@@ -245,10 +245,35 @@ function disposeNode(node)
 }
 
 
-
-
-
 function compileJsonFile()
+{
+	let id = infProject.jsonProject.actLevel;
+	
+	infProject.jsonProject.level[id] = {};
+	infProject.jsonProject.level[id].wall = infProject.scene.array.wall;
+	infProject.jsonProject.level[id].point = infProject.scene.array.point;
+	infProject.jsonProject.level[id].window = infProject.scene.array.window;
+	infProject.jsonProject.level[id].door = infProject.scene.array.door;
+	infProject.jsonProject.level[id].obj = infProject.scene.array.obj;
+	infProject.jsonProject.level[id].floor = infProject.scene.array.floor;
+	infProject.jsonProject.level[id].ceiling = infProject.scene.array.ceiling;	
+	
+	let level = [];
+	
+	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
+	{
+		//if(infProject.jsonProject.level[i].wall.length === 0) continue;
+		
+		level[level.length] = compileJsonFile_2(infProject.jsonProject.level[i]);
+	}
+	
+	let json = {level: level};
+	
+	return json;
+}
+
+
+function compileJsonFile_2(array)
 {
 	let json = {level: []};
 	
@@ -267,8 +292,8 @@ function compileJsonFile()
 	var rooms = [];
 	var object = [];
 	
-	
-	var wall = infProject.scene.array.wall;
+	console.log(array);
+	var wall = array.wall;
 	//var point = infProject.scene.array.point;
 	
 	for ( var i = 0; i < wall.length; i++ )
@@ -323,7 +348,8 @@ function compileJsonFile()
 		walls[i].material = [wall[i].userData.material[1], wall[i].userData.material[2]];						
 	}	
 
-	var floor = infProject.scene.array.floor;
+	var floor = array.floor;
+	var ceiling = array.ceiling;
 	
 	for ( var i = 0; i < floor.length; i++ )
 	{
@@ -341,7 +367,7 @@ function compileJsonFile()
 	
 
 	
-	for ( var i = 0; i < infProject.scene.array.obj.length; i++ )
+	for ( var i = 0; i < array.obj.length; i++ )
 	{
 		var obj = infProject.scene.array.obj[i];		
 			
@@ -372,7 +398,7 @@ function compileJsonFile()
 	json.level[0].version.id = 2;
 	
 	
-	return json;
+	return json.level[0];
 }
 
 
@@ -456,7 +482,7 @@ function saveFile(cdm)
 		({
 			url: infProject.path+'saveJson.php',
 			type: 'POST',
-			data: {myarray: json, nameFile: infProject.settings.save.file},
+			data: {myarray: json, nameFile: infProject.settings.save.file},		// nameFile: infProject.settings.save.file t/fileJson3.json
 			dataType: 'json',
 			success: function(json)
 			{ 			
@@ -554,8 +580,21 @@ async function loadFilePL(json)
 	await addObjInCatalogUI_1();		// наполняем каталог объектов UI
 	 
 	//if(!arr) return;	
-	//console.log(arr);
-	let arr = json.level[0];
+	for ( var i = 0; i < json.level.length; i++ )
+	{
+		await loadFileLevel(json.level[i]);
+		//newLevel();
+	}	
+	
+	newTestLoad();
+	
+	readyProject(); 
+}
+
+
+async function loadFileLevel(json)
+{
+	let arr = json;
 	
 	if(!arr.points) { arr.points = []; }
 	if(!arr.walls) { arr.walls = []; }
@@ -571,7 +610,7 @@ async function loadFilePL(json)
 	var furn = (arr.object) ? arr.object : [];
 	
 	
-	changeAllHeightWall_1({ load: true, height: arr.height, input: true, globalHeight: true });
+	//changeAllHeightWall_1({ load: true, height: arr.height, input: true, globalHeight: true });
 			
 	var wall = [];
 	
@@ -592,8 +631,8 @@ async function loadFilePL(json)
 								
 		for ( var i2 = 0; i2 < point.length; i2++ ) 			 
 		{  	
-			if(wall[i].points[0].id == point[i2].id) { wall[i].points[0].pos = new THREE.Vector3(point[i2].pos.x, 0, point[i2].pos.z); }
-			if(wall[i].points[1].id == point[i2].id) { wall[i].points[1].pos = new THREE.Vector3(point[i2].pos.x, 0, point[i2].pos.z); }
+			if(wall[i].points[0].id == point[i2].id) { wall[i].points[0].pos = new THREE.Vector3(point[i2].pos.x, point[i2].pos.y, point[i2].pos.z); }
+			if(wall[i].points[1].id == point[i2].id) { wall[i].points[1].pos = new THREE.Vector3(point[i2].pos.x, point[i2].pos.y, point[i2].pos.z); }
 		}
 		
 		wall[i].material = walls[i].material;
@@ -731,14 +770,8 @@ async function loadFilePL(json)
 	  
 	assignListRoomTypesApi({arr: rooms});	// получаем типы помещений, добавляем в меню и назначаем всем построеннным комнатам тип помещения
 	
-	await loadObjInBase({furn: furn});
-	
-	newTestLoad();
-	
-	readyProject(); 
+	await loadObjInBase({furn: furn});	
 }
-
-
 
 
 // получаем типы помещений из api, добавляем в меню

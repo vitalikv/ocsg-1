@@ -145,7 +145,10 @@ var lightMap_1 = null;
 
 var clickO = resetPop.clickO();
 infProject.project = null;
-infProject.jsonProject = {level: []};
+infProject.jsonProject = {};
+infProject.jsonProject.actLevel = 0;
+infProject.jsonProject.level = [];
+infProject.jsonProject.level[0] = {};
 infProject.settings.active = { pg: 'pivot' };
 infProject.settings.door = { width: 1, height: 2.2 };
 infProject.settings.wind = { width: 1, height: 1, h1: 1.0 };
@@ -673,9 +676,10 @@ function sliderSunIntensity(cdm)
 function backgroundPlane()
 {
 	var geometry = new THREE.PlaneGeometry( 1000, 1000 );
-	var material = new THREE.MeshLambertMaterial( {color: 0xffffff, polygonOffset: true, polygonOffsetFactor: 10.0, polygonOffsetUnits: 4.0 } );
+	//var material = new THREE.MeshLambertMaterial( {color: 0xffffff, polygonOffset: true, polygonOffsetFactor: 10.0, polygonOffsetUnits: 4.0 } );
+	var material = new THREE.MeshPhongMaterial( {color: 0xffffff, transparent: true, opacity: 0.5  } );
 	var planeMath = new THREE.Mesh( geometry, material );
-	planeMath.position.y = -0.02;
+	planeMath.position.y = 0.02;
 	planeMath.rotation.set(-Math.PI/2, 0, 0);
 	scene.add( planeMath );	
 	
@@ -1216,7 +1220,7 @@ function createPoint( pos, id )
 	point.position.copy( pos );		
 
 	point.renderOrder = 1;
-	
+	 
 	point.w = [];
 	point.p = [];
 	point.start = [];		
@@ -1232,6 +1236,7 @@ function createPoint( pos, id )
 	point.userData.point.cross = null;
 	point.userData.point.type = null;
 	point.userData.point.last = { pos : pos.clone(), cdm : '', cross : null };
+	point.userData.level = infProject.jsonProject.actLevel;
 	
 	point.visible = (camera == cameraTop) ? true : false;	
 	
@@ -1302,6 +1307,7 @@ function crtW( cdm )
 	//wall.userData.wall.active = { click: true, hover: true };	
 	wall.userData.wall.room = { side : 0, side2 : [null,null,null] };
 	wall.userData.wall.html = {};
+	wall.userData.level = infProject.jsonProject.actLevel;
 	
 	if(infProject.settings.html.fonts.wall.show)
 	{
