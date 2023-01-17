@@ -250,7 +250,9 @@ function disposeNode(node)
 
 function compileJsonFile()
 {
-	var json = 
+	let json = {level: []};
+	
+	json.level[0] = 
 	{
 		version: {},
 		points: [],
@@ -360,15 +362,14 @@ function compileJsonFile()
 	}	
 	
 	
-	json.points = points;
-	json.walls = walls;
-	json.rooms = rooms;
-	json.object = object;
+	json.level[0].points = points;
+	json.level[0].walls = walls;
+	json.level[0].rooms = rooms;
+	json.level[0].object = object;
 	
 	
 	// version
-
-	json.version.id = 2;
+	json.level[0].version.id = 2;
 	
 	
 	return json;
@@ -455,7 +456,7 @@ function saveFile(cdm)
 		({
 			url: infProject.path+'saveJson.php',
 			type: 'POST',
-			data: {myarray: json, name: infProject.settings.save.file},
+			data: {myarray: json, nameFile: infProject.settings.save.file},
 			dataType: 'json',
 			success: function(json)
 			{ 			
@@ -510,7 +511,7 @@ function loadFile(cdm)
 	{
 		$.ajax
 		({
-			url: infProject.path + cdm.json,
+			url: infProject.path + infProject.path + cdm.json, 	
 			type: 'POST',
 			dataType: 'json',
 			success: function(json)
@@ -545,7 +546,7 @@ function loadFile(cdm)
 
 
 
-async function loadFilePL(arr) 
+async function loadFilePL(json) 
 {
 	resetScene();
 
@@ -554,6 +555,7 @@ async function loadFilePL(arr)
 	 
 	//if(!arr) return;	
 	//console.log(arr);
+	let arr = json.level[0];
 	
 	if(!arr.points) { arr.points = []; }
 	if(!arr.walls) { arr.walls = []; }
@@ -725,10 +727,13 @@ async function loadFilePL(arr)
 		loadTextureInBase({arr: arrTexture});
 	}
 	
+
 	  
 	assignListRoomTypesApi({arr: rooms});	// получаем типы помещений, добавляем в меню и назначаем всем построеннным комнатам тип помещения
 	
 	await loadObjInBase({furn: furn});
+	
+	newTestLoad();
 	
 	readyProject(); 
 }
@@ -887,7 +892,98 @@ function readyProject(cdm)
 }
 
 
+// меняем уровень отрисовки объектов 
+function changeDepthColor222()
+{
+		var depthTest = true;
+		var w2 = 0.0;
+		var visible = false;
+		var visible_2 = false;
+		var visible_3 = true;
+	
+	var point = infProject.scene.array.point;
+	var wall = infProject.scene.array.wall;
+	var window = infProject.scene.array.window;
+	var door = infProject.scene.array.door;	
+	var floor = infProject.scene.array.floor;
+	
+	
+	
+	
+	var label = [];
+	for ( var i = 0; i < wall.length; i++ )
+	{
+		if(!wall[i].userData.wall.html.label) continue;
+		
+		for ( var i2 = 0; i2 <  wall[i].userData.wall.html.label.length; i2++ )
+		{
+			label[label.length] = wall[i].userData.wall.html.label[i2];  
+		}
+	}		
 
+	if(infProject.settings.floor.label.visible)
+	{
+		for ( var i = 0; i < floor.length; i++ )
+		{ 
+			if(visible)
+			{
+				if(floor[i].userData.room.zone.id !== undefined)
+				{
+					label[label.length] = floor[i].userData.room.html.label; 
+				}
+			}
+			else
+			{
+				label[label.length] = floor[i].userData.room.html.label;
+			}			 
+		}		
+	}
+	
+	if(visible) { showElementHtml(label); }
+	else 
+	{ 
+		hideElementHtml(label); 
+		hideElementHtml(infProject.html.furn.size);
+		hideElementHtml(infProject.html.furn.offset);		
+	}
+
+	//hideElementSvg(infProject.svg.arr);
+	
+	
+	for ( var i = 0; i < point.length; i++ )
+	{ 
+		point[i].visible = visible; 
+	}		
+
+	var svg = [];
+	
+	for ( var i = 0; i < door.length; i++ )
+	{  
+		svg[svg.length] = door[i].userData.door.svg.el;
+		
+		if(door[i].userData.door.svg.path) { svg[svg.length] = door[i].userData.door.svg.path; }
+		if(door[i].userData.door.svg.arc) { svg[svg.length] = door[i].userData.door.svg.arc; }
+		
+		if(!door[i].userData.door.obj3D) continue;
+		door[i].userData.door.obj3D.visible = visible_3;		
+	}	
+
+	for ( var i = 0; i < window.length; i++ )
+	{ 
+		svg[svg.length] = window[i].userData.door.svg.el;
+		
+		if(window[i].userData.door.svg.path) { svg[svg.length] = window[i].userData.door.svg.path; }
+		
+		if(!window[i].userData.door.obj3D) continue;
+		window[i].userData.door.obj3D.visible = visible_3;		
+	}
+	
+	hideElementSvg(svg);	
+	
+	showHideArrObj(window, visible_2);
+	showHideArrObj(door, visible_2);
+	
+}
 
 
 

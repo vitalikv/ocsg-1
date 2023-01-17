@@ -145,6 +145,7 @@ var lightMap_1 = null;
 
 var clickO = resetPop.clickO();
 infProject.project = null;
+infProject.jsonProject = {level: []};
 infProject.settings.active = { pg: 'pivot' };
 infProject.settings.door = { width: 1, height: 2.2 };
 infProject.settings.wind = { width: 1, height: 1, h1: 1.0 };

@@ -60,7 +60,7 @@ function onDocumentMouseDown( event )
 {
 	//event.preventDefault();
 
-	if (window.location.hostname == 'ocsg'){} 
+	if (window.location.hostname == 'ocsg-1'){} 
 	else if (window.location.hostname == 'ocsg.ru'){}
 	else if (window.location.hostname == 'room-3d'){} 
 	else if (window.location.hostname == 'room-3d.ru'){} 
