@@ -30,7 +30,7 @@ function createFloor(cdm)
 	room[n] = floor;
 	
 	//floor.position.set( 0, infProject.settings.floor.posY, 0 );
-	floor.position.set( 0, arrP[0].position.y, 0 );
+	floor.position.set( 0, arrP[0].position.y + infProject.settings.floor.height, 0 );
 	floor.rotation.set( Math.PI / 2, 0, 0 );	
 	floor.p = arrP;
 	floor.w = arrW; 
@@ -166,7 +166,7 @@ function updateShapeFloor(arrRoom)
 		geometry.dispose();
 		
 		//arrRoom[i].position.y = infProject.settings.floor.posY;
-		arrRoom[i].position.y = arrRoom[i].p[0].position.y;
+		//arrRoom[i].position.y = arrRoom[i].p[0].position.y;
 		upUvs_1( arrRoom[i] );
 		getYardageSpace([arrRoom[i]]); 
 

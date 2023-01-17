@@ -583,7 +583,7 @@ async function loadFilePL(json)
 	for ( var i = 0; i < json.level.length; i++ )
 	{
 		await loadFileLevel(json.level[i]);
-		//newLevel();
+		saveArrLevel(i);
 	}	
 	
 	newTestLoad();

@@ -9,7 +9,12 @@
 
 	<div class="flex_column_1 right_panel_1_1" nameId="panel_catalog_1">
 		<div class="flex_1 bottom_line_1">
-			<div class="flex_1 relative_1 right_panel_1_item">				
+			<div class="flex_1 relative_1 right_panel_1_item">	
+				<div class="right_panel_1_item_block" nameId="button_wrap_level">
+					<div class="right_panel_1_item_block_text">
+						этажи
+					</div>	
+				</div>			
 				<div class="right_panel_1_item_block" nameId="button_wrap_plan">
 					<div class="right_panel_1_item_block_text">
 						дом
@@ -32,7 +37,78 @@
 		</div>
 	
 	
-		
+		<div class="flex_column_1" nameId="wrap_level" style="display: none;">
+			<div class="right_panel_1_1_h">Этажи</div>
+
+			<div class="flex_column_1 rp_item_plane">							
+				<div class="flex_1">
+					<div class="flex_1 align_items">
+						<div class="rp_label_plane">
+							высота этажа
+						</div>
+					</div>
+					<div class="flex_1 align_items" style="width: auto;">
+						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_level_1_h2" value="0">
+					</div>
+				</div>
+				
+				<div>
+					<div nameId="btn_level_1" class="button1 button_gradient_1">Этаж 1</div>
+				</div>
+			</div>
+			
+			<div class="flex_column_1 rp_item_plane">							
+				<div class="flex_1">
+					<div class="flex_1 align_items">
+						<div class="rp_label_plane">
+							высота этажа
+						</div>
+					</div>
+					<div class="flex_1 align_items" style="width: auto;">
+						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_level_2_h2" value="0">
+					</div>
+				</div>
+				
+				<div>
+					<div nameId="btn_level_2" class="button1 button_gradient_1">Этаж 2</div>
+				</div>
+			</div>
+
+			<div class="flex_column_1 rp_item_plane">							
+				<div class="flex_1">
+					<div class="flex_1 align_items">
+						<div class="rp_label_plane">
+							высота этажа
+						</div>
+					</div>
+					<div class="flex_1 align_items" style="width: auto;">
+						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_level_3_h2" value="0">
+					</div>
+				</div>
+				
+				<div>
+					<div nameId="btn_level_3" class="button1 button_gradient_1">Этаж 3</div>
+				</div>
+			</div>
+
+			<div class="flex_column_1 rp_item_plane">							
+				<div class="flex_1">
+					<div class="flex_1 align_items">
+						<div class="rp_label_plane">
+							высота этажа
+						</div>
+					</div>
+					<div class="flex_1 align_items" style="width: auto;">
+						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_level_4_h2" value="0">
+					</div>
+				</div>
+				
+				<div>
+					<div nameId="btn_level_4" class="button1 button_gradient_1">Этаж 4</div>
+				</div>
+			</div>			
+		</div>
+			
 		<div class="flex_column_1" nameId="wrap_plan" style="display: none;">
 			<div class="right_panel_1_1_h">Дом</div>
 			

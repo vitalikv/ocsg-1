@@ -61,7 +61,7 @@ function changeRightMenuUI_1(cdm)
 	$('[nameId="wrap_catalog"]').hide();
 	$('[nameId="wrap_object"]').hide();
 	$('[nameId="wrap_plan"]').hide();
-	
+	$('[nameId="wrap_level"]').hide();
 	
 	var name = '';
 	//var name_2 = infProject.ui.right_menu.active;
@@ -84,7 +84,11 @@ function changeRightMenuUI_1(cdm)
 	{
 		$('[nameId="wrap_plan"]').show();
 	}
-
+	if(name == "button_wrap_level") 
+	{
+		$('[nameId="wrap_level"]').show();
+	}
+	
 	infProject.ui.right_menu.active = name;
 }
 

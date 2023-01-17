@@ -38,9 +38,8 @@ function newTestLoad()
 
 
 
-function newLevel()
+function saveArrLevel(id)
 {
-	let id = 0;
 	
 	infProject.jsonProject.level[id] = {};
 	infProject.jsonProject.level[id].wall = infProject.scene.array.wall;
@@ -67,6 +66,47 @@ function newLevel()
 	
 	infProject.scene.array = resetPop.infProjectSceneArray();
 
-	infProject.jsonProject.actLevel = 1;	
+		
 }
+
+
+function activeLevel(id)
+{
+	obj_point = infProject.jsonProject.level[id].point;
+	room = infProject.jsonProject.level[id].floor;
+	ceiling = infProject.jsonProject.level[id].ceiling;
+	arr_obj_3d = infProject.jsonProject.level[id].obj;
+
+	infProject.scene.array.wall = infProject.jsonProject.level[id].wall;
+	infProject.scene.array.point = infProject.jsonProject.level[id].point;
+	infProject.scene.array.window = infProject.jsonProject.level[id].window;
+	infProject.scene.array.door = infProject.jsonProject.level[id].door;
+	infProject.scene.array.obj = infProject.jsonProject.level[id].obj;
+	infProject.scene.array.floor = infProject.jsonProject.level[id].floor;
+	infProject.scene.array.ceiling = infProject.jsonProject.level[id].ceiling;
+
+	changeDepthColor();
+
+	infProject.jsonProject.actLevel = id;	
+}
+
+
+
+function getElBtnLevel()
+{
+	let elBlock = document.querySelector('[nameId="wrap_level"]');
+	
+	let btn1 = document.querySelector('[nameId="btn_level_1"]');
+	let btn2 = document.querySelector('[nameId="btn_level_2"]');
+	let btn3 = document.querySelector('[nameId="btn_level_3"]');
+	let btn4 = document.querySelector('[nameId="btn_level_4"]');
+	
+	btn1.onmousedown = () => { console.log(1); activeLevel(0); }
+	btn2.onmousedown = () => { console.log(2); activeLevel(1); }
+	btn3.onmousedown = () => { console.log(3); activeLevel(2); }
+	btn4.onmousedown = () => { console.log(4); activeLevel(3); }
+	console.log(elBlock);
+}
+
+
 
