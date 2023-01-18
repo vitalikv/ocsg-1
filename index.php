@@ -133,6 +133,7 @@
 	<script src="<?=$path?>uiInterface_catalog.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>eventClick.js?<?=$vrs?>"></script>
 	
+	<script src="<?=$path?>new/level.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/test.js?<?=$vrs?>"></script>
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 

@@ -147,8 +147,7 @@ var clickO = resetPop.clickO();
 infProject.project = null;
 infProject.jsonProject = {};
 infProject.jsonProject.actLevel = 0;
-infProject.jsonProject.level = [];
-infProject.jsonProject.level[0] = {};
+infProject.jsonProject.level = initArrLevel();
 infProject.settings.active = { pg: 'pivot' };
 infProject.settings.door = { width: 1, height: 2.2 };
 infProject.settings.wind = { width: 1, height: 1, h1: 1.0 };
@@ -326,9 +325,11 @@ var ccc = new THREE.Color().setHex( '0x'+infProject.settings.profile.color );
 	addTextureInCatalogUI_1();		// наполняем каталог текстур UI
 	addTextureInCatalogUI_2();
 	//changeRightMenuUI_1({name: 'button_wrap_object'});	// назначаем первоначальную вкладку , которая будет включена	
-	changeRightMenuUI_1({name: 'button_wrap_plan'});
+	changeRightMenuUI_1({name: 'button_wrap_level'});
 	startRightPlaneInput({});
-
+	
+	initElBtnLevel();
+	
 	//getAutoBuildingJson();
 	
 	assignEventSvgScaleSizeObj({el: infProject.svg.furn.boxCircle.elem}); 

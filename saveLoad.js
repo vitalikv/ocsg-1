@@ -586,6 +586,9 @@ async function loadFilePL(json)
 		saveArrLevel(i);
 	}	
 	
+	startLevel(1);
+	switchLevel(1);
+	
 	newTestLoad();
 	
 	readyProject(); 

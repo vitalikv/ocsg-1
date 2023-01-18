@@ -92,21 +92,6 @@ function activeLevel(id)
 
 
 
-function getElBtnLevel()
-{
-	let elBlock = document.querySelector('[nameId="wrap_level"]');
-	
-	let btn1 = document.querySelector('[nameId="btn_level_1"]');
-	let btn2 = document.querySelector('[nameId="btn_level_2"]');
-	let btn3 = document.querySelector('[nameId="btn_level_3"]');
-	let btn4 = document.querySelector('[nameId="btn_level_4"]');
-	
-	btn1.onmousedown = () => { console.log(1); activeLevel(0); }
-	btn2.onmousedown = () => { console.log(2); activeLevel(1); }
-	btn3.onmousedown = () => { console.log(3); activeLevel(2); }
-	btn4.onmousedown = () => { console.log(4); activeLevel(3); }
-	console.log(elBlock);
-}
 
 
 
