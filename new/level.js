@@ -4,7 +4,7 @@ function initArrLevel()
 	let count = 4;
 	let level = [];
 	
-	for ( var i = 0; i < count.length; i++ )
+	for ( var i = 0; i < count; i++ )
 	{
 		level[i] = {};
 		level[i].wall = [];
@@ -13,7 +13,8 @@ function initArrLevel()
 		level[i].door = [];
 		level[i].obj = [];
 		level[i].floor = [];
-		level[i].ceiling = [];		
+		level[i].ceiling = [];
+		level[i].height = 2.8;		
 	}
 	
 	return level;
@@ -32,8 +33,8 @@ function initElBtnLevel()
 	
 	btn1.onmousedown = () => { console.log(1); switchLevel(0); }
 	btn2.onmousedown = () => { console.log(2); switchLevel(1); }
-	btn3.onmousedown = () => { console.log(3); activeLevel(2); }
-	btn4.onmousedown = () => { console.log(4); activeLevel(3); }
+	btn3.onmousedown = () => { console.log(3); switchLevel(2); }
+	btn4.onmousedown = () => { console.log(4); switchLevel(3); }
 }
 
 
@@ -65,13 +66,12 @@ function switchLevel(id)
 {	
 	if(infProject.jsonProject.actLevel === id) return;
 	
+	let posY = getLevelPos0({lastId: infProject.jsonProject.actLevel, newId: id});
+	
 	deactiveLevel();
 	
 	startLevel(id);
 	
-	let posY = 0 - infProject.scene.array.point[0].position.y;
-	posY *= -1;
-	console.log('posY', posY);
 	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
 	{
 		changePosYLevel(posY, i);
@@ -87,6 +87,28 @@ function switchLevel(id)
 	else visibleLevelCam3D(id, true);
 	
 	changeDepthColor();
+}
+
+// получаем значение, на который нужно сдвинуть этажи, чтобы текущий этаж был на нулевом уровне
+function getLevelPos0({lastId, newId})
+{
+	let sumY1 = 0;
+	let sumY2 = 0;
+	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
+	{
+		sumY1 += infProject.jsonProject.level[i].height;
+		if(i === lastId) break;
+	}
+	
+	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
+	{
+		sumY2 += infProject.jsonProject.level[i].height;
+		if(i === newId) break;
+	}
+	
+	let posY = sumY2 - sumY1;
+
+	return posY;
 }
 
 
@@ -202,20 +224,20 @@ function deactiveLevel()
 {
 	let id = infProject.jsonProject.actLevel;
 
-
-	infProject.jsonProject.level[id] = {};
+	getInfoRenderWall();
+	showAllWallRender();
+	changeDepthColor222();
+	
+	//infProject.jsonProject.level[id] = {};
 	infProject.jsonProject.level[id].wall = infProject.scene.array.wall;
 	infProject.jsonProject.level[id].point = infProject.scene.array.point;
 	infProject.jsonProject.level[id].window = infProject.scene.array.window;
 	infProject.jsonProject.level[id].door = infProject.scene.array.door;
 	infProject.jsonProject.level[id].obj = infProject.scene.array.obj;
 	infProject.jsonProject.level[id].floor = infProject.scene.array.floor;
-	infProject.jsonProject.level[id].ceiling = infProject.scene.array.ceiling;	
-
-	getInfoRenderWall();
-	showAllWallRender();
+	infProject.jsonProject.level[id].ceiling = infProject.scene.array.ceiling;		
+ 	infProject.jsonProject.level[id].height = infProject.settings.height;
 	
- 	changeDepthColor222();
 	obj_point = [];
 	room = [];
 	ceiling = [];

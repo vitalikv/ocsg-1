@@ -249,7 +249,7 @@ function compileJsonFile()
 {
 	let id = infProject.jsonProject.actLevel;
 	
-	infProject.jsonProject.level[id] = {};
+	//infProject.jsonProject.level[id] = {};
 	infProject.jsonProject.level[id].wall = infProject.scene.array.wall;
 	infProject.jsonProject.level[id].point = infProject.scene.array.point;
 	infProject.jsonProject.level[id].window = infProject.scene.array.window;
@@ -257,14 +257,19 @@ function compileJsonFile()
 	infProject.jsonProject.level[id].obj = infProject.scene.array.obj;
 	infProject.jsonProject.level[id].floor = infProject.scene.array.floor;
 	infProject.jsonProject.level[id].ceiling = infProject.scene.array.ceiling;	
+	infProject.jsonProject.level[id].height = infProject.settings.height;
 	
 	let level = [];
+
+	let posY = getLevelPos0({lastId: id, newId: 0});
+	
+	console.log(posY);
 	
 	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
 	{
 		//if(infProject.jsonProject.level[i].wall.length === 0) continue;
 		
-		level[level.length] = compileJsonFile_2(infProject.jsonProject.level[i]);
+		level[level.length] = compileJsonFile_2(infProject.jsonProject.level[i], posY);
 	}
 	
 	let json = {level: level};
@@ -273,7 +278,7 @@ function compileJsonFile()
 }
 
 
-function compileJsonFile_2(array)
+function compileJsonFile_2(array, posY)
 {
 	let json = {level: []};
 	
@@ -284,7 +289,7 @@ function compileJsonFile_2(array)
 		walls: [],	
 		rooms: [],
 		object: [],
-		height: infProject.settings.height,		
+		height: array.height,		
 	};
 	
 	var points = [];
@@ -310,7 +315,7 @@ function compileJsonFile_2(array)
 				var m = points.length;
 				points[m] = {};
 				points[m].id = p[i2].userData.id;
-				points[m].pos = new THREE.Vector3(p[i2].position.x, p[i2].position.y, p[i2].position.z);
+				points[m].pos = new THREE.Vector3(p[i2].position.x, p[i2].position.y - posY, p[i2].position.z);
 				points[m].type = 'w';
 			}
 		}
@@ -375,7 +380,7 @@ function compileJsonFile_2(array)
 		object[m] = {};
 		object[m].id = Number(obj.userData.id);
 		object[m].lotid = Number(obj.userData.obj3D.lotid);
-		object[m].pos = obj.position;
+		object[m].pos = new THREE.Vector3(obj.position.x, obj.position.y - posY, obj.position.z);
 		//object[m].rot = new THREE.Vector3( THREE.Math.radToDeg(obj.rotation.x), THREE.Math.radToDeg(obj.rotation.y), THREE.Math.radToDeg(obj.rotation.z) );
 		object[m].q = {x: obj.quaternion.x, y: obj.quaternion.y, z: obj.quaternion.z, w: obj.quaternion.w};
 		object[m].scale = obj.scale;
@@ -392,7 +397,6 @@ function compileJsonFile_2(array)
 	json.level[0].walls = walls;
 	json.level[0].rooms = rooms;
 	json.level[0].object = object;
-	
 	
 	// version
 	json.level[0].version.id = 2;
@@ -586,8 +590,8 @@ async function loadFilePL(json)
 		saveArrLevel(i);
 	}	
 	
-	startLevel(1);
-	switchLevel(1);
+	startLevel(0);
+	switchLevel(0);
 	
 	newTestLoad();
 	
