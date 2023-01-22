@@ -677,10 +677,10 @@ function sliderSunIntensity(cdm)
 function backgroundPlane()
 {
 	var geometry = new THREE.PlaneGeometry( 1000, 1000 );
-	//var material = new THREE.MeshLambertMaterial( {color: 0xffffff, polygonOffset: true, polygonOffsetFactor: 10.0, polygonOffsetUnits: 4.0 } );
-	var material = new THREE.MeshPhongMaterial( {color: 0xffffff, transparent: true, opacity: 0.5  } );
+	var material = new THREE.MeshLambertMaterial( {color: 0xffffff, polygonOffset: true, polygonOffsetFactor: 10.0, polygonOffsetUnits: 4.0 } );
+	//var material = new THREE.MeshPhongMaterial( {color: 0xffffff, transparent: true, opacity: 0.5  } );
 	var planeMath = new THREE.Mesh( geometry, material );
-	planeMath.position.y = 0.02;
+	planeMath.position.y = -0.02;
 	planeMath.rotation.set(-Math.PI/2, 0, 0);
 	scene.add( planeMath );	
 	

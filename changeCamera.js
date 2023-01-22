@@ -25,6 +25,7 @@ function changeCamera(cam)
 		showAllWallRender();	// показываем стены, которые были спрятаны
 		
 		changeRightMenuUI_1({current: true});
+		infProject.scene.grid.visible = true;
 	}
 	else if(camera == camera3D)
 	{	
@@ -44,6 +45,7 @@ function changeCamera(cam)
 		wallAfterRender_2();
 		
 		changeRightMenuUI_1({current: true});
+		infProject.scene.grid.visible = false;
 	}
 	
 	infProject.tools.axis[0].visible = false;

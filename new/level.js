@@ -20,6 +20,7 @@ function initArrLevel()
 }
 
 
+// создаем собитие по клику на кнопки этажей
 function initElBtnLevel()
 {
 	let elBlock = document.querySelector('[nameId="wrap_level"]');
@@ -36,6 +37,7 @@ function initElBtnLevel()
 }
 
 
+// делаем выбранный этаж основным
 function startLevel(id)
 {
 	obj_point = infProject.jsonProject.level[id].point;
@@ -51,10 +53,14 @@ function startLevel(id)
 	infProject.scene.array.floor = infProject.jsonProject.level[id].floor;
 	infProject.scene.array.ceiling = infProject.jsonProject.level[id].ceiling;
 
+	getInfoRenderWall();
+	if(camera === cameraTop) showAllWallRender();
+	else wallAfterRender_2();
 	
 	infProject.jsonProject.actLevel = id;	
 }
 
+// переключения одного этажа на другой
 function switchLevel(id)
 {	
 	if(infProject.jsonProject.actLevel === id) return;
@@ -74,14 +80,17 @@ function switchLevel(id)
 	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
 	{
 		if(camera === cameraTop) visibleLevelCam2D(i, false)
+		else visibleLevelCam3D(i, true);
 	}
 	
 	if(camera === cameraTop) visibleLevelCam2D(id, true);
+	else visibleLevelCam3D(id, true);
 	
 	changeDepthColor();
 }
 
 
+// меняем высоту этажей, самый первый ставим на 0
 function changePosYLevel(posY, id)
 {
 	let arrW = infProject.jsonProject.level[id].wall;
@@ -145,7 +154,6 @@ function visibleLevelCam2D(id, visible)
 	for ( var i = 0; i < ceiling.length; i++ ) ceiling[i].visible = visible;	
 }
 
-
 function visibleLevelCam3D(id, visible)
 {
 	var point = infProject.jsonProject.level[id].point;
@@ -157,9 +165,36 @@ function visibleLevelCam3D(id, visible)
 	
 	for ( var i = 0; i < point.length; i++ )
 	{ 
-		point[i].visible = visible; 
+		point[i].visible = false; 
+	}
+	
+	for ( var i = 0; i < wall.length; i++ )
+	{ 
+		wall[i].visible = visible; 
+	}		
+	
+	for ( var i = 0; i < door.length; i++ )
+	{  
+		if(!door[i].userData.door.obj3D) continue;
+		door[i].userData.door.obj3D.visible = visible;		
 	}	
+
+	for ( var i = 0; i < window.length; i++ )
+	{ 
+		if(!window[i].userData.door.obj3D) continue;
+		window[i].userData.door.obj3D.visible = visible;		
+	}
+	
+	
+	showHideArrObj(window, false);
+	showHideArrObj(door, false);
+
+		
+	for ( var i = 0; i < room.length; i++ ) room[i].visible = visible;
+	for ( var i = 0; i < ceiling.length; i++ ) ceiling[i].visible = visible;	
 }
+
+
 
 
 // деактивируем уровень и сохраняем план в массиве для этого этажа
@@ -177,6 +212,8 @@ function deactiveLevel()
 	infProject.jsonProject.level[id].floor = infProject.scene.array.floor;
 	infProject.jsonProject.level[id].ceiling = infProject.scene.array.ceiling;	
 
+	getInfoRenderWall();
+	showAllWallRender();
 	
  	changeDepthColor222();
 	obj_point = [];
