@@ -356,7 +356,7 @@ function deactiveLevel()
 	infProject.scene.array.floor = [];
 	infProject.scene.array.ceiling = [];
 	
-	infProject.scene.array = resetPop.infProjectSceneArray();
+	infProject.scene.array = resetPop.infProjectMySceneArray();
 }
 
 

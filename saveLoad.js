@@ -23,12 +23,20 @@ var resetPop =
 	{
 		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: arr_obj_3d, objSpot: [] };
 		array.cubeCam = [];
-		array.lineGrid = { limit : false };
 		array.base = (infProject.start)? infProject.scene.array.base : [];	// массив клонируемых объектов
 		
 		return array;
 	},
 
+	infProjectMySceneArray : function()
+	{
+		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: arr_obj_3d, objSpot: [] };
+		array.cubeCam = [];
+		array.base = infProject.scene.array.base;	// массив клонируемых объектов
+		
+		return array;
+	},
+	
 	listColor : function()
 	{	
 		var array = {};
@@ -579,6 +587,13 @@ function loadFile(cdm)
 async function loadFilePL(json) 
 {
 	resetScene();
+	
+	let inf = await getObjFromBase({lotid: 10});
+	if(inf.model) addObjInBase(inf, new THREE.ObjectLoader().parse( inf.model ));
+	inf = await getObjFromBase({lotid: 11});
+	if(inf.model) addObjInBase(inf, new THREE.ObjectLoader().parse( inf.model ));
+	
+	
 
 	//await getListRoomTypesApi();	// получаем типы помещений из api, добавляем в меню
 	await addObjInCatalogUI_1();		// наполняем каталог объектов UI
@@ -594,8 +609,6 @@ async function loadFilePL(json)
 	
 	startLevel(0);
 	switchLevel(0);
-	
-	newTestLoad();
 	
 	readyProject(); 
 }
