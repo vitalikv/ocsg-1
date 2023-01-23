@@ -13,7 +13,8 @@ function changeCamera(cam)
 	outlinePass.renderCamera = cam;
 	if(saoPass) saoPass.camera = cam;
 	outlineRemoveObj();
-	
+
+
 	if(camera == cameraTop)
 	{				
 		infProject.camera.d3.targetO.visible = false;
@@ -52,6 +53,8 @@ function changeCamera(cam)
 	infProject.tools.axis[1].visible = false;	
 
 	clickO = resetPop.clickO();
+	
+	changeVisibleLevels();	
 	
 	renderCamera();
 }

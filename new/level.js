@@ -163,6 +163,8 @@ function startLevel(id)
 	if(camera === cameraTop) showAllWallRender();
 	else wallAfterRender_2();
 	
+	if(camera === cameraTop) upPosLabels_1({resize: true});
+	
 	infProject.jsonProject.actLevel = id;	
 }
 
@@ -181,18 +183,32 @@ function switchLevel(id)
 	{
 		changePosYLevel(posY, i);
 	}
-
-	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
-	{
-		if(camera === cameraTop) visibleLevelCam2D(i, false)
-		else visibleLevelCam3D(i, true);
-	}
+	
+	changeDepthColor();	
+	
+	changeVisibleLevels();
 	
 	if(camera === cameraTop) visibleLevelCam2D(id, true);
-	else visibleLevelCam3D(id, true);
-	
-	changeDepthColor();
+	else visibleLevelCam3D(id, true); 
 }
+
+// меняем видимость неактивных этажей
+function changeVisibleLevels()
+{
+	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
+	{		
+		if(camera === camera3D && infProject.jsonProject.actLevel !== i) 
+		{
+			visibleLevelCam3D(i, true);
+		}
+		if(camera === cameraTop && infProject.jsonProject.actLevel !== i) 
+		{
+			visibleLevelCam2D(i, false);
+		}		
+	}
+	if(camera === cameraTop) upPosLabels_1({resize: true});	// поправляем размеры и svg
+}
+
 
 // получаем значение, на который нужно сдвинуть этажи, чтобы текущий этаж был на нулевом уровне
 function getLevelPos0({lastId, newId})

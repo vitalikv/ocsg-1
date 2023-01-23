@@ -603,11 +603,13 @@ async function loadFilePL(json)
 	{
 		await loadFileLevel(json.level[i]);
 		saveArrLevel(i);
+		visibleLevelCam2D(i, false);
 	}	
 	
 	startSetLevel_UI();
 	
 	startLevel(0);
+	visibleLevelCam2D(0, true);
 	switchLevel(0);
 	
 	readyProject(); 
