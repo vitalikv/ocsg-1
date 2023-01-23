@@ -26,15 +26,119 @@ function initElBtnLevel()
 {
 	let elBlock = document.querySelector('[nameId="wrap_level"]');
 	
-	let btn1 = document.querySelector('[nameId="btn_level_1"]');
-	let btn2 = document.querySelector('[nameId="btn_level_2"]');
-	let btn3 = document.querySelector('[nameId="btn_level_3"]');
-	let btn4 = document.querySelector('[nameId="btn_level_4"]');
+	let btn1 = elBlock.querySelector('[nameId="btn_level_1"]');
+	let btn2 = elBlock.querySelector('[nameId="btn_level_2"]');
+	let btn3 = elBlock.querySelector('[nameId="btn_level_3"]');
+	let btn4 = elBlock.querySelector('[nameId="btn_level_4"]');
 	
-	btn1.onmousedown = () => { console.log(1); switchLevel(0); }
-	btn2.onmousedown = () => { console.log(2); switchLevel(1); }
-	btn3.onmousedown = () => { console.log(3); switchLevel(2); }
-	btn4.onmousedown = () => { console.log(4); switchLevel(3); }
+	btn1.onmousedown = () => { switchLevel(0); }
+	btn2.onmousedown = () => { switchLevel(1); }
+	btn3.onmousedown = () => { switchLevel(2); }
+	btn4.onmousedown = () => { switchLevel(3); }
+	
+	startSetLevel_UI();
+	
+	// input высоты этажа
+	let input1 = elBlock.querySelector('[nameId="rp_level_1_h2"]');
+	let input2 = elBlock.querySelector('[nameId="rp_level_2_h2"]');
+	let input3 = elBlock.querySelector('[nameId="rp_level_3_h2"]');
+	let input4 = elBlock.querySelector('[nameId="rp_level_4_h2"]');	
+	
+	input1.onkeyup = (event) => changeHeightWallLevel(event, 0);
+	input2.onkeyup = (event) => changeHeightWallLevel(event, 1);
+	input3.onkeyup = (event) => changeHeightWallLevel(event, 2);
+	input4.onkeyup = (event) => changeHeightWallLevel(event, 3);
+}
+
+
+function startSetLevel_UI()
+{
+	let elBlock = document.querySelector('[nameId="wrap_level"]');
+	let input1 = elBlock.querySelector('[nameId="rp_level_1_h2"]');
+	let input2 = elBlock.querySelector('[nameId="rp_level_2_h2"]');
+	let input3 = elBlock.querySelector('[nameId="rp_level_3_h2"]');
+	let input4 = elBlock.querySelector('[nameId="rp_level_4_h2"]');		
+	
+	let level = infProject.jsonProject.level;	
+	input1.value = level[0].height;
+	input2.value = level[1].height;
+	input3.value = level[2].height;
+	input4.value = level[3].height;	
+}
+
+
+function changeHeightWallLevel(event, id)
+{
+	if (event.keyCode !== 13) return;
+	
+	let level = infProject.jsonProject.level;
+	
+	let value = checkNumberInput({ value: event.target.value, unit: 1, limit: {min: 0.1, max: 5} });
+
+	if(!value) 
+	{
+		event.target.value = Math.round(level[id].height * 100) / 100;
+		return;
+	}	
+	
+	let posY = level[id].height - value.num;
+	 
+	
+	level[id].height = value.num;
+	event.target.value = value.num;
+	
+	if(infProject.jsonProject.actLevel === id) infProject.settings.height = value.num;
+	if(infProject.jsonProject.actLevel === id) console.log(infProject.jsonProject.actLevel === id, infProject.settings.height);
+	if(1===1)
+	{
+		clickMovePoint_BSP( level[id].wall );
+		
+		for ( var i = 0; i < level[id].wall.length; i++ )
+		{
+			var v = level[id].wall[i].geometry.vertices;
+			
+			v[1].y = value.num;
+			v[3].y = value.num;
+			v[5].y = value.num;
+			v[7].y = value.num;
+			v[9].y = value.num;
+			v[11].y = value.num;
+			level[id].wall[i].geometry.verticesNeedUpdate = true;
+			level[id].wall[i].geometry.elementsNeedUpdate = true;
+			
+			level[id].wall[i].userData.wall.height_1 = value.num;
+		}
+		
+		upLabelPlan_1( level[id].wall );
+		clickPointUP_BSP( level[id].wall );
+
+		var floor = level[id].floor;
+		var ceiling = level[id].ceiling;
+		
+		for ( var i = 0; i < floor.length; i++ )
+		{		
+			ceiling[i].position.set( 0, floor[i].position.y + value.num, 0 ); 	
+		}
+	}
+	
+	if(infProject.jsonProject.actLevel > id)
+	{
+		for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
+		{
+			if(i > id) continue;					
+			changePosYLevel(-posY, i);
+		}		
+	}
+	else
+	{
+		for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
+		{
+			if(i <= id) continue;			
+			changePosYLevel(posY, i);
+		}				
+	}
+	
+	renderCamera();
 }
 
 
@@ -53,6 +157,7 @@ function startLevel(id)
 	infProject.scene.array.obj = infProject.jsonProject.level[id].obj;
 	infProject.scene.array.floor = infProject.jsonProject.level[id].floor;
 	infProject.scene.array.ceiling = infProject.jsonProject.level[id].ceiling;
+	infProject.settings.height = infProject.jsonProject.level[id].height;
 
 	getInfoRenderWall();
 	if(camera === cameraTop) showAllWallRender();
@@ -96,14 +201,14 @@ function getLevelPos0({lastId, newId})
 	let sumY2 = 0;
 	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
 	{
-		sumY1 += infProject.jsonProject.level[i].height;
 		if(i === lastId) break;
+		sumY1 += infProject.jsonProject.level[i].height;		
 	}
 	
 	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
 	{
-		sumY2 += infProject.jsonProject.level[i].height;
 		if(i === newId) break;
+		sumY2 += infProject.jsonProject.level[i].height;		
 	}
 	
 	let posY = sumY2 - sumY1;

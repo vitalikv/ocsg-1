@@ -590,6 +590,8 @@ async function loadFilePL(json)
 		saveArrLevel(i);
 	}	
 	
+	startSetLevel_UI();
+	
 	startLevel(0);
 	switchLevel(0);
 	
@@ -607,7 +609,7 @@ async function loadFileLevel(json)
 	if(!arr.walls) { arr.walls = []; }
 	if(!arr.rooms) { arr.rooms = []; }
 	if(!arr.object) { arr.object = []; }
-	if(!arr.height) { arr.height = infProject.settings.height; }
+	if(arr.height) { infProject.settings.height = arr.height; }
 	
 	infProject.project = { file: arr, load: { furn: [] } };
 		
