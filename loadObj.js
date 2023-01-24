@@ -448,7 +448,7 @@ function checkReflectionMaterial(cdm)
 		}
 	});
 
-	if(arrCubeO.length > 0) createCubeCam({obj: obj, arrO: arrCubeO});		
+	//if(arrCubeO.length > 0) createCubeCam({obj: obj, arrO: arrCubeO});		
 	
 }
 

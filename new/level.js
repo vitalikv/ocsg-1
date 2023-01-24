@@ -10,10 +10,10 @@ function initArrLevel()
 		level[i].wall = [];
 		level[i].point = [];
 		level[i].window = [];
-		level[i].door = [];
-		level[i].obj = [];
+		level[i].door = [];		
 		level[i].floor = [];
 		level[i].ceiling = [];
+		level[i].obj = [];
 		level[i].height = 2.8;		
 	}
 	
@@ -67,6 +67,7 @@ function startSetLevel_UI()
 }
 
 
+// меняем высоту этажа и сдвигаем все остальные этажы
 function changeHeightWallLevel(event, id)
 {
 	if (event.keyCode !== 13) return;
@@ -148,15 +149,14 @@ function startLevel(id)
 	obj_point = infProject.jsonProject.level[id].point;
 	room = infProject.jsonProject.level[id].floor;
 	ceiling = infProject.jsonProject.level[id].ceiling;
-	arr_obj_3d = infProject.jsonProject.level[id].obj;
 
 	infProject.scene.array.wall = infProject.jsonProject.level[id].wall;
 	infProject.scene.array.point = infProject.jsonProject.level[id].point;
 	infProject.scene.array.window = infProject.jsonProject.level[id].window;
-	infProject.scene.array.door = infProject.jsonProject.level[id].door;
-	infProject.scene.array.obj = infProject.jsonProject.level[id].obj;
+	infProject.scene.array.door = infProject.jsonProject.level[id].door;	
 	infProject.scene.array.floor = infProject.jsonProject.level[id].floor;
 	infProject.scene.array.ceiling = infProject.jsonProject.level[id].ceiling;
+	infProject.scene.array.obj = infProject.jsonProject.level[id].obj;
 	infProject.settings.height = infProject.jsonProject.level[id].height;
 
 	getInfoRenderWall();
@@ -172,6 +172,8 @@ function startLevel(id)
 function switchLevel(id)
 {	
 	if(infProject.jsonProject.actLevel === id) return;
+	
+	deActiveSelected();
 	
 	let posY = getLevelPos0({lastId: infProject.jsonProject.actLevel, newId: id});
 	
@@ -240,6 +242,7 @@ function changePosYLevel(posY, id)
 	let obj_point = infProject.jsonProject.level[id].point;
 	let room = infProject.jsonProject.level[id].floor;
 	let ceiling = infProject.jsonProject.level[id].ceiling;
+	let obj3D = infProject.jsonProject.level[id].obj;
 	
 	for ( var i = 0; i < arrW.length; i++ )
 	{		
@@ -253,7 +256,8 @@ function changePosYLevel(posY, id)
 	
 	for ( var i = 0; i < obj_point.length; i++ ) obj_point[i].position.y = obj_point[i].position.y - posY;	
 	for ( var i = 0; i < room.length; i++ ) room[i].position.y = room[i].position.y - posY;
-	for ( var i = 0; i < ceiling.length; i++ ) ceiling[i].position.y = ceiling[i].position.y - posY;	
+	for ( var i = 0; i < ceiling.length; i++ ) ceiling[i].position.y = ceiling[i].position.y - posY;
+	for ( var i = 0; i < obj3D.length; i++ ) obj3D[i].position.y = obj3D[i].position.y - posY;	
 }
 
 
@@ -265,6 +269,7 @@ function visibleLevelCam2D(id, visible)
 	var door = infProject.jsonProject.level[id].door;	
 	let room = infProject.jsonProject.level[id].floor;
 	let ceiling = infProject.jsonProject.level[id].ceiling;
+	let obj3D = infProject.jsonProject.level[id].obj;
 	
 	for ( var i = 0; i < point.length; i++ )
 	{ 
@@ -294,7 +299,8 @@ function visibleLevelCam2D(id, visible)
 
 		
 	for ( var i = 0; i < room.length; i++ ) room[i].visible = visible;
-	for ( var i = 0; i < ceiling.length; i++ ) ceiling[i].visible = visible;	
+	for ( var i = 0; i < ceiling.length; i++ ) ceiling[i].visible = visible;
+	for ( var i = 0; i < obj3D.length; i++ ) obj3D[i].visible = visible;	
 }
 
 function visibleLevelCam3D(id, visible)
@@ -305,6 +311,7 @@ function visibleLevelCam3D(id, visible)
 	var door = infProject.jsonProject.level[id].door;	
 	let room = infProject.jsonProject.level[id].floor;
 	let ceiling = infProject.jsonProject.level[id].ceiling;
+	let obj3D = infProject.jsonProject.level[id].obj;
 	
 	for ( var i = 0; i < point.length; i++ )
 	{ 
@@ -334,7 +341,8 @@ function visibleLevelCam3D(id, visible)
 
 		
 	for ( var i = 0; i < room.length; i++ ) room[i].visible = visible;
-	for ( var i = 0; i < ceiling.length; i++ ) ceiling[i].visible = visible;	
+	for ( var i = 0; i < ceiling.length; i++ ) ceiling[i].visible = visible;
+	for ( var i = 0; i < obj3D.length; i++ ) obj3D[i].visible = visible;
 }
 
 
@@ -353,26 +361,113 @@ function deactiveLevel()
 	infProject.jsonProject.level[id].wall = infProject.scene.array.wall;
 	infProject.jsonProject.level[id].point = infProject.scene.array.point;
 	infProject.jsonProject.level[id].window = infProject.scene.array.window;
-	infProject.jsonProject.level[id].door = infProject.scene.array.door;
-	infProject.jsonProject.level[id].obj = infProject.scene.array.obj;
+	infProject.jsonProject.level[id].door = infProject.scene.array.door;	
 	infProject.jsonProject.level[id].floor = infProject.scene.array.floor;
-	infProject.jsonProject.level[id].ceiling = infProject.scene.array.ceiling;		
+	infProject.jsonProject.level[id].ceiling = infProject.scene.array.ceiling;
+	infProject.jsonProject.level[id].obj = infProject.scene.array.obj;	
  	infProject.jsonProject.level[id].height = infProject.settings.height;
 	
 	obj_point = [];
 	room = [];
 	ceiling = [];
-	arr_obj_3d = [];
 	
 	infProject.scene.array.wall = [];
 	infProject.scene.array.point = [];
 	infProject.scene.array.window = [];
-	infProject.scene.array.door = [];
-	infProject.scene.array.obj = [];
+	infProject.scene.array.door = [];	
 	infProject.scene.array.floor = [];
 	infProject.scene.array.ceiling = [];
+	infProject.scene.array.obj = [];
 	
 	infProject.scene.array = resetPop.infProjectMySceneArray();
+}
+
+// удалем все этажи
+function clearAllLevels()
+{
+	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
+	{
+		clearOneLevel(i);
+	}	
+}
+
+// удаляем один этаж
+function clearOneLevel(id)
+{
+	deActiveSelected();
+	
+	let wall = infProject.jsonProject.level[id].wall;
+	let point = infProject.jsonProject.level[id].point;
+	let window = infProject.jsonProject.level[id].window;
+	let door = infProject.jsonProject.level[id].door;	
+	let floor = infProject.jsonProject.level[id].floor;
+	let ceiling = infProject.jsonProject.level[id].ceiling;
+	let obj = infProject.jsonProject.level[id].obj;
+	
+	for ( var i = 0; i < wall.length; i++ )
+	{ 		
+		if(wall[i].userData.wall.html.label)
+		{
+			for ( var i2 = 0; i2 < wall[i].userData.wall.html.label.length; i2++ )
+			{
+				deleteValueFromArrya({arr: infProject.html.label, o: wall[i].userData.wall.html.label[i2]});
+				wall[i].userData.wall.html.label[i2].remove();
+			}
+		}					
+		
+		wall[i].userData.wall.p = [];
+		
+		disposeHierchy({obj: wall[i]});
+		scene.remove(wall[i]); 
+	}
+	
+	for ( var i = 0; i < point.length; i++ )
+	{ 
+		disposeHierchy({obj: point[i]});
+		scene.remove(point[i]); 
+	}	
+	
+	for ( var i = 0; i < window.length; i++ )
+	{ 
+		deleteSvgWD({obj: window[i]});	
+		disposeHierchy({obj: window[i]});   
+		scene.remove(window[i]); 
+	}
+	
+	for ( var i = 0; i < door.length; i++ )
+	{ 
+		deleteSvgWD({obj: door[i]});
+		disposeHierchy({obj: door[i]}); 
+		scene.remove(door[i]); 
+	}	
+	
+	
+	for ( var i = 0; i < floor.length; i++ )
+	{		
+		disposeHierchy({obj: floor[i]});
+		disposeHierchy({obj: ceiling[i]});
+		
+		deleteValueFromArrya({arr: infProject.html.label, o: floor[i].userData.room.html.label});
+		floor[i].userData.room.html.label.remove(); 
+		
+		scene.remove(floor[i]); 
+		scene.remove(ceiling[i]);	
+	}
+	
+	for ( var i = 0; i < obj.length; i++ )
+	{ 
+		disposeHierchy({obj: obj[i]});
+		scene.remove(obj[i]);
+	}
+
+	infProject.jsonProject.level[id].wall = [];
+	infProject.jsonProject.level[id].point = [];
+	infProject.jsonProject.level[id].window = [];
+	infProject.jsonProject.level[id].door = [];	
+	infProject.jsonProject.level[id].floor = [];
+	infProject.jsonProject.level[id].ceiling = [];
+	infProject.jsonProject.level[id].obj = [];	
+ 	//infProject.jsonProject.level[id].height = 2.8;	
 }
 
 

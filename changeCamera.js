@@ -34,12 +34,7 @@ function changeCamera(cam)
 		blockActiveObj({visible_1: true, visible_2: true});
 				 
 		cameraZoomTop( cameraTop.zoom );
-		changeDepthColor();
-		
-		for( var i = 0; i < infProject.scene.array.cubeCam.length; i++ )
-		{
-			//updateCubeCam({obj: infProject.scene.array.cubeCam[i]});
-		}		
+		changeDepthColor();				
 		
 		// прячем стены
 		getInfoRenderWall();

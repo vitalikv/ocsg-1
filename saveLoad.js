@@ -21,7 +21,7 @@ var resetPop =
 	
 	infProjectSceneArray : function()
 	{
-		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: arr_obj_3d, objSpot: [] };
+		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: [], objSpot: [] };
 		array.cubeCam = [];
 		array.base = (infProject.start)? infProject.scene.array.base : [];	// массив клонируемых объектов
 		
@@ -30,7 +30,7 @@ var resetPop =
 
 	infProjectMySceneArray : function()
 	{
-		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: arr_obj_3d, objSpot: [] };
+		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: [], objSpot: [] };
 		array.cubeCam = [];
 		array.base = infProject.scene.array.base;	// массив клонируемых объектов
 		
@@ -78,86 +78,23 @@ var resetPop =
 
 
 function resetScene() 
-{	
-	hideMenuUI(clickO.last_obj);
+{
+	deActiveSelected();
+	//hideMenuUI(clickO.last_obj);		
 	
+	clearOneLevel(infProject.jsonProject.actLevel);
 	
-	var wall = infProject.scene.array.wall;
-	var point = infProject.scene.array.point;
-	var window = infProject.scene.array.window;
-	var door = infProject.scene.array.door;
-	var obj = infProject.scene.array.obj;
-	var floor = infProject.scene.array.floor;
-	var ceiling = infProject.scene.array.ceiling;
 	var cubeCam = infProject.scene.array.cubeCam;
 	
-	for ( var i = 0; i < wall.length; i++ )
-	{ 		
-		if(wall[i].userData.wall.html.label)
-		{
-			for ( var i2 = 0; i2 < wall[i].userData.wall.html.label.length; i2++ )
-			{
-				deleteValueFromArrya({arr: infProject.html.label, o: wall[i].userData.wall.html.label[i2]});
-				wall[i].userData.wall.html.label[i2].remove();
-			}
-		}					
-		
-		wall[i].userData.wall.p = [];
-		
-		disposeHierchy({obj: wall[i]});
-		scene.remove(wall[i]); 
-	}
-	
-	for ( var i = 0; i < point.length; i++ )
-	{ 
-		disposeHierchy({obj: point[i]});
-		scene.remove(point[i]); 
-	}	
-	
-	for ( var i = 0; i < window.length; i++ )
-	{ 
-		deleteSvgWD({obj: window[i]});	
-		disposeHierchy({obj: window[i]});   
-		scene.remove(window[i]); 
-	}
-	
-	for ( var i = 0; i < door.length; i++ )
-	{ 
-		deleteSvgWD({obj: door[i]});
-		disposeHierchy({obj: door[i]}); 
-		scene.remove(door[i]); 
-	}	
-	
-	
-	for ( var i = 0; i < floor.length; i++ )
-	{		
-		disposeHierchy({obj: floor[i]});
-		disposeHierchy({obj: ceiling[i]});
-		
-		deleteValueFromArrya({arr: infProject.html.label, o: floor[i].userData.room.html.label});
-		floor[i].userData.room.html.label.remove(); 
-		
-		scene.remove(floor[i]); 
-		scene.remove(ceiling[i]);	
-	}
-	
-	for ( var i = 0; i < obj.length; i++ )
-	{ 
-		disposeHierchy({obj: obj[i]});
-		scene.remove(obj[i]);
-	}
-
 	for ( var i = 0; i < cubeCam.length; i++ )
 	{
 		disposeHierchy({obj: cubeCam[i]});
 		scene.remove( cubeCam[i] );		
-	}	
-	
+	}		
 	
 	obj_point = [];
 	room = [];
 	ceiling = [];
-	arr_obj_3d = [];
 	arrWallFront = [];
 	
 
@@ -191,8 +128,13 @@ function resetScene()
 	infProject.scene.array = resetPop.infProjectSceneArray();
 	infProject.scene.light.lamp = [];
 	
+	clearAllLevels();
 	
 	//getConsoleRendererInfo();
+	//console.log('infProject.scene.array');
+	//console.log(infProject.scene.array);
+	//console.log('infProject.jsonProject.level');
+	//console.log(infProject.jsonProject.level);
 }
 
 
