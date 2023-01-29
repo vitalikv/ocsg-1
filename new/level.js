@@ -221,8 +221,15 @@ function switchLevel(id)
 	
 	changeVisibleLevels();
 	
-	if(camera === cameraTop) visibleLevelCam2D(id, true);
-	else visibleLevelCam3D(id, true); 
+	if(camera === cameraTop) 
+	{
+		ghostLevel.createLevel();
+		visibleLevelCam2D(id, true);
+	}
+	else 
+	{
+		visibleLevelCam3D(id, true);
+	}		
 }
 
 // меняем видимость неактивных этажей

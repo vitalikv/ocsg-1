@@ -181,6 +181,7 @@ function dragToolPoint( event, obj )
 		else if(object.userData.tag == 'window' || object.userData.tag == 'door'){ dw = object; } 
 	}
 	
+	let glued = false;
 	
 	for ( var i = 0; i < obj_point.length; i++ )
 	{
@@ -193,10 +194,28 @@ function dragToolPoint( event, obj )
 		{ 
 			obj.position.set( obj_point[i].position.x, obj.position.y, obj_point[i].position.z );
 			obj.userData.point.cross = point = obj_point[i];
+			glued = true;
 			break;
 		}	
 	}	
- 
+
+	if(!glued)
+	{
+		let arrP = ghostLevel.arr.point;
+		
+		for ( var i = 0; i < arrP.length; i++ )
+		{
+			var p1 = new THREE.Vector3( obj.position.x, 0, obj.position.z ); 
+			var p2 = new THREE.Vector3( arrP[i].position.x, 0, arrP[i].position.z ); 
+			
+			if(p1.distanceTo( p2 ) < 0.1 / camera.zoom)
+			{ 
+				obj.position.set( arrP[i].position.x, obj.position.y, arrP[i].position.z );
+				point = arrP[i];
+				break;
+			}	
+		} 		
+	}
 	  
 	if(point) 
 	{
