@@ -223,7 +223,7 @@ function switchLevel(id)
 	
 	if(camera === cameraTop) 
 	{
-		ghostLevel.createLevel();
+		ghostLevel.createLevel();	// показываем призрачный этаж
 		visibleLevelCam2D(id, true);
 	}
 	else 

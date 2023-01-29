@@ -199,6 +199,7 @@ function dragToolPoint( event, obj )
 		}	
 	}	
 
+	// ищем точки нижнего этажа, которые могут прилипать (чтобы посторить новые стены, как на нижнем этаже)
 	if(!glued)
 	{
 		let arrP = ghostLevel.arr.point;

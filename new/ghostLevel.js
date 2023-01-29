@@ -13,6 +13,7 @@ class GhostLevel
 		this.material.dw = new THREE.MeshStandardMaterial( { color : 0xd1d1d1 } );
 	}
 	
+	// показываем призрачный этаж
 	createLevel()
 	{
 		this.deleteLevel();
@@ -69,6 +70,7 @@ class GhostLevel
 		renderCamera();		
 	}
 	
+	// получаем данные нижнего этажа, чтобы построить призрачный этаж
 	getLevel()
 	{
 		let id = infProject.jsonProject.actLevel - 1;
@@ -84,6 +86,7 @@ class GhostLevel
 		return {wall, point, window, door};
 	}
 
+	// создаем призрачный этаж
 	crForm({arrP, y, material})
 	{
 		let t = [];
@@ -99,6 +102,7 @@ class GhostLevel
 		return obj;
 	}
 	
+	// удаляем призрачный этаж
 	deleteLevel()
 	{
 		getConsoleRendererInfo()

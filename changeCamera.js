@@ -17,7 +17,7 @@ function changeCamera(cam)
 
 	if(camera == cameraTop)
 	{	
-		ghostLevel.createLevel();
+		ghostLevel.createLevel();	// показываем призрачный этаж
 		
 		infProject.camera.d3.targetO.visible = false;
 		blockActiveObj({visible_1: false, visible_2: false});
@@ -32,7 +32,7 @@ function changeCamera(cam)
 	}
 	else if(camera == camera3D)
 	{	
-		ghostLevel.deleteLevel();
+		ghostLevel.deleteLevel();	// прячем призрачный этаж
 		
 		infProject.camera.d3.targetO.visible = true;
 		blockActiveObj({visible_1: true, visible_2: true});
