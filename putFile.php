@@ -37,6 +37,8 @@ html_1.js
 selectionBox.js
 undoRedo.js
 getScreenshot.js
+new/level.js
+new/ghostLevel.js
 ';
 
 $arrF = array();

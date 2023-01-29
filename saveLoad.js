@@ -491,7 +491,7 @@ function loadFile(cdm)
 	{
 		$.ajax
 		({
-			url: infProject.path + infProject.path + cdm.json, 	
+			url: infProject.path + cdm.json, 	
 			type: 'POST',
 			dataType: 'json',
 			success: function(json)

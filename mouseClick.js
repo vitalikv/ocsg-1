@@ -61,9 +61,10 @@ function onDocumentMouseDown( event )
 	//event.preventDefault();
 
 	if (window.location.hostname == 'ocsg-1'){} 
-	else if (window.location.hostname == 'ocsg.ru'){}
+	else if (window.location.hostname == 'engineering-plan.ru'){}
+	else if (window.location.hostname == 'engineering-plan-test'){} 
 	else if (window.location.hostname == 'room-3d'){} 
-	else if (window.location.hostname == 'room-3d.ru'){} 
+	else if (window.location.hostname == 'room-3d.ru'){} 	
 	else { return; }
  
 	long_click = false;
