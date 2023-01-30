@@ -39,6 +39,7 @@ undoRedo.js
 getScreenshot.js
 new/level.js
 new/ghostLevel.js
+new/roof.js
 ';
 
 $arrF = array();

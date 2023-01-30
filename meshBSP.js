@@ -131,7 +131,7 @@ function clickMovePoint_BSP( arrW )
 	{
 		var wall = arrW[i]; 
 		
-		if(wall.userData.wall.arrO.length == 0) continue;
+		//if(wall.userData.wall.arrO.length == 0) continue;
 		
 		var p1 = wall.userData.wall.p[0].position;
 		var p2 = wall.userData.wall.p[1].position;	

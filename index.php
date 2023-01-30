@@ -135,6 +135,7 @@
 	
 	<script src="<?=$path?>new/level.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ghostLevel.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/roof.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/test.js?<?=$vrs?>"></script>
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
