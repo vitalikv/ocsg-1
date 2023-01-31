@@ -105,8 +105,6 @@ class GhostLevel
 	// удаляем призрачный этаж
 	deleteLevel()
 	{
-		getConsoleRendererInfo()
-		
 		this.deleteObjs(this.arr.point);
 		this.deleteObjs(this.arr.wall);
 		this.deleteObjs(this.arr.window);
@@ -116,8 +114,6 @@ class GhostLevel
 		this.arr.wall = [];
 		this.arr.window = [];
 		this.arr.door = [];
-		
-		getConsoleRendererInfo();
 	}
 	
 	deleteObjs(arrO)

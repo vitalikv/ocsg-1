@@ -213,8 +213,6 @@ function compileJsonFile()
 
 	let posY = getLevelPos0({lastId: id, newId: 0});
 	
-	console.log(posY);
-	
 	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
 	{
 		//if(infProject.jsonProject.level[i].wall.length === 0) continue;
@@ -247,7 +245,7 @@ function compileJsonFile_2(array, posY)
 	var rooms = [];
 	var object = [];
 	
-	console.log(array);
+	
 	var wall = array.wall;
 	//var point = infProject.scene.array.point;
 	

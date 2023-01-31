@@ -195,6 +195,10 @@
 				<div>
 					<div data-action ='create_wd_3' class="button1 button_gradient_1">Окно</div>
 				</div>
+				
+				<div>
+					<div nameId="roof" class="button1 button_gradient_1">Крыша</div>
+				</div>				
 			</div>			
 					
 		
