@@ -322,7 +322,7 @@ function compileJsonFile_2(array, posY)
 	
 	for ( var i = 0; i < array.obj.length; i++ )
 	{
-		var obj = infProject.scene.array.obj[i];		
+		var obj = array.obj[i];		
 			
 		var m = object.length;
 		object[m] = {};

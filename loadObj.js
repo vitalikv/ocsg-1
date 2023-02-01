@@ -242,6 +242,13 @@ function addObjInScene(inf, cdm)
 		return;
 	}
 	
+	if(cdm.roof)
+	{
+		clRoof.initRoof(inf, cdm);
+		
+		return;
+	}
+	
 	var obj = inf.obj;
 	
 	if(cdm.pos){ obj.position.copy(cdm.pos); }

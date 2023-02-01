@@ -194,13 +194,16 @@
 				
 				<div>
 					<div data-action ='create_wd_3' class="button1 button_gradient_1">Окно</div>
-				</div>
-				
+				</div>			
+			</div>	
+
+
+			<div class="flex_column_1 rp_item_plane">
 				<div>
-					<div nameId="roof" class="button1 button_gradient_1">Крыша</div>
+					<div nameId="cr_btn_roof" class="button1 button_gradient_1">Крыша</div>
 				</div>				
-			</div>			
-					
+			</div>
+			
 		
 			<div class="flex_1 rp_item_plane">
 				<div class="flex_1 align_items">
