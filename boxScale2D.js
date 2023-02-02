@@ -292,6 +292,7 @@ function showSvgSizeObj(cdm)
 	
 	var obj = cdm.obj;
 		
+	let tag = obj.userData.tag;
 	
 	if(cdm.resetPos)
 	{
@@ -411,7 +412,7 @@ function showSvgSizeObj(cdm)
 		updateSvgCircle({el: circle[7], pos: new THREE.Vector3().subVectors( v[3], v[1] ).divideScalar( 2 ).add(v[1])});		
 	}	
 
-
+	let svgBox2 = (tag === 'roof') ? false : true;
 	
 	// box2 (внешний прямоугольник, который НЕ поворачивается)
 	{
@@ -433,13 +434,17 @@ function showSvgSizeObj(cdm)
 		var p3 = new THREE.Vector3(bound.max.x, 0, bound.max.z);	// bottom-right				
 		var p4 = new THREE.Vector3(bound.min.x, 0, bound.max.z);	// bottom-left		
 		
-		if(camera == cameraTop) { showElementSvg([box2]); }
-		
-		updateSvgPath({el: box2, arrP: [p1, p2, p3, p4, p1]});	
+		if(camera == cameraTop && svgBox2) 
+		{ 
+			showElementSvg([box2]); 
+			updateSvgPath({el: box2, arrP: [p1, p2, p3, p4, p1]});
+		}	
 	}
 	
+	let svgRoulette = (tag === 'roof') ? false : true;
 	
 	// определяем к какой комнате относится объект и показываем расстояние до стен и до объектов
+	if(svgRoulette)
 	{
 		var floor = null;
 		

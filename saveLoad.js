@@ -21,7 +21,7 @@ var resetPop =
 	
 	infProjectSceneArray : function()
 	{
-		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: [], objSpot: [] };
+		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: [], roof: [], objSpot: [] };
 		array.cubeCam = [];
 		array.base = (infProject.start)? infProject.scene.array.base : [];	// массив клонируемых объектов
 		
@@ -30,7 +30,7 @@ var resetPop =
 
 	infProjectMySceneArray : function()
 	{
-		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: [], objSpot: [] };
+		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: [], roof: [], objSpot: [] };
 		array.cubeCam = [];
 		array.base = infProject.scene.array.base;	// массив клонируемых объектов
 		
@@ -206,7 +206,8 @@ function compileJsonFile()
 	infProject.jsonProject.level[id].door = infProject.scene.array.door;
 	infProject.jsonProject.level[id].obj = infProject.scene.array.obj;
 	infProject.jsonProject.level[id].floor = infProject.scene.array.floor;
-	infProject.jsonProject.level[id].ceiling = infProject.scene.array.ceiling;	
+	infProject.jsonProject.level[id].ceiling = infProject.scene.array.ceiling;
+	infProject.jsonProject.level[id].roof = infProject.scene.array.roof;	
 	infProject.jsonProject.level[id].height = infProject.settings.height;
 	
 	let level = [];
@@ -237,16 +238,17 @@ function compileJsonFile_2(array, posY)
 		walls: [],	
 		rooms: [],
 		object: [],
+		roofs: [],
 		height: array.height,		
 	};
 	
-	var points = [];
-	var walls = [];
-	var rooms = [];
-	var object = [];
+	let points = [];
+	let walls = [];
+	let rooms = [];
+	let object = [];
+	let roofs = [];
 	
-	
-	var wall = array.wall;
+	let wall = array.wall;
 	//var point = infProject.scene.array.point;
 	
 	for ( var i = 0; i < wall.length; i++ )
@@ -340,11 +342,27 @@ function compileJsonFile_2(array, posY)
 		}
 	}	
 	
+	let roof = array.roof;
 	
+	for ( var i = 0; i < roof.length; i++ )
+	{
+		var obj = roof[i];		
+			
+		var m = roofs.length;
+		roofs[m] = {};
+		roofs[m].id = Number(obj.userData.id);
+		roofs[m].lotid = Number(obj.userData.roof.lotid);
+		roofs[m].pos = new THREE.Vector3(obj.position.x, obj.position.y - posY, obj.position.z);
+		//object[m].rot = new THREE.Vector3( THREE.Math.radToDeg(obj.rotation.x), THREE.Math.radToDeg(obj.rotation.y), THREE.Math.radToDeg(obj.rotation.z) );
+		roofs[m].q = {x: obj.quaternion.x, y: obj.quaternion.y, z: obj.quaternion.z, w: obj.quaternion.w};
+		roofs[m].scale = obj.scale;
+	}	
+		
 	json.level[0].points = points;
 	json.level[0].walls = walls;
 	json.level[0].rooms = rooms;
 	json.level[0].object = object;
+	json.level[0].roofs = roofs;
 	
 	// version
 	json.level[0].version.id = 2;
@@ -532,7 +550,8 @@ async function loadFilePL(json)
 	if(inf.model) addObjInBase(inf, new THREE.ObjectLoader().parse( inf.model ));
 	inf = await getObjFromBase({lotid: 11});
 	if(inf.model) addObjInBase(inf, new THREE.ObjectLoader().parse( inf.model ));
-	
+	inf = await getObjFromBase({lotid: 19});
+	if(inf.model) addObjInBase(inf, new THREE.ObjectLoader().parse( inf.model ));	
 	
 
 	//await getListRoomTypesApi();	// получаем типы помещений из api, добавляем в меню
@@ -572,7 +591,7 @@ async function loadFileLevel(json)
 	var walls = arr.walls;
 	var rooms = arr.rooms;
 	var furn = (arr.object) ? arr.object : [];
-	
+	var roofs = (arr.roofs) ? arr.roofs : [];
 	
 	//changeAllHeightWall_1({ load: true, height: arr.height, input: true, globalHeight: true });
 			
@@ -730,7 +749,11 @@ async function loadFileLevel(json)
 		loadTextureInBase({arr: arrTexture});
 	}
 	
-
+	for ( var i = 0; i < roofs.length; i++ )
+	{		
+		roofs[i].roof = true;
+		await loadObjServer(roofs[i]); 
+	}
 	  
 	assignListRoomTypesApi({arr: rooms});	// получаем типы помещений, добавляем в меню и назначаем всем построеннным комнатам тип помещения
 	

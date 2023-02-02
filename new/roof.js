@@ -21,10 +21,14 @@ class Roof
 	{
 		let obj = inf.obj;
 		
-		obj.position.y = 0;
-		planeMath.position.y = 0; 
-		planeMath.rotation.set(-Math.PI/2, 0, 0);
-		planeMath.updateMatrixWorld();
+		if(cdm.pos){ obj.position.copy(cdm.pos); }
+		else
+		{
+			obj.position.y = 0;
+			planeMath.position.y = 0; 
+			planeMath.rotation.set(-Math.PI/2, 0, 0);
+			planeMath.updateMatrixWorld();			
+		}
 		
 		if(cdm.id){ obj.userData.id = cdm.id; }
 		else { obj.userData.id = countId; countId++; }
@@ -47,21 +51,110 @@ class Roof
 		
 		obj.material.visible = false;
 		
-		//infProject.scene.array.obj[infProject.scene.array.obj.length] = obj;
+		infProject.scene.array.roof[infProject.scene.array.roof.length] = obj;
 
-		scene.add( obj );		
+		scene.add( obj );	
+
+		if(cdm.cursor) clickO.move = obj; 	// объект был добавлен в сцену из каталога
 		
 		renderCamera();		
 	}
+
+	// активируем объект, ставим pivot/gizmo
+	clickRoof(cdm)
+	{
+		let obj = cdm.obj;
+		let rayhit = cdm.rayhit;
+		
+		if(clickWall_2D_selectBox( rayhit )) { return; }
+		
+		obj.updateMatrixWorld();
+		let pos = obj.localToWorld( obj.geometry.boundingSphere.center.clone() );			 
+		
+		let qt = obj.quaternion.clone();		
+		
+	 
+		// объект уже выбран
+		if(infProject.tools.pivot.userData.pivot.obj == obj)
+		{
+			clickO.move = obj;		
+			clickO.offset = new THREE.Vector3().subVectors( obj.position, rayhit.point );
+		
+			planeMath.position.copy( rayhit.point );
+			planeMath.rotation.set( Math.PI/2, 0, 0 );
+		}
+		
+		let pivot = infProject.tools.pivot;	
+		pivot.visible = true;	
+		pivot.userData.pivot.obj = obj;
+		pivot.position.copy(pos);
+		pivot.quaternion.copy(qt);
+		
+		if(camera == cameraTop) pivot.visible = false;
+		else pivot.userData.pivot.axs.y.visible = true;	
+		
+		let gizmo = infProject.tools.gizmo;					
+		gizmo.position.copy( pos );		
+		gizmo.visible = true;
+		gizmo.userData.gizmo.obj = obj;
+		gizmo.quaternion.copy( qt );			
+		
+		setScalePivotGizmo();
+		
+		if(camera == cameraTop) { outlineRemoveObj(); }
+		if(camera == camera3D) { outlineAddObj({arr: [obj]}); }
+		
+		activeObjRightPanelUI_1({obj: obj});	// показываем меню UI
+
+		showSvgSizeObj({obj: obj, boxCircle: true, getObjRoom: true, resetPos: true});
+		
+		uiInfoObj({obj});
+	}
+
+	// перемещение крыши по мыши
+	moveRoof( event )
+	{	
+		let intersects = rayIntersect( event, planeMath, 'one' ); 
+		
+		if(intersects.length == 0) return;
+		
+		let obj = clickO.move;
+		
+		if(!clickO.actMove) clickO.actMove = true;		
+		
+		let pos = new THREE.Vector3().addVectors( intersects[ 0 ].point, clickO.offset );	
+		
+		let pos2 = new THREE.Vector3().subVectors( pos, obj.position );
+		obj.position.add( pos2 );
+
+		infProject.tools.pivot.position.add( pos2 );
+		infProject.tools.gizmo.position.add( pos2 );
+
+		setScalePivotGizmo();
+		
+		showSvgSizeObj({obj: obj, boxCircle: true, setPos: { pos2D: new THREE.Vector2(event.clientX, event.clientY), pos3D: intersects[ 0 ].point }});
+	}
+
+	clickUpRoof(obj)
+	{ 
+		if(!clickO.actMove) return;
+		if(camera !== cameraTop) return;
+				
+		// offsetLine
+		upSvgLinePosScene({el: infProject.svg.furn.offset.elem});
+		upSvgLinePosScene({el: infProject.svg.furn.size.elem});
+	}
 	
 	cutWalls()
-	{
-		let obj = infProject.scene.array.obj[0];
+	{		
+		let roofs = infProject.scene.array.roof;
 		
-		let roofMod = this.crRoofMod( obj );
-		this.obj[0] = roofMod;		
-		
-		this.meshBSP(roofMod);
+		for (let i = 0; i < roofs.length; i++)
+		{
+			let roofMod = this.crRoofMod( roofs[i] );		
+			
+			this.meshBSP(roofMod);			
+		}		
 		
 		renderCamera();			
 	}
@@ -171,6 +264,34 @@ class Roof
 
 		return obj2;
 	}	
+
+	copyRoof() 
+	{
+		let obj = getObjFromPivotGizmo();		
+		if(!obj) return;	
+		
+		let clone = obj.clone();
+
+		clone.userData.id = countId; countId++;
+		infProject.scene.array.roof[infProject.scene.array.roof.length] = clone; 
+		scene.add( clone );	
+	}
+
+	// удаление объекта
+	deleteRoof(obj)
+	{ 		
+		clickO = resetPop.clickO(); 
+		
+		hidePivotGizmo(obj);
+		
+		deleteValueFromArrya({arr: infProject.scene.array.roof, o: obj});		
+		disposeHierchy({obj: obj}); 
+		scene.remove(obj); 
+		
+		outlineRemoveObj();
+		
+		renderCamera();
+	}
 }
 
 let clRoof = new Roof();

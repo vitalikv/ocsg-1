@@ -147,51 +147,6 @@ function addObjInBase(inf, obj)
 
 
 
-// создаем слепок объекта
-function createSpotObj(inf, cdm)
-{ 
-	if(!inf.spot) return;
-	if(!inf.spot.coordinates) return;
-	
-	var v = inf.spot.coordinates[0];
-	var height = (inf.height) ? inf.height : 0.1;
-	
-	var point = [];
-	for ( var i = 0; i < v.length - 1; i++ ) 
-	{  
-		point[i] = new THREE.Vector2 ( v[i][0], v[i][1] );
-		if(cdm.scale)
-		{
-			point[i].x *= cdm.scale.x;
-			point[i].y *= cdm.scale.z;
-		}
-	}
-
-	if(cdm.scale) { height *= cdm.scale.y; }
-	
-	var geometry = new THREE.ExtrudeGeometry( new THREE.Shape(point), { bevelEnabled: false, depth: height } );
-	geometry.rotateX(-Math.PI / 2);
-	geometry.rotateY(Math.PI);
-	var material = new THREE.MeshLambertMaterial( { color: 0xe3e3e5, transparent: true, opacity: 0.8 } );
-	
-	
-	var obj = new THREE.Mesh( geometry, material ); 
-	
-	infProject.scene.array.objSpot[infProject.scene.array.objSpot.length] = obj;
-	
-	scene.add(obj);
-	
-	obj.userData.tag = 'obj_spot';
-	obj.userData.objSpot = {};
-	
-	if(cdm.id) { obj.userData.objSpot.id = cdm.id; }	
-	if(cdm.pos) { obj.position.copy(cdm.pos); }
-	if(cdm.q) { obj.quaternion.copy(cdm.q); }
-	
-	if(cdm.cursor) { clickO.move = obj; }
-}
-
-
 
 // удаление пятно объекта
 function deleteSpotObj(cdm)

@@ -119,7 +119,6 @@ function activeObjRightPanelUI_1(cdm)
 	}	
 	else if(obj.userData.tag == 'wall')
 	{
-		console.log(cdm);
 		if(cdm.side)
 		{
 			$('[nameId="rp_button_side_texture_1"]').hide();
@@ -172,6 +171,11 @@ function activeObjRightPanelUI_1(cdm)
 		$('[nameId="bl_object_3d"]').show();
 		
 		if( isCheckExsistFunction(window['getInfObjFromBD']) ) { getInfObjFromBD({obj: obj}); };
+	}
+	else if(obj.userData.tag == 'roof')
+	{		
+		$('[nameId="rp_obj_name"]').val(obj.userData.roof.nameRus);		
+		$('[nameId="bl_object_3d"]').show();
 	}	
 	else if(obj.userData.tag == 'room')
 	{

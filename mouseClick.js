@@ -138,6 +138,33 @@ function clickRayHit(event)
 		var ray = rayIntersect( event, arr, 'arr' );
 		if(ray.length > 0) { rayhit = ray[0]; return rayhit; }		
 	}
+	
+	if(!rayhit)
+	{
+		var ray = rayIntersect( event, infProject.scene.array.roof, 'arr', true );	
+		//if(ray.length > 0) { rayhit = ray[0]; return rayhit; }
+
+		if(ray.length > 0)
+		{   	
+			rayhit = null;
+			
+			for (var i = 0; i < ray.length; i++)
+			{
+				if(ray[i].object.userData.roof) continue;
+				
+				rayhit = ray[i];
+				break;
+			}
+			
+			var object = null; 
+			
+			if(rayhit) { object = getParentObj({obj: rayhit.object}); }
+			
+			if(!object) { rayhit = null; }
+			else { rayhit.object = object; return rayhit; }
+		}		
+	}
+		
 
 	if(!infProject.scene.block.click.controll_wd)
 	{
@@ -226,7 +253,7 @@ function getParentObj(cdm)
 		{
 			if(obj.userData.tag)
 			{
-				if(obj.userData.tag == 'obj')
+				if(obj.userData.tag == 'obj' || obj.userData.tag == 'roof')
 				{
 					next = false;
 					return obj;					
@@ -292,6 +319,8 @@ function clickMouseActive(cdm)
 		else if( tag == 'controll_wd' ) { clickToggleChangeWin( rayhit ); }
 		else if( tag == 'obj' && camera == cameraTop ) { clickObject3D({obj: obj, rayhit: rayhit}); }
 		else if( tag == 'obj' && camera == camera3D && infProject.tools.pivot.userData.pivot.obj == obj) { clickObject3D({obj: obj, rayhit: rayhit}); }
+		else if( tag == 'roof' && camera == cameraTop ) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }
+		else if( tag == 'roof' && camera == camera3D && infProject.tools.pivot.userData.pivot.obj == obj) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }		
 		else { flag = false; }
 	}
 	else if(cdm.type == 'up')
@@ -300,6 +329,7 @@ function clickMouseActive(cdm)
 		else if( tag == 'obj' && camera == camera3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clickObject3D({obj: obj, rayhit: rayhit}); }
 		else if( tag == 'room' && camera == cameraTop ) { clickFloor({obj: obj}); }
 		else if( tag == 'room' && camera == camera3D ) { clickFloor({obj: obj}); }
+		else if( tag == 'roof' && camera == camera3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }
 		else { flag = false; }
 	}	
 
@@ -356,7 +386,7 @@ function onDocumentMouseMove( event )
 		else if ( tag == 'free_dw' ) { dragWD_2( event, obj ); }
 		else if ( tag == 'obj' ) { moveObjectPop( event ); }
 		else if ( tag == 'obj_spot' ) { moveObjectPop( event ); }
-		else if ( tag == 'roof' ) { moveObjectPop( event ); }
+		else if ( tag == 'roof' ) { clRoof.moveRoof( event ); }
 	}
 	else if(camera == cameraTop && clickO.selectBox.drag) 
 	{		
@@ -409,6 +439,7 @@ function onDocumentMouseUp( event )
 		else if(tag == 'obj') { clickMouseUpObject(obj); }
 		else if(tag == 'pivot') { clickMouseUpPivot(); }
 		else if(tag == 'gizmo') { clickMouseUpGizmo(); }
+		else if ( tag == 'roof' ) { clRoof.moveRoof( event ); }
 		
 		if(tag == 'free_dw') {  }
 		else if (tag == 'point') 
@@ -465,7 +496,8 @@ function hideMenuObjUI_2D(cdm)
 			else if(tag == 'point' && camera == cameraTop) { hideMenuUI(obj); }
 			else if(tag == 'window' && camera == cameraTop) { hideSizeWD(obj); hideMenuUI(obj); }
 			else if(tag == 'door' && camera == cameraTop) { hideSizeWD(obj); hideMenuUI(obj); }
-			else if(tag == 'obj' && camera == cameraTop) { hidePivotGizmo(obj); }			
+			else if(tag == 'obj' && camera == cameraTop) { hidePivotGizmo(obj); }
+			else if(tag == 'roof' && camera == cameraTop) { hidePivotGizmo(obj); }
 			else { flag = false; }
 		}
 		else if(cdm.type == 'up')
@@ -474,6 +506,7 @@ function hideMenuObjUI_2D(cdm)
 			else if(tag == 'room' && camera == cameraTop) { hideMenuUI(obj); outlineRemoveObj(); }
 			else if(tag == 'room' && camera == camera3D) { hideMenuUI(obj); outlineRemoveObj(); }
 			else if(tag == 'obj' && camera == camera3D) { hidePivotGizmo(obj); }
+			else if(tag == 'roof' && camera == camera3D) { hidePivotGizmo(obj); }
 			else { flag = false; }
 		}
 		else
@@ -484,6 +517,7 @@ function hideMenuObjUI_2D(cdm)
 			else if(tag == 'door') { hideSizeWD(obj); hideMenuUI(obj); }
 			else if(tag == 'room') { hideMenuUI(obj); }
 			else if(tag == 'obj') { hidePivotGizmo(obj); }
+			else if(tag == 'roof') { hidePivotGizmo(obj); }
 			else { flag = false; }
 		}
 	}

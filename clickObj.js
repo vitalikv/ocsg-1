@@ -83,10 +83,8 @@ function clickObject3D(cdm)
 
 
 // обновляем меню
-function uiInfoObj(cdm)
+function uiInfoObj({obj})
 {			
-	var obj = cdm.obj;
-	
 	obj.geometry.computeBoundingBox();
 	
 	var minX = obj.geometry.boundingBox.min.x;
@@ -242,6 +240,13 @@ function deleteObjectPop(cdm)
 	
 	var arr = [];
 	
+	if(cdm.obj && cdm.obj.userData.tag === 'roof' || clickO.last_obj && clickO.last_obj.userData.tag === 'roof')
+	{
+		let o2 = (cdm.obj) ? cdm.obj : clickO.last_obj;
+		clRoof.deleteRoof(o2);
+		return;
+	}
+	
 	if(cdm.obj)
 	{
 		if(cdm.obj.userData.tag == 'obj') { arr[0] = cdm.obj; }
@@ -369,6 +374,12 @@ function copyObj(cdm)
 	
 	if(!obj) return;	
 	
+	if(obj.userData.tag == 'roof') 
+	{
+		clRoof.copyRoof();
+		return;
+	}
+		
 	var cubeCam = null;
 	if(obj.userData.cubeCam) 
 	{ 

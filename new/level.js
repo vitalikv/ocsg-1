@@ -14,6 +14,7 @@ function initArrLevel()
 		level[i].floor = [];
 		level[i].ceiling = [];
 		level[i].obj = [];
+		level[i].roof = [];
 		level[i].height = 2.8;		
 	}
 	
@@ -77,8 +78,10 @@ function saveArrLevel(id)
 	infProject.jsonProject.level[id].door = infProject.scene.array.door;	
 	infProject.jsonProject.level[id].floor = infProject.scene.array.floor;
 	infProject.jsonProject.level[id].ceiling = infProject.scene.array.ceiling;
-	infProject.jsonProject.level[id].height = infProject.settings.height;
 	infProject.jsonProject.level[id].obj = infProject.scene.array.obj;
+	infProject.jsonProject.level[id].roof = infProject.scene.array.roof;
+	infProject.jsonProject.level[id].height = infProject.settings.height;
+	
 	
  	changeDepthColor222();
 	obj_point = [];
@@ -88,10 +91,11 @@ function saveArrLevel(id)
 	infProject.scene.array.wall = [];
 	infProject.scene.array.point = [];
 	infProject.scene.array.window = [];
-	infProject.scene.array.door = [];
-	infProject.scene.array.obj = [];
+	infProject.scene.array.door = [];	
 	infProject.scene.array.floor = [];
 	infProject.scene.array.ceiling = [];
+	infProject.scene.array.obj = [];
+	infProject.scene.array.roof = [];
 	
 	infProject.scene.array = resetPop.infProjectMySceneArray();
 
@@ -120,7 +124,8 @@ function changeHeightWallLevel(event, id)
 	event.target.value = value.num;
 	
 	if(infProject.jsonProject.actLevel === id) infProject.settings.height = value.num;
-	if(infProject.jsonProject.actLevel === id) console.log(infProject.jsonProject.actLevel === id, infProject.settings.height);
+	
+	// меняем высоту текщего этажа и поднимаем потолок и крышу
 	if(1===1)
 	{
 		clickMovePoint_BSP( level[id].wall );
@@ -144,18 +149,17 @@ function changeHeightWallLevel(event, id)
 		upLabelPlan_1( level[id].wall );
 		clickPointUP_BSP( level[id].wall );
 
-		var floor = level[id].floor;
-		var ceiling = level[id].ceiling;
+		let floor = level[id].floor;
+		let ceiling = level[id].ceiling;
+		let roof = level[id].roof;
 		
-		for ( var i = 0; i < floor.length; i++ )
-		{		
-			ceiling[i].position.set( 0, floor[i].position.y + value.num, 0 ); 	
-		}
+		for ( let i = 0; i < floor.length; i++ ) ceiling[i].position.set( 0, floor[i].position.y + value.num, 0 );
+		for ( let i = 0; i < roof.length; i++ ) roof[i].position.set( 0, roof[i].position.y + value.num, 0 );
 	}
 	
 	if(infProject.jsonProject.actLevel > id)
 	{
-		for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
+		for ( let i = 0; i < infProject.jsonProject.level.length; i++ )
 		{
 			if(i > id) continue;					
 			changePosYLevel(-posY, i);
@@ -188,6 +192,7 @@ function startLevel(id)
 	infProject.scene.array.floor = infProject.jsonProject.level[id].floor;
 	infProject.scene.array.ceiling = infProject.jsonProject.level[id].ceiling;
 	infProject.scene.array.obj = infProject.jsonProject.level[id].obj;
+	infProject.scene.array.roof = infProject.jsonProject.level[id].roof;
 	infProject.settings.height = infProject.jsonProject.level[id].height;
 
 	getInfoRenderWall();
@@ -281,7 +286,8 @@ function changePosYLevel(posY, id)
 	let room = infProject.jsonProject.level[id].floor;
 	let ceiling = infProject.jsonProject.level[id].ceiling;
 	let obj3D = infProject.jsonProject.level[id].obj;
-	
+	let roof = infProject.jsonProject.level[id].roof;
+		
 	for ( var i = 0; i < arrW.length; i++ )
 	{		
 		arrW[i].position.y = arrW[i].position.y - posY;
@@ -295,7 +301,8 @@ function changePosYLevel(posY, id)
 	for ( var i = 0; i < obj_point.length; i++ ) obj_point[i].position.y = obj_point[i].position.y - posY;	
 	for ( var i = 0; i < room.length; i++ ) room[i].position.y = room[i].position.y - posY;
 	for ( var i = 0; i < ceiling.length; i++ ) ceiling[i].position.y = ceiling[i].position.y - posY;
-	for ( var i = 0; i < obj3D.length; i++ ) obj3D[i].position.y = obj3D[i].position.y - posY;	
+	for ( var i = 0; i < obj3D.length; i++ ) obj3D[i].position.y = obj3D[i].position.y - posY;
+	for ( var i = 0; i < roof.length; i++ ) roof[i].position.y = roof[i].position.y - posY;
 }
 
 
@@ -308,6 +315,7 @@ function visibleLevelCam2D(id, visible)
 	let room = infProject.jsonProject.level[id].floor;
 	let ceiling = infProject.jsonProject.level[id].ceiling;
 	let obj3D = infProject.jsonProject.level[id].obj;
+	let roof = infProject.jsonProject.level[id].roof;
 	
 	for ( var i = 0; i < point.length; i++ )
 	{ 
@@ -338,7 +346,8 @@ function visibleLevelCam2D(id, visible)
 		
 	for ( var i = 0; i < room.length; i++ ) room[i].visible = visible;
 	for ( var i = 0; i < ceiling.length; i++ ) ceiling[i].visible = visible;
-	for ( var i = 0; i < obj3D.length; i++ ) obj3D[i].visible = visible;	
+	for ( var i = 0; i < obj3D.length; i++ ) obj3D[i].visible = visible;
+	for ( var i = 0; i < roof.length; i++ ) roof[i].visible = visible;
 }
 
 function visibleLevelCam3D(id, visible)
@@ -350,6 +359,7 @@ function visibleLevelCam3D(id, visible)
 	let room = infProject.jsonProject.level[id].floor;
 	let ceiling = infProject.jsonProject.level[id].ceiling;
 	let obj3D = infProject.jsonProject.level[id].obj;
+	let roof = infProject.jsonProject.level[id].roof;
 	
 	for ( var i = 0; i < point.length; i++ )
 	{ 
@@ -381,6 +391,7 @@ function visibleLevelCam3D(id, visible)
 	for ( var i = 0; i < room.length; i++ ) room[i].visible = visible;
 	for ( var i = 0; i < ceiling.length; i++ ) ceiling[i].visible = visible;
 	for ( var i = 0; i < obj3D.length; i++ ) obj3D[i].visible = visible;
+	for ( var i = 0; i < roof.length; i++ ) roof[i].visible = visible;
 }
 
 
@@ -402,7 +413,8 @@ function deactiveLevel()
 	infProject.jsonProject.level[id].door = infProject.scene.array.door;	
 	infProject.jsonProject.level[id].floor = infProject.scene.array.floor;
 	infProject.jsonProject.level[id].ceiling = infProject.scene.array.ceiling;
-	infProject.jsonProject.level[id].obj = infProject.scene.array.obj;	
+	infProject.jsonProject.level[id].obj = infProject.scene.array.obj;
+	infProject.jsonProject.level[id].roof = infProject.scene.array.roof;
  	infProject.jsonProject.level[id].height = infProject.settings.height;
 	
 	obj_point = [];
@@ -416,6 +428,7 @@ function deactiveLevel()
 	infProject.scene.array.floor = [];
 	infProject.scene.array.ceiling = [];
 	infProject.scene.array.obj = [];
+	infProject.scene.array.roof = [];
 	
 	infProject.scene.array = resetPop.infProjectMySceneArray();
 }
@@ -441,6 +454,7 @@ function clearOneLevel(id)
 	let floor = infProject.jsonProject.level[id].floor;
 	let ceiling = infProject.jsonProject.level[id].ceiling;
 	let obj = infProject.jsonProject.level[id].obj;
+	let roof = infProject.jsonProject.level[id].roof;
 	
 	for ( var i = 0; i < wall.length; i++ )
 	{ 		
@@ -498,13 +512,20 @@ function clearOneLevel(id)
 		scene.remove(obj[i]);
 	}
 
+	for ( var i = 0; i < roof.length; i++ )
+	{ 
+		disposeHierchy({obj: roof[i]});
+		scene.remove(roof[i]);
+	}
+	
 	infProject.jsonProject.level[id].wall = [];
 	infProject.jsonProject.level[id].point = [];
 	infProject.jsonProject.level[id].window = [];
 	infProject.jsonProject.level[id].door = [];	
 	infProject.jsonProject.level[id].floor = [];
 	infProject.jsonProject.level[id].ceiling = [];
-	infProject.jsonProject.level[id].obj = [];	
+	infProject.jsonProject.level[id].obj = [];
+	infProject.jsonProject.level[id].roof = [];
  	//infProject.jsonProject.level[id].height = 2.8;	
 }
 
