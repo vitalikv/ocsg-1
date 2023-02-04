@@ -113,9 +113,9 @@ function createEmptyFormWD_1(cdm)
 	obj.userData.door.svg.el = createSvgPath({count: 1, color: infProject.settings.svg.scaleBox.color, fill: '#ffffff', stroke_width: "1px"})[0];
 	
 	var fillColor = (type == 'door') ? '#e0e0e0' : '#ffffff';	
-	obj.userData.door.svg.path = createSvgPath({count: 1, color: infProject.settings.svg.scaleBox.color, fill: fillColor, stroke_width: "1px"})[0];
+	if(cdm.lotid) obj.userData.door.svg.path = createSvgPath({count: 1, color: infProject.settings.svg.scaleBox.color, fill: fillColor, stroke_width: "1px"})[0];
 	
-	if(type == 'door')
+	if(type == 'door' && cdm.lotid)
 	{
 		obj.userData.door.svg.arc = createSvgArc({count: 1, color: infProject.settings.svg.scaleBox.color})[0];
 	}

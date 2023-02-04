@@ -151,8 +151,8 @@ infProject.jsonProject.showAllLevel = true;
 infProject.jsonProject.wallTransparent = true;
 
 infProject.settings.active = { pg: 'pivot' };
-infProject.settings.door = { width: 1, height: 2.2 };
-infProject.settings.wind = { width: 1, height: 1, h1: 1.0 };
+infProject.settings.door = { width: 0.85, height: 2.1 };
+infProject.settings.wind = { width: 1.5, height: 1.5, h1: 0.8 };
 infProject.settings.room = { type: [] };
 infProject.settings.blockKeyCode = false;
 infProject.scene.grid = backgroundPlane();
@@ -1590,6 +1590,10 @@ function clickButton( event )
 			point.userData.point.type = clickO.button; 
 			clickO.move = point;				
 		}
+		else if(clickO.button == 'create_wd_1')
+		{
+			createEmptyFormWD_1({type:'door', lotid: null});
+		}		
 		else if(clickO.button == 'create_wd_2')
 		{
 			createEmptyFormWD_1({type:'door', lotid: 10});
@@ -1652,6 +1656,10 @@ function clickInterface(cdm)
 		{
 			clickO.button = 'create_wall';
 		}
+		else if(cdm.button == 'create_wd_1')
+		{
+			clickO.button = 'create_wd_1';
+		}		
 		else if(cdm.button == 'create_wd_2')
 		{
 			clickO.button = 'create_wd_2';

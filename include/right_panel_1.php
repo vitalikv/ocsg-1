@@ -151,7 +151,7 @@
 				<div class="flex_1">
 					<div class="flex_1 align_items">
 						<div class="rp_label_plane">
-							длина
+							ширина
 						</div>
 					</div>
 					<div class="flex_1 align_items" style="width: auto;">
@@ -171,6 +171,7 @@
 				</div>				
 				
 				<div>
+					<div data-action ='create_wd_1' class="button1 button_gradient_1">Проем</div>
 					<div data-action ='create_wd_2' class="button1 button_gradient_1">Дверь</div>
 				</div>
 			</div>
@@ -179,7 +180,7 @@
 				<div class="flex_1">
 					<div class="flex_1 align_items">
 						<div class="rp_label_plane">
-							длина
+							ширина
 						</div>
 					</div>
 					<div class="flex_1 align_items" style="width: auto;">
