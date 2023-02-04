@@ -152,7 +152,7 @@ function cameraMove3D( event )
 			
 			infProject.camera.d3.targetO.rotation.set( 0, camera.rotation.y, 0 );
 			
-			wallAfterRender_2();
+			if(infProject.jsonProject.wallTransparent) wallAfterRender_2();
 		}
 		if ( isMouseDown3 )    
 		{
@@ -163,7 +163,7 @@ function cameraMove3D( event )
 			camera.position.add( offset );
 			infProject.camera.d3.targetO.position.add( offset );
 			
-			wallAfterRender_2();
+			if(infProject.jsonProject.wallTransparent) wallAfterRender_2();
 		}
 	}
 	else if ( camera3D.userData.camera.type == 'first' )

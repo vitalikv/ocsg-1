@@ -49,8 +49,67 @@ function initElBtnLevel()
 	input2.onkeyup = (event) => changeHeightWallLevel(event, 1);
 	input3.onkeyup = (event) => changeHeightWallLevel(event, 2);
 	input4.onkeyup = (event) => changeHeightWallLevel(event, 3);
+	
+	let checkBox1 = elBlock.querySelector('[nameId="type_cam_vis_1"]');
+	let checkBox2 = elBlock.querySelector('[nameId="type_cam_vis_2"]');
+	
+	checkBox1.onmousedown = () => { changeCheckBoxLevelVis({elem: checkBox1, type: 'allLevel'}); }
+	checkBox2.onmousedown = () => { changeCheckBoxLevelVis({elem: checkBox2, type: 'wallTransparent'}); }	
 }
 
+
+function showHideDivTypeCam()
+{
+	let elBlock = document.querySelector('[nameId="wrap_level"]');
+	let div = elBlock.querySelector('[nameId="div_type_cam_vis"]');
+	
+	if(camera === cameraTop) div.style.display = 'none';
+	if(camera === camera3D) div.style.display = '';
+}
+
+function changeCheckBoxLevelVis({elem, type})
+{
+	elem.children[0].style.background = (elem.children[0].style.background === 'none') ? 'rgb(213, 213, 213)' : 'none';
+	
+	let visible = (elem.children[0].style.background === 'none') ? false : true;
+	
+	if(type === 'allLevel')
+	{
+		infProject.jsonProject.showAllLevel = visible;
+		
+		changeVisibleLevels();		
+	}
+	
+	if(type === 'wallTransparent')
+	{
+		infProject.jsonProject.wallTransparent = visible;
+		
+		if(camera === camera3D)
+		{
+			getInfoRenderWall();
+			if(infProject.jsonProject.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();
+			else showAllWallRender();						
+		}
+	}	
+}
+
+function levelBackground_UI({id})
+{
+	let elBlock = document.querySelector('[nameId="wrap_level"]');
+	
+	let el1 = elBlock.querySelector('[nameId="div_level_1"]');
+	let el2 = elBlock.querySelector('[nameId="div_level_2"]');
+	let el3 = elBlock.querySelector('[nameId="div_level_3"]');
+	let el4 = elBlock.querySelector('[nameId="div_level_4"]');	
+	
+	let arr = [el1, el2, el3, el4];
+	
+	for ( var i = 0; i < arr.length; i++ )
+	{
+		arr[i].style.background = 'none';
+		if(i === id) arr[i].style.background = '#d5d5d5';
+	}
+}
 
 function startSetLevel_UI()
 {
@@ -196,12 +255,21 @@ function startLevel(id)
 	infProject.settings.height = infProject.jsonProject.level[id].height;
 
 	getInfoRenderWall();
-	if(camera === cameraTop) showAllWallRender();
-	else wallAfterRender_2();
+	if(camera === cameraTop) 
+	{
+		showAllWallRender();
+	}
+	else 
+	{
+		if(infProject.jsonProject.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();
+		else showAllWallRender();
+	}
 	
 	if(camera === cameraTop) upPosLabels_1({resize: true});
 	
-	infProject.jsonProject.actLevel = id;	
+	infProject.jsonProject.actLevel = id;
+
+	levelBackground_UI({id});
 }
 
 // переключения одного этажа на другой
@@ -209,6 +277,7 @@ function switchLevel(id)
 {	
 	if(infProject.jsonProject.actLevel === id) return;
 	
+	outlineRemoveObj();
 	deActiveSelected();
 	
 	let posY = getLevelPos0({lastId: infProject.jsonProject.actLevel, newId: id});
@@ -244,7 +313,8 @@ function changeVisibleLevels()
 	{		
 		if(camera === camera3D && infProject.jsonProject.actLevel !== i) 
 		{
-			visibleLevelCam3D(i, true);
+			let visible = infProject.jsonProject.showAllLevel;
+			visibleLevelCam3D(i, visible);
 		}
 		if(camera === cameraTop && infProject.jsonProject.actLevel !== i) 
 		{
