@@ -215,7 +215,34 @@
 				</div>			
 			</div>	
 
-
+			<div class="flex_column_1 rp_item_plane">
+				<div class="flex_1">
+					<div class="flex_1 align_items">
+						<div class="rp_label_plane">
+							ширина
+						</div>
+					</div>
+					<div class="flex_1 align_items" style="width: auto;">
+						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_gate_length_1" value="0">
+					</div>
+				</div>
+				
+				<div class="flex_1">
+					<div class="flex_1 align_items">
+						<div class="rp_label_plane">
+							высота
+						</div>
+					</div>
+					<div class="flex_1 align_items" style="width: auto;">
+						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_gate_height_1" value="0">
+					</div>
+				</div>				
+				
+				<div>
+					<div data-action ='create_gate_1' class="button1 button_gradient_1">Гар. ворота</div>
+				</div>
+			</div>
+			
 			<div class="flex_column_1 rp_item_plane">
 				<div>
 					<div nameId="cr_btn_roof" class="button1 button_gradient_1">Крыша</div>

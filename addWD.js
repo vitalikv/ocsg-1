@@ -53,6 +53,12 @@ function createEmptyFormWD_1(cdm)
 		var x = infProject.settings.door.width / 2;
 		var y = infProject.settings.door.height / 2;
 		
+		if(cdm.lotid === -2)
+		{
+			x = infProject.settings.gate.width / 2;
+			y = infProject.settings.gate.height / 2;			
+		}
+		
 		spline[0] = new THREE.Vector2( -x, -y );	
 		spline[1] = new THREE.Vector2( x, -y );
 		spline[2] = new THREE.Vector2( x, y );
@@ -113,9 +119,9 @@ function createEmptyFormWD_1(cdm)
 	obj.userData.door.svg.el = createSvgPath({count: 1, color: infProject.settings.svg.scaleBox.color, fill: '#ffffff', stroke_width: "1px"})[0];
 	
 	var fillColor = (type == 'door') ? '#e0e0e0' : '#ffffff';	
-	if(cdm.lotid) obj.userData.door.svg.path = createSvgPath({count: 1, color: infProject.settings.svg.scaleBox.color, fill: fillColor, stroke_width: "1px"})[0];
+	if(cdm.lotid > 0) obj.userData.door.svg.path = createSvgPath({count: 1, color: infProject.settings.svg.scaleBox.color, fill: fillColor, stroke_width: "1px"})[0];
 	
-	if(type == 'door' && cdm.lotid)
+	if(type == 'door' && cdm.lotid > 0)
 	{
 		obj.userData.door.svg.arc = createSvgArc({count: 1, color: infProject.settings.svg.scaleBox.color})[0];
 	}
@@ -264,9 +270,8 @@ function clickToolWD(obj)
 // добавляем на выбранную стену окно/дверь (вырезаем форму в стене)
 // obj 		готовая дверь/окно
 // wall		стену на которую кликнули
-function addWD( cdm )
+function addWD({ obj })
 {	
-	var obj = cdm.obj;
 	var wall = obj.userData.door.wall;
 	var pos = obj.position;
 	obj.userData.tag = obj.userData.door.type;
@@ -322,9 +327,25 @@ function addWD( cdm )
 	obj.geometry.computeBoundingSphere();
 	
 	
-	if(obj.userData.door.lotid)
+	if(obj.userData.door.lotid > 0)
 	{
 		loadObjServer({type: 'wd', wd: obj, lotid: obj.userData.door.lotid});
+	}
+	else if(obj.userData.door.lotid === -2)
+	{
+		let mat2 = new THREE.MeshStandardMaterial({ color: 0xcccccc, lightMap : lightMap_1 });
+		let obj2 = new THREE.Mesh( obj.geometry.clone(), mat2 );
+		
+		for ( let i = 0; i < obj2.geometry.vertices.length; i++ )
+		{
+			let z = obj2.geometry.vertices[i].z;
+			obj2.geometry.vertices[i].z = (z < 0) ? -0.01 : 0.01;
+		}
+		obj2.geometry.verticesNeedUpdate = true;
+		setTexture({obj: obj2, material: { img: "img/load/proflist_1.jpg" } });
+		
+		setObjInWD({obj: obj2}, {wd: obj});
+		mat2.visible = true;	// не прячем текстуру ,т.к. это самопальный объект и в нем нету пустого box(обертки), поэтому его не прячем		
 	}
 	
 	//обновляем svg форму

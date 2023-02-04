@@ -32,6 +32,7 @@ $('[data-action="wall"]').mousedown(function () { clickInterface({button:'point_
 $('[data-action="create_wd_1"]').mousedown(function () { clickInterface({button:'create_wd_1'}); });
 $('[data-action="create_wd_2"]').mousedown(function () { clickInterface({button:'create_wd_2'}); });
 $('[data-action="create_wd_3"]').mousedown(function () { clickInterface({button:'create_wd_3'}); });
+$('[data-action="create_gate_1"]').mousedown(function () { clickInterface({button:'create_gate_1'}); });
 $('[add_lotid]').mousedown(function () { clickInterface({button: 'add_lotid', value: this.attributes.add_lotid.value}); });
 $('[nameId="screenshot"]').mousedown(function () { createImageSvg(); createImageScene(); }); 				
 
@@ -96,6 +97,14 @@ function actionChangeInputUI(cdm)
 		upRightPlaneInput_1({ el: infProject.activeInput_2.el });
 	}
 	else if(infProject.activeInput == 'rp_wind_above_floor_1')
+	{
+		upRightPlaneInput_1({ el: infProject.activeInput_2.el });
+	}
+	else if(infProject.activeInput == 'rp_gate_length_1')
+	{
+		upRightPlaneInput_1({ el: infProject.activeInput_2.el });
+	}
+	else if(infProject.activeInput == 'rp_gate_height_1')
 	{
 		upRightPlaneInput_1({ el: infProject.activeInput_2.el });
 	}	

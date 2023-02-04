@@ -153,6 +153,7 @@ infProject.jsonProject.wallTransparent = true;
 infProject.settings.active = { pg: 'pivot' };
 infProject.settings.door = { width: 0.85, height: 2.1 };
 infProject.settings.wind = { width: 1.5, height: 1.5, h1: 0.8 };
+infProject.settings.gate = { width: 2.5, height: 2.1 };
 infProject.settings.room = { type: [] };
 infProject.settings.blockKeyCode = false;
 infProject.scene.grid = backgroundPlane();
@@ -1602,6 +1603,10 @@ function clickButton( event )
 		{
 			createEmptyFormWD_1({type:'window', lotid: 11});
 		}
+		else if(clickO.button == 'create_gate_1')
+		{
+			createEmptyFormWD_1({type:'door', lotid: -2});
+		}			
 		else if(clickO.button == 'create_roof_1')
 		{
 			loadObjServer({lotid: 19, roof: true, cursor: true});
@@ -1668,6 +1673,10 @@ function clickInterface(cdm)
 		{
 			clickO.button = 'create_wd_3';
 		}
+		else if(cdm.button == 'create_gate_1')
+		{
+			clickO.button = 'create_gate_1';
+		}		
 		else if(cdm.button == 'create_roof_1')
 		{
 			clickO.button = 'create_roof_1';

@@ -48,6 +48,7 @@ function infoListTexture()
 	};	
 
 	arr[8] = { url : infProject.path+'img/load/gazbeton.jpg' }
+	arr[9] = { url : infProject.path+'img/load/proflist_1.jpg' }
 	
 	return arr;
 }
