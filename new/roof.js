@@ -30,6 +30,8 @@ class Roof
 			planeMath.updateMatrixWorld();			
 		}
 		
+		if(cdm.q){ obj.quaternion.set(cdm.q.x, cdm.q.y, cdm.q.z, cdm.q.w); }
+		
 		if(cdm.id){ obj.userData.id = cdm.id; }
 		else { obj.userData.id = countId; countId++; }
 		
