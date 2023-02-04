@@ -65,7 +65,7 @@ function createFloor(cdm)
 
 
 	
-	cdm.material = { img: infProject.path+"img/load/floor_1.jpg" };
+	cdm.material = { img: "img/load/floor_1.jpg" };
 	
 	if(cdm.material)
 	{  

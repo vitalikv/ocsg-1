@@ -74,11 +74,7 @@ function actionInputUI(cdm)
 
 function actionChangeInputUI(cdm)
 {
-	if(infProject.activeInput == 'rp_floor_height')
-	{
-		changeAllHeightWall_1({ height: $('[nameId="rp_floor_height"]').val(), input: true, globalHeight: true });
-	}
-	else if(infProject.activeInput == 'rp_wall_width_1')
+	if(infProject.activeInput == 'rp_wall_width_1')
 	{
 		upRightPlaneInput_1({ el: infProject.activeInput_2.el });
 	}

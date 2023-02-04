@@ -204,8 +204,6 @@ function startRightPlaneInput(cdm)
 	$('[nameId="rp_wind_length_1"]').val(infProject.settings.wind.width);
 	$('[nameId="rp_wind_height_1"]').val(infProject.settings.wind.height);
 	$('[nameId="rp_wind_above_floor_1"]').val(infProject.settings.wind.h1);
-	
-	$('[nameId="rp_floor_height"]').val(infProject.settings.height);
 }
 
 

@@ -455,7 +455,7 @@ function createCenterCamObj()
 	
 	upUvs_4( obj );
 	
-	setTexture({obj: obj, material: { img: infProject.path+"img/walk_1.png" }, repeat: {x: 1.9, y: 1.9}, offset: {x: 0.5, y: 0.5} });	
+	setTexture({obj: obj, material: { img: "img/walk_1.png" }, repeat: {x: 1.9, y: 1.9}, offset: {x: 0.5, y: 0.5} });	
 	
 	return obj;
 }
@@ -1338,8 +1338,8 @@ function crtW( cdm )
 	upUvs_1( wall );
 	
 	cdm.material = [];
-	cdm.material[0] = { img: infProject.path+"img/load/beton.jpg", index:1 };
-	cdm.material[1] = { img: infProject.path+"img/load/beton.jpg", index:2 };
+	cdm.material[0] = { img: "img/load/beton.jpg", index:1 };
+	cdm.material[1] = { img: "img/load/beton.jpg", index:2 };
 	//console.log('cdm.material', cdm);
 	if(cdm.material)
 	{  
@@ -1496,7 +1496,7 @@ function setTexture(cdm)
 	
 	var material = (cdm.obj.userData.tag == "wall") ? cdm.obj.material[cdm.material.index] : cdm.obj.material;
 	
-	new THREE.TextureLoader().load(img, function ( image )  
+	new THREE.TextureLoader().load(infProject.path+img, function ( image )  
 	{
 		material.color = new THREE.Color( 0xffffff );
 		var texture = image;			

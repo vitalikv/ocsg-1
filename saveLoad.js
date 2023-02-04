@@ -743,7 +743,7 @@ async function loadFileLevel(json)
 			arrTexture[arrTexture.length] = { objId: rooms[i].id, img: rooms[i].material[1].img, tag: rooms[i].material[1].tag };
 		}
 		
-		//arrTexture = [...new Set(arrTexture)];	// удаляем из массива повторяющиеся элементы ES6
+		arrTexture = [...new Set(arrTexture)];	// удаляем из массива повторяющиеся элементы ES6
 		
 		
 		loadTextureInBase({arr: arrTexture});

@@ -461,7 +461,7 @@ function changeAllHeightWall_1(cdm)
 	
 	if(cdm.input)
 	{  
-		$('[nameId="rp_floor_height"]').val(height.num);
+		//$('[nameId="rp_floor_height"]').val(height.num);
 	}
 	
 	if(cdm.globalHeight)
