@@ -37,74 +37,62 @@
 		</div>
 	
 	
-		<div class="flex_column_1" nameId="wrap_level" style="display: none;">
+		<div class="flex_column_1" nameId="wrap_level" style="display: none; overflow: auto;">
 			<div class="right_panel_1_1_h">Этажи</div>
 
 			<div nameId="div_level_1" class="flex_column_1 rp_item_plane">							
 				<div class="flex_1">
+					<div nameId="btn_level_1" class="button1 button_gradient_1">1</div>
 					<div class="flex_1 align_items">
 						<div class="rp_label_plane">
-							высота этажа
+							высота
 						</div>
 					</div>
 					<div class="flex_1 align_items" style="width: auto;">
 						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_level_1_h2" value="0">
 					</div>
 				</div>
-				
-				<div>
-					<div nameId="btn_level_1" class="button1 button_gradient_1">Этаж 1</div>
-				</div>
 			</div>
 			
 			<div nameId="div_level_2" class="flex_column_1 rp_item_plane">							
 				<div class="flex_1">
+					<div nameId="btn_level_2" class="button1 button_gradient_1">2</div>
 					<div class="flex_1 align_items">
 						<div class="rp_label_plane">
-							высота этажа
+							высота
 						</div>
 					</div>
 					<div class="flex_1 align_items" style="width: auto;">
 						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_level_2_h2" value="0">
 					</div>
 				</div>
-				
-				<div>
-					<div nameId="btn_level_2" class="button1 button_gradient_1">Этаж 2</div>
-				</div>
 			</div>
 
 			<div nameId="div_level_3" class="flex_column_1 rp_item_plane">							
 				<div class="flex_1">
+					<div nameId="btn_level_3" class="button1 button_gradient_1">3</div>
 					<div class="flex_1 align_items">
 						<div class="rp_label_plane">
-							высота этажа
+							высота
 						</div>
 					</div>
 					<div class="flex_1 align_items" style="width: auto;">
 						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_level_3_h2" value="0">
 					</div>
 				</div>
-				
-				<div>
-					<div nameId="btn_level_3" class="button1 button_gradient_1">Этаж 3</div>
-				</div>
 			</div>
 
 			<div nameId="div_level_4" class="flex_column_1 rp_item_plane">							
 				<div class="flex_1">
+					<div nameId="btn_level_4" class="button1 button_gradient_1">4</div>
 					<div class="flex_1 align_items">
 						<div class="rp_label_plane">
-							высота этажа
+							высота
 						</div>
 					</div>
 					<div class="flex_1 align_items" style="width: auto;">
 						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_level_4_h2" value="0">
 					</div>
-				</div>
-				
-				<div>
-					<div nameId="btn_level_4" class="button1 button_gradient_1">Этаж 4</div>
 				</div>
 			</div>
 
@@ -126,12 +114,16 @@
 			</div>
 		</div>
 			
-		<div class="flex_column_1" nameId="wrap_plan" style="display: none;">
+		<div class="flex_column_1" nameId="wrap_plan" style="display: none; overflow: auto;">
 			<div class="right_panel_1_1_h">Дом</div>
 			
 			
 			<div class="flex_column_1 rp_item_plane">			
 				<div class="flex_1">
+					<div class="flex_column_1">
+						<div data-action ='wall' class="button2 button_gradient_1"><div>стена</div></div>
+					</div>		
+					
 					<div class="flex_1 align_items">
 						<div class="rp_label_plane">
 							толщина
@@ -140,114 +132,154 @@
 					<div class="flex_1 align_items" style="width: auto;">
 						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_wall_width_1" value="0">
 					</div>
-				</div>				
-				
-				<div>
-					<div data-action ='wall' class="button1 button_gradient_1">Стена</div>
-				</div>
+				</div>							
 			</div>				
 			
 			<div class="flex_column_1 rp_item_plane">
 				<div class="flex_1">
-					<div class="flex_1 align_items">
-						<div class="rp_label_plane">
-							ширина
+					<div class="flex_column_1">
+						<div data-action ='create_wd_1' class="button2 button_gradient_1"><div>проем</div></div>
+						<div data-action ='create_wd_2' class="button2 button_gradient_1"><div>дверь</div></div>
+					</div>	
+
+					<div>
+						<div class="flex_1">
+							<div class="flex_1 align_items">
+								<div class="rp_label_plane">
+									ширина
+								</div>
+							</div>
+							<div class="flex_1 align_items" style="width: auto;">
+								<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_door_length_1" value="0">
+							</div>
 						</div>
-					</div>
-					<div class="flex_1 align_items" style="width: auto;">
-						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_door_length_1" value="0">
-					</div>
+						
+						<div class="flex_1">
+							<div class="flex_1 align_items">
+								<div class="rp_label_plane">
+									высота
+								</div>
+							</div>
+							<div class="flex_1 align_items" style="width: auto;">
+								<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_door_height_1" value="0">
+							</div>
+						</div>				
+					</div>			
 				</div>
-				
-				<div class="flex_1">
-					<div class="flex_1 align_items">
-						<div class="rp_label_plane">
-							высота
-						</div>
-					</div>
-					<div class="flex_1 align_items" style="width: auto;">
-						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_door_height_1" value="0">
-					</div>
-				</div>				
-				
-				<div>
-					<div data-action ='create_wd_1' class="button1 button_gradient_1">Проем</div>
-					<div data-action ='create_wd_2' class="button1 button_gradient_1">Дверь</div>
-				</div>
+
 			</div>
 
 			<div class="flex_column_1 rp_item_plane">
 				<div class="flex_1">
-					<div class="flex_1 align_items">
-						<div class="rp_label_plane">
-							ширина
+					<div class="flex_column_1">
+						<div data-action ='create_wd_3' class="button2 button_gradient_1">
+							<div>окно</div>
 						</div>
 					</div>
-					<div class="flex_1 align_items" style="width: auto;">
-						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_wind_length_1" value="0">
-					</div>
-				</div>
-				
-				<div class="flex_1">
-					<div class="flex_1 align_items">
-						<div class="rp_label_plane">
-							высота
-						</div>
-					</div>
-					<div class="flex_1 align_items" style="width: auto;">
-						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_wind_height_1" value="0">
-					</div>
-				</div>	
 
-				<div class="flex_1">
-					<div class="flex_1 align_items">
-						<div class="rp_label_plane">
-							над полом
+					<div>
+						<div class="flex_1">
+							<div class="flex_1 align_items">
+								<div class="rp_label_plane">
+									ширина
+								</div>
+							</div>
+							<div class="flex_1 align_items" style="width: auto;">
+								<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_wind_length_1" value="0">
+							</div>
+						</div>
+						
+						<div class="flex_1">
+							<div class="flex_1 align_items">
+								<div class="rp_label_plane">
+									высота
+								</div>
+							</div>
+							<div class="flex_1 align_items" style="width: auto;">
+								<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_wind_height_1" value="0">
+							</div>
+						</div>	
+
+						<div class="flex_1">
+							<div class="flex_1 align_items">
+								<div class="rp_label_plane">
+									над полом
+								</div>
+							</div>
+							<div class="flex_1 align_items" style="width: auto;">
+								<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_wind_above_floor_1" value="0">
+							</div>
 						</div>
 					</div>
-					<div class="flex_1 align_items" style="width: auto;">
-						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_wind_above_floor_1" value="0">
-					</div>
-				</div>					
-				
-				<div>
-					<div data-action ='create_wd_3' class="button1 button_gradient_1">Окно</div>
+					
 				</div>			
 			</div>	
 
 			<div class="flex_column_1 rp_item_plane">
 				<div class="flex_1">
-					<div class="flex_1 align_items">
-						<div class="rp_label_plane">
-							ширина
-						</div>
+					<div class="flex_column_1">
+						<div data-action ='create_gate_1' class="button2 button_gradient_1">ворота</div>
 					</div>
-					<div class="flex_1 align_items" style="width: auto;">
-						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_gate_length_1" value="0">
-					</div>
-				</div>
 				
-				<div class="flex_1">
-					<div class="flex_1 align_items">
-						<div class="rp_label_plane">
-							высота
+					<div>
+						<div class="flex_1">
+							<div class="flex_1 align_items">
+								<div class="rp_label_plane">
+									ширина
+								</div>
+							</div>
+							<div class="flex_1 align_items" style="width: auto;">
+								<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_gate_length_1" value="0">
+							</div>
 						</div>
+						
+						<div class="flex_1">
+							<div class="flex_1 align_items">
+								<div class="rp_label_plane">
+									высота
+								</div>
+							</div>
+							<div class="flex_1 align_items" style="width: auto;">
+								<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_gate_height_1" value="0">
+							</div>
+						</div>									
 					</div>
-					<div class="flex_1 align_items" style="width: auto;">
-						<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_gate_height_1" value="0">
-					</div>
-				</div>				
-				
-				<div>
-					<div data-action ='create_gate_1' class="button1 button_gradient_1">Гар. ворота</div>
 				</div>
 			</div>
 			
+
+
 			<div class="flex_column_1 rp_item_plane">
-				<div>
-					<div nameId="cr_btn_roof" class="button1 button_gradient_1">Крыша</div>
-				</div>				
-			</div>
+				<div class="flex_1">
+					<div class="flex_column_1">
+						<div nameId="cr_btn_roof" class="button2 button_gradient_1">крыша</div>
+					</div>
+				
+					<div>
+						<div class="flex_1">
+							<div class="flex_1 align_items">
+								<div class="rp_label_plane">
+									ширина
+								</div>
+							</div>
+							<div class="flex_1 align_items" style="width: auto;">
+								<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_roof_width_1" value="0">
+							</div>
+						</div>
+						
+						<div class="flex_1">
+							<div class="flex_1 align_items">
+								<div class="rp_label_plane">
+									длина
+								</div>
+							</div>
+							<div class="flex_1 align_items" style="width: auto;">
+								<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_roof_length_1" value="0">
+							</div>
+						</div>									
+					</div>
+				</div>
+			</div>			
 						
 		</div>
 		
@@ -283,11 +315,7 @@
 							<div class="flex_1 align_items" style="width: auto;">
 								<input type="text" style="width: 90%; margin:5px 5px;" nameId="size_wall_width_1" value="0">
 							</div>
-						</div>				
-						
-						<div>
-							<div class="button1 button_gradient_1" nameId="rp_button_apply">Применить</div>
-						</div>						
+						</div>										
 					</div>
 
 					<div class="flex_column_1" nameId="rp_button_side_texture_1" style="display: none;">
