@@ -1,5 +1,5 @@
 <? 
-require_once ($_SERVER['DOCUMENT_ROOT']."/include/bd_1.php");
+require_once ("bd_1.php");
 
 
 
@@ -7,7 +7,9 @@ require_once ($_SERVER['DOCUMENT_ROOT']."/include/bd_1.php");
 $url = $_SERVER['REQUEST_URI'];
 
 $path = "";
-$title = 'Test';
+if($_SERVER['SERVER_NAME']=='engineering-plan.ru' || $_SERVER['SERVER_NAME']=='engineering-plan-new') $path = '/p1/';
+
+$title = 'Программа проектирование дома онлайн 3D';
 $h1 = '----';
 $description = '';
 $nameId = '';

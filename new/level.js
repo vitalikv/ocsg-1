@@ -367,7 +367,7 @@ function changePosYLevel(posY, id)
 			arrW[i].userData.wall.arrO[i2].position.y = arrW[i].userData.wall.arrO[i2].position.y - posY;
 		}
 	}
-	
+	if(id === 0) infProject.scene.grid.position.y = infProject.scene.grid.position.y - posY;
 	for ( var i = 0; i < obj_point.length; i++ ) obj_point[i].position.y = obj_point[i].position.y - posY;	
 	for ( var i = 0; i < room.length; i++ ) room[i].position.y = room[i].position.y - posY;
 	for ( var i = 0; i < ceiling.length; i++ ) ceiling[i].position.y = ceiling[i].position.y - posY;

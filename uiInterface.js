@@ -150,12 +150,12 @@ function activeObjRightPanelUI_1(cdm)
 	}
 	else if(obj.userData.tag == 'door')
 	{
-		$('[nameId="rp_obj_name"]').val('дверь');
+		$('[nameId="rp_obj_name"]').val(obj.userData.door.nameRus);
 		$('[nameId="rp_menu_wd"]').show();
 	}
 	else if(obj.userData.tag == 'window')
 	{
-		$('[nameId="rp_obj_name"]').val('окно');
+		$('[nameId="rp_obj_name"]').val(obj.userData.door.nameRus);
 		$('[nameId="rp_item_wd_h1"]').show();
 		$('[nameId="rp_menu_wd"]').show();
 	}	

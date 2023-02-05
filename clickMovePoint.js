@@ -98,7 +98,15 @@ function movePoint( event, obj )
 	
 		upLineYY(obj);			
 		
-		upLabelPlan_1(obj.w); 
+		
+		// отображение длины стен
+		let arrW = [];
+		for ( let i = 0; i < obj.p.length; i++ )
+		{
+			arrW.push(...obj.p[i].w);		
+		}		
+		arrW = [...new Set(arrW)];
+		upLabelPlan_1(arrW);
 	}
 	
 }

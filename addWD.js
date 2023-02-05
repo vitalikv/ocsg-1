@@ -117,6 +117,7 @@ function createEmptyFormWD_1(cdm)
 	obj.userData.door.openId = (cdm.openId !== undefined) ? cdm.openId : 0;
 	obj.userData.door.svg = {};
 	obj.userData.door.svg.el = createSvgPath({count: 1, color: infProject.settings.svg.scaleBox.color, fill: '#ffffff', stroke_width: "1px"})[0];
+	obj.userData.door.nameRus = (type === 'door') ? 'дверь' : 'окно';
 	
 	var fillColor = (type == 'door') ? '#e0e0e0' : '#ffffff';	
 	if(cdm.lotid > 0) obj.userData.door.svg.path = createSvgPath({count: 1, color: infProject.settings.svg.scaleBox.color, fill: fillColor, stroke_width: "1px"})[0];
@@ -333,7 +334,8 @@ function addWD({ obj })
 	}
 	else if(obj.userData.door.lotid === -2)
 	{
-		let mat2 = new THREE.MeshStandardMaterial({ color: 0xcccccc, lightMap : lightMap_1 });
+		obj.userData.door.nameRus = 'гаражные ворота';
+		let mat2 = new THREE.MeshStandardMaterial({ color: 0x000000, lightMap : lightMap_1 });
 		let obj2 = new THREE.Mesh( obj.geometry.clone(), mat2 );
 		
 		for ( let i = 0; i < obj2.geometry.vertices.length; i++ )
@@ -346,6 +348,10 @@ function addWD({ obj })
 		
 		setObjInWD({obj: obj2}, {wd: obj});
 		mat2.visible = true;	// не прячем текстуру ,т.к. это самопальный объект и в нем нету пустого box(обертки), поэтому его не прячем		
+	}
+	else
+	{
+		obj.userData.door.nameRus = 'проем';
 	}
 	
 	//обновляем svg форму
