@@ -19,7 +19,8 @@ class Roof
 	
 	initRoof(inf, cdm)
 	{
-		let obj = inf.obj;
+		//let obj = inf.obj;
+		let obj = myRoof.initRoof();
 		
 		if(cdm.pos){ obj.position.copy(cdm.pos); }
 		else
@@ -41,6 +42,7 @@ class Roof
 		obj.userData.roof.nameRus = (inf.name) ? inf.name : 'крыша 1';
 		obj.userData.roof.typeGroup = '';
 		obj.userData.roof.helper = null;
+		obj.userData.obj3D = {};
 		
 		// получаем начальные размеры объекта, что потом можно было масштабировать от начальных размеров
 		obj.geometry.computeBoundingBox();

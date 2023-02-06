@@ -1525,6 +1525,16 @@ function setTexture(cdm)
 			texture.offset.y = cdm.offset.y;				
 		}
 		
+		if(cdm.rotation)
+		{
+			texture.rotation = cdm.rotation;				
+		}
+
+		if(cdm.color)
+		{
+			material.color = new THREE.Color( cdm.color );
+		}
+		
 		texture.needsUpdate = true;
 		
 		material.map = texture; 
