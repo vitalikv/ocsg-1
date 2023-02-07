@@ -13,14 +13,17 @@ class Roof
 	initBtn()
 	{
 		let elBlock = document.querySelector('[nameId="wrap_plan"]');
-		let btn = elBlock.querySelector('[nameId="cr_btn_roof"]');
-		btn.onmousedown = () => { clickInterface({button:'create_roof_1'}); }
+		
+		let btn1 = elBlock.querySelector('[nameId="cr_btn_roof_1"]');
+		btn1.onmousedown = () => { clickInterface({button:'create_roof_1'}); }
+		
+		let btn2 = elBlock.querySelector('[nameId="cr_btn_roof_2"]');
+		btn2.onmousedown = () => { clickInterface({button:'create_roof_2'}); }		
 	}
 	
 	initRoof(inf, cdm)
 	{
-		//let obj = inf.obj;
-		let obj = myRoof.initRoof();
+		let obj = inf.obj; 
 		
 		if(cdm.pos){ obj.position.copy(cdm.pos); }
 		else

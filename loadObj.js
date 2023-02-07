@@ -57,12 +57,11 @@ function infoListTexture()
 
 
 // ищем был ли до этого объект добавлен в сцену (если был, то береме сохраненную копию, усли нет, то ищем в базе)
-async function getObjFromBase(cdm)
+async function getObjFromBase({lotid})
 {
-	var lotid = cdm.lotid;								// объекты в сцене 
-	var base = infProject.scene.array.base;		// объекты в памяти	
+	let base = infProject.scene.array.base;		// объекты в памяти	
 	
-	for(var i = 0; i < base.length; i++)
+	for(let i = 0; i < base.length; i++)
 	{
 		if(base[i].id == lotid)
 		{
@@ -70,15 +69,39 @@ async function getObjFromBase(cdm)
 		}
 	}
 
+	let inf = {};
 	
-	var url = infProject.path+'components_2/getObjSql.php?id='+lotid;  
+	if(lotid === 19)	// крыша 1
+	{
+		inf.id = lotid;			// не используется, lotid берется в loadObjServer(cdm) cdm.lotid
+		inf.name = 'крыша четырехскатная';
+		inf.obj = myRoof.initRoof();
+		inf.model = null;		// в этом случаи не нужно, нужно только при загрузки из бд
+		inf.preview = null;		// не используется
+		inf.planeMath = 0.0;	// не используется
+		inf.size = new THREE.Vector3();	// не нужно, для объектов считается в самой ф-ции
+	}
+
+	if(lotid === 20)	// крыша 2
+	{
+		inf.name = 'крыша двухскатная';
+		inf.obj = myRoof.initRoof_2();
+	}
 	
-	var response = await fetch(url, { method: 'GET' });	
-	var json = await response.json();
+	// объект не из бд, а из ф-ции	
+	if(inf.obj !== undefined) 
+	{
+		addObjInBase(inf, inf.obj);	// сохраняем в память
+		return inf;
+	}		
+	
+	let url = infProject.path+'components_2/getObjSql.php?id='+lotid;  	
+	let response = await fetch(url, { method: 'GET' });	
+	let json = await response.json();
 	
 	if(!json.error)
 	{
-		var inf = json;
+		inf = json;
 		inf.planeMath = 0.0;
 		
 		return inf;
@@ -103,7 +126,7 @@ async function loadObjServer(cdm)
 	
 	if(inf.obj)		// объект есть в кэше
 	{ 
-		console.log('---------');
+		console.log(lotid, '--- объект есть в кэше');
 	}
 	else if(inf.model)		// объекта нет в кэше, сохраняем/добавляем в кэш
 	{	

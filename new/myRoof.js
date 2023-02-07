@@ -95,11 +95,13 @@ class MyRoof
 		g.verticesNeedUpdate = true;
 		this.upUvsRoof( g );
 		
-		let obj1 = new THREE.Mesh( g, this.material );
+		let material = new THREE.MeshStandardMaterial( { color : 0x736a5a, lightMap : lightMap_1 } );
 		
-		let obj2 = new THREE.Mesh( g, this.material );
+		let obj1 = new THREE.Mesh( g, material );
+		
+		let obj2 = new THREE.Mesh( g, material );
 		obj2.rotation.y = Math.PI;				
-		
+		setTexture({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
 		setTexture({obj: obj2, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
 		
 		let roof = this.getBoxRoof([obj1, obj2]);
@@ -202,7 +204,7 @@ class MyRoof
 			box.add(arr[i]);
 		}
 		
-		scene.add(box);
+		//scene.add(box); не добавляем в сцену, так как будет добавлен через loadObjServer
 
 		return box;
 	}

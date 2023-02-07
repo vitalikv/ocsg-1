@@ -252,7 +252,8 @@
 			<div class="flex_column_1 rp_item_plane">
 				<div class="flex_1">
 					<div class="flex_column_1">
-						<div nameId="cr_btn_roof" class="button2 button_gradient_1">крыша</div>
+						<div nameId="cr_btn_roof_1" class="button2 button_gradient_1">крыша 1</div>
+						<div nameId="cr_btn_roof_2" class="button2 button_gradient_1">крыша 2</div>
 					</div>
 				
 					<div>
