@@ -239,9 +239,12 @@ function moveElementBoxScale2D(e)
 		var x = B.distanceTo( C );
 		
 		
-		var obj = clickO.last_obj;		
-		obj.scale.x = x/obj.userData.obj3D.box.x;
-		obj.scale.z = z/obj.userData.obj3D.box.z;		
+		var obj = clickO.last_obj;
+		if(obj.userData.tag === 'obj') box = obj.userData.obj3D.box;
+		if(obj.userData.tag === 'roof') box = obj.userData.roof.box;
+		
+		obj.scale.x = x/box.x;
+		obj.scale.z = z/box.z;		
 	}
 	
 	
@@ -963,10 +966,22 @@ function inputScaleObjPop(cdm)
 	y *= obj.scale.y;
 	z *= obj.scale.z;		
 
-
-	var x2 = $('[nameId="size-obj-length"]').val();
-	var y2 = $('[nameId="size-obj-height"]').val();
-	var z2 = $('[nameId="size-obj-width"]').val(); 
+	var x2 = undefined;
+	var y2 = undefined;
+	var z2 = undefined; 
+	
+	if(obj.userData.tag === 'obj')
+	{
+		x2 = $('[nameId="size-obj-length"]').val();
+		y2 = $('[nameId="size-obj-height"]').val();
+		z2 = $('[nameId="size-obj-width"]').val(); 		
+	}
+	if(obj.userData.tag === 'roof')
+	{
+		x2 = $('[nameId="size-roof-length"]').val();
+		y2 = $('[nameId="size-roof-height"]').val();
+		z2 = $('[nameId="size-roof-width"]').val(); 		
+	}	
 
 	x2 = x2.replace(",", ".");
 	y2 = y2.replace(",", ".");
@@ -994,7 +1009,9 @@ function inputScaleObjPop(cdm)
 	else if(z2 > limit.z_max) { z2 = limit.z_max; }			
 	
 	
-	var box = obj.userData.obj3D.box; 
+	let box = new THREE.Vector3(1, 1, 1);  
+	if(obj.userData.tag === 'obj') box = obj.userData.obj3D.box;
+	if(obj.userData.tag === 'roof') box = obj.userData.roof.box;
 	 
 	obj.scale.set(x2/box.x, y2/box.y, z2/box.z);	
 	obj.updateMatrixWorld();

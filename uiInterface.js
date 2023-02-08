@@ -105,6 +105,7 @@ function activeObjRightPanelUI_1(cdm)
 	$('[nameId="rp_item_wd_h1"]').hide();
 	$('[nameId="rp_menu_wd"]').hide();
 	$('[nameId="rp_menu_room"]').hide();
+	$('[nameId="bl_roof_3d"]').hide();
 	
 	if(!cdm) { cdm = {}; }  
 	
@@ -175,7 +176,7 @@ function activeObjRightPanelUI_1(cdm)
 	else if(obj.userData.tag == 'roof')
 	{		
 		$('[nameId="rp_obj_name"]').val(obj.userData.roof.nameRus);		
-		$('[nameId="bl_object_3d"]').show();
+		$('[nameId="bl_roof_3d"]').show();
 	}	
 	else if(obj.userData.tag == 'room')
 	{

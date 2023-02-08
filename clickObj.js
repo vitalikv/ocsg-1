@@ -84,7 +84,13 @@ function clickObject3D(cdm)
 
 // обновляем меню
 function uiInfoObj({obj})
-{			
+{	
+	if(obj.userData.tag === 'roof') 
+	{
+		clRoof.upInputUI({obj});
+		return;
+	}
+	
 	obj.geometry.computeBoundingBox();
 	
 	var minX = obj.geometry.boundingBox.min.x;

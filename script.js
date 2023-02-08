@@ -1881,7 +1881,10 @@ document.addEventListener("keydown", function (e)
 			}
 			if(infProject.activeInput == 'size-obj-length') { inputScaleObjPop({obj: clickO.last_obj}); }
 			if(infProject.activeInput == 'size-obj-height') { inputScaleObjPop({obj: clickO.last_obj}); }
-			if(infProject.activeInput == 'size-obj-width') { inputScaleObjPop({obj: clickO.last_obj}); }			
+			if(infProject.activeInput == 'size-obj-width') { inputScaleObjPop({obj: clickO.last_obj}); }
+			if(infProject.activeInput == 'size-roof-length') { inputScaleObjPop({obj: clickO.last_obj}); }
+			if(infProject.activeInput == 'size-roof-height') { inputScaleObjPop({obj: clickO.last_obj}); }
+			if(infProject.activeInput == 'size-roof-width') { inputScaleObjPop({obj: clickO.last_obj}); }			
 		}		
 		 
 		return; 

@@ -512,6 +512,54 @@
 
 					</div> 
 				</div> 
+			
+				<div nameId="bl_roof_3d" style="display: none;">  
+					
+					<div class="flex_column_1" style="display: block; margin-bottom: 40px;">
+						<div class="flex_1">
+							<div class="flex_1 align_items">
+								<div class="rp_label_plane">
+									длина
+								</div>
+							</div>
+							<div class="flex_1 align_items" style="width: auto;">
+								<input type="text" style="width: 90%; margin:5px 5px;" nameId="size-roof-length" value="0">
+							</div>
+						</div>
+						
+						<div class="flex_1">
+							<div class="flex_1 align_items">
+								<div class="rp_label_plane">
+									ширина
+								</div>
+							</div>
+							<div class="flex_1 align_items" style="width: auto;">
+								<input type="text" style="width: 90%; margin:5px 5px;" nameId="size-roof-width" value="0">
+							</div>
+						</div>
+
+						<div class="flex_1">
+							<div class="flex_1 align_items">
+								<div class="rp_label_plane">
+									высота
+								</div>
+							</div>
+							<div class="flex_1 align_items" style="width: auto;">
+								<input type="text" style="width: 90%; margin:5px 5px;" nameId="size-roof-height" value="0">
+							</div>
+						</div>						
+					</div>	
+
+					<div>
+						<div class="rp_1_1_list">
+							<div class="rp_1_2_list" nameId="color_roof_1">
+
+							</div>				 							
+						</div>						
+					</div>					
+				</div> 
+						
+			
 			</div>	
 		</div>
 

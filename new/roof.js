@@ -8,8 +8,10 @@ class Roof
 		this.material = new THREE.MeshStandardMaterial( { color : 0xff0000 } );	//side: THREE.DoubleSide
 		this.material2 = new THREE.MeshStandardMaterial( { color : 0x0000ff } );
 		this.initBtn();
+		this.initListColor();
 	}
 	
+	// назначаем кнопкам событие 
 	initBtn()
 	{
 		let elBlock = document.querySelector('[nameId="wrap_plan"]');
@@ -19,6 +21,25 @@ class Roof
 		
 		let btn2 = elBlock.querySelector('[nameId="cr_btn_roof_2"]');
 		btn2.onmousedown = () => { clickInterface({button:'create_roof_2'}); }		
+	}
+	
+	// создаем список с цветом
+	initListColor()
+	{
+		let html = '';
+		let arr = ['ff0000', '00ff00', '0000ff'];
+		
+		let container = document.querySelector('[nameId="color_roof_1"]');
+		
+		for(let i = 0; i < arr.length; i++)
+		{
+			let div = document.createElement('div');
+			div.innerHTML = `<div class="right_panel_1_1_list_item rp_list_item_texture" style="background: #${arr[i]};"></div>`;
+			let elem = div.children[0];
+			container.append(elem);	
+			
+			elem.onmousedown = () => { this.setColor({color: '0x'+arr[i]}); }
+		}		
 	}
 	
 	initRoof(inf, cdm)
@@ -45,14 +66,14 @@ class Roof
 		obj.userData.roof.nameRus = (inf.name) ? inf.name : 'крыша 1';
 		obj.userData.roof.typeGroup = '';
 		obj.userData.roof.helper = null;
-		obj.userData.obj3D = {};
+		obj.userData.roof.box = new THREE.Vector3();
 		
 		// получаем начальные размеры объекта, что потом можно было масштабировать от начальных размеров
 		obj.geometry.computeBoundingBox();
 		let x = obj.geometry.boundingBox.max.x - obj.geometry.boundingBox.min.x;
 		let y = obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y;
 		let z = obj.geometry.boundingBox.max.z - obj.geometry.boundingBox.min.z;	
-		obj.userData.obj3D.box = new THREE.Vector3(x, y, z);
+		obj.userData.roof.box = new THREE.Vector3(x, y, z);
 
 		if(cdm.scale){ obj.scale.set(cdm.scale.x, cdm.scale.y, cdm.scale.z); }
 		
@@ -283,6 +304,19 @@ class Roof
 		infProject.scene.array.roof[infProject.scene.array.roof.length] = clone; 
 		scene.add( clone );	
 	}
+	
+	setColor({color})
+	{
+		let obj = clickO.last_obj;
+		if(obj.userData.tag !== 'roof') return;
+		
+		for(let i = 0; i < obj.children.length; i++)
+		{
+			obj.children[i].material.color = new THREE.Color( Number(color) );
+			obj.children[i].material.needsUpdate = true;			
+		}
+		console.log(11, color);
+	}
 
 	// удаление объекта
 	deleteRoof(obj)
@@ -299,6 +333,27 @@ class Roof
 		
 		renderCamera();
 	}
+	
+	// при клике на объект обновляем input-ы
+	upInputUI({obj})
+	{			
+		obj.geometry.computeBoundingBox();
+		
+		let minX = obj.geometry.boundingBox.min.x;
+		let maxX = obj.geometry.boundingBox.max.x;
+		let minY = obj.geometry.boundingBox.min.y;
+		let maxY = obj.geometry.boundingBox.max.y;	
+		let minZ = obj.geometry.boundingBox.min.z;
+		let maxZ = obj.geometry.boundingBox.max.z;
+
+		let x = Math.abs( (maxX - minX) * obj.scale.x );
+		let y = Math.abs( (maxY - minY) * obj.scale.y );
+		let z = Math.abs( (maxZ - minZ) * obj.scale.z );			
+		
+		$('[nameId="size-roof-length"]').val(Math.round(x * 100) / 100);
+		$('[nameId="size-roof-height"]').val(Math.round(y * 100) / 100);
+		$('[nameId="size-roof-width"]').val(Math.round(z * 100) / 100);	
+	}	
 }
 
 let clRoof = new Roof();

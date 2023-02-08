@@ -114,7 +114,7 @@ function clickGizmo( intersect )
 	var dir = planeMath.worldToLocal( intersect.point.clone() );	
 	gizmo.userData.gizmo.active.rotY = Math.atan2(dir.x, dir.y);
 
-	getInfoObj_UndoRedo({obj: gizmo.userData.gizmo.obj});
+	if(obj.userData.tag === 'obj') getInfoObj_UndoRedo({obj: gizmo.userData.gizmo.obj});
 }
 
 
@@ -196,7 +196,7 @@ function moveGizmo( event )
 
 function clickMouseUpGizmo(cdm)
 {	
-	if(clickO.actMove)
+	if(clickO.actMove && infProject.tools.gizmo.userData.gizmo.obj.userData.tag === 'obj')
 	{	
 		getInfoEvent23({obj: infProject.tools.gizmo.userData.gizmo.obj, type: 'move'});
 	}		

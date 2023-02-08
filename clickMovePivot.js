@@ -140,7 +140,7 @@ function clickPivot( intersect )
 	
 	planeMath.position.copy( intersect.point );
 	
-	getInfoObj_UndoRedo({obj: pivot.userData.pivot.obj});
+	if(pivot.userData.pivot.obj.userData.tag === 'obj') getInfoObj_UndoRedo({obj: pivot.userData.pivot.obj});
 } 
 
 
@@ -227,7 +227,7 @@ function setScalePivotGizmo()
 
 function clickMouseUpPivot(cdm)
 {	
-	if(clickO.actMove)
+	if(clickO.actMove && infProject.tools.pivot.userData.pivot.obj.userData.tag === 'obj')
 	{	
 		getInfoEvent23({obj: infProject.tools.pivot.userData.pivot.obj, type: 'move'});
 		
