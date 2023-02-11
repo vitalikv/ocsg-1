@@ -356,6 +356,9 @@ function compileJsonFile_2(array, posY)
 		//object[m].rot = new THREE.Vector3( THREE.Math.radToDeg(obj.rotation.x), THREE.Math.radToDeg(obj.rotation.y), THREE.Math.radToDeg(obj.rotation.z) );
 		roofs[m].q = {x: obj.quaternion.x, y: obj.quaternion.y, z: obj.quaternion.z, w: obj.quaternion.w};
 		roofs[m].scale = obj.scale;
+		roofs[m].material = {};
+		roofs[m].material.color = obj.children[0].material.color;
+		//roofs[m].material.img = obj.children[0].material.map ? obj.userData.material.map.image;
 	}	
 		
 	json.level[0].points = points;

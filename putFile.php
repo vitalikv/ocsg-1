@@ -40,6 +40,7 @@ getScreenshot.js
 new/level.js
 new/ghostLevel.js
 new/roof.js
+new/myRoof.js
 ';
 
 $arrF = array();

@@ -27,7 +27,7 @@ class Roof
 	initListColor()
 	{
 		let html = '';
-		let arr = ['ff0000', '00ff00', '0000ff'];
+		let arr = ['223594', '942a22', '947b22', '539422', '762294', 'ffffff', '8a8a8a', '292929'];
 		
 		let container = document.querySelector('[nameId="color_roof_1"]');
 		
@@ -77,9 +77,14 @@ class Roof
 
 		if(cdm.scale){ obj.scale.set(cdm.scale.x, cdm.scale.y, cdm.scale.z); }
 		
+		if(cdm.material)
+		{
+			if(cdm.material.color) this.setColor({obj, color: cdm.material.color});
+		}
+		
 		obj.material.visible = false;
 		
-		infProject.scene.array.roof[infProject.scene.array.roof.length] = obj;
+		infProject.scene.array.roof.push(obj);
 
 		scene.add( obj );	
 
@@ -305,9 +310,9 @@ class Roof
 		scene.add( clone );	
 	}
 	
-	setColor({color})
+	setColor({obj, color})
 	{
-		let obj = clickO.last_obj;
+		if(!obj) obj = clickO.last_obj;
 		if(obj.userData.tag !== 'roof') return;
 		
 		for(let i = 0; i < obj.children.length; i++)
@@ -315,7 +320,6 @@ class Roof
 			obj.children[i].material.color = new THREE.Color( Number(color) );
 			obj.children[i].material.needsUpdate = true;			
 		}
-		console.log(11, color);
 	}
 
 	// удаление объекта
