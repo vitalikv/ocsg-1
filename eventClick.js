@@ -259,17 +259,7 @@ $('[nameId="button_show_panel_catalog"]').mousedown(function () { showHideCatalo
 $('[nameId="button_catalog_close"]').mousedown(function () { showHideCatalogMenuUI({show: false}); });
 
 
-// скрываем/показываем правое меню UI
-function showHideCatalogMenuUI(cdm)
-{
-	var show = cdm.show;
-	
-	var block = $('[nameId="panel_catalog_1"]');
-	var button = $('[nameId="button_show_panel_catalog"]');
-	
-	if(show) { block.show(); button.hide(); }
-	else { block.hide(); button.show(); }
-}
+
 
 
 
@@ -282,7 +272,17 @@ function showHideCatalogMenuUI(cdm)
 });
 
 
-
+// скрываем/показываем правое меню UI
+function showHideCatalogMenuUI(cdm)
+{
+	var show = cdm.show;
+	
+	var block = $('[nameId="panel_catalog_1"]');
+	var button = $('[nameId="button_show_panel_catalog"]');
+	
+	if(show) { block.show(); button.hide(); }
+	else { block.hide(); button.show(); }
+}
 
 
 

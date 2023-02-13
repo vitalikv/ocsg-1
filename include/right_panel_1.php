@@ -412,10 +412,6 @@
 						</div>
 					</div>					
 					
-					<div>
-						<div class="button1 button_gradient_1" nameId="rp_button_apply">Применить</div>
-					</div>
-					
 					<div class="flex_1" style="margin: 15px auto;">						
 						<div class="button1 button_gradient_1" nameId="sw_dw_1" style="height: 55px;">
 							<svg width="55" height="55" xmlns="http://www.w3.org/2000/svg">
@@ -434,10 +430,6 @@
 							</svg>	
 						</div>							
 					</div>					
-					
-					<div>
-						<div class="button1 button_gradient_1" data-action="deleteObj">Удалить</div>
-					</div>
 				</div>				
 				
 				

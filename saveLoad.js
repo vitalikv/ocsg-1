@@ -908,10 +908,7 @@ function readyProject(cdm)
 	
 	$('[nameId="menu_loader_slider_UI"]').hide();
 	
-	changeCamera(cameraTop);
-	centerCamera2D();
-	cameraZoomTop( camera.zoom );
-	renderCamera();
+	startProject.setCamera();	
 }
 
 

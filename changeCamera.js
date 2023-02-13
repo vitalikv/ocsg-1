@@ -56,13 +56,28 @@ function changeCamera(cam)
 
 	clickO = resetPop.clickO();
 	
-	changeVisibleLevels();	
+	changeVisibleLevels();
+	
+	if(camera == cameraTop)
+	{
+		camera.updateMatrixWorld();
+		upPosLabels_1({resize: true});		
+	}
 	
 	renderCamera();
 }
 
 
-
+function clickOnBtn2D3D(cam)
+{
+	$('[nameId="butt_camera_2D"]').hide();
+	$('[nameId="butt_camera_3D"]').hide();
+	
+	if(cam === camera3D) $('[nameId="butt_camera_2D"]').show();
+	else $('[nameId="butt_camera_3D"]').show();
+	
+	changeCamera(cam);
+}
 
 
 

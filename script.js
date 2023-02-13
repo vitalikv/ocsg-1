@@ -2085,14 +2085,8 @@ var docReady = false;
 $(document).ready(function () 
 { 
 	docReady = true; 	
-		 
-	 //getAutoBuildingJson();
 	 
-	if(infProject.settings.load.file)
-	{
-		loadFile({json: infProject.settings.load.file});
-		//loadFile({id: 0});
-	}			  
+	startProject.init();			  
 	
 });
 

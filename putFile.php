@@ -41,6 +41,7 @@ new/level.js
 new/ghostLevel.js
 new/roof.js
 new/myRoof.js
+new/startProject.js
 ';
 
 $arrF = array();

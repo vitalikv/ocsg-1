@@ -53,6 +53,9 @@ function initElBtnLevel()
 	let checkBox1 = elBlock.querySelector('[nameId="type_cam_vis_1"]');
 	let checkBox2 = elBlock.querySelector('[nameId="type_cam_vis_2"]');
 	
+	checkBox1.children[0].style.background = (infProject.jsonProject.showAllLevel) ? 'rgb(213, 213, 213)' : 'none';
+	checkBox2.children[0].style.background = (infProject.jsonProject.wallTransparent) ? 'rgb(213, 213, 213)' : 'none';
+	
 	checkBox1.onmousedown = () => { changeCheckBoxLevelVis({elem: checkBox1, type: 'allLevel'}); }
 	checkBox2.onmousedown = () => { changeCheckBoxLevelVis({elem: checkBox2, type: 'wallTransparent'}); }	
 }
