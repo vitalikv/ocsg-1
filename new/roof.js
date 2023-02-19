@@ -87,7 +87,18 @@ class Roof
 		infProject.scene.array.roof.push(obj);
 
 		scene.add( obj );	
-
+		
+		// отдельный материал, иначе при изменении в материале у всех других крыш, также примутся изменения
+		let matClone = obj.children[0].material.clone();		
+		obj.traverse(function(child) 
+		{
+			if(child.isMesh && child.userData.tag !== 'roof') 
+			{ 
+				child.material = matClone; 
+			}
+		});			
+		setTexture({obj: obj.children[0], material: { img: infProject.path+"img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: matClone.color });
+		
 		if(cdm.cursor) clickO.move = obj; 	// объект был добавлен в сцену из каталога
 		
 		renderCamera();		

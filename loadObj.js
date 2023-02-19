@@ -71,6 +71,27 @@ async function getObjFromBase({lotid})
 
 	let inf = {};
 	
+	if(lotid === 1)
+	{
+		inf.name = 'куб';
+		inf.obj = myObj.crBox();
+		inf.planeMath = 0.5;
+	}
+	
+	if(lotid === 2)
+	{
+		inf.name = 'сфера';
+		inf.obj = myObj.crSphere();
+		inf.planeMath = 0.5;
+	}
+
+	if(lotid === 3)
+	{
+		inf.name = 'цилиндр';
+		inf.obj = myObj.crCylinder();
+		inf.planeMath = 0.5;
+	}	
+	
 	if(lotid === 19)	// крыша 1
 	{
 		inf.id = lotid;			// не используется, lotid берется в loadObjServer(cdm) cdm.lotid
@@ -78,7 +99,7 @@ async function getObjFromBase({lotid})
 		inf.obj = myRoof.initRoof();
 		inf.model = null;		// в этом случаи не нужно, нужно только при загрузки из бд
 		inf.preview = null;		// не используется
-		inf.planeMath = 0.0;	// не используется
+		inf.planeMath = 0.0;	// высота над полом
 		inf.size = new THREE.Vector3();	// не нужно, для объектов считается в самой ф-ции
 	}
 
@@ -152,16 +173,9 @@ function addObjInBase(inf, obj)
 	// накладываем на материал объекта lightMap
 	obj.traverse(function(child) 
 	{
-		if(child.isMesh) 
+		if(child.isMesh && child.material.visible) 
 		{ 
-			if(infProject.settings.obj.material.texture == 'none')
-			{
-				child.material.map = null;
-				child.material.color = new THREE.Color(infProject.settings.obj.material.color);				
-			}
-
-			child.castShadow = true;	
-			child.receiveShadow = true;				
+			
 		}
 	});
 

@@ -1,14 +1,7 @@
 
 
 class MyRoof 
-{
-	constructor()
-	{
-		this.obj = [];
-		this.material = new THREE.MeshStandardMaterial( { color : 0xff0000 } );	//side: THREE.DoubleSide
-		this.material2 = new THREE.MeshStandardMaterial( { color : 0x0000ff } );
-	}
-	
+{	
 	getGeometry({x, y, z, h, x2, z2})
 	{
 		// h - высоты крыши
@@ -41,25 +34,25 @@ class MyRoof
 	// 4-х скатная крыша
 	initRoof()
 	{
-		this.material = new THREE.MeshStandardMaterial( { color : 0x736a5a, lightMap : lightMap_1 } );	//side: THREE.DoubleSide
-		this.material2 = new THREE.MeshStandardMaterial( { color : 0x706858, lightMap : lightMap_1 } );
+		let material = new THREE.MeshStandardMaterial( { color : 0x736a5a, lightMap : lightMap_1 } );	//side: THREE.DoubleSide
 		
 		let g = this.getGeometry({x: 2.5, y: 0.07, z: 5, h: 3, z2: 3, x2: 0});
 		
-		let obj1 = new THREE.Mesh( g, this.material2 );
-		setTexture({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });		
+		let obj1 = new THREE.Mesh( g, material );		
 		
-		let obj2 = new THREE.Mesh( g, this.material2 );
+		let obj2 = new THREE.Mesh( g, material );
 		obj2.rotation.y = Math.PI;		
 		
 		g = this.getGeometry({x: 2.5, y: 0.07, z: 5, h: 3, z2: 5, x2: 5 - 3});
 		
-		let obj3 = new THREE.Mesh( g, this.material );
-		setTexture({obj: obj3, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
+		let obj3 = new THREE.Mesh( g, material );
+		
 		obj3.rotation.y = Math.PI/2;		
 		
-		let obj4 = new THREE.Mesh( g, this.material );
+		let obj4 = new THREE.Mesh( g, material );
 		obj4.rotation.y = -Math.PI/2;
+		
+		setTexture({obj: obj1, material: { img: infProject.path+"img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
 		
 		let roof = this.getBoxRoof([obj1, obj2, obj3, obj4]);
 		
@@ -101,8 +94,7 @@ class MyRoof
 		
 		let obj2 = new THREE.Mesh( g, material );
 		obj2.rotation.y = Math.PI;				
-		setTexture({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
-		setTexture({obj: obj2, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
+		setTexture({obj: obj1, material: { img: infProject.path+"img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
 		
 		let roof = this.getBoxRoof([obj1, obj2]);
 		

@@ -1,23 +1,45 @@
 
-
+// каталог не из бд, а тут составленный 
+function getMyCatalog()
+{
+	let list = [];
+	
+	list[0] = {id: 1, name: 'куб'};
+	list[1] = {id: 2, name: 'сфера'};
+	list[2] = {id: 3, name: 'цилиндр'};
+	
+	return list;
+}
 
 // добавляем структурированный каталог Json 
 async function addObjInCatalogUI_1(cdm) 
 {
-	var url = infProject.path+'t/catalog_2.json';
-	var url = infProject.path+'components_2/getListObjSql.php';	
 	
-	var response = await fetch(url, 
+	if(1==2)
 	{
-		method: 'POST',
-		body: 'select_list=id, name' ,
-		headers: 
+		var url = infProject.path+'t/catalog_2.json';
+		var url = infProject.path+'components_2/getListObjSql.php';	
+
+		var response = await fetch(url, 
 		{
-			'Content-Type': 'application/x-www-form-urlencoded'
-		},		
-		
-	});
-	var json = await response.json(); 
+			method: 'POST',
+			body: 'select_list=id, name' ,
+			headers: 
+			{
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},		
+			
+		});
+		var json = await response.json(); 		
+	}
+	else
+	{
+		json = getMyCatalog();
+	}
+	
+	let nn = {...json};
+	console.log(111, nn);
+	
 	
 	
 	for(var i = 0; i < json.length; i++)
@@ -31,9 +53,8 @@ async function addObjInCatalogUI_1(cdm)
 		
 	
 	// находим дочерние объекты 
-	function getItemChilds(cdm)
+	function getItemChilds({json})
 	{
-		var json = cdm.json;
 		
 		if(json.id != 'group') 
 		{

@@ -42,6 +42,7 @@ new/ghostLevel.js
 new/roof.js
 new/myRoof.js
 new/startProject.js
+new/myObj.js
 ';
 
 $arrF = array();

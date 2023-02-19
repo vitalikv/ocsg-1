@@ -25,7 +25,6 @@ $('[nameId="sw_dw_2"]').mousedown(function () { swSetDW_1({obj: clickO.last_obj,
 
 $('[nameId="obj_rotate_reset"]').mousedown(function () { objRotateReset(); });	
 $('[nameId="button_copy_obj"]').mousedown(function () { copyObj(); });
-$('[nameId="button_delete_obj"]').mousedown(function () { deleteObjectPop(); });
 
 
 $('[data-action="wall"]').mousedown(function () { clickInterface({button:'point_1'}); });
@@ -116,37 +115,6 @@ $('input').blur(function ()
 	infProject.activeInput = '';
 	infProject.activeInput_2 = null;
 });	
-
-
-
-// нажали кнопку применить
-$('[nameId="rp_button_apply"]').mousedown(function () 
-{  
-	var obj = clickO.last_obj;
-	
-	if(!obj) return;
-	if(!obj.userData.tag) return;
-	
-	if(obj.userData.tag == 'wall')
-	{
-		var width = $('[nameid="size_wall_width_1"]').val();
-		
-		inputWidthOneWall({wall:clickO.last_obj, width:{value: width}, offset:'wallRedBlueArrow'});		
-	}
-	else if(obj.userData.tag == 'window')
-	{
-		inputWidthHeightWD(clickO.last_obj);
-	}
-	else if(obj.userData.tag == 'door')
-	{
-		inputWidthHeightWD(clickO.last_obj);
-	}
-	else if(obj.userData.tag == 'obj')
-	{
-		inputScaleObjPop({obj: clickO.last_obj});
-	}	
-});
-
 
 
 // texture UI

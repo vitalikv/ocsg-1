@@ -1556,6 +1556,8 @@ function setTexture(cdm)
 		{
 			cdm.obj.userData.material.img = img;
 		}		
+
+		//material.map.image.onload = () => { material.needsUpdate = true; renderCamera();};
 		
 		renderCamera();
 	});			

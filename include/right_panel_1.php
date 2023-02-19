@@ -480,10 +480,6 @@
 								<input type="text" style="width: 90%; margin:5px 5px;" nameId="size-obj-height" value="0">
 							</div>
 						</div>						
-						
-						<div>
-							<div class="button1 button_gradient_1" nameId="rp_button_apply">Применить</div>
-						</div>
 					</div>						
 					
 				
@@ -493,13 +489,17 @@
 					
 					<div class="button1 button_gradient_1" nameId="button_copy_obj">
 						копировать	
-					</div>								
-
-					<div class="button1 button_gradient_1" nameId="button_delete_obj">
-						удалить	
-					</div>									
+					</div>																
 					
-								
+
+					<div>
+						<div class="rp_1_1_list">
+							<div class="rp_1_2_list" nameId="color_obj_1">
+
+							</div>				 							
+						</div>						
+					</div>	
+					
 					<div nameId="sp_block_drt" style="display:none">
 
 					</div> 
