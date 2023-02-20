@@ -503,7 +503,13 @@ function saveFile(cdm)
 
 function loadFile(cdm) 
 {
-	if(cdm.id == 0) { resetScene(); readyProject(); return; }	 
+	if(cdm.id == 0) 
+	{ 
+		resetScene(); 
+		addObjInCatalogUI_1();		// наполняем каталог объектов UI
+		readyProject(); 
+		return; 
+	}	 
 	
 	
 	if(cdm.json)	// загрузка json из папки

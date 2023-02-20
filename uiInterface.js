@@ -13,7 +13,7 @@ function addTextureInCatalogUI_1(cdm)
 		o.name = 'img';
 		var str = 
 		'<div class="right_panel_1_1_list_item rp_list_item_texture" add_texture="'+o.url+'">\
-			<img src="'+o.url+'" nameId="">\
+			<img src="'+infProject.path+o.url+'" nameId="">\
 		</div>';
 		 
 		$('[list_ui="catalog_texture_1"]').append(str);
@@ -29,7 +29,7 @@ function addTextureInCatalogUI_2(cdm)
 		o.name = 'img';
 		var str = 
 		'<div class="right_panel_1_1_list_item rp_list_item_texture" add_texture="'+o.url+'">\
-			<img src="'+o.url+'" nameId="">\
+			<img src="'+infProject.path+o.url+'" nameId="">\
 		</div>';
 		 
 		$('[list_ui="catalog_texture_2"]').append(str);
@@ -251,8 +251,8 @@ function upRightPlaneInput_1(cdm)
 // показываем текстыру у стены в правой панели
 function changeTextureWall_UI_1(cdm) 
 {
-	$('[nameId="wall_texture_1img"]').attr('src', cdm.obj.userData.material[1].img);  
-	$('[nameId="wall_texture_2img"]').attr('src', cdm.obj.userData.material[2].img);
+	$('[nameId="wall_texture_1img"]').attr('src', infProject.path+cdm.obj.userData.material[1].img);  
+	$('[nameId="wall_texture_2img"]').attr('src', infProject.path+cdm.obj.userData.material[2].img);
 }
 
 

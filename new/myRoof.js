@@ -52,7 +52,7 @@ class MyRoof
 		let obj4 = new THREE.Mesh( g, material );
 		obj4.rotation.y = -Math.PI/2;
 		
-		setTexture({obj: obj1, material: { img: infProject.path+"img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
+		setTexture({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
 		
 		let roof = this.getBoxRoof([obj1, obj2, obj3, obj4]);
 		
@@ -94,7 +94,7 @@ class MyRoof
 		
 		let obj2 = new THREE.Mesh( g, material );
 		obj2.rotation.y = Math.PI;				
-		setTexture({obj: obj1, material: { img: infProject.path+"img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
+		setTexture({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
 		
 		let roof = this.getBoxRoof([obj1, obj2]);
 		

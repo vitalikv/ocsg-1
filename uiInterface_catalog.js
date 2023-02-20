@@ -37,11 +37,6 @@ async function addObjInCatalogUI_1(cdm)
 		json = getMyCatalog();
 	}
 	
-	let nn = {...json};
-	console.log(111, nn);
-	
-	
-	
 	for(var i = 0; i < json.length; i++)
 	{
 		if(json[i].id == 10 || json[i].id == 11) continue;

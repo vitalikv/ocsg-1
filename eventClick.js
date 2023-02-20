@@ -32,7 +32,7 @@ $('[data-action="create_wd_1"]').mousedown(function () { clickInterface({button:
 $('[data-action="create_wd_2"]').mousedown(function () { clickInterface({button:'create_wd_2'}); });
 $('[data-action="create_wd_3"]').mousedown(function () { clickInterface({button:'create_wd_3'}); });
 $('[data-action="create_gate_1"]').mousedown(function () { clickInterface({button:'create_gate_1'}); });
-$('[add_lotid]').mousedown(function () { clickInterface({button: 'add_lotid', value: this.attributes.add_lotid.value}); });
+//$('[add_lotid]').mousedown(function () { clickInterface({button: 'add_lotid', value: this.attributes.add_lotid.value}); });
 $('[nameId="screenshot"]').mousedown(function () { createImageSvg(); createImageScene(); }); 				
 
 

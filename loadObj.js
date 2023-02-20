@@ -9,47 +9,47 @@ function infoListTexture()
 	
 	arr[0] =
 	{
-		url : infProject.path+'img/load/floor_1.jpg', 
+		url : 'img/load/floor_1.jpg', 
 	};
 	
 	arr[1] =
 	{
-		url : infProject.path+'img/load/w1.jpg', 
+		url : 'img/load/w1.jpg', 
 	};
 
 	arr[2] =
 	{
-		url : infProject.path+'img/load/kirpich.jpg', 
+		url : 'img/load/kirpich.jpg', 
 	};
 
 	arr[3] =
 	{
-		url : infProject.path+'img/load/beton.jpg', 
+		url : 'img/load/beton.jpg', 
 	};	
 
 	arr[4] =
 	{
-		url : infProject.path+'img/load/w2.jpg', 
+		url : 'img/load/w2.jpg', 
 	};
 
 	arr[5] =
 	{
-		url : infProject.path+'img/load/f1.jpg', 
+		url : 'img/load/f1.jpg', 
 	};
 
 	arr[6] =
 	{
-		url : infProject.path+'img/load/f2.jpeg', 
+		url : 'img/load/f2.jpeg', 
 	};
 
 	arr[7] =
 	{
-		url : infProject.path+'img/load/f3.jpg', 
+		url : 'img/load/f3.jpg', 
 	};	
 
-	arr[8] = { url : infProject.path+'img/load/gazbeton.jpg' }
-	arr[9] = { url : infProject.path+'img/load/proflist_1.jpg' }
-	arr[10] = { url : infProject.path+'img/load/roof_1.jpg' }
+	arr[8] = { url : 'img/load/gazbeton.jpg' }
+	arr[9] = { url : 'img/load/proflist_1.jpg' }
+	arr[10] = { url : 'img/load/roof_1.jpg' }
 	
 	return arr;
 }
