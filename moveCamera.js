@@ -171,8 +171,8 @@ function cameraMove3D( event )
 		if ( isMouseDown2 )
 		{
 			newCameraPosition = null;
-			var y = ( ( event.clientX - onMouseDownPosition.x ) * 0.006 );
-			var x = ( ( event.clientY - onMouseDownPosition.y ) * 0.006 );
+			var y = ( ( event.clientX - onMouseDownPosition.x ) * 0.002 );
+			var x = ( ( event.clientY - onMouseDownPosition.y ) * 0.002 );
 
 			camera.rotation.x -= x;
 			camera.rotation.y -= y;

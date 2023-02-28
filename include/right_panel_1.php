@@ -293,16 +293,7 @@
 				
 				<div class="rp_obj_name">
 					<input type="text" nameId="rp_obj_name" value="Название">					
-				</div>
-				
-				
-				<div nameId="rp_menu_point" style="display: none;"> 
-					<div class="flex_column_1">															
-						<div>
-							<div class="button1 button_gradient_1" data-action="deleteObj">Удалить</div>
-						</div>						
-					</div>	
-				</div>				
+				</div>								
 				
 				
 				<div nameId="rp_menu_wall" style="display: none;"> 
@@ -342,10 +333,6 @@
 								
 							</div>				 							
 						</div>						
-					</div>
-					
-					<div>
-						<div class="button1 button_gradient_1" style="margin-top: 20px;" data-action="deleteObj">Удалить</div>
 					</div>			 	
 					
 				</div>

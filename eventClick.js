@@ -9,8 +9,8 @@ $('[data-action="left_panel_1"]').mousedown(function () { clickInterface(); });
 
 
 
-$('[nameId="butt_camera_2D"]').mousedown(function() { changeCamera(cameraTop); $(this).hide(); $('[nameId="butt_camera_3D"]').show(); $('[nameId="butt_cam_walk"]').hide(); });
-$('[nameId="butt_camera_3D"]').mousedown(function() { changeCamera(camera3D); $(this).hide(); $('[nameId="butt_camera_2D"]').show(); $('[nameId="butt_cam_walk"]').show(); });
+$('[nameId="butt_camera_2D"]').mousedown(function() { clickOnBtn2D3D(cameraTop); });
+$('[nameId="butt_camera_3D"]').mousedown(function() { clickOnBtn2D3D(camera3D); });
 $('[nameId="butt_cam_walk"]').mousedown(function() { switchCamera3D(); });
 
 
@@ -41,7 +41,7 @@ $('[nameId="zoom_camera_butt_p"]').mousedown(function () { zoomLoop = 'zoomIn'; 
 $(window).mouseup(function () { zoomLoop = ''; });
 
 
-$('[data-action="deleteObj"]').mousedown(function () { detectDeleteObj(); return false; });
+
 $('[data-action="addPointCenterWall"]').mousedown(function () { addPointCenterWall(); return false; });
 
 

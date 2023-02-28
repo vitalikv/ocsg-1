@@ -101,7 +101,6 @@ function activeObjRightPanelUI_1(cdm)
 	$('[nameId="rp_bl_light"]').hide();
 	$('[nameId="bl_object_3d"]').hide();
 	$('[nameId="rp_menu_wall"]').hide();
-	$('[nameId="rp_menu_point"]').hide();
 	$('[nameId="rp_item_wd_h1"]').hide();
 	$('[nameId="rp_menu_wd"]').hide();
 	$('[nameId="rp_menu_room"]').hide();
@@ -115,7 +114,6 @@ function activeObjRightPanelUI_1(cdm)
 	
 	if(obj.userData.tag == 'point')
 	{
-		$('[nameId="rp_menu_point"]').show();
 		$('[nameId="rp_obj_name"]').val('точка');
 	}	
 	else if(obj.userData.tag == 'wall')

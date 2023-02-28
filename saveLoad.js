@@ -505,9 +505,7 @@ function loadFile(cdm)
 {
 	if(cdm.id == 0) 
 	{ 
-		resetScene(); 
-		addObjInCatalogUI_1();		// наполняем каталог объектов UI
-		readyProject(); 
+		loadFilePL({level: []});
 		return; 
 	}	 
 	
@@ -559,8 +557,8 @@ async function loadFilePL(json)
 	if(inf.model) addObjInBase(inf, new THREE.ObjectLoader().parse( inf.model ));
 	inf = await getObjFromBase({lotid: 11});
 	if(inf.model) addObjInBase(inf, new THREE.ObjectLoader().parse( inf.model ));
-	inf = await getObjFromBase({lotid: 19});
-	if(inf.model) addObjInBase(inf, new THREE.ObjectLoader().parse( inf.model ));	
+	//inf = await getObjFromBase({lotid: 19});
+	//if(inf.model) addObjInBase(inf, new THREE.ObjectLoader().parse( inf.model ));	
 	
 
 	//await getListRoomTypesApi();	// получаем типы помещений из api, добавляем в меню

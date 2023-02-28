@@ -72,9 +72,18 @@ function clickOnBtn2D3D(cam)
 {
 	$('[nameId="butt_camera_2D"]').hide();
 	$('[nameId="butt_camera_3D"]').hide();
+
+	if(cam === cameraTop) 
+	{
+		$('[nameId="butt_camera_3D"]').show();
+		$('[nameId="butt_cam_walk"]').hide();
+	}	
 	
-	if(cam === camera3D) $('[nameId="butt_camera_2D"]').show();
-	else $('[nameId="butt_camera_3D"]').show();
+	if(cam === camera3D) 
+	{
+		$('[nameId="butt_camera_2D"]').show();
+		$('[nameId="butt_cam_walk"]').show();
+	}
 	
 	changeCamera(cam);
 }
