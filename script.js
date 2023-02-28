@@ -1538,7 +1538,7 @@ function setTexture(cdm)
 		texture.needsUpdate = true;
 		
 		material.map = texture; 
-		material.lightMap = null;
+		//material.lightMap = null;
 		material.needsUpdate = true; 
 
 
@@ -2088,7 +2088,7 @@ $(document).ready(function ()
 { 
 	docReady = true; 	
 	 
-	startProject.init();			  
+	startProject.init('t');			  
 	
 });
 

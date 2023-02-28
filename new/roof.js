@@ -27,7 +27,7 @@ class Roof
 	initListColor()
 	{
 		let html = '';
-		let arr = ['223594', '942a22', '947b22', '539422', '762294', 'ffffff', '8a8a8a', '292929'];
+		let arr = ['223594', '942a22', '947b22', '539422', '706758', 'ffffff', '8a8a8a', '292929'];
 		
 		let container = document.querySelector('[nameId="color_roof_1"]');
 		
@@ -203,49 +203,6 @@ class Roof
 		renderCamera();			
 	}
 
-	// режем стены активного этажа
-	meshBSP(obj)
-	{  
-		let w = infProject.scene.array.wall;
-		var wdClone = obj;
-		wdClone.updateMatrixWorld();
-		
-		for ( var i = 0; i < w.length; i++ )
-		{
-			let wall = w[i];
-			wall.updateMatrixWorld();
-			var wallClone = wall;
- 
-			//wdClone.position.copy( wd.position );
-			var wdBSP = new ThreeBSP( wdClone );
-			
-			var wallBSP = new ThreeBSP( wallClone ); 			// копируем выбранную стену	
-			var newBSP = wallBSP.subtract( wdBSP );				// вычитаем из стены объект нужной формы
-			
-			
-			wallClone.geometry.dispose();
-			wall.geometry.dispose();	
-			
-			wall.geometry = newBSP.toGeometry();
-			//wall.geometry.computeVertexNormals();			
-			wall.geometry.computeFaceNormals();	
-
-			
-			for ( var i2 = 0; i2 < wall.geometry.faces.length; i2++ )
-			{
-				wall.geometry.faces[i2].normal.normalize();
-				if(wall.geometry.faces[i2].normal.z == 1) { wall.geometry.faces[i2].materialIndex = 1; }
-				else if(wall.geometry.faces[i2].normal.z == -1) { wall.geometry.faces[i2].materialIndex = 2; }
-				else if(wall.geometry.faces[i2].normal.x == 1) { wall.geometry.faces[i2].materialIndex = 0; }
-				else if(wall.geometry.faces[i2].normal.x == -1) { wall.geometry.faces[i2].materialIndex = 0; }
-				else { wall.geometry.faces[i2].materialIndex = 3; }
-			}			
-		}
-		
-		obj.visible = false;
-		
-	}
-
 
 	// получаем модифицированную клон-крышу, с высокими откасами, чтобы резать стены
 	crRoofMod( obj )
@@ -369,6 +326,136 @@ class Roof
 		$('[nameId="size-roof-height"]').val(Math.round(y * 100) / 100);
 		$('[nameId="size-roof-width"]').val(Math.round(z * 100) / 100);	
 	}	
+	
+	cgs()
+	{
+		let roof = infProject.scene.array.roof[0];
+		
+		let group = [];
+		for(let i = 0; i < roof.children.length; i++)
+		{
+			let child = roof.children[i];
+			
+			let posW = child.getWorldPosition(new THREE.Vector3());
+			let quaW = child.getWorldQuaternion(new THREE.Quaternion());							
+			let scaW = child.getWorldScale(new THREE.Vector3());
+			
+			let roofClone = new THREE.Mesh(child.geometry.clone(), child.material);
+			
+			roofClone.position.copy( posW );
+			roofClone.quaternion.copy( quaW );
+			roofClone.scale.copy( scaW );
+			
+			this.crRoofMod_2( roofClone );
+			
+			group.push(roofClone);
+		}
+		
+		for(let i = 0; i < group.length; i++)
+		{
+			//group[i].position.y += 1;
+			//scene.add(group[i]);
+			this.cutMeshBSP(group[i]);
+			group[i].geometry.dispose();
+		}		
+	}
+	
+	
+	// получаем модифицированную клон-крышу, с высокими откасами, чтобы резать стены
+	crRoofMod_2( obj )
+	{ 		
+		obj.updateMatrixWorld();
+		
+		let geometry = obj.geometry;
+		
+		//geometry.computeFaceNormals();	не правильно (подсчитать нормали)		
+		geometry.computeVertexNormals();	//правильно (подсчитать нормали)
+		
+		let faces = geometry.faces;		
+		
+		let arrV = [];
+		for (let i = 0; i < faces.length; i++) 
+		{		
+			if(faces[i].normal.y < 0.8) continue;
+
+			let v1 = geometry.vertices[faces[i].a];
+			let v2 = geometry.vertices[faces[i].b];
+			let v3 = geometry.vertices[faces[i].c];							
+			
+			arrV[faces[i].a] = v1;
+			arrV[faces[i].b] = v2;
+			arrV[faces[i].c] = v3;
+			
+			let helperDir = false;
+			if(helperDir)
+			{
+				let origin = v1.clone().applyMatrix4( obj.matrixWorld );
+				let helper = new THREE.ArrowHelper(faces[i].normal, origin, 2, 0xff0000);
+				helper.position.copy(origin);
+				scene.add(helper);							
+			}
+		}
+		
+
+		for (let i = 0; i < geometry.vertices.length; i++)
+		{
+			for (let i2 = 0; i2 < arrV.length; i2++)
+			{
+				if(!arrV[i2]) continue;				
+				if(i2 === i) continue;
+				
+				if(geometry.vertices[i].distanceTo( arrV[i2] ) < 0.001)
+				{
+					arrV[i] = geometry.vertices[i];
+				}
+			}			
+		}		
+		
+		for (let i = 0; i < arrV.length; i++)
+		{
+			if(!arrV[i]) continue;
+			arrV[i].y += 5; 		
+		}
+		
+		geometry.verticesNeedUpdate = true; 
+		geometry.elementsNeedUpdate = true;	
+	}	
+
+
+	// режем стены активного этажа
+	cutMeshBSP(obj)
+	{  
+		let w = infProject.scene.array.wall;
+		
+		obj.updateMatrixWorld();
+		
+		for ( let i = 0; i < w.length; i++ )
+		{
+			w[i].updateMatrixWorld();
+ 
+			let objBSP = new ThreeBSP( obj );			
+			let wBSP = new ThreeBSP( w[i] ); 			
+			let newBSP = wBSP.subtract( objBSP );		// вычитаем из стены объект нужной формы
+			
+			w[i].geometry.dispose();	
+			
+			w[i].geometry = newBSP.toGeometry();
+			//wall.geometry.computeVertexNormals();			
+			w[i].geometry.computeFaceNormals();	
+
+			
+			for ( let i2 = 0; i2 < w[i].geometry.faces.length; i2++ )
+			{
+				w[i].geometry.faces[i2].normal.normalize();
+				if(w[i].geometry.faces[i2].normal.z == 1) { w[i].geometry.faces[i2].materialIndex = 1; }
+				else if(w[i].geometry.faces[i2].normal.z == -1) { w[i].geometry.faces[i2].materialIndex = 2; }
+				else if(w[i].geometry.faces[i2].normal.x == 1) { w[i].geometry.faces[i2].materialIndex = 0; }
+				else if(w[i].geometry.faces[i2].normal.x == -1) { w[i].geometry.faces[i2].materialIndex = 0; }
+				else { w[i].geometry.faces[i2].materialIndex = 3; }
+			}			
+		}
+	}
+	
 }
 
 let clRoof = new Roof();
