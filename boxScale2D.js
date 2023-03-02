@@ -324,10 +324,10 @@ function showSvgSizeObj(cdm)
 			showElementSvg(infProject.svg.furn.size.elem);
 		}
 		
-		var x1 = obj.localToWorld( new THREE.Vector3(obj.geometry.boundingBox.min.x, 0, obj.geometry.boundingBox.max.z - 0.06) );
-		var x2 = obj.localToWorld( new THREE.Vector3(obj.geometry.boundingBox.max.x, 0, obj.geometry.boundingBox.max.z - 0.06) );
-		var z1 = obj.localToWorld( new THREE.Vector3(obj.geometry.boundingBox.min.x + 0.06, 0, obj.geometry.boundingBox.min.z) );
-		var z2 = obj.localToWorld( new THREE.Vector3(obj.geometry.boundingBox.min.x + 0.06, 0, obj.geometry.boundingBox.max.z) );	
+		var x1 = obj.localToWorld( new THREE.Vector3(obj.geometry.boundingBox.min.x, 0, obj.geometry.boundingBox.max.z + 0.14 / obj.scale.z) );
+		var x2 = obj.localToWorld( new THREE.Vector3(obj.geometry.boundingBox.max.x, 0, obj.geometry.boundingBox.max.z + 0.14 / obj.scale.z) );
+		var z1 = obj.localToWorld( new THREE.Vector3(obj.geometry.boundingBox.min.x - 0.14 / obj.scale.x, 0, obj.geometry.boundingBox.min.z) );
+		var z2 = obj.localToWorld( new THREE.Vector3(obj.geometry.boundingBox.min.x - 0.14 / obj.scale.x, 0, obj.geometry.boundingBox.max.z) );	
 		
 		var sizeX = x1.distanceTo( x2 );
 		var sizeZ = z1.distanceTo( z2 );

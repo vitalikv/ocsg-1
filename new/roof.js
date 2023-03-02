@@ -76,6 +76,13 @@ class Roof
 		obj.userData.roof.box = new THREE.Vector3(x, y, z);
 
 		if(cdm.scale){ obj.scale.set(cdm.scale.x, cdm.scale.y, cdm.scale.z); }
+		else if(!cdm.id)
+		{
+			let x = infProject.settings.roof.length;
+			let z = infProject.settings.roof.width;
+			
+			obj.scale.set(x/obj.userData.roof.box.x, obj.scale.y, z/obj.userData.roof.box.z);
+		}
 		
 		if(cdm.material)
 		{
