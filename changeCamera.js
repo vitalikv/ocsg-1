@@ -49,6 +49,8 @@ function changeCamera(cam)
 		//infProject.scene.grid.visible = false;
 	}
 	
+	clRoof.changeMaterialTransparent();
+	
 	showHideDivTypeCam();
 	
 	infProject.tools.axis[0].visible = false;

@@ -139,33 +139,11 @@ function clickRayHit(event)
 		var ray = rayIntersect( event, arr, 'arr' );
 		if(ray.length > 0) { rayhit = ray[0]; return rayhit; }		
 	}
-	
-	if(!rayhit)
-	{
-		var ray = rayIntersect( event, infProject.scene.array.roof, 'arr', true );	
-		//if(ray.length > 0) { rayhit = ray[0]; return rayhit; }
 
-		if(ray.length > 0)
-		{   	
-			rayhit = null;
-			
-			for (var i = 0; i < ray.length; i++)
-			{
-				if(ray[i].object.userData.roof) continue;
-				
-				rayhit = ray[i];
-				break;
-			}
-			
-			var object = null; 
-			
-			if(rayhit) { object = getParentObj({obj: rayhit.object}); }
-			
-			if(!object) { rayhit = null; }
-			else { rayhit.object = object; return rayhit; }
-		}		
-	}
-		
+	if(!rayhit && camera === camera3D)
+	{
+		rayhit = clRoof.getRayIntersect();		
+	}	
 
 	if(!infProject.scene.block.click.controll_wd)
 	{
@@ -228,6 +206,11 @@ function clickRayHit(event)
 			if(!object) { rayhit = null; }
 			else { rayhit.object = object; }
 		}			
+	}
+
+	if(!rayhit && camera === cameraTop)
+	{
+		rayhit = clRoof.getRayIntersect();		
 	}
 	
 	if(!rayhit)

@@ -34,7 +34,7 @@ class MyRoof
 	// 4-х скатная крыша
 	initRoof()
 	{
-		let material = new THREE.MeshStandardMaterial( { color : 0x706758, lightMap : lightMap_1 } );	//side: THREE.DoubleSide
+		let material = new THREE.MeshStandardMaterial( { color : 0x706758, lightMap : lightMap_1, transparent: true, opacity: 0.3 } );	//side: THREE.DoubleSide
 		
 		let g = this.getGeometry({x: 2.5, y: 0.07, z: 5, h: 3, z2: 3, x2: 0});
 		
@@ -88,7 +88,7 @@ class MyRoof
 		g.verticesNeedUpdate = true;
 		this.upUvsRoof( g );
 		
-		let material = new THREE.MeshStandardMaterial( { color : 0x736a5a, lightMap : lightMap_1 } );
+		let material = new THREE.MeshStandardMaterial( { color : 0x736a5a, lightMap : lightMap_1, transparent: true, opacity: 0.3 } );
 		
 		let obj1 = new THREE.Mesh( g, material );
 		

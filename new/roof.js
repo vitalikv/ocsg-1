@@ -312,6 +312,34 @@ class Roof
 		
 		renderCamera();
 	}
+
+	// при клике, определяем попали в крышу или нет
+	getRayIntersect()
+	{
+		let ray = rayIntersect( event, infProject.scene.array.roof, 'arr', true );	
+
+		let rayhit = null;
+		
+		if(ray.length > 0)
+		{   	
+			for (let i = 0; i < ray.length; i++)
+			{
+				if(ray[i].object.userData.roof) continue;
+				
+				rayhit = ray[i];
+				break;
+			}
+			
+			let object = null; 
+			
+			if(rayhit) { object = getParentObj({obj: rayhit.object}); }
+			
+			if(!object) { rayhit = null; }
+			else { rayhit.object = object;  }
+		}
+
+		return rayhit;
+	}
 	
 	// при клике на объект обновляем input-ы
 	upInputUI({obj})
@@ -463,6 +491,27 @@ class Roof
 		}
 	}
 	
+	
+	// camera3D - не прозрачная крыша, cameraTop - прозрачная крыша
+	changeMaterialTransparent()
+	{
+		let opacity = (camera === cameraTop) ? 0.3 : 1;
+		
+		let levels = infProject.jsonProject.level;
+				
+		for (let i = 0; i < levels.length; i++)
+		{
+			let roofs = levels[i].roof;
+			
+			for (let i2 = 0; i2 < roofs.length; i2++)
+			{
+				for (let i3 = 0; i3 < roofs[i2].children.length; i3++)
+				{
+					roofs[i2].children[i3].material.opacity = opacity;
+				}			
+			}					
+		}
+	}
 }
 
 let clRoof = new Roof();
