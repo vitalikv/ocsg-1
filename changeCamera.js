@@ -49,6 +49,9 @@ function changeCamera(cam)
 		//infProject.scene.grid.visible = false;
 	}
 	
+	if(camera === cameraTop) clRoof.resetWall();
+	else clRoof.cgs();
+	
 	clRoof.changeMaterialTransparent();
 	
 	showHideDivTypeCam();

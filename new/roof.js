@@ -362,9 +362,26 @@ class Roof
 		$('[nameId="size-roof-width"]').val(Math.round(z * 100) / 100);	
 	}	
 	
+	
+	// старт обрезание стен крышами
 	cgs()
 	{
-		let roof = infProject.scene.array.roof[0];
+		let level = infProject.jsonProject.level;
+		let arr = [];
+		
+		for(let i = 0; i < level.length; i++)
+		{
+			for(let i2 = 0; i2 < level[i].roof.length; i2++)
+			{
+				//arr.push(level[i].roof[i2]);
+				this.cgs_2(level[i].roof[i2]);
+			}
+		}
+	}
+	
+	cgs_2(roof)
+	{		
+		console.log('обрезаем стены крышами');
 		
 		let group = [];
 		for(let i = 0; i < roof.children.length; i++)
@@ -394,7 +411,7 @@ class Roof
 			group[i].geometry.dispose();
 		}		
 	}
-	
+
 	
 	// получаем модифицированную клон-крышу, с высокими откасами, чтобы резать стены
 	crRoofMod_2( obj )
@@ -449,7 +466,7 @@ class Roof
 		for (let i = 0; i < arrV.length; i++)
 		{
 			if(!arrV[i]) continue;
-			arrV[i].y += 5; 		
+			arrV[i].y += 15; 		
 		}
 		
 		geometry.verticesNeedUpdate = true; 
@@ -457,23 +474,35 @@ class Roof
 	}	
 
 
-	// режем стены активного этажа
+	// обрезаем стены всех этажей
 	cutMeshBSP(obj)
 	{  
-		let w = infProject.scene.array.wall;
+		//let w = infProject.scene.array.wall;
+		
+		let level = infProject.jsonProject.level;
+		let w = [];
+		
+		for(let i = 0; i < level.length; i++)
+		{
+			for(let i2 = 0; i2 < level[i].wall.length; i2++)
+			{
+				w.push(level[i].wall[i2]);
+			}
+		}		
 		
 		obj.updateMatrixWorld();
+		let objBSP = new ThreeBSP( obj );
 		
 		for ( let i = 0; i < w.length; i++ )
 		{
-			w[i].updateMatrixWorld();
- 
-			let objBSP = new ThreeBSP( obj );			
-			let wBSP = new ThreeBSP( w[i] ); 			
+			if(w[i].geometry.vertices.length === 0) continue;
+			
+			w[i].updateMatrixWorld();			
+			let wBSP = new ThreeBSP( w[i] );
+			
 			let newBSP = wBSP.subtract( objBSP );		// вычитаем из стены объект нужной формы
 			
-			w[i].geometry.dispose();	
-			
+			w[i].geometry.dispose();				
 			w[i].geometry = newBSP.toGeometry();
 			//wall.geometry.computeVertexNormals();			
 			w[i].geometry.computeFaceNormals();	
@@ -490,7 +519,76 @@ class Roof
 			}			
 		}
 	}
+
+
+	// восстанавливаем все стены
+	resetWall()   
+	{
+		let level = infProject.jsonProject.level;
+		let count = 0;
+		
+		for(let i = 0; i < level.length; i++)
+		{
+			for(let i2 = 0; i2 < level[i].roof.length; i2++)
+			{
+				count++;
+			}
+		}	
+
+		if(count === 0) return;
+		
+		console.log('восстанавливаем все стены после крыш');
+
+		
+		let arrW = [];
+		
+		for(let i = 0; i < level.length; i++)
+		{
+			for(let i2 = 0; i2 < level[i].wall.length; i2++)
+			{
+				arrW.push(level[i].wall[i2]);
+			}
+		}
+		
+		for ( var i = 0; i < arrW.length; i++ )
+		{
+			var wall = arrW[i]; 
+			
+			//if(wall.userData.wall.arrO.length == 0) continue;
+			
+			var p1 = wall.userData.wall.p[0].position;
+			var p2 = wall.userData.wall.p[1].position;	
+			var d = p1.distanceTo( p2 );		
+			
+			wall.geometry.dispose();
+			wall.geometry = createGeometryWall(d, wall.userData.wall.height_1, wall.userData.wall.width, wall.userData.wall.offsetZ);	// обновляем стену до простой стены		
+			 
+			// добавляем откосы
+			var v = wall.geometry.vertices;
+			for ( var i2 = 0; i2 < v.length; i2++ ) { v[i2] = wall.userData.wall.v[i2].clone(); }	
+			wall.geometry.verticesNeedUpdate = true;
+			wall.geometry.elementsNeedUpdate = true;	
+			wall.geometry.computeBoundingSphere();
+		}
 	
+		for ( var i = 0; i < arrW.length; i++ )
+		{
+			var wall = arrW[i];
+			
+			for ( var i2 = 0; i2 < wall.userData.wall.arrO.length; i2++ )
+			{
+				var wd = wall.userData.wall.arrO[i2];
+				
+				var wdClone = createCloneWD_BSP( wd );
+				
+				objsBSP = { wall : wall, wd : wdClone };		
+				
+				MeshBSP( wd, objsBSP );			
+			}
+			
+			upUvs_1( wall ); 
+		}
+	} 	
 	
 	// camera3D - не прозрачная крыша, cameraTop - прозрачная крыша
 	changeMaterialTransparent()
