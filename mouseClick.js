@@ -423,7 +423,7 @@ function onDocumentMouseUp( event )
 		else if(tag == 'obj') { clickMouseUpObject(obj); }
 		else if(tag == 'pivot') { clickMouseUpPivot(); }
 		else if(tag == 'gizmo') { clickMouseUpGizmo(); }
-		else if ( tag == 'roof' ) { clRoof.moveRoof( event ); }
+		else if ( tag == 'roof' ) { clRoof.moveRoof( event ); clRoof.clickUpRoof(obj); }
 		
 		if(tag == 'free_dw') {  }
 		else if (tag == 'point') 

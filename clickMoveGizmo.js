@@ -199,7 +199,12 @@ function clickMouseUpGizmo(cdm)
 	if(clickO.actMove && infProject.tools.gizmo.userData.gizmo.obj.userData.tag === 'obj')
 	{	
 		getInfoEvent23({obj: infProject.tools.gizmo.userData.gizmo.obj, type: 'move'});
-	}		
+	}
+
+	if(clickO.actMove && infProject.tools.pivot.userData.pivot.obj.userData.tag === 'roof')
+	{
+		clRoof.updateCgsRoof();
+	}	
 }
 
 

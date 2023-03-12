@@ -189,11 +189,11 @@ class Roof
 	clickUpRoof(obj)
 	{ 
 		if(!clickO.actMove) return;
-		if(camera !== cameraTop) return;
-				
-		// offsetLine
-		upSvgLinePosScene({el: infProject.svg.furn.offset.elem});
-		upSvgLinePosScene({el: infProject.svg.furn.size.elem});
+
+		if(camera === camera3D) 
+		{
+			this.updateCgsRoof();			
+		}				
 	}
 	
 	cutWalls()
