@@ -308,8 +308,13 @@ class Roof
 		disposeHierchy({obj: obj}); 
 		scene.remove(obj); 
 		
+		let id = infProject.jsonProject.actLevel;
+		updateArrLevel(id);
+	
 		outlineRemoveObj();
-		
+
+		this.updateCgsRoof()
+	
 		renderCamera();
 	}
 
@@ -363,6 +368,15 @@ class Roof
 	}	
 	
 	
+	// обновление обрезаных стен
+	updateCgsRoof()
+	{
+		if(camera !== camera3D) return;
+		
+		clRoof.resetWall({force: true});
+		clRoof.cgs();
+	}
+	
 	// старт обрезание стен крышами
 	cgs()
 	{
@@ -373,7 +387,6 @@ class Roof
 		{
 			for(let i2 = 0; i2 < level[i].roof.length; i2++)
 			{
-				//arr.push(level[i].roof[i2]);
 				this.cgs_2(level[i].roof[i2]);
 			}
 		}
@@ -497,16 +510,16 @@ class Roof
 		{
 			if(w[i].geometry.vertices.length === 0) continue;
 			
-			w[i].updateMatrixWorld();			
+			w[i].updateMatrixWorld();
 			let wBSP = new ThreeBSP( w[i] );
 			
 			let newBSP = wBSP.subtract( objBSP );		// вычитаем из стены объект нужной формы
 			
 			w[i].geometry.dispose();				
 			w[i].geometry = newBSP.toGeometry();
-			//wall.geometry.computeVertexNormals();			
+			
+			//wall.geometry.computeVertexNormals();	
 			w[i].geometry.computeFaceNormals();	
-
 			
 			for ( let i2 = 0; i2 < w[i].geometry.faces.length; i2++ )
 			{
@@ -516,13 +529,15 @@ class Roof
 				else if(w[i].geometry.faces[i2].normal.x == 1) { w[i].geometry.faces[i2].materialIndex = 0; }
 				else if(w[i].geometry.faces[i2].normal.x == -1) { w[i].geometry.faces[i2].materialIndex = 0; }
 				else { w[i].geometry.faces[i2].materialIndex = 3; }
-			}			
+			}
 		}
+		
+
 	}
 
 
 	// восстанавливаем все стены
-	resetWall()   
+	resetWall({force = false} = {})   
 	{
 		let level = infProject.jsonProject.level;
 		let count = 0;
@@ -535,7 +550,7 @@ class Roof
 			}
 		}	
 
-		if(count === 0) return;
+		if(!force && count === 0) return;
 		
 		console.log('восстанавливаем все стены после крыш');
 

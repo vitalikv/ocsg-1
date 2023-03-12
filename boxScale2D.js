@@ -1016,6 +1016,11 @@ function inputScaleObjPop(cdm)
 	obj.scale.set(x2/box.x, y2/box.y, z2/box.z);	
 	obj.updateMatrixWorld();
 	
+	if(obj.userData.tag === 'roof')
+	{
+		clRoof.updateCgsRoof();
+	}
+	
 	if(camera == cameraTop)
 	{
 		showSvgSizeObj({obj: obj, boxCircle: true, getObjRoom: true, resetPos: true});

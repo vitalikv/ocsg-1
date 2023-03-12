@@ -7,6 +7,8 @@ window.ThreeBSP = (function() {
 		FRONT = 1,
 		BACK = 2,
 		SPANNING = 3;
+		
+	var myPolygon = {v1: new THREE.Vector3(Infinity, Infinity, Infinity), w: Infinity};
 	
 	ThreeBSP = function( geometry ) {
 		// Convert THREE.Geometry to ThreeBSP
@@ -440,7 +442,20 @@ window.ThreeBSP = (function() {
 		this.front = this.back = undefined;
 		
 		if ( !(polygons instanceof Array) || polygons.length === 0 ) return;
+		
+		
+		// мое добавление, иначе бывает зацикливание 
+		var posCheck = (myPolygon.v1.x === polygons[0].vertices[0].x && myPolygon.v1.y === polygons[0].vertices[0].y && myPolygon.v1.z === polygons[0].vertices[0].z);
+		
+		if ( myPolygon.w === polygons[0].w && posCheck ) 
+		{
+			myPolygon = {v1: polygons[0].vertices[0].clone(), w: polygons[0].w};
+			this.divider = polygons[0].clone();
+			return;
+		}
 
+		myPolygon = {v1: polygons[0].vertices[0].clone(), w: polygons[0].w};
+		
 		this.divider = polygons[0].clone();
 		
 		for ( i = 0, polygon_count = polygons.length; i < polygon_count; i++ ) {

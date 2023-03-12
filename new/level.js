@@ -130,20 +130,23 @@ function startSetLevel_UI()
 }
 
 
-function saveArrLevel(id)
+function updateArrLevel(id)
 {
-	console.log(id, infProject.jsonProject.level[id]); 
-	//infProject.jsonProject.level[id] = {};
 	infProject.jsonProject.level[id].wall = infProject.scene.array.wall;
 	infProject.jsonProject.level[id].point = infProject.scene.array.point;
 	infProject.jsonProject.level[id].window = infProject.scene.array.window;
-	infProject.jsonProject.level[id].door = infProject.scene.array.door;	
+	infProject.jsonProject.level[id].door = infProject.scene.array.door;
+	infProject.jsonProject.level[id].obj = infProject.scene.array.obj;
 	infProject.jsonProject.level[id].floor = infProject.scene.array.floor;
 	infProject.jsonProject.level[id].ceiling = infProject.scene.array.ceiling;
-	infProject.jsonProject.level[id].obj = infProject.scene.array.obj;
-	infProject.jsonProject.level[id].roof = infProject.scene.array.roof;
-	infProject.jsonProject.level[id].height = infProject.settings.height;
-	
+	infProject.jsonProject.level[id].roof = infProject.scene.array.roof;	
+	infProject.jsonProject.level[id].height = infProject.settings.height;	
+}
+
+function saveArrLevel(id)
+{
+	console.log(id, infProject.jsonProject.level[id]); 
+	updateArrLevel(id);	
 	
  	changeDepthColor222();
 	obj_point = [];

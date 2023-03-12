@@ -230,8 +230,11 @@ function clickMouseUpPivot(cdm)
 	if(clickO.actMove && infProject.tools.pivot.userData.pivot.obj.userData.tag === 'obj')
 	{	
 		getInfoEvent23({obj: infProject.tools.pivot.userData.pivot.obj, type: 'move'});
-		
-		updateCubeCam({obj: infProject.tools.pivot.userData.pivot.obj});	// CubeCamera (material Reflection)
-	}		
+	}
+
+	if(clickO.actMove && infProject.tools.pivot.userData.pivot.obj.userData.tag === 'roof')
+	{
+		clRoof.updateCgsRoof();
+	}
 }
 
