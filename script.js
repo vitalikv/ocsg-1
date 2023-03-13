@@ -1723,7 +1723,29 @@ function deActiveSelected()
 }
 
 
-
+function boxUnwrapUVs(geometry) {
+    for (var i = 0; i < geometry.faces.length; i++) {
+        var face = geometry.faces[i];
+        var faceUVs = geometry.faceVertexUvs[0][i]
+        var va = geometry.vertices[geometry.faces[i].a]
+        var vb = geometry.vertices[geometry.faces[i].b]
+        var vc = geometry.vertices[geometry.faces[i].c]
+        var vab = new THREE.Vector3().copy(vb).sub(va)
+        var vac = new THREE.Vector3().copy(vc).sub(va)
+        //now we have 2 vectors to get the cross product of...
+        var vcross = new THREE.Vector3().copy(vab).cross(vac);
+        //Find the largest axis of the plane normal...
+        vcross.set(Math.abs(vcross.x), Math.abs(vcross.y), Math.abs(vcross.z))
+        var majorAxis = vcross.x > vcross.y ? (vcross.x > vcross.z ? 'x' : vcross.y > vcross.z ? 'y' : vcross.y > vcross.z) : vcross.y > vcross.z ? 'y' : 'z'
+        //Take the other two axis from the largest axis
+        var uAxis = majorAxis == 'x' ? 'y' : majorAxis == 'y' ? 'x' : 'x';
+        var vAxis = majorAxis == 'x' ? 'z' : majorAxis == 'y' ? 'z' : 'y';
+        faceUVs[0].set(va[uAxis], va[vAxis])
+        faceUVs[1].set(vb[uAxis], vb[vAxis])
+        faceUVs[2].set(vc[uAxis], vc[vAxis])
+    }
+    geometry.elementsNeedUpdate = geometry.verticesNeedUpdate = true;
+}
 
 function upUvs_1( obj )
 { 

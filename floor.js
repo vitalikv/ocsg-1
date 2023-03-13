@@ -62,7 +62,7 @@ function createFloor(cdm)
 	ceil.userData.tag = 'ceiling';
 	ceil.userData.id = id;
 	ceil.userData.material = { tag: 'ceiling', color: ceil.material.color, img: null };
-
+	ceil.visible = false;
 
 	
 	cdm.material = { img: "img/load/floor_1.jpg" };

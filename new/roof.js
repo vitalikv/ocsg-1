@@ -520,7 +520,7 @@ class Roof
 			
 			//wall.geometry.computeVertexNormals();	
 			w[i].geometry.computeFaceNormals();	
-			
+			boxUnwrapUVs(w[i].geometry);
 			for ( let i2 = 0; i2 < w[i].geometry.faces.length; i2++ )
 			{
 				w[i].geometry.faces[i2].normal.normalize();
@@ -601,7 +601,7 @@ class Roof
 				MeshBSP( wd, objsBSP );			
 			}
 			
-			upUvs_1( wall ); 
+			boxUnwrapUVs(wall.geometry);
 		}
 	} 	
 	
