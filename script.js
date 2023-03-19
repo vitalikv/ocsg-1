@@ -1614,7 +1614,7 @@ function clickButton( event )
 		}
 		else if(clickO.button == 'create_wd_3')
 		{
-			createEmptyFormWD_1({type:'window', lotid: 11});
+			createEmptyFormWD_1({type:'window', lotid: 5});
 		}
 		else if(clickO.button == 'create_gate_1')
 		{

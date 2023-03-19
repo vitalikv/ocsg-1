@@ -271,7 +271,7 @@ function clickToolWD(obj)
 // добавляем на выбранную стену окно/дверь (вырезаем форму в стене)
 // obj 		готовая дверь/окно
 // wall		стену на которую кликнули
-function addWD({ obj })
+async function addWD({ obj })
 {	
 	var wall = obj.userData.door.wall;
 	var pos = obj.position;
@@ -313,15 +313,6 @@ function addWD({ obj })
 	
 	obj.updateMatrixWorld();
 	
-	
-	// создаем клон двери/окна, чтобы вырезать в стене нужную форму
-	if(1==1)
-	{  
-		objsBSP = { wall : wall, wd : createCloneWD_BSP( obj ) };				
-		MeshBSP( obj, objsBSP ); 
-	}	
-
-
 	wall.userData.wall.arrO[wall.userData.wall.arrO.length] = obj;
 	
 	obj.geometry.computeBoundingBox();
@@ -330,7 +321,7 @@ function addWD({ obj })
 	
 	if(obj.userData.door.lotid > 0)
 	{
-		loadObjServer({type: 'wd', wd: obj, lotid: obj.userData.door.lotid});
+		await loadObjServer({type: 'wd', wd: obj, lotid: obj.userData.door.lotid});
 	}
 	else if(obj.userData.door.lotid === -2)
 	{
@@ -360,6 +351,14 @@ function addWD({ obj })
 	clickO.obj = null;
 	clickO.last_obj = null;
 	clickO.move = null;
+	
+	
+	// создаем клон двери/окна, чтобы вырезать в стене нужную форму
+	if(1==1)
+	{  
+		let objsBSP = { wall: wall, wd: createCloneWD_BSP( obj ) };		
+		MeshBSP( obj, objsBSP ); 
+	}	
 	
 	renderCamera();
 }
@@ -398,6 +397,18 @@ function swSetDW_1(cdm)
 	}
 	
 	calcSvgFormWD({obj: obj});
+
+	// парметрическое окно
+	if(obj.children.length > 0 && obj.children[0].userData.contour && obj.children[0].userData.contour.length > 0)
+	{	
+		const wallClone = new THREE.Mesh();
+		wallClone.geometry = clickMoveWD_BSP( obj ).geometry.clone(); 
+		wallClone.position.copy( obj.userData.door.wall.position ); 
+		wallClone.rotation.copy( obj.userData.door.wall.rotation );
+
+		const objsBSP = { wall: wallClone, wd: createCloneWD_BSP( obj ) };		
+		MeshBSP( obj, objsBSP ); 
+	}
 	
 	renderCamera();
 }
@@ -534,6 +545,7 @@ function setPosWD_Obj3D(cdm)
 	//if(openId == 0 || openId == 1) { obj3D.scale.x = Math.abs(obj3D.scale.x); }	
 	//else { obj3D.scale.x = -Math.abs(obj3D.scale.x); }
 
+	
 	if(openId == 0)
 	{
 		obj3D.scale.set(Math.abs(obj3D.scale.x), obj3D.scale.y, Math.abs(obj3D.scale.z)); 
@@ -549,7 +561,7 @@ function setPosWD_Obj3D(cdm)
 	else if(openId == 3) 
 	{ 
 		obj3D.scale.set(-Math.abs(obj3D.scale.x), obj3D.scale.y, -Math.abs(obj3D.scale.z)); 
-	}			
+	}
 }
 
 

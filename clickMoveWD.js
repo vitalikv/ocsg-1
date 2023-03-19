@@ -332,7 +332,7 @@ function inputWidthHeightWD(wd)
 	
 	wallClone.geometry = clickMoveWD_BSP( wd ).geometry.clone(); 
 	wallClone.position.copy( wd.userData.door.wall.position ); 
-	wallClone.rotation.copy( wd.userData.door.wall.rotation );		
+	wallClone.rotation.copy( wd.userData.door.wall.rotation );	 	
 
 	MeshBSP( wd, { wall : wallClone, wd : createCloneWD_BSP( wd ) } ); 	
 	
@@ -387,7 +387,9 @@ function сhangeSizePosWD( wd, pos, x, y )
 		var dX = obj3D.geometry.boundingBox.max.x - obj3D.geometry.boundingBox.min.x;
 		var dY = obj3D.geometry.boundingBox.max.y - obj3D.geometry.boundingBox.min.y;				
 		
-		obj3D.scale.set(x/dX, y/dY, 1);			
+		obj3D.scale.set(x/dX, y/dY, 1);	
+
+		setPosWD_Obj3D({wd});
 	}	
 }
 

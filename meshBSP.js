@@ -67,7 +67,13 @@ function clickMoveWD_BSP( wd, wall )
 // создаем форму окна/двери (для boolean), чуть шире стены
 function createCloneWD_BSP( wd )
 {
-	//console.log('clone WD (но чушь шире оригинала) (для boolean)');
+	// парметрическое окно
+	if(wd.children.length > 0 && wd.children[0].userData.contour && wd.children[0].userData.contour.length > 0)
+	{
+		const wdCSG = myWindows.calcContourCSG(wd.children[0]);		
+		return wdCSG;
+	}
+	
 	var obj = new THREE.Mesh();
 	obj.geometry = wd.geometry.clone(); 
 	obj.position.copy( wd.position );

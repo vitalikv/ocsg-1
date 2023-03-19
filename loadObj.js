@@ -90,7 +90,15 @@ async function getObjFromBase({lotid})
 		inf.name = 'цилиндр';
 		inf.obj = myObj.crCylinder();
 		inf.planeMath = 0.5;
-	}	
+	}
+
+
+	if(lotid === 5)
+	{
+		inf.name = 'окно мое';
+		inf.obj = myWindows.createWind();
+		inf.planeMath = 0.0;
+	}		
 	
 	if(lotid === 19)	// крыша 1
 	{
@@ -142,7 +150,7 @@ async function loadObjServer(cdm)
 	
 	var lotid = cdm.lotid;	
 	
-	var inf = await getObjFromBase({lotid: lotid});
+	var inf = await getObjFromBase({lotid: lotid}); 
 	if(!inf) return;		// объект не существует в API/каталоге
 	
 	if(inf.obj)		// объект есть в кэше
