@@ -172,9 +172,11 @@
 			<div class="flex_column_1 rp_item_plane">
 				<div class="flex_1">
 					<div class="flex_column_1">
-						<div data-action ='create_wd_3' class="button2 button_gradient_1">
-							<div>окно</div>
-						</div>
+						<div nameId="cr_btn_wind_1" class="button2 button_gradient_1"><div>окно 1</div></div>
+						<div nameId="cr_btn_wind_2" class="button2 button_gradient_1"><div>окно 2</div></div>	
+						<div nameId="cr_btn_wind_3" class="button2 button_gradient_1"><div>окно 3</div></div>
+						<div nameId="cr_btn_wind_4" class="button2 button_gradient_1"><div>окно 4</div></div>
+						<div nameId="cr_btn_wind_5" class="button2 button_gradient_1"><div>окно 5</div></div>						
 					</div>
 
 					<div>

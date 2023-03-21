@@ -1612,9 +1612,9 @@ function clickButton( event )
 		{
 			createEmptyFormWD_1({type:'door', lotid: 10});
 		}
-		else if(clickO.button == 'create_wd_3')
+		else if(clickO.button == 'add_wind')
 		{
-			createEmptyFormWD_1({type:'window', lotid: 5});
+			createEmptyFormWD_1({type:'window', lotid: clickO.options});
 		}
 		else if(clickO.button == 'create_gate_1')
 		{
@@ -1639,13 +1639,6 @@ function clickButton( event )
 		{
 			loadObjServer({lotid: clickO.options, cursor: true});
 		}		
-	}
-	else if(camera == cameraWall)
-	{
-		if(clickO.button == 'create_wd_3')
-		{
-			createEmptyFormWD_1({type:'window'});
-		}
 	}
 	
 	clickO.buttonAct = clickO.button;
@@ -1686,9 +1679,10 @@ function clickInterface(cdm)
 		{
 			clickO.button = 'create_wd_2';
 		}
-		else if(cdm.button == 'create_wd_3')
+		else if(cdm.button == 'add_wind')
 		{
-			clickO.button = 'create_wd_3';
+			clickO.button = 'add_wind';
+			clickO.options = cdm.id;
 		}
 		else if(cdm.button == 'create_gate_1')
 		{

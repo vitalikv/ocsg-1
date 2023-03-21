@@ -46,7 +46,10 @@ class StartProject
 		}
 
 		if(this.name === 'new') loadFile({id: 0});
-		else loadFile({json: infProject.settings.load.file});		
+		else loadFile({json: infProject.settings.load.file});
+		
+		//myWindows.createWind();
+		//clickOnBtn2D3D(camera3D);
 	}
 	
 	setCamera()

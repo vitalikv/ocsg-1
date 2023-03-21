@@ -1,10 +1,32 @@
 
 
 class MyWindows 
-{	
-	createWind()
+{
+	constructor()
 	{
-		return this.myCrWind();
+		this.initBtn();
+	}
+	
+	initBtn()
+	{
+		const elBlock = document.querySelector('[nameId="wrap_plan"]');
+		
+		const btn1 = elBlock.querySelector('[nameId="cr_btn_wind_1"]');
+		const btn2 = elBlock.querySelector('[nameId="cr_btn_wind_2"]');
+		const btn3 = elBlock.querySelector('[nameId="cr_btn_wind_3"]');
+		const btn4 = elBlock.querySelector('[nameId="cr_btn_wind_4"]');
+		const btn5 = elBlock.querySelector('[nameId="cr_btn_wind_5"]');
+		
+		btn1.onmousedown = () => { clickInterface({button:'add_wind', id: 5}); }
+		btn2.onmousedown = () => { clickInterface({button:'add_wind', id: 6}); }
+		btn3.onmousedown = () => { clickInterface({button:'add_wind', id: 7}); }
+		btn4.onmousedown = () => { clickInterface({button:'add_wind', id: 8}); }
+		btn5.onmousedown = () => { clickInterface({button:'add_wind', id: 9}); }
+	}
+		
+	createWind({id})
+	{
+		return this.myCrWind({id});
 	}
 	
 	
@@ -18,43 +40,50 @@ class MyWindows
 	myFormaWind(type)
 	{
 		let arr = [];
+		let contour = [];
 		
+		// окно с 1 секцией
 		if(type === 1)
 		{
-			arr = [
-			[new THREE.Vector2(-0.5,-0.5),new THREE.Vector2(-0.5,0.5),new THREE.Vector2(0.5,0.5),new THREE.Vector2(0.5,-0.5)],
-			];			
+			arr = [[new THREE.Vector2(-0.5,-0.5),new THREE.Vector2(-0.5,0.5),new THREE.Vector2(0.5,0.5),new THREE.Vector2(0.5,-0.5)]];
+			contour = [...arr[0]];
 		}
 		
+		// окно с 2 секциями
 		if(type === 2)
 		{
 			arr = [
-			[new THREE.Vector2(-0.5,-0.5),new THREE.Vector2(-0.5,1.242102),new THREE.Vector2(0.2975754,1.242102),new THREE.Vector2(0.2975754,-0.5)],
-			[new THREE.Vector2(0.2975754,1.242102),new THREE.Vector2(1.098457,1.242102),new THREE.Vector2(1.098457,-0.4999999),new THREE.Vector2(0.2975754,-0.5)]
-			];			
+			[new THREE.Vector2(-0.5,-0.5),new THREE.Vector2(-0.5,0.5),new THREE.Vector2(0,0.5),new THREE.Vector2(0,-0.5)],
+			[new THREE.Vector2(0,0.5),new THREE.Vector2(0.5,0.5),new THREE.Vector2(0.5,-0.5),new THREE.Vector2(0,-0.5)]
+			];
+
+			contour = [new THREE.Vector2(-0.5,-0.5), new THREE.Vector2(-0.5,0.5), new THREE.Vector2(0.5,0.5), new THREE.Vector2(0.5,-0.5)];
 		}		
 		
+		// окно с 3 секциями
 		if(type === 3)
 		{
 			arr = [
-			[new THREE.Vector2(-0.5,-0.5),new THREE.Vector2(-0.5,1.242102),new THREE.Vector2(0.2975754,1.242102),new THREE.Vector2(0.2975754,-0.5)],
-			[new THREE.Vector2(1.892359,1.242102),new THREE.Vector2(1.892359,-0.5),new THREE.Vector2(1.098457,-0.4999999),new THREE.Vector2(1.098457, 1.242102)],
-			[new THREE.Vector2(0.2975754,1.242102),new THREE.Vector2(1.098457,1.242102),new THREE.Vector2(1.098457,-0.4999999),new THREE.Vector2(0.2975754,-0.5)]
-			];			
+			[new THREE.Vector2(-0.75,-0.5),new THREE.Vector2(-0.75,0.5),new THREE.Vector2(-0.25,0.5),new THREE.Vector2(-0.25,-0.5)],			
+			[new THREE.Vector2(-0.25,-0.5),new THREE.Vector2(-0.25,0.5),new THREE.Vector2(0.25,0.5),new THREE.Vector2(0.25,-0.5)],
+			[new THREE.Vector2(-0.25,-0.5),new THREE.Vector2(-0.25,0.5),new THREE.Vector2(0.75,0.5),new THREE.Vector2(0.75,-0.5)],
+			];
+
+			contour = [new THREE.Vector2(-0.75,-0.5), new THREE.Vector2(-0.75,0.5), new THREE.Vector2(0.75,0.5), new THREE.Vector2(0.75,-0.5)];
 		}
 		
+		// треугольное окно
 		if(type === 4)
 		{
-			arr = [
-			[new THREE.Vector2(-0.5,-0.5),new THREE.Vector2(0.0,0.5),new THREE.Vector2(0.5,-0.5)],
-			];			
+			arr = [[new THREE.Vector2(-0.5,-0.5),new THREE.Vector2(0.0,0.5),new THREE.Vector2(0.5,-0.5)]];
+			contour = [...arr[0]];
 		}
 
+		// треугольное окно
 		if(type === 5)
 		{
-			arr = [
-			[new THREE.Vector2(-0.5,-0.5),new THREE.Vector2(0.5,0.5),new THREE.Vector2(0.5,-0.5)],
-			];			
+			arr = [[new THREE.Vector2(-0.5,-0.5),new THREE.Vector2(0.5,0.5),new THREE.Vector2(0.5,-0.5)]];
+			contour = [...arr[0]];
 		}			
 
 		let sections = [];
@@ -64,7 +93,7 @@ class MyWindows
 			sections.push({ userData: {p: arr[i]} });
 		}
 
-		return { sections: sections };
+		return { sections, contour };
 	}
 
 	
@@ -76,13 +105,13 @@ class MyWindows
 
 	
 	// создаем окно по моим контурам
-	myCrWind()
+	myCrWind({id})
 	{
 		const setXJ = this.profileWind();
-		const js_1 = this.myFormaWind(5);
+		const js_1 = this.myFormaWind(id);
 				
-		console.log(setXJ);
-		console.log(js_1);
+		//console.log(setXJ);
+		//console.log(js_1);
 		
 		var group = new THREE.Group();	// собираем все части окна
 		
@@ -100,7 +129,7 @@ class MyWindows
 			shape.autoClose = true;
 			
 			// помошник для отображения профиля 
-			if(1==1)
+			if(1==2)
 			{
 				var points = shape.getPoints();
 				var geometryPoints = new THREE.BufferGeometry().setFromPoints( points );
@@ -113,7 +142,7 @@ class MyWindows
 			for ( var i2 = 0; i2 < js_1.sections.length; i2++ ) 
 			{		
 				//if(js_1.sections[i2].openType != 0) continue;
-				console.log(js_1.sections[i2].userData.p);
+				
 				if(setXJ.close[i].matType == 'chrome')
 				{
 					group.add(this.crGlassParamWindow(js_1.sections[i2].userData.p, setXJ.close[i].points));
@@ -137,12 +166,13 @@ class MyWindows
 		box.add(group);
 		//scene.add(box);
 		//box.position.set(1, 1.7, -2);
-		box.userData.contour = js_1.sections[0].userData.p;
+		box.userData.contour = js_1.contour;
 		//this.calcContourCSG(box);
 		
 		return box;
 	}
 
+	// CSG объект для верезания формы в стене
 	calcContourCSG(box)
 	{
 		const posW = box.getWorldPosition(new THREE.Vector3());
