@@ -584,6 +584,7 @@ class Roof
 			wall.geometry.verticesNeedUpdate = true;
 			wall.geometry.elementsNeedUpdate = true;	
 			wall.geometry.computeBoundingSphere();
+			upUvs_1( wall ); 	// без этого не работает boxUnwrapUVs(wall.geometry)
 		}
 	
 		for ( var i = 0; i < arrW.length; i++ )
@@ -598,7 +599,7 @@ class Roof
 				
 				objsBSP = { wall : wall, wd : wdClone };		
 				
-				MeshBSP( wd, objsBSP );			
+				MeshBSP( wd, objsBSP );					
 			}
 			
 			boxUnwrapUVs(wall.geometry);
