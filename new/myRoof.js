@@ -30,35 +30,45 @@ class MyRoof
 
 		return g;
 	}
-	
-	// 4-х скатная крыша
-	initRoof()
+
+	// 1-ная крыша
+	initRoof_1()
 	{
-		let material = new THREE.MeshStandardMaterial( { color : 0x706758, lightMap : lightMap_1, transparent: true, opacity: 0.3 } );	//side: THREE.DoubleSide
+		let x = 2.5;
+		let y = 0.07;
+		let z = 5;
 		
-		let g = this.getGeometry({x: 2.5, y: 0.07, z: 5, h: 3, z2: 3, x2: 0});
+		let g = createGeometryCube(x, y, z);
+
+		let hY = 0;		// высоты крыши, чтобы обрезать стены над крышей
+		let h = 3;
+		
+		let vertices = 
+		[
+			new THREE.Vector3(-x, 0, z),
+			new THREE.Vector3(-x, y + hY, z),
+			new THREE.Vector3(x, y + h + hY, z),
+			new THREE.Vector3(x, 0 + h, z),
+			new THREE.Vector3(x, 0 + h, -z),
+			new THREE.Vector3(x, y + h + hY, -z),
+			new THREE.Vector3(-x, y + hY, -z),
+			new THREE.Vector3(-x, 0, -z),
+		];		
+		
+		g.vertices = vertices;
+		g.verticesNeedUpdate = true;
+		this.upUvsRoof( g );
+		
+		let material = new THREE.MeshStandardMaterial( { color : 0x736a5a, lightMap : lightMap_1, transparent: true, opacity: 0.3 } );
 		
 		let obj1 = new THREE.Mesh( g, material );		
-		
-		let obj2 = new THREE.Mesh( g, material );
-		obj2.rotation.y = Math.PI;		
-		
-		g = this.getGeometry({x: 2.5, y: 0.07, z: 5, h: 3, z2: 5, x2: 5 - 3});
-		
-		let obj3 = new THREE.Mesh( g, material );
-		
-		obj3.rotation.y = Math.PI/2;		
-		
-		let obj4 = new THREE.Mesh( g, material );
-		obj4.rotation.y = -Math.PI/2;
-		
 		setTexture({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
 		
-		let roof = this.getBoxRoof([obj1, obj2, obj3, obj4]);
+		let roof = this.getBoxRoof([obj1]);
 		
 		return roof;
 	}
-	
+
 
 	// 2-ная крыша
 	initRoof_2()
@@ -100,6 +110,37 @@ class MyRoof
 		
 		return roof;
 	}
+
+	
+	// 4-х скатная крыша
+	initRoof_3()
+	{
+		let material = new THREE.MeshStandardMaterial( { color : 0x706758, lightMap : lightMap_1, transparent: true, opacity: 0.3 } );	//side: THREE.DoubleSide
+		
+		let g = this.getGeometry({x: 2.5, y: 0.07, z: 5, h: 3, z2: 3, x2: 0});
+		
+		let obj1 = new THREE.Mesh( g, material );		
+		
+		let obj2 = new THREE.Mesh( g, material );
+		obj2.rotation.y = Math.PI;		
+		
+		g = this.getGeometry({x: 2.5, y: 0.07, z: 5, h: 3, z2: 5, x2: 5 - 3});
+		
+		let obj3 = new THREE.Mesh( g, material );
+		
+		obj3.rotation.y = Math.PI/2;		
+		
+		let obj4 = new THREE.Mesh( g, material );
+		obj4.rotation.y = -Math.PI/2;
+		
+		setTexture({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
+		
+		let roof = this.getBoxRoof([obj1, obj2, obj3, obj4]);
+		
+		return roof;
+	}
+	
+
 
 	// пересчет корректных uvs координат
 	upUvsRoof( geometry )

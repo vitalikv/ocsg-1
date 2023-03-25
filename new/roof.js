@@ -17,10 +17,13 @@ class Roof
 		let elBlock = document.querySelector('[nameId="wrap_plan"]');
 		
 		let btn1 = elBlock.querySelector('[nameId="cr_btn_roof_1"]');
-		btn1.onmousedown = () => { clickInterface({button:'create_roof_1'}); }
+		btn1.onmousedown = () => { clickInterface({button:'add_roof', lotid: 17}); }
 		
 		let btn2 = elBlock.querySelector('[nameId="cr_btn_roof_2"]');
-		btn2.onmousedown = () => { clickInterface({button:'create_roof_2'}); }		
+		btn2.onmousedown = () => { clickInterface({button:'add_roof', lotid: 18}); }
+
+		let btn3 = elBlock.querySelector('[nameId="cr_btn_roof_3"]');
+		btn3.onmousedown = () => { clickInterface({button:'add_roof', lotid: 19}); }		
 	}
 	
 	// создаем список с цветом

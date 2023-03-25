@@ -1620,13 +1620,9 @@ function clickButton( event )
 		{
 			createEmptyFormWD_1({type:'door', lotid: -2});
 		}			
-		else if(clickO.button == 'create_roof_1')
+		else if(clickO.button == 'add_roof')
 		{
-			loadObjServer({lotid: 19, roof: true, cursor: true});
-		}
-		else if(clickO.button == 'create_roof_2')
-		{
-			loadObjServer({lotid: 20, roof: true, cursor: true});
+			loadObjServer({lotid: clickO.options, roof: true, cursor: true});
 		}		
 		else if(clickO.button == 'add_lotid')
 		{
@@ -1688,13 +1684,10 @@ function clickInterface(cdm)
 		{
 			clickO.button = 'create_gate_1';
 		}		
-		else if(cdm.button == 'create_roof_1')
+		else if(cdm.button == 'add_roof')
 		{
-			clickO.button = 'create_roof_1';
-		}
-		else if(cdm.button == 'create_roof_2')
-		{
-			clickO.button = 'create_roof_2';
+			clickO.button = 'add_roof';
+			clickO.options = cdm.lotid;
 		}		
 		else if(cdm.button == 'add_lotid')
 		{

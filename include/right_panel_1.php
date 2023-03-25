@@ -256,6 +256,7 @@
 					<div class="flex_column_1">
 						<div nameId="cr_btn_roof_1" class="button2 button_gradient_1">крыша 1</div>
 						<div nameId="cr_btn_roof_2" class="button2 button_gradient_1">крыша 2</div>
+						<div nameId="cr_btn_roof_3" class="button2 button_gradient_1">крыша 3</div>
 					</div>
 				
 					<div>
