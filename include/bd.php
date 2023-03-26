@@ -9,7 +9,7 @@ $url = $_SERVER['REQUEST_URI'];
 $path = "";
 if($_SERVER['SERVER_NAME']=='engineering-plan.ru' || $_SERVER['SERVER_NAME']=='engineering-plan-new') $path = '/p1/';
 
-$title = 'Программа проектирование дома онлайн 3D';
+$title = 'Планировщик загородного дома онлайн 3D';
 $h1 = '----';
 $description = '';
 $nameId = '';

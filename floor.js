@@ -83,7 +83,7 @@ function createFloor(cdm)
 			
 		getYardageSpace([floor]); 
 		scene.add(floor); 
-		scene.add(ceil);		
+		//scene.add(ceil);		
 	}
 	else
 	{
@@ -226,25 +226,30 @@ function createPlaneOutlineFloor()
 }
 
 // кликнули на пол
-function clickFloor(cdm)
-{
-	var obj = cdm.obj;
+function clickFloor({obj})
+{	
+	const contour = obj.userData.room.contour;
+	const contour2 = [];
 	
-	var contour = obj.userData.room.contour;
-	var contour2 = [];
-	
-	for(var i = 0; i < contour.length; i++)
+	for(let i = 0; i < contour.length; i++)
 	{
 		contour2[i] = new THREE.Vector2(contour[i].x, -contour[i].z);
 	}
 
 	// меняем форму плоскости под форму пола и выделяем outline
-	var plane = infProject.tools.floorPl;	
+	const plane = infProject.tools.floorPl;	
 	plane.geometry.dispose();
 	plane.geometry = new THREE.ShapeGeometry( new THREE.Shape(contour2) );	
-	outlineAddObj({arr: [plane]});
-	 
-	activeObjRightPanelUI_1({obj: obj});
+	//outlineAddObj({arr: [plane]});
+	
+	
+	// TODO: прячем выделенный пол(клон с измененной геометрией), потому что при обрезки пола(клона) крышей,
+	// нужно дополнительно будет делать доп.расчеты для геометрии. вообщем долго объяснять 
+	plane.visible = false;	
+	outlineAddObj({arr: [obj]});
+	plane.userData.floorId = obj.userData.id;	// нужно чтобы понять к какому полу приклеплен
+	
+	activeObjRightPanelUI_1({obj});
 }
 
 

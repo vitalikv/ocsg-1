@@ -490,13 +490,12 @@ class Roof
 	}	
 
 
-	// обрезаем стены всех этажей
+	// обрезаем стены всех этажей и полы
 	cutMeshBSP(obj)
 	{  
-		//let w = infProject.scene.array.wall;
-		
-		let level = infProject.jsonProject.level;
-		let w = [];
+		const level = infProject.jsonProject.level;
+		const w = [];
+		const f = [];
 		
 		for(let i = 0; i < level.length; i++)
 		{
@@ -504,6 +503,11 @@ class Roof
 			{
 				w.push(level[i].wall[i2]);
 			}
+			
+			for(let i2 = 0; i2 < level[i].floor.length; i2++)
+			{
+				f.push(level[i].floor[i2]);
+			}			
 		}		
 		
 		obj.updateMatrixWorld();
@@ -535,14 +539,31 @@ class Roof
 			}
 		}
 		
+		for ( let i = 0; i < f.length; i++ )
+		{
+			if(f[i].geometry.vertices.length === 0) continue;
+			
+			f[i].updateMatrixWorld();
+			let wBSP = new ThreeBSP( f[i] );
+			
+			let newBSP = wBSP.subtract( objBSP );	
+			
+			f[i].geometry.dispose();				
+			f[i].geometry = newBSP.toGeometry();
 
+			/*if(infProject.tools.floorPl.userData.floorId && f[i].userData.id === infProject.tools.floorPl.userData.floorId)
+			{
+				infProject.tools.floorPl.geometry.dispose();				
+				infProject.tools.floorPl.geometry = f[i].geometry.clone();				
+			}*/			
+		}
 	}
 
 
-	// восстанавливаем все стены
+	// восстанавливаем все стены и пол
 	resetWall({force = false} = {})   
 	{
-		let level = infProject.jsonProject.level;
+		const level = infProject.jsonProject.level;
 		let count = 0;
 		
 		for(let i = 0; i < level.length; i++)
@@ -558,7 +579,8 @@ class Roof
 		console.log('восстанавливаем все стены после крыш');
 
 		
-		let arrW = [];
+		const arrW = [];
+		const f = [];
 		
 		for(let i = 0; i < level.length; i++)
 		{
@@ -566,9 +588,14 @@ class Roof
 			{
 				arrW.push(level[i].wall[i2]);
 			}
+			
+			for(let i2 = 0; i2 < level[i].floor.length; i2++)
+			{
+				f.push(level[i].floor[i2]);
+			}			
 		}
 		
-		for ( var i = 0; i < arrW.length; i++ )
+		for (let i = 0; i < arrW.length; i++)
 		{
 			var wall = arrW[i]; 
 			
@@ -607,6 +634,22 @@ class Roof
 			
 			boxUnwrapUVs(wall.geometry);
 		}
+		
+		for ( let i = 0; i < f.length; i++ )
+		{
+			const p2 = [];
+			for ( let i2 = 0; i2 < f[i].userData.room.p.length - 1; i2++ ) 
+			{  
+				const p = f[i].userData.room.p[i2];
+				p2.push(new THREE.Vector2( p.position.x, p.position.z ));		
+			}	 
+			
+			const shape = new THREE.Shape( p2 );
+			const geometry = new THREE.ExtrudeGeometry( shape, { bevelEnabled: false, depth: f[i].userData.room.height } );
+			
+			f[i].geometry.dispose();				
+			f[i].geometry = geometry;	
+		}		
 	} 	
 	
 	// camera3D - не прозрачная крыша, cameraTop - прозрачная крыша

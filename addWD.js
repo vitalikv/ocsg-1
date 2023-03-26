@@ -147,7 +147,7 @@ function createEmptyFormWD_1(cdm)
 		 
 		obj.userData.door.h1 = h1 - obj.geometry.boundingBox.min.y; 
 
-		if(cdm.pos) { obj.userData.door.h1 = cdm.pos.y - obj.geometry.boundingBox.min.y; }
+		//if(cdm.pos) { obj.userData.door.h1 = cdm.pos.y - obj.geometry.boundingBox.min.y; }
 	}
 		
 	//default vertices
