@@ -314,6 +314,9 @@ function addObjInScene(inf, cdm)
 	obj.userData.obj3D.typeGroup = '';
 	obj.userData.obj3D.helper = null;
 	
+	obj.userData.material = {};
+	obj.userData.material.img = null;
+	
 	obj.userData.obj3D.ur = {};
 	obj.userData.obj3D.ur.pos = new THREE.Vector3();
 	obj.userData.obj3D.ur.q = new THREE.Quaternion();
@@ -340,7 +343,11 @@ function addObjInScene(inf, cdm)
 		upDateTextureObj3D({obj, force: true});
 	}
 	
-	
+	if(cdm.material && cdm.material.img)
+	{
+		setTexture({obj: obj.children[0], material: { img: cdm.material.img } });
+	}
+
 
 	if(inf.type)
 	{
@@ -394,6 +401,7 @@ function upDateTextureObj3D({obj, force = false})
 		}
 	});	
 }
+
 
 
 // добавлеям к светильнику источник света

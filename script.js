@@ -328,6 +328,7 @@ var ccc = new THREE.Color().setHex( '0x'+infProject.settings.profile.color );
 	//await addObjInCatalogUI_1();			// наполняем каталог объектов UI
 	addTextureInCatalogUI_1();		// наполняем каталог текстур UI
 	addTextureInCatalogUI_2();
+	addTextureInCatalogUI_3();		// наполняем каталог текстур UI для obj
 	//changeRightMenuUI_1({name: 'button_wrap_object'});	// назначаем первоначальную вкладку , которая будет включена	
 	changeRightMenuUI_1({name: 'button_wrap_level'});
 	startRightPlaneInput({});
@@ -1560,6 +1561,7 @@ function setTexture(cdm)
 		if(cdm.obj.parent.userData.tag === "obj")
 		{ 						
 			upDateTextureObj3D({obj: cdm.obj.parent});
+			cdm.obj.parent.userData.material.img = img;
 		}
 		
 		if(cdm.obj.parent.userData.tag === "roof")

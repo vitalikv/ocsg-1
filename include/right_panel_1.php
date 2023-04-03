@@ -484,7 +484,7 @@
 
 					<div>
 						<div class="rp_1_1_list">
-							<div class="rp_1_2_list" nameId="color_obj_1">
+							<div class="rp_1_2_list" nameId="catalog_texture_obj">
 
 							</div>				 							
 						</div>						

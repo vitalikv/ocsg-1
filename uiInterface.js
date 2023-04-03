@@ -36,6 +36,28 @@ function addTextureInCatalogUI_2(cdm)
 	}	
 }
 
+// текстуры для объектов
+function addTextureInCatalogUI_3()
+{
+	let html = '';
+	let arr = infProject.catalog.texture;
+	
+	let container = document.querySelector('[nameId="catalog_texture_obj"]');
+	
+	for(let i = 0; i < arr.length; i++)
+	{
+		let div = document.createElement('div');
+		div.innerHTML = 
+		`<div class="right_panel_1_1_list_item rp_list_item_texture">
+			<img src="${infProject.path+arr[i].url}">
+		</div>`;
+		let elem = div.children[0];
+		container.append(elem);	
+		
+		elem.onmousedown = () => { myObj.clickBtnChangeTextureObj3D({url: arr[i].url}) }
+	}		
+}
+
 // показываем/скрываем кнопки/список текстур для стен
 function showHideMenuTexture_1(cdm)
 {

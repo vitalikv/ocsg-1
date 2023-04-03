@@ -114,6 +114,16 @@ class MyObj
 	}
 	
 
+	// выбрали текстуру из меню 
+	clickBtnChangeTextureObj3D({url})
+	{	
+		const obj = clickO.last_obj;
+		
+		if(!obj) return;
+		if(obj.userData.tag !== 'obj') return;	
+		
+		setTexture({obj: obj.children[0], material: { img: url } }); 	
+	}
 }
 
 let myObj = new MyObj();
