@@ -57,8 +57,7 @@ class MyRoof
 		
 		g.vertices = vertices;
 		g.verticesNeedUpdate = true;
-		this.upUvsRoof( g );
-		
+		boxUnwrapUVs(g);
 		let material = new THREE.MeshStandardMaterial( { color : 0x736a5a, lightMap : lightMap_1, transparent: true, opacity: 0.3 } );
 		
 		let obj1 = new THREE.Mesh( g, material );		
@@ -96,7 +95,8 @@ class MyRoof
 		
 		g.vertices = vertices;
 		g.verticesNeedUpdate = true;
-		this.upUvsRoof( g );
+		//this.upUvsRoof( g );
+		boxUnwrapUVs(g);
 		
 		let material = new THREE.MeshStandardMaterial( { color : 0x736a5a, lightMap : lightMap_1, transparent: true, opacity: 0.3 } );
 		
@@ -115,27 +115,29 @@ class MyRoof
 	// 4-х скатная крыша
 	initRoof_3()
 	{
-		let material = new THREE.MeshStandardMaterial( { color : 0x706758, lightMap : lightMap_1, transparent: true, opacity: 0.3 } );	//side: THREE.DoubleSide
+		const material = new THREE.MeshStandardMaterial( { color : 0x706758, lightMap : lightMap_1, transparent: true, opacity: 0.3 } );	//side: THREE.DoubleSide
 		
-		let g = this.getGeometry({x: 2.5, y: 0.07, z: 5, h: 3, z2: 3, x2: 0});
+		const g1 = this.getGeometry({x: 2.5, y: 0.07, z: 5, h: 3, z2: 3, x2: 0});
 		
-		let obj1 = new THREE.Mesh( g, material );		
+		const obj1 = new THREE.Mesh( g1, material );		
 		
-		let obj2 = new THREE.Mesh( g, material );
+		const obj2 = new THREE.Mesh( g1, material );
 		obj2.rotation.y = Math.PI;		
+		boxUnwrapUVs(g1);
 		
-		g = this.getGeometry({x: 2.5, y: 0.07, z: 5, h: 3, z2: 5, x2: 5 - 3});
+		const g2 = this.getGeometry({x: 2.5, y: 0.07, z: 5, h: 3, z2: 5, x2: 5 - 3});
 		
-		let obj3 = new THREE.Mesh( g, material );
+		const obj3 = new THREE.Mesh( g2, material );
 		
 		obj3.rotation.y = Math.PI/2;		
 		
-		let obj4 = new THREE.Mesh( g, material );
+		const obj4 = new THREE.Mesh( g2, material );
 		obj4.rotation.y = -Math.PI/2;
+		boxUnwrapUVs(g2);
 		
 		setTexture({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
 		
-		let roof = this.getBoxRoof([obj1, obj2, obj3, obj4]);
+		const roof = this.getBoxRoof([obj1, obj2, obj3, obj4]);
 		
 		return roof;
 	}
@@ -170,6 +172,22 @@ class MyRoof
 		geometry.elementsNeedUpdate = true;	
 	}
 
+	// пересчет корректных uvs координат
+	upDateTextureRoof({obj})
+	{
+		if(obj.userData.tag !== 'roof') return;
+		
+		const scaW = obj.getWorldScale(new THREE.Vector3());
+		
+		obj.children[0].traverse(function(child) 
+		{
+			if(child.isMesh && child.material.map) 
+			{ 
+				boxUnwrapUVs(child.geometry, obj.scale)				
+			}
+		});		
+	}
+	
 	// получаем габариты объекта и строим box-форму
 	getBoxRoof(arr)
 	{		

@@ -279,6 +279,16 @@ function clickUpElementBoxScale()
 	
 	if(!obj) return;
 	
+	if(obj.userData.tag === 'obj')
+	{
+		upDateTextureObj3D({obj})
+	}
+	
+	if(obj.userData.tag === 'roof')
+	{
+		myRoof.upDateTextureRoof({obj})
+	}	
+	
 	showSvgSizeObj({obj: obj, boxCircle: true});
 	
 	clickO.elem = null;
@@ -1019,6 +1029,12 @@ function inputScaleObjPop(cdm)
 	if(obj.userData.tag === 'roof')
 	{
 		clRoof.updateCgsRoof();
+		myRoof.upDateTextureRoof({obj})
+	}
+
+	if(obj.userData.tag === 'obj')
+	{
+		upDateTextureObj3D({obj})
 	}
 	
 	if(camera == cameraTop)

@@ -1552,11 +1552,20 @@ function setTexture(cdm)
 			}
 		}
 		
-		if(cdm.obj.userData.tag == "room" || cdm.obj.userData.tag == "ceiling")
+		if(cdm.obj.userData.tag === "room" || cdm.obj.userData.tag === "ceiling")
 		{
 			cdm.obj.userData.material.img = img;
 		}		
 
+		if(cdm.obj.parent.userData.tag === "obj")
+		{ 						
+			upDateTextureObj3D({obj: cdm.obj.parent});
+		}
+		
+		if(cdm.obj.parent.userData.tag === "roof")
+		{ 			
+			myRoof.upDateTextureRoof({obj: cdm.obj.parent})
+		}
 		//material.map.image.onload = () => { material.needsUpdate = true; renderCamera();};
 		
 		renderCamera();
@@ -1710,13 +1719,21 @@ function deActiveSelected()
 }
 
 
-function boxUnwrapUVs(geometry) {
+function boxUnwrapUVs(geometry, scale = new THREE.Vector3(1, 1, 1)) {
     for (var i = 0; i < geometry.faces.length; i++) {
         var face = geometry.faces[i];
         var faceUVs = geometry.faceVertexUvs[0][i]
-        var va = geometry.vertices[geometry.faces[i].a]
-        var vb = geometry.vertices[geometry.faces[i].b]
-        var vc = geometry.vertices[geometry.faces[i].c]
+        var va = geometry.vertices[geometry.faces[i].a].clone();
+        var vb = geometry.vertices[geometry.faces[i].b].clone();
+        var vc = geometry.vertices[geometry.faces[i].c].clone();
+		
+		if(1===1)
+		{
+			va.x *= scale.x; va.y *= scale.y; va.z *= scale.z;
+			vb.x *= scale.x; vb.y *= scale.y; vb.z *= scale.z;
+			vc.x *= scale.x; vc.y *= scale.y; vc.z *= scale.z;
+		}
+		
         var vab = new THREE.Vector3().copy(vb).sub(va)
         var vac = new THREE.Vector3().copy(vc).sub(va)
         //now we have 2 vectors to get the cross product of...
@@ -2097,7 +2114,7 @@ $(document).ready(function ()
 { 
 	docReady = true; 	
 	 
-	startProject.init('t');			  
+	startProject.init();			  
 	
 });
 

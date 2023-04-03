@@ -334,7 +334,13 @@ function addObjInScene(inf, cdm)
 
 	
 	
-	if(cdm.scale){ obj.scale.set(cdm.scale.x, cdm.scale.y, cdm.scale.z); }
+	if(cdm.scale)
+	{ 
+		obj.scale.set(cdm.scale.x, cdm.scale.y, cdm.scale.z);
+		upDateTextureObj3D({obj, force: true});
+	}
+	
+	
 
 	if(inf.type)
 	{
@@ -370,6 +376,23 @@ function addObjInScene(inf, cdm)
 	}
 	
 	renderCamera();
+}
+
+
+// если у объекта есть текстура, то обнволяем UVs
+function upDateTextureObj3D({obj, force = false})
+{	
+	if(obj.userData.tag !== 'obj') return;
+	
+	const scaW = obj.getWorldScale(new THREE.Vector3());
+	
+	obj.children[0].traverse(function(child) 
+	{
+		if(child.isMesh && (child.material.map || force)) 
+		{ 
+			boxUnwrapUVs(child.geometry, obj.scale)				
+		}
+	});	
 }
 
 
