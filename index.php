@@ -78,7 +78,7 @@
 		
 	</div>
 	
-	
+	<div nameId="wrapDiv" style="display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; font-family: arial,sans-serif; background: rgba(0, 0, 0, 0.5);"></div>
 	
 	
 	<style type="text/css">
@@ -133,6 +133,7 @@
 	<script src="<?=$path?>uiInterface_catalog.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>eventClick.js?<?=$vrs?>"></script>
 	
+	<script src="<?=$path?>new/btnDropList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/level.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ghostLevel.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/roof.js?<?=$vrs?>"></script>

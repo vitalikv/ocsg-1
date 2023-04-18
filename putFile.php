@@ -37,6 +37,7 @@ html_1.js
 selectionBox.js
 undoRedo.js
 getScreenshot.js
+new/btnDropList.js
 new/level.js
 new/ghostLevel.js
 new/roof.js

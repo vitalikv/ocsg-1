@@ -22,6 +22,18 @@ class MyWindows
 		btn3.onmousedown = () => { clickInterface({button:'add_wind', id: 7}); }
 		btn4.onmousedown = () => { clickInterface({button:'add_wind', id: 8}); }
 		btn5.onmousedown = () => { clickInterface({button:'add_wind', id: 9}); }
+
+		const data = 
+		[
+			{name: '1', src: 'img/walk_1.png', func: () => { clickInterface({button:'add_wind', id: 5}) } },
+			{name: '2', src: 'img/settings_1.png', func: () => { clickInterface({button:'add_wind', id: 6}) } },
+			{name: '1', src: 'img/walk_1.png', func: () => { clickInterface({button:'add_wind', id: 7}) } },
+			{name: '1', src: 'img/walk_1.png', func: () => { clickInterface({button:'add_wind', id: 8}) } },
+			{name: '1', src: 'img/walk_1.png', func: () => { clickInterface({button:'add_wind', id: 9}) } },
+		];
+		
+		const btnDropList = new BtnDropList();
+		btnDropList.initBtn({containerId: 'list_btn_wind', name: 'Окна', data});		
 	}
 		
 	createWind({id})
