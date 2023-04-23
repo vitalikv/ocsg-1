@@ -46,6 +46,7 @@ new/startProject.js
 new/myObj.js
 new/csgBox.js
 new/oWindow.js
+new/myDoor.js
 ';
 
 $arrF = array();

@@ -9,31 +9,17 @@ class MyWindows
 	
 	initBtn()
 	{
-		const elBlock = document.querySelector('[nameId="wrap_plan"]');
-		
-		const btn1 = elBlock.querySelector('[nameId="cr_btn_wind_1"]');
-		const btn2 = elBlock.querySelector('[nameId="cr_btn_wind_2"]');
-		const btn3 = elBlock.querySelector('[nameId="cr_btn_wind_3"]');
-		const btn4 = elBlock.querySelector('[nameId="cr_btn_wind_4"]');
-		const btn5 = elBlock.querySelector('[nameId="cr_btn_wind_5"]');
-		
-		btn1.onmousedown = () => { clickInterface({button:'add_wind', id: 5}); }
-		btn2.onmousedown = () => { clickInterface({button:'add_wind', id: 6}); }
-		btn3.onmousedown = () => { clickInterface({button:'add_wind', id: 7}); }
-		btn4.onmousedown = () => { clickInterface({button:'add_wind', id: 8}); }
-		btn5.onmousedown = () => { clickInterface({button:'add_wind', id: 9}); }
-
 		const data = 
 		[
-			{name: '1', src: 'img/walk_1.png', func: () => { clickInterface({button:'add_wind', id: 5}) } },
-			{name: '2', src: 'img/settings_1.png', func: () => { clickInterface({button:'add_wind', id: 6}) } },
-			{name: '1', src: 'img/walk_1.png', func: () => { clickInterface({button:'add_wind', id: 7}) } },
-			{name: '1', src: 'img/walk_1.png', func: () => { clickInterface({button:'add_wind', id: 8}) } },
-			{name: '1', src: 'img/walk_1.png', func: () => { clickInterface({button:'add_wind', id: 9}) } },
+			{name: 'одностворчатое', src: 'img/icon/wind/1.png', func: () => { clickInterface({button:'add_wind', id: 5}) } },
+			{name: 'двустворчатое', src: 'img/icon/wind/2.png', func: () => { clickInterface({button:'add_wind', id: 6}) } },
+			{name: 'трехстворчатое', src: 'img/icon/wind/3.png', func: () => { clickInterface({button:'add_wind', id: 7}) } },
+			{name: 'треугольное', src: 'img/icon/wind/4.png', func: () => { clickInterface({button:'add_wind', id: 8}) } },
+			{name: 'треугольное', src: 'img/icon/wind/5.png', func: () => { clickInterface({button:'add_wind', id: 9}) } },
 		];
 		
-		const btnDropList = new BtnDropList();
-		btnDropList.initBtn({containerId: 'list_btn_wind', name: 'Окна', data});		
+		// создаем модальное окно, со списком объектов
+		const btnDropList = new BtnDropList({containerId: 'list_btn_wind', name: 'Окна', data});	
 	}
 		
 	createWind({id})

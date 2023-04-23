@@ -1196,7 +1196,6 @@ canvas
 .div_drop_down_modal
 {
 	position: absolute;
-	width: 312px;
 	font-size: 14px;
 	color: #4A4A4A;
 	background: #fff;
@@ -1208,7 +1207,9 @@ canvas
 {
 	display: grid;
 	grid-template-columns: auto auto auto;
-	text-align: center;	
+	margin: 0 20px;
+	text-align: center;
+	font-size: 12px;		
 }
 
 /*  <--- right_panel  */

@@ -7,6 +7,11 @@ class BtnDropList
 	modalList = null;
 	btnItem = null;
 	
+	constructor({containerId, name, data})
+	{
+		this.initBtn({containerId, name, data});
+	}
+	
 	initBtn({containerId, name, data})
 	{
 		const container = document.querySelector('[nameId="'+containerId+'"]');
@@ -17,21 +22,24 @@ class BtnDropList
 		container.append(elem);	
 		
 		this.wrapDiv = document.querySelector('[nameId="wrapDiv"]');
+		
 		this.wrapModal = this.initModal({name});
+		this.wrapModal.style.display = 'none';
+		
 		this.modalList = this.wrapModal.querySelector('[nameId="modal_list"]');
 		this.initList({data});
 		
 		this.btnItem = container.querySelector('[nameId="btn_obj_item"]');
-		this.btnItem.onmousedown = () => 
-		{ 		
-			console.log(666)
-		}
+		this.initEventClickBtn({name: data[0].name, src: data[0].src, func: data[0].func});
 		
 		const btnDrop = container.querySelector('[nameId="btn_drop_item"]');
 		btnDrop.onmousedown = () => 
-		{ 		
-			this.showModal({el: btnDrop});
-			this.initEventModal();
+		{ 
+			if(this.isActive())
+			{
+				this.showModal({el: btnDrop});
+				this.initEventModal();				
+			}
 		}
 	}
 	
@@ -69,14 +77,17 @@ class BtnDropList
 		return elem;
 	}
 	
+	// наполняем список
 	initList({data})
 	{
 		const style = `
-		margin: 12px auto 0 auto;
+		margin: 10px;
 		cursor: pointer;
-		width: 50px;
-		height: 60px;
-		border: ;
+		width: 100px;`;
+		
+		const style2 = `
+		width: 100px;
+		height: 100px;
 		background: #fff;
 		border-radius: 4px;
 		border: 1px solid #D1D1D1;`;
@@ -87,13 +98,18 @@ class BtnDropList
 		margin: auto;
 		object-fit: contain;`;		
 
+		const styleTxt = `
+		margin: 10px auto;`;
+		
 		for ( let i = 0; i < data.length; i++ )
 		{
 			const div = document.createElement('div');
 			div.innerHTML = `
 			<div style="${style}">
-				<img src="${infProject.path+data[i].src}" style="${styleImg}">
-				<div>${data[i].name}</div>
+				<div style="${style2}">
+					<img src="${infProject.path+data[i].src}" style="${styleImg}">
+				</div>
+				<div style="${styleTxt}">${data[i].name}</div>
 			</div>`;
 			const elem = div.children[0];
 			
@@ -101,8 +117,16 @@ class BtnDropList
 
 			elem.onmousedown = (event) => 
 			{
-				data[i].func();
-				this.initEventClickItemList({name: data[i].name, src: data[i].src, func: data[i].func})
+				if(this.isActive())
+				{
+					data[i].func();
+					this.initEventClickBtn({name: data[i].name, src: data[i].src, func: data[i].func});				
+				}
+
+				
+				document.removeEventListener('mousedown', this.closeModal);
+				this.wrapModal.style.display = 'none';
+				this.wrapDiv.style.display = 'none';				
 			}				
 		}
 		
@@ -141,8 +165,8 @@ class BtnDropList
 		document.addEventListener('mousedown', this.closeModal);		
 	}	
 	
-	// кликнули на item в списке модального окна
-	initEventClickItemList({src, func})
+	// создаем событие для основной кнопки 
+	initEventClickBtn({src, func})
 	{
 		const styleImg = `
 		display: block;
@@ -153,12 +177,14 @@ class BtnDropList
 		this.btnItem.innerHTML = `<img src="${infProject.path+src}" style="${styleImg}">`;
 		this.btnItem.onmousedown = () => 
 		{ 		
-			func();
+			if(this.isActive()) func();
 		}
-		
-		document.removeEventListener('mousedown', this.closeModal);
-		this.wrapModal.style.display = 'none';
-		this.wrapDiv.style.display = 'none';
+	}
+	
+	// если находимся в 2D , то выполняем ф-ции
+	isActive()
+	{
+		return (camera === cameraTop) ? true : false;
 	}
 }
 
