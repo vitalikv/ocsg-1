@@ -3,7 +3,7 @@
 
 class StartProject
 {
-	name = 'new2';
+	name = 'new';
 	
 	constructor()
 	{
@@ -78,17 +78,27 @@ class StartProject
 				
 				camera3D.userData.camera.save.pos = camera3D.position.clone();
 				camera3D.userData.camera.save.radius = infProject.camera.d3.targetO.position.distanceTo(camera3D.position);								
-			}			
+			}						
 			
 			if(this.name === 'demo 3')
 			{
-				camera3D.position.set(4.3056373564054615, 5.998624420277156, -11.039353875200328);			
-				camera3D.rotation.set(-0.3382383267121755, 2.665165831108994, 0);			
-				infProject.camera.d3.targetO.position.set(-3.514850050989855, 4.9713253022648246e-14, 4.1114122118257255);
+				camera3D.position.set(-12.980195647195652, 4.725726151717402, -12.990587090348361);			
+				camera3D.rotation.set(-0.26457459280865037, -2.4635665662870103, 0);			
+				infProject.camera.d3.targetO.position.set(-2.039031079023262, 0, 0.5941402268183111);
 				
 				camera3D.userData.camera.save.pos = camera3D.position.clone();
 				camera3D.userData.camera.save.radius = infProject.camera.d3.targetO.position.distanceTo(camera3D.position);								
 			}
+
+			if(this.name === 'demo 4')
+			{
+				camera3D.position.set(-10.150758808809238, 7.476452542725171, -9.096691766295946);			
+				camera3D.rotation.set(-0.40309943010546634, -2.371254594012155, 0);			
+				infProject.camera.d3.targetO.position.set(2.0579833473162843, 0, 3.485431627682769);
+				
+				camera3D.userData.camera.save.pos = camera3D.position.clone();
+				camera3D.userData.camera.save.radius = infProject.camera.d3.targetO.position.distanceTo(camera3D.position);								
+			}			
 			
 			clickOnBtn2D3D(camera3D);				
 		}

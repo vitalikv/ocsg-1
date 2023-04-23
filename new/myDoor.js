@@ -16,7 +16,7 @@ class MyDoors
 		];
 		
 		// создаем модальное окно, со списком объектов
-		const btnDropList = new BtnDropList({containerId: 'list_btn_door', name: 'Дверь/проём', data});	
+		const btnDropList = new BtnDropList({containerId: 'list_btn_door', name: 'дверь/проём', data});	
 	}
 		
 

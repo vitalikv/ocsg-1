@@ -19,7 +19,7 @@ class MyWindows
 		];
 		
 		// создаем модальное окно, со списком объектов
-		const btnDropList = new BtnDropList({containerId: 'list_btn_wind', name: 'Окна', data});	
+		const btnDropList = new BtnDropList({containerId: 'list_btn_wind', name: 'окно', data});	
 	}
 		
 	createWind({id})

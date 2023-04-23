@@ -14,16 +14,15 @@ class Roof
 	// назначаем кнопкам событие 
 	initBtn()
 	{
-		let elBlock = document.querySelector('[nameId="wrap_plan"]');
+		const data = 
+		[
+			{name: 'односкатная', src: 'img/icon/roof/1.png', func: () => { clickInterface({button:'add_roof', lotid: 17}) } },
+			{name: 'двухскатная', src: 'img/icon/roof/2.png', func: () => { clickInterface({button:'add_roof', lotid: 18}) } },
+			{name: 'четырехскатная', src: 'img/icon/roof/3.png', func: () => { clickInterface({button:'add_roof', lotid: 19}) } },
+		];
 		
-		let btn1 = elBlock.querySelector('[nameId="cr_btn_roof_1"]');
-		btn1.onmousedown = () => { clickInterface({button:'add_roof', lotid: 17}); }
-		
-		let btn2 = elBlock.querySelector('[nameId="cr_btn_roof_2"]');
-		btn2.onmousedown = () => { clickInterface({button:'add_roof', lotid: 18}); }
-
-		let btn3 = elBlock.querySelector('[nameId="cr_btn_roof_3"]');
-		btn3.onmousedown = () => { clickInterface({button:'add_roof', lotid: 19}); }		
+		// создаем модальное окно, со списком объектов
+		const btnDropList = new BtnDropList({containerId: 'list_btn_roof', name: 'крыша', data});		
 	}
 	
 	// создаем список с цветом

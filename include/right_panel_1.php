@@ -121,7 +121,7 @@
 			<div class="flex_column_1 rp_item_plane">			
 				<div class="flex_1">
 					<div class="flex_column_1">
-						<div data-action ='wall' class="button2 button_gradient_1"><div>стена</div></div>
+						<div data-action ='wall' class="button2 button_gradient_1" style="font-size: 14px; font-weight: normal;"><div>стена</div></div>
 					</div>		
 					
 					<div class="flex_1 align_items">
@@ -138,12 +138,12 @@
 			<div class="flex_column_1 rp_item_plane">
 				<div class="flex_1">
 					<div class="flex_column_1">
-						<div nameId="list_btn_door">
+						<div nameId="list_btn_door" style="width: 80px; margin: auto;">
 						
 						</div>							
 					</div>	
 
-					<div>
+					<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
 						<div class="flex_1">
 							<div class="flex_1 align_items">
 								<div class="rp_label_plane">
@@ -173,12 +173,12 @@
 			<div class="flex_column_1 rp_item_plane">
 				<div class="flex_1">
 					<div class="flex_column_1">						
-						<div nameId="list_btn_wind">
+						<div nameId="list_btn_wind" style="width: 80px; margin: auto;">
 						
 						</div>						
 					</div>
 
-					<div>
+					<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
 						<div class="flex_1">
 							<div class="flex_1 align_items">
 								<div class="rp_label_plane">
@@ -219,10 +219,10 @@
 			<div class="flex_column_1 rp_item_plane">
 				<div class="flex_1">
 					<div class="flex_column_1">
-						<div data-action ='create_gate_1' class="button2 button_gradient_1">ворота</div>
+						<div data-action ='create_gate_1' class="button2 button_gradient_1" style="font-size: 14px; font-weight: normal;">ворота</div>
 					</div>
 				
-					<div>
+					<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
 						<div class="flex_1">
 							<div class="flex_1 align_items">
 								<div class="rp_label_plane">
@@ -253,12 +253,12 @@
 			<div class="flex_column_1 rp_item_plane">
 				<div class="flex_1">
 					<div class="flex_column_1">
-						<div nameId="cr_btn_roof_1" class="button2 button_gradient_1">крыша 1</div>
-						<div nameId="cr_btn_roof_2" class="button2 button_gradient_1">крыша 2</div>
-						<div nameId="cr_btn_roof_3" class="button2 button_gradient_1">крыша 3</div>
+						<div nameId="list_btn_roof" style="width: 80px; margin: auto;">
+						
+						</div>						
 					</div>
-				
-					<div>
+					
+					<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
 						<div class="flex_1">
 							<div class="flex_1 align_items">
 								<div class="rp_label_plane">

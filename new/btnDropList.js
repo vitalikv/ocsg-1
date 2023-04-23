@@ -17,7 +17,7 @@ class BtnDropList
 		const container = document.querySelector('[nameId="'+containerId+'"]');
 		
 		const div = document.createElement('div');
-		div.innerHTML = this.html();
+		div.innerHTML = this.html({name});
 		const elem = div.children[0];
 		container.append(elem);	
 		
@@ -45,15 +45,18 @@ class BtnDropList
 	
 	
 	// создаем кнопку для вызова модального окна
-	html()
+	html({name})
 	{
 		const html = `
-		<div class="wrap_btn_drop_down_list_1">
-			<div nameId="btn_obj_item" class="item_1">окно 0</div>
-			<div nameId="btn_drop_item" class="item_2">
-				<div style="display: flex; justify-content: center; align-items: center; width: 16px; height: 16px; margin: 3px 3px 3px 0;">
-					<img src="${infProject.path}img/svg/input_dropdown.svg" style="width: 16px; height: 16px;">
-				</div>							
+		<div>
+			<div style="margin-bottom: 5px; font-size: 14px; color: #737373; text-align: center;">${name}</div>
+			<div class="wrap_btn_drop_down_list_1">			
+				<div nameId="btn_obj_item" class="item_1"></div>
+				<div nameId="btn_drop_item" class="item_2">
+					<div style="display: flex; justify-content: center; align-items: center; width: 16px; height: 16px; margin: 3px 3px 3px 0;">
+						<img src="${infProject.path}img/svg/input_dropdown.svg" style="width: 16px; height: 16px;">
+					</div>							
+				</div>
 			</div>
 		</div>`;
 
