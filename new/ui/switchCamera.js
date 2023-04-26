@@ -45,7 +45,8 @@ class SwitchCamera
 		}
 		
 		changeCamera(cam);
-		this.showHideDivTypeCam();
+		tabs.upCurrentTab();	// обновляем текущую вкладку, например прячем в 3D вкладку 'Дом'
+		this.showHideDivTypeCam();	
 	}
 	
 	// прячем/показываем блок с настройками отображения стен и этажей

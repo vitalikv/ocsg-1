@@ -8,16 +8,6 @@ $('[data-action="left_panel_1"]').mousedown(function () { clickInterface(); });
 
 
 
-
-
-
-
-$('[nameId="button_wrap_catalog"]').mousedown(function () { changeRightMenuUI_1({el: this}); });
-$('[nameId="button_wrap_list_obj"]').mousedown(function () { changeRightMenuUI_1({el: this}); });
-$('[nameId="button_wrap_object"]').mousedown(function () { changeRightMenuUI_1({el: this}); });
-$('[nameId="button_wrap_plan"]').mousedown(function () { changeRightMenuUI_1({el: this}); });
-$('[nameId="button_wrap_level"]').mousedown(function () { changeRightMenuUI_1({el: this}); });
-
 $('[nameId="sw_dw_1"]').mousedown(function () { swSetDW_1({obj: clickO.last_obj, type: 'r-l'}); }); 
 $('[nameId="sw_dw_2"]').mousedown(function () { swSetDW_1({obj: clickO.last_obj, type: 't-b'}); });	
 

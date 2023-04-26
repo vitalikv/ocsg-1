@@ -113,7 +113,13 @@
 				</div>				
 			</div>
 		</div>
-			
+		
+		
+		<div class="flex_column_1" nameId="wrap_plan_3d" style="display: none; overflow: auto;">
+			<div class="right_panel_1_1_h">Дом</div>
+			<div class="right_panel_1_1_h">Работает только в 2D</div>
+		</div>
+		
 		<div class="flex_column_1" nameId="wrap_plan" style="display: none; overflow: auto;">
 			<div class="right_panel_1_1_h">Дом</div>
 			

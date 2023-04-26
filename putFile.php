@@ -48,6 +48,7 @@ new/csgBox.js
 new/oWindow.js
 new/myDoor.js
 new/ui/switchCamera.js
+new/ui/right-panel/tabs.js
 new/ui/right-panel/tabLevel.js
 new/ui/right-panel/divLevelVisible.js
 ';

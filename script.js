@@ -202,9 +202,6 @@ infProject.calc.boxScale2D.pos2D = new THREE.Vector2();
 infProject.calc.boxScale2D.pos3D = new THREE.Vector3();
 infProject.calc.boxScale2D.arrO = [];
 
-infProject.ui = {};
-infProject.ui.right_menu = {active: ''};
-
 infProject.ur = {};
 infProject.ur.count = -1; 
 infProject.ur.back = [];
@@ -329,11 +326,7 @@ var ccc = new THREE.Color().setHex( '0x'+infProject.settings.profile.color );
 	addTextureInCatalogUI_1();		// наполняем каталог текстур UI
 	addTextureInCatalogUI_2();
 	addTextureInCatalogUI_3();		// наполняем каталог текстур UI для obj
-	//changeRightMenuUI_1({name: 'button_wrap_object'});	// назначаем первоначальную вкладку , которая будет включена	
-	changeRightMenuUI_1({name: 'button_wrap_level'});
 	startRightPlaneInput({});
-	
-	
 	
 	//getAutoBuildingJson();
 	
@@ -2103,6 +2096,7 @@ function isCheckExsistFunction(functionToCheck)
 
 
 var docReady = false;
+let tabs;
 let tabLevel;
 let switchCamera;
 
@@ -2110,6 +2104,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 {
 	docReady = true; 	
 	
+	tabs = new Tabs();
 	tabLevel = new TabLevel();
 	switchCamera = new SwitchCamera()	
 	startProject.init();		

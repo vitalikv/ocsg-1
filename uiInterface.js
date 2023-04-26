@@ -77,43 +77,6 @@ function showHideMenuTexture_1(cdm)
 
 
 
-// переключаем вкладки правой панели 
-function changeRightMenuUI_1(cdm)
-{
-	$('[nameId="wrap_catalog"]').hide();
-	$('[nameId="wrap_object"]').hide();
-	$('[nameId="wrap_plan"]').hide();
-	$('[nameId="wrap_level"]').hide();
-	
-	var name = '';
-	//var name_2 = infProject.ui.right_menu.active;
-	
-	if(cdm.el) { name = cdm.el.attributes.nameId.value; }
-	else if(cdm.name) { name = cdm.name; }
-	else if(cdm.current) { name = infProject.ui.right_menu.active; }
-	
-	
-	
-	if(name == "button_wrap_catalog") 
-	{
-		$('[nameId="wrap_catalog"]').show();
-	}
-	if(name == "button_wrap_object") 
-	{
-		$('[nameId="wrap_object"]').show(); 
-	}
-	if(name == "button_wrap_plan") 
-	{
-		$('[nameId="wrap_plan"]').show();
-	}
-	if(name == "button_wrap_level") 
-	{
-		$('[nameId="wrap_level"]').show();
-	}
-	
-	infProject.ui.right_menu.active = name;
-}
-
 
 // кликнули на obj, wd (показываем нужное меню и заполняем input)
 function activeObjRightPanelUI_1(cdm) 
