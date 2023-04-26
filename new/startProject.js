@@ -48,7 +48,7 @@ class StartProject
 		else loadFile({json: infProject.settings.load.file});
 		
 		//myWindows.createWind();
-		//clickOnBtn2D3D(camera3D);
+		//switchCamera.clickOnBtn2D3D(camera3D);
 	}
 	
 	setCamera()
@@ -100,11 +100,11 @@ class StartProject
 				camera3D.userData.camera.save.radius = infProject.camera.d3.targetO.position.distanceTo(camera3D.position);								
 			}			
 			
-			clickOnBtn2D3D(camera3D);				
+			switchCamera.clickOnBtn2D3D(camera3D);				
 		}
 		else
 		{
-			clickOnBtn2D3D(cameraTop);
+			switchCamera.clickOnBtn2D3D(cameraTop);
 		}		
 	}
 }

@@ -22,53 +22,8 @@ function initArrLevel()
 }
 
 
-// создаем собитие по клику на кнопки этажей
-function initElBtnLevel()
-{
-	let elBlock = document.querySelector('[nameId="wrap_level"]');
-	
-	let btn1 = elBlock.querySelector('[nameId="btn_level_1"]');
-	let btn2 = elBlock.querySelector('[nameId="btn_level_2"]');
-	let btn3 = elBlock.querySelector('[nameId="btn_level_3"]');
-	let btn4 = elBlock.querySelector('[nameId="btn_level_4"]');
-	
-	btn1.onmousedown = () => { switchLevel(0); }
-	btn2.onmousedown = () => { switchLevel(1); }
-	btn3.onmousedown = () => { switchLevel(2); }
-	btn4.onmousedown = () => { switchLevel(3); }
-	
-	startSetLevel_UI();
-	
-	// input высоты этажа
-	let input1 = elBlock.querySelector('[nameId="rp_level_1_h2"]');
-	let input2 = elBlock.querySelector('[nameId="rp_level_2_h2"]');
-	let input3 = elBlock.querySelector('[nameId="rp_level_3_h2"]');
-	let input4 = elBlock.querySelector('[nameId="rp_level_4_h2"]');	
-	
-	input1.onkeyup = (event) => changeHeightWallLevel(event, 0);
-	input2.onkeyup = (event) => changeHeightWallLevel(event, 1);
-	input3.onkeyup = (event) => changeHeightWallLevel(event, 2);
-	input4.onkeyup = (event) => changeHeightWallLevel(event, 3);
-	
-	let checkBox1 = elBlock.querySelector('[nameId="type_cam_vis_1"]');
-	let checkBox2 = elBlock.querySelector('[nameId="type_cam_vis_2"]');
-	
-	checkBox1.children[0].style.background = (infProject.jsonProject.showAllLevel) ? 'rgb(213, 213, 213)' : 'none';
-	checkBox2.children[0].style.background = (infProject.jsonProject.wallTransparent) ? 'rgb(213, 213, 213)' : 'none';
-	
-	checkBox1.onmousedown = () => { changeCheckBoxLevelVis({elem: checkBox1, type: 'allLevel'}); }
-	checkBox2.onmousedown = () => { changeCheckBoxLevelVis({elem: checkBox2, type: 'wallTransparent'}); }	
-}
 
 
-function showHideDivTypeCam()
-{
-	let elBlock = document.querySelector('[nameId="wrap_level"]');
-	let div = elBlock.querySelector('[nameId="div_type_cam_vis"]');
-	
-	if(camera === cameraTop) div.style.display = 'none';
-	if(camera === camera3D) div.style.display = '';
-}
 
 function changeCheckBoxLevelVis({elem, type})
 {
@@ -114,20 +69,7 @@ function levelBackground_UI({id})
 	}
 }
 
-function startSetLevel_UI()
-{
-	let elBlock = document.querySelector('[nameId="wrap_level"]');
-	let input1 = elBlock.querySelector('[nameId="rp_level_1_h2"]');
-	let input2 = elBlock.querySelector('[nameId="rp_level_2_h2"]');
-	let input3 = elBlock.querySelector('[nameId="rp_level_3_h2"]');
-	let input4 = elBlock.querySelector('[nameId="rp_level_4_h2"]');		
-	
-	let level = infProject.jsonProject.level;	
-	input1.value = level[0].height;
-	input2.value = level[1].height;
-	input3.value = level[2].height;
-	input4.value = level[3].height;	
-}
+
 
 
 function updateArrLevel(id)

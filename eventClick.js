@@ -9,9 +9,7 @@ $('[data-action="left_panel_1"]').mousedown(function () { clickInterface(); });
 
 
 
-$('[nameId="butt_camera_2D"]').mousedown(function() { clickOnBtn2D3D(cameraTop); });
-$('[nameId="butt_camera_3D"]').mousedown(function() { clickOnBtn2D3D(camera3D); });
-$('[nameId="butt_cam_walk"]').mousedown(function() { switchCamera3D(); });
+
 
 
 $('[nameId="button_wrap_catalog"]').mousedown(function () { changeRightMenuUI_1({el: this}); });
@@ -235,6 +233,8 @@ $('[nameId="button_catalog_close"]').mousedown(function () { showHideCatalogMenu
 
 
 });
+
+
 
 
 // скрываем/показываем правое меню UI

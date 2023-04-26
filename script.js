@@ -333,7 +333,7 @@ var ccc = new THREE.Color().setHex( '0x'+infProject.settings.profile.color );
 	changeRightMenuUI_1({name: 'button_wrap_level'});
 	startRightPlaneInput({});
 	
-	initElBtnLevel();
+	
 	
 	//getAutoBuildingJson();
 	
@@ -1666,15 +1666,7 @@ function clickInterface(cdm)
 	{		
 		deActiveSelected();	
 		
-		if(cdm.button == '2D')
-		{  			
-			changeCamera(cameraTop);
-		}
-		else if(cdm.button == '3D')
-		{
-			changeCamera(camera3D);
-		}	
-		else if(cdm.button == 'point_1')
+		if(cdm.button == 'point_1')
 		{
 			clickO.button = 'create_wall';
 		}
@@ -2111,14 +2103,19 @@ function isCheckExsistFunction(functionToCheck)
 
 
 var docReady = false;
+let tabLevel;
+let switchCamera;
 
-$(document).ready(function () 
-{ 
+document.addEventListener("DOMContentLoaded", ()=>
+{
 	docReady = true; 	
-	 
-	startProject.init();			  
 	
+	tabLevel = new TabLevel();
+	switchCamera = new SwitchCamera()	
+	startProject.init();		
 });
+
+
 
 
 

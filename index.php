@@ -133,6 +133,10 @@
 	<script src="<?=$path?>uiInterface_catalog.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>eventClick.js?<?=$vrs?>"></script>
 	
+	
+	<script src="<?=$path?>new/ui/switchCamera.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/tabLevel.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/divLevelVisible.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/btnDropList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/level.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ghostLevel.js?<?=$vrs?>"></script>
