@@ -38,7 +38,7 @@ function clickWD( intersect )
 	}
 	
 	showTableWD( obj );		// UI
-	activeObjRightPanelUI_1({obj: obj}); 	// UI
+	tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
 	
 	outlineAddObj({arr: [obj]});
 }

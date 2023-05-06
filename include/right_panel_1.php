@@ -396,7 +396,7 @@
 						</div>
 					</div>	
 
-					<div class="flex_1" nameId="rp_item_wd_h1" style="display: none;">
+					<div class="flex_1" nameId="rp_item_wd_h1">
 						<div class="flex_1 align_items">
 							<div class="rp_label_plane">
 								над полом
@@ -429,18 +429,7 @@
 				
 				
 	
-				<div nameId="bl_object_3d" style="display: none;">  
-				
-					<div class="bl_fd30" nameId="rp_bl_light" style="display: none;">
-						<div class="bl_light_t1">
-							Интенсивность света: <span class="bl_light_t2" nameId="sun_intensity_div">0.0</span>
-						</div>
-					
-						<div class="bl_fd31">
-							<div class="bl_circle_handle" nameId="sun_intensity_handle"></div>
-						</div>	 	
-					</div>
-
+				<div nameId="bl_object_3d" style="display: none;">  				
 					
 					<div class="flex_column_1" nameId="rp_bl_set_obj_xyz" style="display: block; margin-bottom: 40px;">
 						<div class="flex_1">

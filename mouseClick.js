@@ -524,11 +524,11 @@ function hideMenuUI(obj)
 	
 	var tag = obj.userData.tag;
 	
-	if(tag == 'wall') { activeObjRightPanelUI_1(); }
-	else if(tag == 'point') { activeObjRightPanelUI_1(); }
-	else if(tag == 'window') { activeObjRightPanelUI_1(); }
-	else if(tag == 'door') { activeObjRightPanelUI_1(); }
-	else if(tag == 'room') { activeObjRightPanelUI_1(); }
+	if(tag == 'wall') { tabObject.activeObjRightPanelUI_1(); }
+	else if(tag == 'point') { tabObject.activeObjRightPanelUI_1(); }
+	else if(tag == 'window') { tabObject.activeObjRightPanelUI_1(); }
+	else if(tag == 'door') { tabObject.activeObjRightPanelUI_1(); }
+	else if(tag == 'room') { tabObject.activeObjRightPanelUI_1(); }
 }
 
 

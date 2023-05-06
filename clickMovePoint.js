@@ -36,7 +36,7 @@ function clickPoint( intersect )
 		}		 			
 	}
 
-	activeObjRightPanelUI_1({obj: obj}); 	// UI
+	tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
 }
 
 

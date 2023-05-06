@@ -347,20 +347,6 @@ function addObjInScene(inf, cdm)
 	{
 		setTexture({obj: obj.children[0], material: { img: cdm.material.img } });
 	}
-
-
-	if(inf.type)
-	{
-		if(inf.type == 'light point')
-		{
-			var intensity = 1;
-			if(cdm.light)
-			{
-				if(cdm.light.intensity) { intensity = cdm.light.intensity; }
-			}
-			setLightInobj({obj: obj, intensity: intensity}); 
-		}
-	}
 	
 	obj.material.visible = false;
 
@@ -404,101 +390,6 @@ function upDateTextureObj3D({obj, force = false})
 
 
 
-// добавлеям к светильнику источник света
-function setLightInobj(cdm)
-{
-	var obj = cdm.obj;
-	obj.userData.obj3D.typeGroup = 'light point';
-	
-	
-	var light = new THREE.PointLight( 0xffffff, cdm.intensity, 10 );
-	
-	light.castShadow = true;            // default false
-	scene.add( light );
-	
-	obj.traverse(function(child) 
-	{
-		if(child.isMesh) 
-		{ 
-			child.castShadow = false;	
-			child.receiveShadow = false;				
-		}
-	});	
-	
-	light.decay = 2;
-
-	//Set up shadow properties for the light
-	light.shadow.mapSize.width = 1048;  // default
-	light.shadow.mapSize.height = 1048; // default
-	light.shadow.camera.near = 0.01;       // default
-	light.shadow.camera.far = 10;      // default
-	
-	light.position.set(0, -0.01, 0);
-
-	if(infProject.settings.light.type == 'global')
-	{
-		light.visible = false;
-	}
-	
-	
-	obj.add( light );
-
-	infProject.scene.light.lamp[infProject.scene.light.lamp.length] = light;
-	
-	
-	if(1==2)
-	{
-		var spotLight = new THREE.SpotLight( 0xffffff );	
-
-		spotLight.castShadow = true;
-
-		spotLight.angle = Math.PI / 2 - 0.1;
-		spotLight.penumbra = 0.05;
-		spotLight.decay = 2;
-		spotLight.distance = 10;	
-
-		spotLight.castShadow = true;
-		spotLight.shadow.mapSize.width = 4048;
-		spotLight.shadow.mapSize.height = 4048;
-		spotLight.shadow.camera.near = 0.01;
-		spotLight.shadow.camera.far = 10;
-
-
-		
-		if(1==2)
-		{
-			scene.add( spotLight );
-			scene.add( spotLight.target );
-			
-			spotLight.position.copy(obj.position);
-			spotLight.target.position.set(obj.position.x, -1, obj.position.z);		
-		}
-		else
-		{
-			spotLight.position.set(0, -0.05, 0);
-			spotLight.target.position.set(0, -1, 0);		
-			
-			obj.add( spotLight );
-			obj.add( spotLight.target );	
-		}
-		
-		console.log('spotLight', spotLight);
-		//--------
-
-		if(1==1)
-		{
-			spotLightCameraHelper = new THREE.CameraHelper( spotLight.shadow.camera );
-			scene.add( spotLightCameraHelper );	
-
-			spotLightHelper = new THREE.SpotLightHelper( spotLight );
-			scene.add( spotLightHelper );		
-
-			obj.userData.obj3D.helper = [spotLightCameraHelper];
-		}
-		
-	}
-
-}
 
 
 // определяем нужно ли для объекта устанавливать отражение, если да, то ставим CubeCamera

@@ -51,6 +51,8 @@ new/ui/switchCamera.js
 new/ui/right-panel/tabs.js
 new/ui/right-panel/tabLevel.js
 new/ui/right-panel/divLevelVisible.js
+new/ui/right-panel/tabPlan.js
+new/ui/right-panel/tabObject.js
 ';
 
 $arrF = array();

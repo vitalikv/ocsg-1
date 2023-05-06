@@ -41,7 +41,7 @@ function clickWall_2D( intersect )
 	
 	if(camera == cameraTop)
 	{
-		activeObjRightPanelUI_1({obj: obj}); 	// UI
+		tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
 	}
 }
 
@@ -64,7 +64,7 @@ function clickWall_3D(cdm)
 	clickO.index = index;  	
 
 	outlineAddObj({arr: [obj]});
-	activeObjRightPanelUI_1({obj: obj, side: index});
+	tabObject.activeObjRightPanelUI_1({obj: obj, side: index});
 
 	//createSideFormWall({obj: obj});
 }

@@ -62,7 +62,7 @@ function clickObject3D(cdm)
 	if(camera == cameraTop) { outlineRemoveObj(); }
 	if(camera == camera3D) { outlineAddObj({arr: [obj]}); }
 	
-	activeObjRightPanelUI_1({obj: obj});	// показываем меню UI
+	tabObject.activeObjRightPanelUI_1({obj: obj});	// показываем меню UI
 
 	showSvgSizeObj({obj: obj, boxCircle: true, getObjRoom: true, resetPos: true});
 	
@@ -345,7 +345,7 @@ function hidePivotGizmo(obj)
 	//clickO.obj = null;  
 	clickO.last_obj = null;
 	
-	activeObjRightPanelUI_1(); 	// UI
+	tabObject.activeObjRightPanelUI_1(); 	// UI
 	
 	outlineRemoveObj();
 }

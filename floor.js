@@ -249,7 +249,7 @@ function clickFloor({obj})
 	outlineAddObj({arr: [obj]});
 	plane.userData.floorId = obj.userData.id;	// нужно чтобы понять к какому полу приклеплен
 	
-	activeObjRightPanelUI_1({obj});
+	tabObject.activeObjRightPanelUI_1({obj});
 }
 
 

@@ -157,7 +157,7 @@ class Roof
 		if(camera == cameraTop) { outlineRemoveObj(); }
 		if(camera == camera3D) { outlineAddObj({arr: [obj]}); }
 		
-		activeObjRightPanelUI_1({obj: obj});	// показываем меню UI
+		tabObject.activeObjRightPanelUI_1({obj: obj});	// показываем меню UI
 
 		showSvgSizeObj({obj: obj, boxCircle: true, getObjRoom: true, resetPos: true});
 		

@@ -327,11 +327,6 @@ function compileJsonFile_2(array, posY)
 		object[m].scale = obj.scale;
 		object[m].typeGroup = obj.userData.obj3D.typeGroup;
 		object[m].material = obj.userData.material;
-		
-		if(obj.userData.obj3D.typeGroup == "light point")
-		{
-			object[m].light = { intensity: obj.children[1].intensity };
-		}
 	}	
 	
 	let roof = array.roof;
