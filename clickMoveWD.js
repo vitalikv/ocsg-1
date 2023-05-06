@@ -35,10 +35,12 @@ function clickWD( intersect )
 	if(camera == cameraTop)
 	{
 		showRulerWD( obj ); 	// показываем линейки 
-		showTableWD( obj );		// UI
-		
-		activeObjRightPanelUI_1({obj: obj}); 	// UI
 	}
+	
+	showTableWD( obj );		// UI
+	activeObjRightPanelUI_1({obj: obj}); 	// UI
+	
+	outlineAddObj({arr: [obj]});
 }
 
 
@@ -323,7 +325,7 @@ function inputWidthHeightWD(wd)
 	h = (!resH) ? h2 : resH.num;
 	
 	
-	wd.userData.door.h1 = h - wd.geometry.boundingBox.min.y;    // вычитаем изменение высоты окна/двери  
+	wd.userData.door.h1 = h - wd.geometry.boundingBox.min.y - (y2 - y)/2;    // вычитаем изменение высоты окна/двери  
 	
 	var pos = wd.position.clone(); 
 	pos.y = wd.userData.door.h1; 

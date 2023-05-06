@@ -298,8 +298,8 @@ function clickMouseActive(cdm)
 		else if( tag == 'gizmo' ) { clickGizmo( rayhit ); } 
 		else if( tag == 'wall' && camera == cameraTop ) { clickWall_2D( rayhit ); }
 		else if( tag == 'point' ) { clickPoint( rayhit ); }
-		else if( tag == 'window' ) { clickWD( rayhit ); }
-		else if( tag == 'door' ) { clickWD( rayhit ); }
+		else if( tag == 'window' && camera == cameraTop ) { clickWD( rayhit ); }
+		else if( tag == 'door' && camera == cameraTop ) { clickWD( rayhit ); }
 		else if( tag == 'controll_wd' ) { clickToggleChangeWin( rayhit ); }
 		else if( tag == 'obj' && camera == cameraTop ) { clickObject3D({obj: obj, rayhit: rayhit}); }
 		else if( tag == 'obj' && camera == camera3D && infProject.tools.pivot.userData.pivot.obj == obj) { clickObject3D({obj: obj, rayhit: rayhit}); }
@@ -314,6 +314,8 @@ function clickMouseActive(cdm)
 		else if( tag == 'room' && camera == cameraTop ) { clickFloor({obj: obj}); }
 		else if( tag == 'room' && camera == camera3D ) { clickFloor({obj: obj}); }
 		else if( tag == 'roof' && camera == camera3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }
+		else if( tag == 'window' && camera == camera3D) { clickWD( rayhit ); }
+		else if( tag == 'door' && camera == camera3D) { clickWD( rayhit ); }		
 		else { flag = false; }
 	}	
 
@@ -491,6 +493,8 @@ function hideMenuObjUI_2D(cdm)
 			else if(tag == 'room' && camera == camera3D) { hideMenuUI(obj); outlineRemoveObj(); }
 			else if(tag == 'obj' && camera == camera3D) { hidePivotGizmo(obj); }
 			else if(tag == 'roof' && camera == camera3D) { hidePivotGizmo(obj); }
+			else if(tag == 'window' && camera == camera3D) { hidePivotGizmo(obj); }
+			else if(tag == 'door' && camera == camera3D) { hidePivotGizmo(obj); }
 			else { flag = false; }
 		}
 		else

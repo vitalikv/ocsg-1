@@ -88,13 +88,8 @@ function objActiveColor_2D(obj)
 			
 	var tag = obj.userData.tag;
 	
-	if(tag == 'window'){ outlineAddObj({arr: [obj]}); }
-	else if(tag == 'point'){ outlineAddObj({arr: [obj]}); }	 
+	if(tag == 'point'){ outlineAddObj({arr: [obj]}); }	 
 	else if(tag == 'wall'){ outlineAddObj({arr: [obj]}); } 	
-	else if(tag == 'door'){ outlineAddObj({arr: [obj]}); }	
-	//else if(tag == 'room'){ obj.material.color = new THREE.Color(infProject.listColor.active2D); console.log(555555);}
-	
-	//if(clickO.hover == obj) { clickO.hover = null; }
 }
  
 

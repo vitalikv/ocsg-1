@@ -106,6 +106,8 @@ function showControllWD( wall, obj )
 // показываем линейки и контроллеры для окна/двери (собираем инфу, для перемещения линеек) 
 function showRulerWD(obj)
 {
+	if(camera !== cameraTop) return;
+	
 	var wall = obj.userData.door.wall;   
 
 	showControllWD( wall, obj );		// показываем контроллеры 

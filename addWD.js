@@ -397,7 +397,8 @@ function swSetDW_1(cdm)
 	}
 	
 	calcSvgFormWD({obj: obj});
-
+	setPosWD_Obj3D({wd: obj});
+	
 	// парметрическое окно
 	if(obj.children.length > 0 && obj.children[0].userData.contour && obj.children[0].userData.contour.length > 0)
 	{	
@@ -526,7 +527,7 @@ function calcSvgFormWD(cdm)
 		updateSvgArc({el: obj.userData.door.svg.arc, param: param});
 	}
 	
-	setPosWD_Obj3D({wd: obj});
+	
 }
 
 
