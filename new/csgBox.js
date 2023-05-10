@@ -6,7 +6,7 @@ class MyCsgBox
 	init()
 	{
 		let arrW = [];
-		let level = infProject.jsonProject.level;
+		let level = myLevels.levels;
 		
 		for(let i = 0; i < level.length; i++)
 		{

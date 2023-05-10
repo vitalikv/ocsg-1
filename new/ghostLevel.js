@@ -73,15 +73,16 @@ class GhostLevel
 	// получаем данные нижнего этажа, чтобы построить призрачный этаж
 	getLevel()
 	{
-		let id = infProject.jsonProject.actLevel - 1;
+		const id = myLevels.activeId - 1;
+		const level = myLevels.levels;
 		
 		if(id < 0) return;
 
-		let wall = infProject.jsonProject.level[id].wall;
-		let point = infProject.jsonProject.level[id].point;
-		let window = infProject.jsonProject.level[id].window;
-		let door = infProject.jsonProject.level[id].door;
-		let height = infProject.jsonProject.level[id].height;
+		const wall = level[id].wall;
+		const point = level[id].point;
+		const window = level[id].window;
+		const door = level[id].door;
+		const height = level[id].height;
 		
 		return {wall, point, window, door};
 	}

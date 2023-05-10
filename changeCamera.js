@@ -57,7 +57,7 @@ function changeCamera(cam)
 
 	clickO = resetPop.clickO();
 	
-	changeVisibleLevels();
+	myLevels.changeVisibleLevels();
 	
 	if(camera == cameraTop)
 	{

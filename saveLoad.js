@@ -82,7 +82,7 @@ function resetScene()
 	deActiveSelected();
 	//hideMenuUI(clickO.last_obj);		
 	
-	clearOneLevel(infProject.jsonProject.actLevel);
+	myLevels.deleteOneLevel(myLevels.activeId);
 	
 	var cubeCam = infProject.scene.array.cubeCam;
 	
@@ -128,13 +128,11 @@ function resetScene()
 	infProject.scene.array = resetPop.infProjectSceneArray();
 	infProject.scene.light.lamp = [];
 	
-	clearAllLevels();
+	myLevels.deleteAllLevels();
 	
 	//getConsoleRendererInfo();
 	//console.log('infProject.scene.array');
 	//console.log(infProject.scene.array);
-	//console.log('infProject.jsonProject.level');
-	//console.log(infProject.jsonProject.level);
 }
 
 
@@ -197,22 +195,19 @@ function disposeNode(node)
 
 function compileJsonFile()
 {
-	let id = infProject.jsonProject.actLevel;
-
-	updateArrLevel(id);
+	myLevels.updateArrLevel();
 	
-	let level = [];
+	const id = myLevels.activeId;
+	const level = [];
 
-	let posY = getLevelPos0({lastId: id, newId: 0});
+	const posY = myLevels.getLevelPos0({lastId: id, newId: 0});
 	
-	for ( var i = 0; i < infProject.jsonProject.level.length; i++ )
-	{
-		//if(infProject.jsonProject.level[i].wall.length === 0) continue;
-		
-		level[level.length] = compileJsonFile_2(infProject.jsonProject.level[i], posY);
+	for ( let i = 0; i < myLevels.levels.length; i++ )
+	{		
+		level[level.length] = compileJsonFile_2(myLevels.levels[i], posY);
 	}
 	
-	let json = {level: level};
+	const json = {level: level};
 	
 	return json;
 }
@@ -556,14 +551,14 @@ async function loadFilePL(json)
 	{
 		await loadFileLevel(json.level[i]);
 		saveArrLevel(i);
-		visibleLevelCam2D(i, false);
+		myLevels.visibleLevelCam2D(i, false);
 	}	
 	
 	tabLevel.setStartInputValue();
 	
-	startLevel(0);
-	visibleLevelCam2D(0, true);
-	switchLevel(0);
+	myLevels.activateLevel(0);
+	myLevels.visibleLevelCam2D(0, true);
+	myLevels.switchLevel(0);
 	
 	readyProject(); 
 }

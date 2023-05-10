@@ -55,7 +55,7 @@ class DivLevelVisible
 			const elem = this.checkBox1;
 			elem.children[0].style.background = (this.showAllLevel) ? 'rgb(213, 213, 213)' : 'none';
 			
-			changeVisibleLevels();		
+			myLevels.changeVisibleLevels();		
 		}
 		
 		if(type === 'wallTransparent')

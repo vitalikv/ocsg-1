@@ -310,8 +310,7 @@ class Roof
 		disposeHierchy({obj: obj}); 
 		scene.remove(obj); 
 		
-		let id = infProject.jsonProject.actLevel;
-		updateArrLevel(id);
+		myLevels.updateArrLevel();
 	
 		outlineRemoveObj();
 
@@ -382,7 +381,7 @@ class Roof
 	// старт обрезание стен крышами
 	cgs()
 	{
-		let level = infProject.jsonProject.level;
+		let level = myLevels.levels;
 		let arr = [];
 		
 		for(let i = 0; i < level.length; i++)
@@ -492,7 +491,7 @@ class Roof
 	// обрезаем стены всех этажей и полы
 	cutMeshBSP(obj)
 	{  
-		const level = infProject.jsonProject.level;
+		const level = myLevels.levels;
 		const w = [];
 		const f = [];
 		
@@ -562,7 +561,7 @@ class Roof
 	// восстанавливаем все стены и пол
 	resetWall({force = false} = {})   
 	{
-		const level = infProject.jsonProject.level;
+		const level = myLevels.levels;
 		let count = 0;
 		
 		for(let i = 0; i < level.length; i++)
@@ -656,7 +655,7 @@ class Roof
 	{
 		let opacity = (camera === cameraTop) ? 0.3 : 1;
 		
-		let levels = infProject.jsonProject.level;
+		let levels = myLevels.levels;
 				
 		for (let i = 0; i < levels.length; i++)
 		{

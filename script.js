@@ -144,9 +144,6 @@ var lightMap_1 = null;
 
 var clickO = resetPop.clickO();
 infProject.project = null;
-infProject.jsonProject = {};
-infProject.jsonProject.actLevel = 0;
-infProject.jsonProject.level = initArrLevel();
 
 infProject.settings.active = { pg: 'pivot' };
 infProject.settings.door = { width: 0.85, height: 2.1 };
@@ -1110,7 +1107,7 @@ function createPoint( pos, id )
 	point.userData.point.cross = null;
 	point.userData.point.type = null;
 	point.userData.point.last = { pos : pos.clone(), cdm : '', cross : null };
-	point.userData.level = infProject.jsonProject.actLevel;
+	//point.userData.level = myLevels.activeId;
 	
 	point.visible = (camera == cameraTop) ? true : false;	
 	
@@ -1181,7 +1178,7 @@ function crtW( cdm )
 	//wall.userData.wall.active = { click: true, hover: true };	
 	wall.userData.wall.room = { side : 0, side2 : [null,null,null] };
 	wall.userData.wall.html = {};
-	wall.userData.level = infProject.jsonProject.actLevel;
+	//wall.userData.level = myLevels.activeId;
 	
 	if(infProject.settings.html.fonts.wall.show)
 	{
