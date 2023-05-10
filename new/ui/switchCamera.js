@@ -5,7 +5,7 @@ class SwitchCamera
 	btnCam2D;
 	btnCam3D;
 	btnCamFirst;
-	divLevelVisible;
+	divLevelVis;
 	
 	constructor()
 	{
@@ -15,8 +15,7 @@ class SwitchCamera
 		
 		this.initBtnEvent();
 		
-		const elBlock = document.querySelector('[nameId="wrap_level"]');
-		this.divLevelVisible = elBlock.querySelector('[nameId="div_type_cam_vis"]');		
+		this.divLevelVis = divLevelVisible.container;	 	
 	}
 	
 	initBtnEvent()
@@ -52,8 +51,8 @@ class SwitchCamera
 	// прячем/показываем блок с настройками отображения стен и этажей
 	showHideDivTypeCam()
 	{
-		if(camera === cameraTop) this.divLevelVisible.style.display = 'none';
-		if(camera === camera3D) this.divLevelVisible.style.display = '';
+		if(camera === cameraTop) this.divLevelVis.style.display = 'none';
+		if(camera === camera3D) this.divLevelVis.style.display = '';
 	}	
 }
 

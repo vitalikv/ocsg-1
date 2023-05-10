@@ -41,7 +41,7 @@ function changeCamera(cam)
 		
 		// прячем стены
 		getInfoRenderWall();
-		if(infProject.jsonProject.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();	
+		if(divLevelVisible.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();	
 		else showAllWallRender();
 		
 		//infProject.scene.grid.visible = false;
@@ -257,7 +257,7 @@ function switchCamera3D(cdm)
 
 		// прячем стены
 		getInfoRenderWall();
-		if(infProject.jsonProject.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();	
+		if(divLevelVisible.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();	
 		else showAllWallRender();
 	}
 }

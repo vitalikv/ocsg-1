@@ -1,5 +1,5 @@
 
-
+// вкладка этажи
 class TabLevel 
 {
 	itemsLevel = [];
@@ -27,8 +27,6 @@ class TabLevel
 		
 		this.setStartInputValue();
 		this.initElemsEvent();
-		
-		new DivLevelVisible();
 	}
 	
 	initElemsEvent()

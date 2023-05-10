@@ -147,8 +147,6 @@ infProject.project = null;
 infProject.jsonProject = {};
 infProject.jsonProject.actLevel = 0;
 infProject.jsonProject.level = initArrLevel();
-infProject.jsonProject.showAllLevel = true;
-infProject.jsonProject.wallTransparent = true;
 
 infProject.settings.active = { pg: 'pivot' };
 infProject.settings.door = { width: 0.85, height: 2.1 };
@@ -1975,6 +1973,7 @@ function isCheckExsistFunction(functionToCheck)
 var docReady = false;
 let tabs;
 let tabLevel;
+let divLevelVisible;
 let tabPlan;
 let tabObject;
 let switchCamera;
@@ -1985,6 +1984,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	tabs = new Tabs();
 	tabLevel = new TabLevel();
+	divLevelVisible = new DivLevelVisible({showAllLevel: true, wallTransparent: false});
 	tabPlan = new TabPlan();
 	tabObject = new TabObject();
 	switchCamera = new SwitchCamera()	

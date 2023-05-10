@@ -25,31 +25,7 @@ function initArrLevel()
 
 
 
-function changeCheckBoxLevelVis({elem, type})
-{
-	elem.children[0].style.background = (elem.children[0].style.background === 'none') ? 'rgb(213, 213, 213)' : 'none';
-	
-	let visible = (elem.children[0].style.background === 'none') ? false : true;
-	
-	if(type === 'allLevel')
-	{
-		infProject.jsonProject.showAllLevel = visible;
-		
-		changeVisibleLevels();		
-	}
-	
-	if(type === 'wallTransparent')
-	{
-		infProject.jsonProject.wallTransparent = visible;
-		
-		if(camera === camera3D)
-		{
-			getInfoRenderWall();
-			if(infProject.jsonProject.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();
-			else showAllWallRender();						
-		}
-	}	
-}
+
 
 function levelBackground_UI({id})
 {
@@ -209,7 +185,7 @@ function startLevel(id)
 	}
 	else 
 	{
-		if(infProject.jsonProject.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();
+		if(divLevelVisible.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();
 		else showAllWallRender();
 	}
 	
@@ -261,8 +237,7 @@ function changeVisibleLevels()
 	{		
 		if(camera === camera3D && infProject.jsonProject.actLevel !== i) 
 		{
-			let visible = infProject.jsonProject.showAllLevel;
-			visibleLevelCam3D(i, visible);
+			visibleLevelCam3D(i, divLevelVisible.showAllLevel);
 		}
 		if(camera === cameraTop && infProject.jsonProject.actLevel !== i) 
 		{

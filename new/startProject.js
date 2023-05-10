@@ -3,7 +3,7 @@
 
 class StartProject
 {
-	name = 'new';
+	name = 'new2';
 	
 	constructor()
 	{
@@ -16,7 +16,10 @@ class StartProject
 		let paramsString = document.location.search; // ?demo=1&demo=2
 		let searchParams = new URLSearchParams(paramsString);	
 		let demo = searchParams.get('demo');
-		
+			
+		//divLevelVisible.switchShowAllLevel({value: true});
+		//divLevelVisible.switchWallTransparent({value: true});			
+			
 		if(demo)
 		{
 			if(demo && Number(demo) === 1) this.name = 'demo 1';
@@ -29,8 +32,8 @@ class StartProject
 		
 		if(this.name === 'demo 1' || this.name === 'demo 2' || this.name === 'demo 3' || this.name === 'demo 4')
 		{
-			infProject.jsonProject.showAllLevel = true;
-			infProject.jsonProject.wallTransparent = false;	
+			divLevelVisible.switchShowAllLevel({value: true});
+			divLevelVisible.switchWallTransparent({value: false});
 
 			let nameFile = '1.json';
 			if(this.name === 'demo 1') nameFile = '1.json';
