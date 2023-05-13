@@ -8,46 +8,44 @@ function changeCamera(cam)
 {  
 	deActiveSelected();
 	
-	camera = cam;
-	renderPass.camera = cam;
-	outlinePass.renderCamera = cam;
-	if(saoPass) saoPass.camera = cam;
+	
 	outlineRemoveObj();
+	myCameraOrbit.setActiveCam({cam});
 
 
-	if(camera == cameraTop)
+	if(cam === '2D')
 	{	
 		ghostLevel.createLevel();	// показываем призрачный этаж
 		
-		infProject.camera.d3.targetO.visible = false;
+		myCameraOrbit.cam3D.userData.targetO.visible = false;
 		blockActiveObj({visible_1: false, visible_2: false});
 		
 		changeDepthColor();			
-		cameraZoomTop( camera.zoom );
+		cameraZoomTop( myCameraOrbit.cam2D.zoom );
 
 		showAllWallRender();	// показываем стены, которые были спрятаны
 		
 		//infProject.scene.grid.visible = true;
 	}
-	else if(camera == camera3D)
+	else if(cam === '3D')
 	{	
 		ghostLevel.deleteLevel();	// прячем призрачный этаж
 		
-		infProject.camera.d3.targetO.visible = true;
+		myCameraOrbit.cam3D.userData.targetO.visible = true;
 		blockActiveObj({visible_1: true, visible_2: true});
 				 
-		cameraZoomTop( cameraTop.zoom );
+		cameraZoomTop( myCameraOrbit.cam2D.zoom );
 		changeDepthColor();				
 		
 		// прячем стены
 		getInfoRenderWall();
-		if(divLevelVisible.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();	
+		if(divLevelVisible.wallTransparent && camera3D.userData.type === 'fly') wallAfterRender_2();	
 		else showAllWallRender();
 		
 		//infProject.scene.grid.visible = false;
 	}
 	
-	if(camera === cameraTop) clRoof.resetWall();
+	if(cam === '2D') clRoof.resetWall();
 	else clRoof.cgs();
 	
 	clRoof.changeMaterialTransparent();
@@ -59,13 +57,13 @@ function changeCamera(cam)
 	
 	myLevels.changeVisibleLevels();
 	
-	if(camera == cameraTop)
+	if(cam === '2D')
 	{
-		camera.updateMatrixWorld();
+		myCameraOrbit.cam2D.updateMatrixWorld();
 		upPosLabels_1({resize: true});		
 	}
 	
-	renderCamera();
+	myCameraOrbit.render();
 }
 
 
@@ -197,70 +195,7 @@ function showHideArrObj(arr, visible)
 
 
 
-// переключаем в 3D режиме полёт/вид от первого лица
-function switchCamera3D(cdm)
-{
-	if(camera != camera3D) return;
-	
-	if(!cdm) { cdm = {}; }
-	
-	if(cdm.type)
-	{
-		camera3D.userData.camera.type = cdm.type;
-	}
-	else
-	{
-		if(camera3D.userData.camera.type == 'first')
-		{
-			camera3D.userData.camera.type = 'fly';
-		}
-		else
-		{
-			camera3D.userData.camera.type = 'first';
-		}
-	}
 
-	
-	var posCenter = infProject.camera.d3.targetO.position;
-	
-	if(camera3D.userData.camera.type == 'first')
-	{		
-		camera3D.userData.camera.save.pos = camera3D.position.clone();
-		camera3D.userData.camera.save.radius = posCenter.distanceTo(camera.position);
-		 
-		camera3D.userData.camera.dist = posCenter.distanceTo(camera.position);
-		camera3D.userData.camera.type = 'first';		
-		
-		newCameraPosition = { positionFirst: new THREE.Vector3(posCenter.x, 1.5, posCenter.z) };
-
-		// показываем стены, которые были спрятаны
-		showAllWallRender();	
-	}
-	else
-	{
-		var radius = camera3D.userData.camera.save.radius;
-		var pos = new THREE.Vector3();		
-		
-		var radH = Math.acos(camera3D.userData.camera.save.pos.y/radius);
-		
-		camera3D.updateMatrixWorld();
-		var dir = camera3D.getWorldDirection(new THREE.Vector3());
-		dir = new THREE.Vector3(dir.x, 0, dir.z).normalize();
-		
-		var radXZ = Math.atan2(dir.z, dir.x);		
-	
-		pos.x = -radius * Math.sin(radH) * Math.cos(radXZ) + posCenter.x; 
-		pos.z = -radius * Math.sin(radH) * Math.sin(radXZ) + posCenter.z;
-		pos.y = radius * Math.cos(radH);					
-		
-		newCameraPosition = { positionFly: pos };
-
-		// прячем стены
-		getInfoRenderWall();
-		if(divLevelVisible.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();	
-		else showAllWallRender();
-	}
-}
 
 
 

@@ -81,12 +81,17 @@ function animate()
 	updateKeyDown();
 }
 
+let myCameraOrbit;
 
 function renderCamera()
 {
-	camera.updateMatrixWorld();	
-	upPosLabels_1();
-	composer.render();
+	//camera.updateMatrixWorld();	
+	//upPosLabels_1();
+	//composer.render();
+	
+	//camera.updateMatrixWorld();			
+	//composer.render();
+	if(myCameraOrbit) myCameraOrbit.render();	
 }
 //----------- render
 
@@ -1731,17 +1736,17 @@ renderCamera();
 
 
 containerF.addEventListener('contextmenu', function(event) { event.preventDefault() });
-containerF.addEventListener( 'mousedown', onDocumentMouseDown, false );
-containerF.addEventListener( 'mousemove', onDocumentMouseMove, false );
-containerF.addEventListener( 'mouseup', onDocumentMouseUp, false );
+//containerF.addEventListener( 'mousedown', onDocumentMouseDown, false );
+//containerF.addEventListener( 'mousemove', onDocumentMouseMove, false );
+//containerF.addEventListener( 'mouseup', onDocumentMouseUp, false );
 
 
-containerF.addEventListener( 'touchstart', onDocumentMouseDown, false );
-containerF.addEventListener( 'touchmove', onDocumentMouseMove, false );
-containerF.addEventListener( 'touchend', onDocumentMouseUp, false );
+//containerF.addEventListener( 'touchstart', onDocumentMouseDown, false );
+//containerF.addEventListener( 'touchmove', onDocumentMouseMove, false );
+//containerF.addEventListener( 'touchend', onDocumentMouseUp, false );
 
-containerF.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
-containerF.addEventListener('mousewheel', onDocumentMouseWheel, false);	
+//containerF.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
+//containerF.addEventListener('mousewheel', onDocumentMouseWheel, false);	
 
 
 document.addEventListener("keydown", function (e) 
@@ -1975,6 +1980,9 @@ let tabPlan;
 let tabObject;
 let switchCamera;
 
+
+let myToolPG;
+
 document.addEventListener("DOMContentLoaded", ()=>
 {
 	docReady = true; 	
@@ -1984,8 +1992,12 @@ document.addEventListener("DOMContentLoaded", ()=>
 	divLevelVisible = new DivLevelVisible({showAllLevel: true, wallTransparent: false});
 	tabPlan = new TabPlan();
 	tabObject = new TabObject();
-	switchCamera = new SwitchCamera()	
-	startProject.init();		
+	switchCamera = new SwitchCamera();
+	
+	myCameraOrbit = new MyCameraOrbit({container: containerF, renderer: renderer, scene: scene, setCam: '3D'});
+	myToolPG = new MyToolPG();
+	
+	//startProject.init();		
 });
 
 

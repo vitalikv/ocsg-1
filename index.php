@@ -132,8 +132,12 @@
 	<script src="<?=$path?>uiInterface.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>uiInterface_catalog.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>eventClick.js?<?=$vrs?>"></script>
+		
 	
-	
+	<script src="<?=$path?>new/myCamera.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/myCameraPerspective.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/tools/myToolPG.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/tools/myPivot.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/switchCamera.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabLevel.js?<?=$vrs?>"></script>

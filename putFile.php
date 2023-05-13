@@ -53,6 +53,10 @@ new/ui/right-panel/tabLevel.js
 new/ui/right-panel/divLevelVisible.js
 new/ui/right-panel/tabPlan.js
 new/ui/right-panel/tabObject.js
+new/tools/myToolPG.js
+new/tools/myPivot.js
+new/myCamera.js
+new/myCameraPerspective.js
 ';
 
 $arrF = array();

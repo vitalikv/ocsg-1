@@ -3,7 +3,7 @@
 
 class StartProject
 {
-	name = 'new2';
+	name = 'new';
 	
 	constructor()
 	{
@@ -17,8 +17,8 @@ class StartProject
 		let searchParams = new URLSearchParams(paramsString);	
 		let demo = searchParams.get('demo');
 			
-		//divLevelVisible.switchShowAllLevel({value: true});
-		//divLevelVisible.switchWallTransparent({value: true});			
+		divLevelVisible.switchShowAllLevel({value: true});
+		divLevelVisible.switchWallTransparent({value: true});			
 			
 		if(demo)
 		{
@@ -51,7 +51,7 @@ class StartProject
 		else loadFile({json: infProject.settings.load.file});
 		
 		//myWindows.createWind();
-		//switchCamera.clickOnBtn2D3D(camera3D);
+		//switchCamera.clickOnBtn2D3D('3D');
 	}
 	
 	setCamera()
@@ -103,11 +103,11 @@ class StartProject
 				camera3D.userData.camera.save.radius = infProject.camera.d3.targetO.position.distanceTo(camera3D.position);								
 			}			
 			
-			switchCamera.clickOnBtn2D3D(camera3D);				
+			switchCamera.clickOnBtn2D3D('3D');				
 		}
 		else
 		{
-			switchCamera.clickOnBtn2D3D(cameraTop);
+			switchCamera.clickOnBtn2D3D('3D');
 		}		
 	}
 }

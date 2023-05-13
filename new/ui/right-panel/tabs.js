@@ -55,7 +55,7 @@ class Tabs
 		// если есть блок для 3D, то показываем его в режиме 3D
 		if(this.items[id].div3D)
 		{
-			if(camera === camera3D) { this.items[id].div3D.style.display = ''; }
+			if(myCameraOrbit.activeCam.userData.isCam3D) { this.items[id].div3D.style.display = ''; }
 			else { this.items[id].div.style.display = ''; }
 		}
 		else

@@ -20,9 +20,9 @@ class SwitchCamera
 	
 	initBtnEvent()
 	{
-		this.btnCam2D.onmousedown = () => { this.clickOnBtn2D3D(cameraTop); }
-		this.btnCam3D.onmousedown = () => { this.clickOnBtn2D3D(camera3D); }
-		this.btnCamFirst.onmousedown = () => { switchCamera3D(); }
+		this.btnCam2D.onmousedown = () => { this.clickOnBtn2D3D('2D'); }
+		this.btnCam3D.onmousedown = () => { this.clickOnBtn2D3D('3D'); }
+		this.btnCamFirst.onmousedown = () => { myCameraOrbit.switchFlyFirst(); }
 	}
 		
 	// меняем камеру 2D или 3D
@@ -31,13 +31,13 @@ class SwitchCamera
 		this.btnCam2D.style.display = 'none';
 		this.btnCam3D.style.display = 'none';
 
-		if(cam === cameraTop) 
+		if(cam === '2D') 
 		{
 			this.btnCam3D.style.display = '';
 			this.btnCamFirst.style.display = 'none';
 		}	
 		
-		if(cam === camera3D) 
+		if(cam === '3D') 
 		{
 			this.btnCam2D.style.display = '';
 			this.btnCamFirst.style.display = '';
@@ -51,8 +51,8 @@ class SwitchCamera
 	// прячем/показываем блок с настройками отображения стен и этажей
 	showHideDivTypeCam()
 	{
-		if(camera === cameraTop) this.divLevelVis.style.display = 'none';
-		if(camera === camera3D) this.divLevelVis.style.display = '';
+		if(myCameraOrbit.activeCam.userData.isCam2D) this.divLevelVis.style.display = 'none';
+		if(myCameraOrbit.activeCam.userData.isCam3D) this.divLevelVis.style.display = '';
 	}	
 }
 
