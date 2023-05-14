@@ -115,18 +115,7 @@ function updateKeyDown()
 }
 
 
-// первоначальные настройки при страте 
-function startPosCamera3D(cdm)
-{
-	camera3D.position.x = 0;
-	camera3D.position.y = cdm.radious * Math.sin( cdm.phi * Math.PI / 360 );
-	camera3D.position.z = cdm.radious * Math.cos( cdm.theta * Math.PI / 360 ) * Math.cos( cdm.phi * Math.PI / 360 );			
-			
-	camera3D.lookAt(new THREE.Vector3( 0, 0, 0 ));
-	
-	camera3D.userData.camera.save.pos = camera3D.position.clone();
-	camera3D.userData.camera.save.radius = infProject.camera.d3.targetO.position.distanceTo(camera3D.position);	
-}
+
 
 
 
@@ -192,8 +181,7 @@ function cameraMove3D( event )
 // кликаем левой кнопокой мыши (собираем инфу для перемещения камеры в 2D режиме)
 function clickSetCamera2D( event, click )
 {
-	if ( camera == cameraTop || camera == cameraWall) { }
-	else { return; }
+	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
 
 	isMouseDown1 = true;
 	isMouseRight1 = true;
@@ -201,32 +189,17 @@ function clickSetCamera2D( event, click )
 	onMouseDownPosition.y = event.clientY;
 	newCameraPosition = null;
 	
-
-	if(camera == cameraTop) 
-	{
-		planeMath.position.set(camera.position.x,0,camera.position.z);
-		planeMath.rotation.set(-Math.PI/2,0,0);  
-		planeMath.updateMatrixWorld();
-		
-		var intersects = rayIntersect( event, planeMath, 'one' );
-		
-		onMouseDownPosition.x = intersects[0].point.x;
-		onMouseDownPosition.z = intersects[0].point.z;	 		
-	}
-	if(camera == cameraWall) 
-	{
-		var dir = camera.getWorldDirection();
-		dir = new THREE.Vector3().addScaledVector(dir, 10);
-		planeMath.position.copy(camera.position);  
-		planeMath.position.add(dir);  
-		planeMath.rotation.copy( camera.rotation ); 
-		planeMath.updateMatrixWorld();
-
-		var intersects = rayIntersect( event, planeMath, 'one' );	
-		onMouseDownPosition.x = intersects[0].point.x;
-		onMouseDownPosition.y = intersects[0].point.y;
-		onMouseDownPosition.z = intersects[0].point.z;		 		
-	}	
+	const cam2D = myCameraOrbit.cam2D;
+	
+	planeMath.position.set(cam2D.position.x, 0, cam2D.position.z);
+	planeMath.rotation.set(-Math.PI/2,0,0);  
+	planeMath.updateMatrixWorld();
+	
+	var intersects = rayIntersect( event, planeMath, 'one' );
+	
+	onMouseDownPosition.x = intersects[0].point.x;
+	onMouseDownPosition.z = intersects[0].point.z;	 		
+	
 }
 
 
@@ -234,11 +207,13 @@ function clickSetCamera2D( event, click )
 // 2. кликаем правой кнопокой мыши (собираем инфу для перемещения камеры в 3D режиме и устанавливаем мат.плоскость)
 function clickSetCamera3D( event, click )
 {
-	if ( camera != camera3D ) { return; }
+	if (!myCameraOrbit.activeCam.userData.isCam3D) { return; }
 
 	onMouseDownPosition.x = event.clientX;
 	onMouseDownPosition.y = event.clientY;
 
+	const cam3D = myCameraOrbit.cam3D;
+	
 	if ( click == 'left' )				// 1
 	{
 		//var dir = camera.getWorldDirection();
@@ -286,20 +261,6 @@ function moveCameraTop( event )
 	camera.position.z += onMouseDownPosition.z - intersects[0].point.z;	
 }
 
-
-// перемещение cameraWall
-function moveCameraWall2D( event )
-{
-	if ( !isMouseRight1 ) { return; }
-
-	var intersects = rayIntersect( event, planeMath, 'one' );
-	
-	camera.position.x += onMouseDownPosition.x - intersects[0].point.x;
-	camera.position.y += onMouseDownPosition.y - intersects[0].point.y;	
-	camera.position.z += onMouseDownPosition.z - intersects[0].point.z;
-	
-	newCameraPosition = null;	
-}
 
 
 // cameraZoom

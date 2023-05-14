@@ -4,7 +4,7 @@
 
 function activeHover2D( event )
 {
-	if (camera != cameraTop) { return; }
+	if (!myCameraOrbit.activeCam.userData.isCam2D) { return; }
 	if (isMouseDown1) { return; }
 
 	if ( clickO.move ) 
@@ -82,7 +82,7 @@ function activeHover2D_2()
 // кликнули на объект (выделение) (cameraTop)
 function objActiveColor_2D(obj)
 { 
-	if(camera != cameraTop) return;
+	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
 	if(!obj) { return; }   
 	if(clickO.last_obj == obj) { return; }
 			
@@ -98,7 +98,7 @@ function objActiveColor_2D(obj)
 // возращаем стандартный цвет объекта
 function objDeActiveColor_2D() 
 {	
-	if(camera != cameraTop) return;
+	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
 	if(!clickO.last_obj){ return; }
 	if(clickO.last_obj == clickO.obj){ return; }
 	

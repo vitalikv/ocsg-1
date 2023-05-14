@@ -420,7 +420,7 @@ function setImgCompSubstrate(cdm)
 		var z = (Math.abs(obj.geometry.boundingBox.max.z) + Math.abs(obj.geometry.boundingBox.min.z));		
 				
 		
-		if(camera == cameraTop)
+		if(myCameraOrbit.activeCam.userData.isCam2D)
 		{
 			setStartPositionRulerSubstrate();			
 		}

@@ -46,8 +46,8 @@ function showControllWD( wall, obj )
 
 	var arrVisible = [true, true, true, true];
 	
-	if(camera == cameraTop) { arrVisible = [true, true, false, false]; }
-	else if(camera == camera3D) { arrVisible = [false, false, false, false]; }
+	if(myCameraOrbit.activeCam.userData.isCam2D) { arrVisible = [true, true, false, false]; }
+	else if(myCameraOrbit.activeCam.userData.isCam3D) { arrVisible = [false, false, false, false]; }
 	
 	if(obj.userData.tag == 'door' || obj.userData.tag == 'window')
 	{
@@ -106,7 +106,7 @@ function showControllWD( wall, obj )
 // показываем линейки и контроллеры для окна/двери (собираем инфу, для перемещения линеек) 
 function showRulerWD(obj)
 {
-	if(camera !== cameraTop) return;
+	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
 	
 	var wall = obj.userData.door.wall;   
 
@@ -168,7 +168,7 @@ function showRulerWD(obj)
 // перемещаем линейки и лайблы 2D
 function showRulerWD_2D(wd)
 {
-	if(camera != cameraTop) return;
+	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
 	
 	var wall = wd.userData.door.wall;
 	
@@ -302,7 +302,7 @@ function clickToggleChangeWin( intersect, cdm )
 	
 	var m = controll.userData.controll_wd.id;
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		planeMath.position.set( 0, intersect.point.y, 0 );
 		planeMath.rotation.set(-Math.PI/2, 0, 0);
@@ -486,7 +486,7 @@ function clickMouseUpToggleWD( controll )
 	
 	MeshBSP( wd, objsBSP );
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{ 
 		wd.material.depthTest = false;  
 		wd.material.opacity = 1.0; 		 	

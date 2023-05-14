@@ -39,7 +39,7 @@ function clickWall_2D( intersect )
 	
 	getInfoUndoWall(obj);
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
 	}

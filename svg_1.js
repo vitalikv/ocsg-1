@@ -251,8 +251,9 @@ function updateSvgLine(cdm)
 	
 	var p = el.userData.svg.line.p;
 	
-	//camera.updateProjectionMatrix();
-	var tempV = p[0].clone().project(camera);
+	const cam2D = myCameraOrbit.cam2D;
+	//cam2D.updateProjectionMatrix();
+	var tempV = p[0].clone().project(cam2D);
 
 	var x = (tempV.x *  .5 + .5) * canvas.clientWidth;
 	var y = (tempV.y * -.5 + .5) * canvas.clientHeight;
@@ -260,7 +261,7 @@ function updateSvgLine(cdm)
 	el.setAttribute("x1", x);
 	el.setAttribute("y1", y);
 	
-	var tempV = p[1].clone().project(camera);
+	var tempV = p[1].clone().project(cam2D);
 
 	var x = (tempV.x *  .5 + .5) * canvas.clientWidth;
 	var y = (tempV.y * -.5 + .5) * canvas.clientHeight;
@@ -284,9 +285,10 @@ function updateSvgCircle(cdm)
 		el.userData.svg.circle.pos = cdm.pos;
 	}
 	
+	const cam2D = myCameraOrbit.cam2D;
 	var pos = el.userData.svg.circle.pos;
 	
-	var tempV = pos.clone().project(camera);
+	var tempV = pos.clone().project(cam2D);
 	var x = (tempV.x *  .5 + .5) * canvas.clientWidth;
 	var y = (tempV.y * -.5 + .5) * canvas.clientHeight;
 
@@ -314,9 +316,11 @@ function updateSvgPath(cdm)
 	
 	if(arrP.length == 0) return;
 	
+	const cam2D = myCameraOrbit.cam2D;
+	
 	for ( var i = 0; i < arrP.length; i++ )
 	{
-		var tempV = arrP[i].clone().project(camera);
+		var tempV = arrP[i].clone().project(cam2D);
 		var x = (tempV.x *  .5 + .5) * canvas.clientWidth;
 		var y = (tempV.y * -.5 + .5) * canvas.clientHeight;
 		
@@ -351,13 +355,14 @@ function updateSvgArc(cdm)
 	var p2 = el.userData.svg.arc.param.p2;
 	//var r = el.userData.svg.arc.param.r;
 	
-	//camera.updateProjectionMatrix();
-	var tempV = p1.clone().project(camera);
+	const cam2D = myCameraOrbit.cam2D;
+	//cam2D.updateProjectionMatrix();
+	var tempV = p1.clone().project(cam2D);
 	var x1 = (tempV.x *  .5 + .5) * canvas.clientWidth;
 	var y1 = (tempV.y * -.5 + .5) * canvas.clientHeight;
 
 	
-	var tempV = p2.clone().project(camera);
+	var tempV = p2.clone().project(cam2D);
 	var x2 = (tempV.x *  .5 + .5) * canvas.clientWidth;
 	var y2 = (tempV.y * -.5 + .5) * canvas.clientHeight;	
 
@@ -374,18 +379,19 @@ function updateSvgArc(cdm)
 function upSvgLinePosScene(cdm)
 {
 	var el = cdm.el;
+	const cam2D = myCameraOrbit.cam2D;
 	
 	for ( var i = 0; i < el.length; i++ )
 	{
 		var x = ( ( el[i].x1.baseVal.value - containerF.offsetLeft ) / containerF.clientWidth ) * 2 - 1;
 		var y = - ( ( el[i].y1.baseVal.value - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
 		var A = new THREE.Vector3(x, y, -1);
-		A.unproject(camera);
+		A.unproject(cam2D);
 		
 		var x = ( ( el[i].x2.baseVal.value - containerF.offsetLeft ) / containerF.clientWidth ) * 2 - 1;
 		var y = - ( ( el[i].y2.baseVal.value - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
 		var B = new THREE.Vector3(x, y, -1);
-		B.unproject(camera);					
+		B.unproject(cam2D);					
 		
 		el[i].userData.svg.line.p = [A, B];
 	}				
@@ -397,6 +403,7 @@ function upSvgLinePosScene(cdm)
 function upSvgPathPosScene(cdm)
 {
 	var el = cdm.el;
+	const cam2D = myCameraOrbit.cam2D;
 	
 	for ( var i = 0; i < el.length; i++ )
 	{
@@ -409,7 +416,7 @@ function upSvgPathPosScene(cdm)
 			var x = ( ( arrS.x - containerF.offsetLeft ) / containerF.clientWidth ) * 2 - 1;
 			var y = - ( ( arrS.y - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
 			var A = new THREE.Vector3(x, y, -1);
-			A.unproject(camera);
+			A.unproject(cam2D);
 
 			arrP[arrP.length] = A;
 		}	

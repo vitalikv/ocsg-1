@@ -37,8 +37,9 @@ function getInfoRenderWall()
 // скрываем внешние стены, когда она перекрывает обзор
 function wallAfterRender_2()
 { //return; 
-
-	var camPos = camera.getWorldDirection(new THREE.Vector3());
+	const cam3D = myCameraOrbit.cam3D;
+	
+	var camPos = cam3D.getWorldDirection(new THREE.Vector3());
 	
 	camPos = new THREE.Vector3(camPos.x, 0, camPos.z).normalize();
 	

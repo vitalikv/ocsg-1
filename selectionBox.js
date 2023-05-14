@@ -21,7 +21,7 @@ function coords(e)
 
 function selectionBoxDown(event) 
 { 
-	if(camera == cameraTop && clickO.keys[16]){} 
+	if(myCameraOrbit.activeCam.userData.isCam2D && clickO.keys[16]){} 
 	else { return false; }
 
 	clickO.rayhit = null;
@@ -38,7 +38,7 @@ function selectionBoxDown(event)
  
 function selectionBoxMove(event)
 {
-	if(camera == cameraTop && clickO.keys[16] && infProject.tools.selectionBox.msdown){}
+	if(myCameraOrbit.activeCam.userData.isCam2D && clickO.keys[16] && infProject.tools.selectionBox.msdown){}
 	else { return false; }
 	
 	var x1=0;
@@ -76,7 +76,7 @@ function selectionBoxMove(event)
 // закончили выделение 
 function selectionBoxUp(event)
 { 
-	if(camera == cameraTop && clickO.keys[16] && infProject.tools.selectionBox.msdown){}
+	if(myCameraOrbit.activeCam.userData.isCam2D && clickO.keys[16] && infProject.tools.selectionBox.msdown){}
 	else { return false; }
 	
 	infProject.tools.selectionBox.msdown = false; 

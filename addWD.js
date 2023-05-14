@@ -15,7 +15,7 @@ function createEmptyFormWD_1(cdm)
 	var material = new THREE.MeshStandardMaterial({ color: color, transparent: true, opacity: 1.0, depthTest: false });
 	
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{ 
 		material.depthTest = false;		
 		material.opacity = 1.0; 	
@@ -283,7 +283,7 @@ async function addWD({ obj })
 	obj.material.transparent = false;
 	
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{ 
 		obj.material.depthTest = false;
 		obj.material.transparent = true;
@@ -420,7 +420,7 @@ function swSetDW_1(cdm)
 //обновляем форму и положение wd svg
 function calcSvgFormWD(cdm)
 {
-	if(camera != cameraTop) return;
+	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
 	
 	var obj = cdm.obj;
 	var openId = obj.userData.door.openId;	// положение открытие wd (в какую сторону повернут obj3D)
@@ -596,7 +596,7 @@ function setObjInWD(inf, cdm)
 	//obj3D.position.set(center.x/objPop.scale.x, center.y/objPop.scale.y, center.z/objPop.scale.z);
 	//obj3D.position.copy(centerWD);
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		obj3D.visible = false;
 	}

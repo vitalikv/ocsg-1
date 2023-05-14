@@ -64,10 +64,6 @@ cameraWall.zoom = 2;
 
 
 
-var cube = new THREE.Mesh( createGeometryCube(0.07, 0.07, 0.07), new THREE.MeshLambertMaterial( { color : 0x030202, transparent: true, opacity: 1, depthTest: false } ) );
-//scene.add( cube ); 
-
-
 
 
 //----------- render
@@ -81,7 +77,7 @@ function animate()
 	updateKeyDown();
 }
 
-let myCameraOrbit;
+
 
 function renderCamera()
 {
@@ -186,8 +182,7 @@ infProject.svg.furn.box1 = createSvgPath({count: 1, color: infProject.settings.s
 infProject.svg.furn.boxCircle = {};
 infProject.svg.furn.boxCircle.elem = createSvgCircle({count: 8, color: infProject.settings.svg.scaleBox.color});
 infProject.svg.furn.boxCircle.show = infProject.settings.obj.cam2D.show.scale; 
-infProject.camera = { d3: { theta: 0, phi: 75 } };
-infProject.camera.d3.targetO = createCenterCamObj();
+
 // controllWD контроллеры для изменения ширины/длины wd
 infProject.tools = { pivot: createPivot_2(), gizmo: createGizmo360_2(), cutWall: [], point: createToolPoint(), axis: createLineAxis(), controllWD: createControllWD() }; 
 infProject.tools.floorPl = createPlaneOutlineFloor();
@@ -321,7 +316,6 @@ var ccc = new THREE.Color().setHex( '0x'+infProject.settings.profile.color );
 
 // cdm
 {	
-	startPosCamera3D({radious: infProject.settings.cam3D, theta: 90, phi: 35});		// стартовое положение 3D камеры
 	//await addObjInCatalogUI_1();			// наполняем каталог объектов UI
 	addTextureInCatalogUI_1();		// наполняем каталог текстур UI
 	addTextureInCatalogUI_2();
@@ -462,20 +456,23 @@ function createCenterCamObj()
 
 function upPosLabels_1(cdm)
 {
-	if(camera != cameraTop) return;
+	
+	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
 	
 	if(!cdm) cdm = {};
-		
+	
+	const cam2D = myCameraOrbit.cam2D;
+	
 	var stop = true;
-	if(cameraTop.userData.camera.save.zoom - cameraTop.zoom !== 0) { stop = false; }
-	if(cameraTop.userData.camera.save.pos.x - cameraTop.position.x !== 0) { stop = false; }
-	else if(cameraTop.userData.camera.save.pos.z - cameraTop.position.z !== 0) { stop = false; }
+	if(cam2D.userData.zoom - cam2D.zoom !== 0) { stop = false; }
+	if(cam2D.userData.pos.x - cam2D.position.x !== 0) { stop = false; }
+	else if(cam2D.userData.pos.z - cam2D.position.z !== 0) { stop = false; }
 	else if(cdm.resize) { stop = false; }
 	
 	if(stop) return;
 	
-	cameraTop.userData.camera.save.pos = cameraTop.position.clone();
-	cameraTop.userData.camera.save.zoom = cameraTop.zoom;
+	cam2D.userData.pos = cam2D.position.clone();
+	cam2D.userData.zoom = cam2D.zoom;
 	
 	
 	for ( var i = 0; i < infProject.html.label.length; i++ )
@@ -484,14 +481,14 @@ function upPosLabels_1(cdm)
 		
 		if(elem.userData.elem.show)
 		{
-			if(cameraTop.zoom < 0.7) { elem.style.display = 'none'; }
+			if(cam2D.zoom < 0.7) { elem.style.display = 'none'; }
 			else { elem.style.display = 'block'; }			
 		}
 		else
 		{
 			continue;
 		}
-		
+				
 		upPosLabels_2({elem: elem});
 	}	
 	
@@ -525,11 +522,13 @@ function upPosLabels_1(cdm)
 function upPosLabels_2(cdm) 
 {
 	var elem = cdm.elem;
-
+	const cam2D = myCameraOrbit.cam2D;
+	
 	if(elem.style.display == 'none') return;
 	
-	//camera.updateProjectionMatrix();
-	var tempV = elem.userData.elem.pos.clone().project(camera);
+	//cam2D.updateProjectionMatrix();
+	
+	var tempV = elem.userData.elem.pos.clone().project(cam2D);
 
 	var x = (tempV.x *  .5 + .5) * canvas.clientWidth;
 	var y = (tempV.y * -.5 + .5) * canvas.clientHeight;
@@ -1349,7 +1348,7 @@ function rayIntersect( event, obj, t, recursive )
 {
 	mouse = getMousePosition( event );
 	
-	raycaster.setFromCamera( mouse, camera );
+	raycaster.setFromCamera( mouse, myCameraOrbit.activeCam );
 	
 	var intersects = null;
 	if(t == 'one'){ intersects = raycaster.intersectObject( obj ); } 
@@ -1730,20 +1729,19 @@ function findObjFromId( cdm, id )
 
 
 
-animate();
-renderCamera();
+
 
 
 
 containerF.addEventListener('contextmenu', function(event) { event.preventDefault() });
-//containerF.addEventListener( 'mousedown', onDocumentMouseDown, false );
-//containerF.addEventListener( 'mousemove', onDocumentMouseMove, false );
-//containerF.addEventListener( 'mouseup', onDocumentMouseUp, false );
+containerF.addEventListener( 'mousedown', onDocumentMouseDown, false );
+containerF.addEventListener( 'mousemove', onDocumentMouseMove, false );
+containerF.addEventListener( 'mouseup', onDocumentMouseUp, false );
 
 
-//containerF.addEventListener( 'touchstart', onDocumentMouseDown, false );
-//containerF.addEventListener( 'touchmove', onDocumentMouseMove, false );
-//containerF.addEventListener( 'touchend', onDocumentMouseUp, false );
+containerF.addEventListener( 'touchstart', onDocumentMouseDown, false );
+containerF.addEventListener( 'touchmove', onDocumentMouseMove, false );
+containerF.addEventListener( 'touchend', onDocumentMouseUp, false );
 
 //containerF.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
 //containerF.addEventListener('mousewheel', onDocumentMouseWheel, false);	
@@ -1972,7 +1970,7 @@ function isCheckExsistFunction(functionToCheck)
 
 
 
-var docReady = false;
+let docReady = false;
 let tabs;
 let tabLevel;
 let divLevelVisible;
@@ -1980,24 +1978,34 @@ let tabPlan;
 let tabObject;
 let switchCamera;
 
-
+let myCameraOrbit;
+let myLevels;
 let myToolPG;
+let startProject;
 
 document.addEventListener("DOMContentLoaded", ()=>
 {
 	docReady = true; 	
 	
+	myCameraOrbit = new MyCameraOrbit({container: containerF, renderer, scene});
+	myLevels = new MyLevels();
+
 	tabs = new Tabs();
 	tabLevel = new TabLevel();
 	divLevelVisible = new DivLevelVisible({showAllLevel: true, wallTransparent: false});
+	divLevelVisible.init();
 	tabPlan = new TabPlan();
 	tabObject = new TabObject();
 	switchCamera = new SwitchCamera();
 	
-	myCameraOrbit = new MyCameraOrbit({container: containerF, renderer: renderer, scene: scene, setCam: '3D'});
+	
 	myToolPG = new MyToolPG();
 	
-	//startProject.init();		
+	startProject = new StartProject();
+	startProject.init();
+
+	animate();
+	renderCamera();	
 });
 
 

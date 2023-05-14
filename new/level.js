@@ -40,17 +40,17 @@ class MyLevels
 		this.updateArrScene(id);
 
 		getInfoRenderWall();
-		if(camera === cameraTop) 
+		if(myCameraOrbit.activeCam.userData.isCam2D)  
 		{
 			showAllWallRender();
 		}
-		else 
+		else if(myCameraOrbit.activeCam.userData.isCam3D)
 		{
-			if(divLevelVisible.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();
+			if(divLevelVisible.wallTransparent && myCameraOrbit.activeCam.userData.type === 'fly') wallAfterRender_2();
 			else showAllWallRender();
 		}
 		
-		if(camera === cameraTop) upPosLabels_1({resize: true});
+		if(myCameraOrbit.activeCam.userData.isCam2D) upPosLabels_1({resize: true});
 
 		tabLevel.levelBackground_UI({id});	// меняем фон у UI item этажа
 	}
@@ -128,12 +128,13 @@ class MyLevels
 		
 		this.changeVisibleLevels();
 		
-		if(camera === cameraTop) 
+		if(myCameraOrbit.activeCam.userData.isCam2D) 
 		{
 			ghostLevel.createLevel();	// показываем призрачный этаж
 			this.visibleLevelCam2D(id, true);
 		}
-		else 
+		
+		if(myCameraOrbit.activeCam.userData.isCam3D)
 		{
 			this.visibleLevelCam3D(id, true);
 		}		
@@ -256,16 +257,16 @@ class MyLevels
 	{
 		for ( let i = 0; i < this.levels.length; i++ )
 		{		
-			if(camera === camera3D && this.activeId !== i) 
+			if(myCameraOrbit.activeCam.userData.isCam3D && this.activeId !== i) 
 			{
 				this.visibleLevelCam3D(i, divLevelVisible.showAllLevel);
 			}
-			if(camera === cameraTop && this.activeId !== i) 
+			if(myCameraOrbit.activeCam.userData.isCam2D && this.activeId !== i) 
 			{
 				this.visibleLevelCam2D(i, false);
 			}		
 		}
-		if(camera === cameraTop) upPosLabels_1({resize: true});	// поправляем размеры и svg
+		if(myCameraOrbit.activeCam.userData.isCam2D) upPosLabels_1({resize: true});	// поправляем размеры и svg
 	}
 
 
@@ -444,7 +445,7 @@ class MyLevels
 	}
 }
 
-const myLevels = new MyLevels();
+
 
 
 function resetArrScene()

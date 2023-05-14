@@ -3,7 +3,7 @@
 
 class StartProject
 {
-	name = 'new';
+	name = 'new2';
 	
 	constructor()
 	{
@@ -63,56 +63,42 @@ class StartProject
 		{
 			if(this.name === 'demo 1')
 			{
-				camera3D.position.set(-7.439878890213777, 3.3154713496334285, 5.463682482175339);			
-				camera3D.rotation.set(-0.373891599064255, -0.9160633908104759, 2.7755575615628914e-17);			
-				infProject.camera.d3.targetO.position.set(-0.7369679466168795, 5.0111501479127856e-14, 0.31786061162317836);
-				infProject.camera.d3.targetO.rotation.set(0, -0.9160633908104759, 0);
-				
-				camera3D.userData.camera.save.pos = camera3D.position.clone();
-				camera3D.userData.camera.save.radius = infProject.camera.d3.targetO.position.distanceTo(camera3D.position);								
+				const posCam = new THREE.Vector3(-7.439878890213777, 3.3154713496334285, 5.463682482175339);
+				const posTarget = new THREE.Vector3(-0.7369679466168795, 0, 0.31786061162317836);
+				myCameraOrbit.setStartPosRot3D({posCam, posTarget});											
 			}
 			
 			if(this.name === 'demo 2')
 			{
-				camera3D.position.set(2.2750910805777775, 2.8388647719569255, 12.403319798672216);			
-				camera3D.rotation.set(-0.21880671377680652, 0.013264345364366182, 0);			
-				infProject.camera.d3.targetO.position.set(2.1057556450078354, 7.185839207340677e-15, -0.3621427765237808);
-				infProject.camera.d3.targetO.rotation.set(0, 0.013264345364366182, 0);
-				
-				camera3D.userData.camera.save.pos = camera3D.position.clone();
-				camera3D.userData.camera.save.radius = infProject.camera.d3.targetO.position.distanceTo(camera3D.position);								
+				const posCam = new THREE.Vector3(2.2750910805777775, 2.8388647719569255, 12.403319798672216);
+				const posTarget = new THREE.Vector3(2.1057556450078354, 0, -0.3621427765237808);
+				myCameraOrbit.setStartPosRot3D({posCam, posTarget});								
 			}						
 			
 			if(this.name === 'demo 3')
 			{
-				camera3D.position.set(-12.980195647195652, 4.725726151717402, -12.990587090348361);			
-				camera3D.rotation.set(-0.26457459280865037, -2.4635665662870103, 0);			
-				infProject.camera.d3.targetO.position.set(-2.039031079023262, 0, 0.5941402268183111);
-				
-				camera3D.userData.camera.save.pos = camera3D.position.clone();
-				camera3D.userData.camera.save.radius = infProject.camera.d3.targetO.position.distanceTo(camera3D.position);								
+				const posCam = new THREE.Vector3(-12.980195647195652, 4.725726151717402, -12.990587090348361);
+				const posTarget = new THREE.Vector3(-2.039031079023262, 0, 0.5941402268183111);
+				myCameraOrbit.setStartPosRot3D({posCam, posTarget});							
 			}
 
 			if(this.name === 'demo 4')
 			{
-				camera3D.position.set(-10.150758808809238, 7.476452542725171, -9.096691766295946);			
-				camera3D.rotation.set(-0.40309943010546634, -2.371254594012155, 0);			
-				infProject.camera.d3.targetO.position.set(2.0579833473162843, 0, 3.485431627682769);
-				
-				camera3D.userData.camera.save.pos = camera3D.position.clone();
-				camera3D.userData.camera.save.radius = infProject.camera.d3.targetO.position.distanceTo(camera3D.position);								
+				const posCam = new THREE.Vector3(-10.150758808809238, 7.476452542725171, -9.096691766295946);
+				const posTarget = new THREE.Vector3(2.0579833473162843, 0, 3.485431627682769);
+				myCameraOrbit.setStartPosRot3D({posCam, posTarget});									
 			}			
 			
 			switchCamera.clickOnBtn2D3D('3D');				
 		}
 		else
 		{
-			switchCamera.clickOnBtn2D3D('3D');
+			switchCamera.clickOnBtn2D3D('2D');
 		}		
 	}
 }
 
-let startProject = new StartProject();
+
 
 
 

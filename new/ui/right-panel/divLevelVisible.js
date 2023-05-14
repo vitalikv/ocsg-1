@@ -19,7 +19,7 @@ class DivLevelVisible
 		this.checkBox1 = this.container.querySelector('[nameId="type_cam_vis_1"]');
 		this.checkBox2 = this.container.querySelector('[nameId="type_cam_vis_2"]');
 
-		this.init();
+		//this.init();
 		this.initEvent();
 	}
 	
@@ -63,10 +63,10 @@ class DivLevelVisible
 			const elem = this.checkBox2;
 			elem.children[0].style.background = (this.wallTransparent) ? 'rgb(213, 213, 213)' : 'none';
 			
-			if(camera === camera3D)
+			if(myCameraOrbit.activeCam.userData.isCam3D)
 			{
 				getInfoRenderWall();
-				if(this.wallTransparent && camera3D.userData.camera.type === 'fly') wallAfterRender_2();
+				if(this.wallTransparent && myCameraOrbit.cam3D.userData.type === 'fly') wallAfterRender_2();
 				else showAllWallRender();						
 			}
 		}

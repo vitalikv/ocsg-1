@@ -10,7 +10,15 @@ var lastClickTime = 0;
 var catchTime = 0.30;
 var vk_click = '';
 
+var onfM = {};
+onfM.stop = false;
+onfM.rayhitStop = false;
 
+function setMouseStop(value) 
+{
+	onfM.stop = value;
+	myCameraOrbit.stopMove = value;
+}
 
 
 
@@ -58,7 +66,7 @@ function mouseDownRight()
 
 function onDocumentMouseDown( event ) 
 {
-	//event.preventDefault();
+	//if(onfM.stop) return;
 
 	if (window.location.hostname == 'ocsg-1'){} 
 	else if (window.location.hostname == 'engineering-plan.ru'){}
@@ -91,8 +99,8 @@ function onDocumentMouseDown( event )
 	infProject.tools.axis[0].visible = false;
 	infProject.tools.axis[1].visible = false;
 
-	clickSetCamera2D( event, vk_click );
-	clickSetCamera3D( event, vk_click );
+	//clickSetCamera2D( event, vk_click );
+	//clickSetCamera3D( event, vk_click );
 
 
 	if ( vk_click == 'right' ) { mouseDownRight( event ); return; } 
@@ -140,7 +148,7 @@ function clickRayHit(event)
 		if(ray.length > 0) { rayhit = ray[0]; return rayhit; }		
 	}
 
-	if(!rayhit && camera === camera3D)
+	if(!rayhit && myCameraOrbit.activeCam.userData.isCam3D)
 	{
 		rayhit = clRoof.getRayIntersect();		
 	}	
@@ -208,7 +216,7 @@ function clickRayHit(event)
 		}			
 	}
 
-	if(!rayhit && camera === cameraTop)
+	if(!rayhit && myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		rayhit = clRoof.getRayIntersect();		
 	}
@@ -291,38 +299,43 @@ function clickMouseActive(cdm)
 	var rayhit = clickO.rayhit;
 	var flag = true;
 	
+	const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
+	const isCam3D = myCameraOrbit.activeCam.userData.isCam3D;
+	
 	if(cdm.type == 'down')
 	{  
 		if(clickToolWD(clickO.move)) { flag = false; }
 		else if( tag == 'pivot' ) { clickPivot( rayhit ); }
 		else if( tag == 'gizmo' ) { clickGizmo( rayhit ); } 
-		else if( tag == 'wall' && camera == cameraTop ) { clickWall_2D( rayhit ); }
+		else if( tag == 'wall' && isCam2D ) { clickWall_2D( rayhit ); }
 		else if( tag == 'point' ) { clickPoint( rayhit ); }
-		else if( tag == 'window' && camera == cameraTop ) { clickWD( rayhit ); }
-		else if( tag == 'door' && camera == cameraTop ) { clickWD( rayhit ); }
+		else if( tag == 'window' && isCam2D ) { clickWD( rayhit ); }
+		else if( tag == 'door' && isCam2D ) { clickWD( rayhit ); }
 		else if( tag == 'controll_wd' ) { clickToggleChangeWin( rayhit ); }
-		else if( tag == 'obj' && camera == cameraTop ) { clickObject3D({obj: obj, rayhit: rayhit}); }
-		else if( tag == 'obj' && camera == camera3D && infProject.tools.pivot.userData.pivot.obj == obj) { clickObject3D({obj: obj, rayhit: rayhit}); }
-		else if( tag == 'roof' && camera == cameraTop ) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }
-		else if( tag == 'roof' && camera == camera3D && infProject.tools.pivot.userData.pivot.obj == obj) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }		
+		else if( tag == 'obj' && isCam2D ) { clickObject3D({obj: obj, rayhit: rayhit}); }
+		else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clickObject3D({obj: obj, rayhit: rayhit}); }
+		else if( tag == 'roof' && isCam2D ) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }
+		else if( tag == 'roof' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }		
 		else { flag = false; }
 	}
 	else if(cdm.type == 'up')
 	{	
-		if( tag == 'wall' && camera == camera3D ) { clickWall_3D({obj: obj, rayhit: rayhit}); }
-		else if( tag == 'obj' && camera == camera3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clickObject3D({obj: obj, rayhit: rayhit}); }
-		else if( tag == 'room' && camera == cameraTop ) { clickFloor({obj: obj}); }
-		else if( tag == 'room' && camera == camera3D ) { clickFloor({obj: obj}); }
-		else if( tag == 'roof' && camera == camera3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }
-		else if( tag == 'window' && camera == camera3D) { clickWD( rayhit ); }
-		else if( tag == 'door' && camera == camera3D) { clickWD( rayhit ); }		
+		if( tag == 'wall' && isCam3D ) { clickWall_3D({obj: obj, rayhit: rayhit}); }
+		else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clickObject3D({obj: obj, rayhit: rayhit}); }
+		else if( tag == 'room' && isCam3D ) { clickFloor({obj: obj}); }
+		else if( tag == 'room' && isCam3D ) { clickFloor({obj: obj}); }
+		else if( tag == 'roof' && isCam3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }
+		else if( tag == 'window' && isCam3D) { clickWD( rayhit ); }
+		else if( tag == 'door' && isCam3D) { clickWD( rayhit ); }		
 		else { flag = false; }
 	}	
 
 	
 	if(flag) 
 	{
-		if(camera == cameraTop)
+		setMouseStop(true);
+		
+		if(isCam2D)
 		{
 			objActiveColor_2D(obj);
 		}		
@@ -339,6 +352,8 @@ function clickMouseActive(cdm)
 
 function onDocumentMouseMove( event ) 
 { 
+	//if(onfM.stop) return;
+	
 	if(event.changedTouches)
 	{
 		event.clientX = event.changedTouches[0].clientX;
@@ -355,6 +370,8 @@ function onDocumentMouseMove( event )
 
 	if ( !long_click ) { long_click = ( lastClickTime - new Date().getTime() < catchTime ) ? true : false; }
 
+	const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
+	
 	var obj = clickO.move;
 	
 	if ( obj ) 
@@ -374,15 +391,9 @@ function onDocumentMouseMove( event )
 		else if ( tag == 'obj_spot' ) { moveObjectPop( event ); }
 		else if ( tag == 'roof' ) { clRoof.moveRoof( event ); }
 	}
-	else if(camera == cameraTop && clickO.selectBox.drag) 
+	else if(isCam2D && clickO.selectBox.drag) 
 	{		
 		moveSelectionBox(event); 
-	}	
-	else 
-	{
-		if ( camera == camera3D ) { cameraMove3D( event ); }
-		else if ( camera == cameraTop ) { moveCameraTop( event ); }
-		else if ( camera == cameraWall ) { moveCameraWall2D( event ); }
 	}
 	
 	activeHover2D( event );
@@ -393,7 +404,8 @@ function onDocumentMouseMove( event )
 
 function onDocumentMouseUp( event )  
 {
-
+	//if(onfM.stop) return;
+	
 	if(selectionBoxUp(event)) { return; }		// selectionBox	
 	
 	if(!long_click) 
@@ -433,14 +445,14 @@ function onDocumentMouseUp( event )
 			if(obj.userData.point.type) {  } 
 			else { clickO.move = null; }
 		}		
-		else { clickO.move = null; }		
+		else { clickO.move = null; }
 	}
 	else if(clickO.selectBox.drag)
 	{		
 		upSelectionBox();
 	}	
 	
-	
+	if(clickO.move === null) setMouseStop(false);
 	param_win.click = false;
 	isMouseDown1 = false;
 	isMouseRight1 = false;
@@ -469,6 +481,9 @@ function hideMenuObjUI_2D(cdm)
 	
 	var flag = true;
 	
+	const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
+	const isCam3D = myCameraOrbit.activeCam.userData.isCam3D;
+
 	if(obj)
 	{ 
 		objDeActiveColor_2D(); 
@@ -478,23 +493,23 @@ function hideMenuObjUI_2D(cdm)
 		
 		if(cdm.type == 'down')
 		{
-			if(tag == 'wall' && camera == cameraTop) { hideMenuUI(obj); }
-			else if(tag == 'point' && camera == cameraTop) { hideMenuUI(obj); }
-			else if(tag == 'window' && camera == cameraTop) { hideSizeWD(obj); hideMenuUI(obj); }
-			else if(tag == 'door' && camera == cameraTop) { hideSizeWD(obj); hideMenuUI(obj); }
-			else if(tag == 'obj' && camera == cameraTop) { hidePivotGizmo(obj); }
-			else if(tag == 'roof' && camera == cameraTop) { hidePivotGizmo(obj); }
+			if(tag == 'wall' && isCam2D) { hideMenuUI(obj); }
+			else if(tag == 'point' && isCam2D) { hideMenuUI(obj); }
+			else if(tag == 'window' && isCam2D) { hideSizeWD(obj); hideMenuUI(obj); }
+			else if(tag == 'door' && isCam2D) { hideSizeWD(obj); hideMenuUI(obj); }
+			else if(tag == 'obj' && isCam2D) { hidePivotGizmo(obj); }
+			else if(tag == 'roof' && isCam2D) { hidePivotGizmo(obj); }
 			else { flag = false; }
 		}
 		else if(cdm.type == 'up')
 		{
-			if(tag == 'wall' && camera == camera3D) { hideMenuUI(obj); outlineRemoveObj(); }
-			else if(tag == 'room' && camera == cameraTop) { hideMenuUI(obj); outlineRemoveObj(); }
-			else if(tag == 'room' && camera == camera3D) { hideMenuUI(obj); outlineRemoveObj(); }
-			else if(tag == 'obj' && camera == camera3D) { hidePivotGizmo(obj); }
-			else if(tag == 'roof' && camera == camera3D) { hidePivotGizmo(obj); }
-			else if(tag == 'window' && camera == camera3D) { hidePivotGizmo(obj); }
-			else if(tag == 'door' && camera == camera3D) { hidePivotGizmo(obj); }
+			if(tag == 'wall' && isCam3D) { hideMenuUI(obj); outlineRemoveObj(); }
+			else if(tag == 'room' && isCam2D) { hideMenuUI(obj); outlineRemoveObj(); }
+			else if(tag == 'room' && isCam3D) { hideMenuUI(obj); outlineRemoveObj(); }
+			else if(tag == 'obj' && isCam3D) { hidePivotGizmo(obj); }
+			else if(tag == 'roof' && isCam3D) { hidePivotGizmo(obj); }
+			else if(tag == 'window' && isCam3D) { hidePivotGizmo(obj); }
+			else if(tag == 'door' && isCam3D) { hidePivotGizmo(obj); }
 			else { flag = false; }
 		}
 		else
@@ -510,7 +525,10 @@ function hideMenuObjUI_2D(cdm)
 		}
 	}
 	
-	if(flag) clickO.last_obj = null;
+	if(flag) 
+	{		
+		clickO.last_obj = null;
+	}
 }
 
 

@@ -205,7 +205,7 @@ function setScalePivotGizmo()
 	if(pVis) obj = pivot.userData.pivot.obj;
 	if(!obj) return;
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{		
 		var scale = 1/camera.zoom+0.0;	
 		

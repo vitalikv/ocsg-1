@@ -41,7 +41,7 @@ function clickObject3D(cdm)
 	pivot.position.copy(pos);
 	pivot.quaternion.copy(qt);
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		//pivot.userData.pivot.axs.y.visible = false;
 		pivot.visible = false;
@@ -59,8 +59,8 @@ function clickObject3D(cdm)
 	
 	setScalePivotGizmo();
 	
-	if(camera == cameraTop) { outlineRemoveObj(); }
-	if(camera == camera3D) { outlineAddObj({arr: [obj]}); }
+	if(myCameraOrbit.activeCam.userData.isCam2D) { outlineRemoveObj(); }
+	if(myCameraOrbit.activeCam.userData.isCam3D) { outlineAddObj({arr: [obj]}); }
 	
 	tabObject.activeObjRightPanelUI_1({obj: obj});	// показываем меню UI
 
@@ -162,7 +162,7 @@ function clickMouseUpObject(obj)
 		
 		getInfoEvent23({obj: obj, type: 'move'}); 
 		
-		if(camera == cameraTop)
+		if(myCameraOrbit.activeCam.userData.isCam2D)
 		{	
 			// svg линии
 			if(1==1)

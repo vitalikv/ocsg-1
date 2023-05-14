@@ -133,6 +133,7 @@
 	<script src="<?=$path?>uiInterface_catalog.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>eventClick.js?<?=$vrs?>"></script>
 		
+	<script src="<?=$path?>new/event/eventMyCamera.js?<?=$vrs?>"></script>
 	
 	<script src="<?=$path?>new/myCamera.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/myCameraPerspective.js?<?=$vrs?>"></script>

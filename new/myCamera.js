@@ -2,7 +2,7 @@
 
 class MyCameraOrbit
 {
-	constructor({container, renderer, scene, setCam})
+	constructor({container, renderer, scene})
 	{
 		this.renderer = renderer;
 		this.canvas = renderer.domElement;
@@ -25,7 +25,8 @@ class MyCameraOrbit
 		this.mouse.pos.x = 0;
 		this.mouse.pos.y = 0;
 		
-		if(setCam) this.setActiveCam({cam: setCam});
+		this.api = new EventMyCamera();	// вспомогательный класс, другие методы подписываются
+		
 		this.initEvent();	
 	}
 	
@@ -60,6 +61,9 @@ class MyCameraOrbit
 		camera2D.updateMatrixWorld();
 		camera2D.updateProjectionMatrix();	
 
+		camera2D.userData.pos = camera2D.position.clone();
+		camera2D.userData.zoom = camera2D.zoom;
+	
 		return camera2D;
 	}
 
@@ -206,6 +210,7 @@ class MyCameraOrbit
 		camera3D.lookAt(posTarget);
 		//camera3D.rotation.set(-0.40309943010546634, -2.371254594012155, 0);			
 		camera3D.userData.targetO.position.copy(posTarget);
+		camera3D.userData.targetO.rotation.set(0, camera3D.rotation.y, 0);
 		
 		camera3D.userData.pos = camera3D.position.clone();
 		camera3D.userData.radius = camera3D.userData.targetO.position.distanceTo(camera3D.position);			
@@ -277,7 +282,10 @@ class MyCameraOrbit
 		
 		const camera2D = this.activeCam;
 		camera2D.position.x += this.mouse.pos.x - intersects[0].point.x;
-		camera2D.position.z += this.mouse.pos.y - intersects[0].point.z;	
+		camera2D.position.z += this.mouse.pos.y - intersects[0].point.z;
+
+		camera2D.updateMatrixWorld();
+		this.api.moveCam2D();
 	}
 
 
@@ -323,7 +331,9 @@ class MyCameraOrbit
 			offset.y = 0;
 			camera3D.position.add( offset );
 			camera3D.userData.targetO.position.add( offset );			
-		}		
+		}
+
+		this.api.moveCamFly3D()
 	}
 	
 	moveCamFirst3D()
@@ -417,8 +427,6 @@ class MyCameraOrbit
 		const zoomOld = camera.zoom;
 		
 		camera.zoom -= ( delta * 0.3 * ( camera.zoom / 2 ) );
-		//camera.updateProjectionMatrix();
-
 
 		// зумирование на конкретный объект/точку в простаранстве 
 		const zoomOnTarget = ({event, zoomOld}) =>
@@ -436,12 +444,15 @@ class MyCameraOrbit
 			const yNew = pos.z + (((camera.position.z - pos.z) * camera.zoom) /zoomOld);
 
 			camera.position.x += camera.position.x - xNew;
-			camera.position.z += camera.position.z - yNew;	
-			
-			camera.updateProjectionMatrix();				
+			camera.position.z += camera.position.z - yNew;
+
+			camera.updateMatrixWorld();
 		}
 
 		zoomOnTarget({event, zoomOld});
+		camera.updateProjectionMatrix();
+		
+		this.api.cameraZoom2D();		
 	}
 
 
@@ -656,7 +667,7 @@ class MyCameraOrbit
 	render() 
 	{
 		if (composer) { composer.render(); } 
-		else { this.renderer.render( this.scene, this.activeCam ); }				
+		else { this.renderer.render( this.scene, this.activeCam ); }
 	}
 	
 }

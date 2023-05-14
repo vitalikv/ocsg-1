@@ -143,7 +143,7 @@ class Roof
 		pivot.position.copy(pos);
 		pivot.quaternion.copy(qt);
 		
-		if(camera == cameraTop) pivot.visible = false;
+		if(myCameraOrbit.activeCam.userData.isCam2D) pivot.visible = false;
 		else pivot.userData.pivot.axs.y.visible = true;	
 		
 		let gizmo = infProject.tools.gizmo;					
@@ -154,8 +154,8 @@ class Roof
 		
 		setScalePivotGizmo();
 		
-		if(camera == cameraTop) { outlineRemoveObj(); }
-		if(camera == camera3D) { outlineAddObj({arr: [obj]}); }
+		if(myCameraOrbit.activeCam.userData.isCam2D) { outlineRemoveObj(); }
+		if(myCameraOrbit.activeCam.userData.isCam3D) { outlineAddObj({arr: [obj]}); }
 		
 		tabObject.activeObjRightPanelUI_1({obj: obj});	// показываем меню UI
 
@@ -650,10 +650,10 @@ class Roof
 		}		
 	} 	
 	
-	// camera3D - не прозрачная крыша, cameraTop - прозрачная крыша
+	// camera3D - не прозрачная крыша, camera2D - прозрачная крыша
 	changeMaterialTransparent()
 	{
-		let opacity = (camera === cameraTop) ? 0.3 : 1;
+		let opacity = (myCameraOrbit.activeCam.userData.isCam2D) ? 0.3 : 1;
 		
 		let levels = myLevels.levels;
 				

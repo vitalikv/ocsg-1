@@ -301,7 +301,7 @@ function clickUpElementBoxScale()
 // кликнули на объект, показываем размеры объекта
 function showSvgSizeObj(cdm)
 {
-	//if(camera != cameraTop) return;
+	//if(myCameraOrbit.activeCam.userData.isCam2D) return;
 	
 	var obj = cdm.obj;
 		
@@ -328,7 +328,7 @@ function showSvgSizeObj(cdm)
 	{
 		var html = infProject.html.furn.size;
 		
-		if(infProject.svg.furn.size.show && camera == cameraTop)
+		if(infProject.svg.furn.size.show && myCameraOrbit.activeCam.userData.isCam2D)
 		{
 			showElementHtml(html);
 			showElementSvg(infProject.svg.furn.size.elem);
@@ -383,7 +383,7 @@ function showSvgSizeObj(cdm)
 		
 		var box1 = infProject.svg.furn.box1;
 		
-		if(camera == cameraTop) { showElementSvg([box1]); }	
+		if(myCameraOrbit.activeCam.userData.isCam2D) { showElementSvg([box1]); }	
 		
 		updateSvgPath({el: box1, arrP: [v[0], v[1], v[3], v[2], v[0]]});		
 	}
@@ -395,7 +395,7 @@ function showSvgSizeObj(cdm)
 	{
 		var circle = infProject.svg.furn.boxCircle.elem;
 		
-		if(infProject.svg.furn.boxCircle.show && camera == cameraTop) { showElementSvg(circle); }
+		if(infProject.svg.furn.boxCircle.show && myCameraOrbit.activeCam.userData.isCam2D) { showElementSvg(circle); }
 		
 		// circle[0] top-left
 		// circle[1] top-center
@@ -447,7 +447,7 @@ function showSvgSizeObj(cdm)
 		var p3 = new THREE.Vector3(bound.max.x, 0, bound.max.z);	// bottom-right				
 		var p4 = new THREE.Vector3(bound.min.x, 0, bound.max.z);	// bottom-left		
 		
-		if(camera == cameraTop && svgBox2) 
+		if(myCameraOrbit.activeCam.userData.isCam2D && svgBox2) 
 		{ 
 			showElementSvg([box2]); 
 			updateSvgPath({el: box2, arrP: [p1, p2, p3, p4, p1]});
@@ -624,7 +624,7 @@ function showSvgSizeObj(cdm)
 				// если можно провести прямую до стен/объектов, то показываем линию и размер, иначе скрываем
 				if(pos2)
 				{
-					if(infProject.svg.furn.offset.show && camera == cameraTop)
+					if(infProject.svg.furn.offset.show && myCameraOrbit.activeCam.userData.isCam2D)
 					{
 						showElementSvg([line]);					
 						showElementHtml([html]);
@@ -1037,7 +1037,7 @@ function inputScaleObjPop(cdm)
 		upDateTextureObj3D({obj})
 	}
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		showSvgSizeObj({obj: obj, boxCircle: true, getObjRoom: true, resetPos: true});
 	}

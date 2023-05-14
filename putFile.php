@@ -57,6 +57,7 @@ new/tools/myToolPG.js
 new/tools/myPivot.js
 new/myCamera.js
 new/myCameraPerspective.js
+new/event/eventMyCamera.js
 ';
 
 $arrF = array();

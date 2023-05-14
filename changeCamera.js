@@ -39,7 +39,7 @@ function changeCamera(cam)
 		
 		// прячем стены
 		getInfoRenderWall();
-		if(divLevelVisible.wallTransparent && camera3D.userData.type === 'fly') wallAfterRender_2();	
+		if(divLevelVisible.wallTransparent && myCameraOrbit.cam3D.userData.type === 'fly') wallAfterRender_2();	
 		else showAllWallRender();
 		
 		//infProject.scene.grid.visible = false;
@@ -74,7 +74,7 @@ function changeCamera(cam)
 // меняем уровень отрисовки объектов 
 function changeDepthColor()
 {
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		var depthTest = false;
 		var w2 = 1;
@@ -82,7 +82,7 @@ function changeDepthColor()
 		var visible_2 = true;
 		var visible_3 = false;
 	}
-	else if(camera == camera3D)
+	else if(myCameraOrbit.activeCam.userData.isCam3D)
 	{
 		var depthTest = true;
 		var w2 = 0.0;
@@ -169,11 +169,11 @@ function changeDepthColor()
 		window[i].userData.door.obj3D.visible = visible_3;		
 	}
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		showElementSvg(svg);
 	}
-	else if(camera == camera3D)
+	else if(myCameraOrbit.activeCam.userData.isCam3D)
 	{
 		hideElementSvg(svg);
 	}	

@@ -187,7 +187,7 @@ class BtnDropList
 	// если находимся в 2D , то выполняем ф-ции
 	isActive()
 	{
-		return (camera === cameraTop) ? true : false;
+		return (myCameraOrbit.activeCam.userData.isCam2D) ? true : false;
 	}
 }
 
