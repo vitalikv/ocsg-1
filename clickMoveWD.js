@@ -11,9 +11,9 @@ function clickWD( intersect )
 	
 	var pos = intersect.point;
 	
-	if(camera != cameraWall) { pos.y = obj.position.y; }
+	pos.y = obj.position.y;
 	
-	if(camera == cameraTop) 
+	if(myCameraOrbit.activeCam.userData.isCam2D) 
 	{
 		planeMath.position.set( 0, pos.y, 0 );
 		planeMath.rotation.set(-Math.PI/2, 0, 0);			
@@ -32,7 +32,7 @@ function clickWD( intersect )
 	
 	findOnWallWD(obj);	
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		showRulerWD( obj ); 	// показываем линейки 
 	}
@@ -188,13 +188,13 @@ function moveWD_2( wd, pos )
 	else if(pos.x + x_max > bound.max.x){ pos.x = bound.max.x - x_max; }	
 	
 	// ограничение по высоте при перемещении wd
-	if(camera != cameraTop)
+	if(!myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		if(pos.y + y_min < bound.min.y){ pos.y = bound.min.y - y_min; }
 		else if(pos.y + y_max > bound.max.y){ pos.y = bound.max.y - y_max; }
 	}	
 	
-	if(camera == cameraTop){ pos.z = 0; }	
+	if(myCameraOrbit.activeCam.userData.isCam2D){ pos.z = 0; }	
 	
 	var pos = wall.localToWorld( pos.clone() );
 	
@@ -217,6 +217,7 @@ function moveWD_2( wd, pos )
 // скрываем размеры и котнроллеры у окна/двери
 function hideSizeWD( obj )
 {	
+	
 	if(clickO.rayhit) 
 	{
 		if(clickO.rayhit.object == obj) return;	// кликнули на один и тот же активный объект
@@ -227,7 +228,7 @@ function hideSizeWD( obj )
 		}		
 	}		
 		
-	if(obj)
+	if(obj && myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		if(obj.userData.tag == 'door' || obj.userData.tag == 'window')
 		{
@@ -395,7 +396,7 @@ function clickWDMouseUp(wd)
 	
 	MeshBSP( wd, objsBSP );
 	 
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{ 
 		wd.material.depthTest = false;  
 		wd.material.opacity = 1.0; 		 	

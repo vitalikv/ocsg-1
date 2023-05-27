@@ -184,10 +184,12 @@ class MyCameraOrbit
 		this.cam2D.right = d * aspect;
 		this.cam2D.top = d;
 		this.cam2D.bottom = -d;
+		this.cam2D.updateMatrixWorld();
 		this.cam2D.updateProjectionMatrix();
 
 		 
 		this.cam3D.aspect = aspect;
+		this.cam3D.updateMatrixWorld();
 		this.cam3D.updateProjectionMatrix();	
 		
 		canvas.style.width = '100%';

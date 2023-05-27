@@ -85,7 +85,7 @@ function clickGizmo( intersect )
 	
 	planeMath.position.copy( gizmo.position );		
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		planeMath.rotation.set(Math.PI/2, 0, 0);
 	}
@@ -148,7 +148,7 @@ function moveGizmo( event )
 	
 	
 	
-	if(camera == cameraTop) 
+	if(myCameraOrbit.activeCam.userData.isCam2D) 
 	{ 
 		obj.rotateOnWorldAxis(new THREE.Vector3(0,1,0), rotY - gizmo.userData.gizmo.active.rotY);
 

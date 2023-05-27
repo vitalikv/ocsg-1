@@ -231,9 +231,10 @@ function moveElementBoxScale2D(e)
 		var C = new THREE.Vector3(x, y, -1);	
 		
 		//camera.updateProjectionMatrix();
-		A.unproject(camera);
-		B.unproject(camera);
-		C.unproject(camera);
+		const cam2D = myCameraOrbit.activeCam;
+		A.unproject(cam2D);
+		B.unproject(cam2D);
+		C.unproject(cam2D);
 		
 		var z = A.distanceTo( C );
 		var x = B.distanceTo( C );

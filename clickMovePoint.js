@@ -190,16 +190,17 @@ function dragToolPoint( event, obj )
 	}
 	
 	let glued = false;
+	const cam2D = myCameraOrbit.activeCam;	
+	const p1 = new THREE.Vector3( obj.position.x, 0, obj.position.z );
 	
 	for ( var i = 0; i < obj_point.length; i++ )
 	{
-		if(obj_point[i] == obj) { continue; }		
-
-		var p1 = new THREE.Vector3( obj.position.x, 0, obj.position.z ); 
-		var p2 = new THREE.Vector3( obj_point[i].position.x, 0, obj_point[i].position.z ); 
+		if(obj_point[i] === obj) { continue; }		
+		 
+		const p2 = new THREE.Vector3( obj_point[i].position.x, 0, obj_point[i].position.z ); 
 		
-		if(p1.distanceTo( p2 ) < 0.2 / camera.zoom)
-		{ 
+		if(p1.distanceTo( p2 ) < 0.2 / cam2D.zoom)
+		{ 		
 			obj.position.set( obj_point[i].position.x, obj.position.y, obj_point[i].position.z );
 			obj.userData.point.cross = point = obj_point[i];
 			glued = true;
@@ -211,14 +212,14 @@ function dragToolPoint( event, obj )
 	if(!glued)
 	{
 		let arrP = ghostLevel.arr.point;
+		const cam2D = myCameraOrbit.activeCam;
 		
 		for ( var i = 0; i < arrP.length; i++ )
 		{
-			var p1 = new THREE.Vector3( obj.position.x, 0, obj.position.z ); 
-			var p2 = new THREE.Vector3( arrP[i].position.x, 0, arrP[i].position.z ); 
+			const p2 = new THREE.Vector3( arrP[i].position.x, 0, arrP[i].position.z ); 			
 			
-			if(p1.distanceTo( p2 ) < 0.1 / camera.zoom)
-			{ 
+			if(p1.distanceTo( p2 ) < 0.1 / cam2D.zoom)
+			{ 		
 				obj.position.set( arrP[i].position.x, obj.position.y, arrP[i].position.z );
 				point = arrP[i];
 				break;
@@ -245,9 +246,13 @@ function dragToolPoint( event, obj )
 	{ 
 		wall.updateMatrixWorld();			
 		var pos = wall.worldToLocal( pos.clone() );	
-		var pos = wall.localToWorld( new THREE.Vector3(pos.x, 0, 0 ) ); 		
-		obj.position.set( pos.x, obj.position.y, pos.z ); 
-		obj.userData.point.cross = wall; 
+		var pos = wall.localToWorld( new THREE.Vector3(pos.x, 0, 0 ) );
+
+		if(p1.distanceTo( new THREE.Vector3(pos.x, 0, pos.z) ) < 0.2 / cam2D.zoom)
+		{
+			obj.position.set( pos.x, obj.position.y, pos.z ); 
+			obj.userData.point.cross = wall; 			
+		}
 		
 		infProject.tools.axis[0].visible = false;
 		infProject.tools.axis[1].visible = false;
@@ -263,6 +268,9 @@ function dragToolPoint( event, obj )
 // направляющие X/Z к точекам
 function showLineAxis( point )
 { 
+	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
+	const cam2D = myCameraOrbit.activeCam;
+	
 	var pX = [];
 	var pZ = [];
 	
@@ -276,8 +284,8 @@ function showLineAxis( point )
 		var x = Math.abs( obj_point[i].position.x - p1.x );
 		var z = Math.abs( obj_point[i].position.z - p2.z );
 		
-		if(x < 0.06 / camera.zoom){ pX[pX.length] = i; }
-		if(z < 0.06 / camera.zoom){ pZ[pZ.length] = i; }			
+		if(x < 0.06 / cam2D.zoom){ pX[pX.length] = i; }
+		if(z < 0.06 / cam2D.zoom){ pZ[pZ.length] = i; }			
 	}
 	
 	

@@ -206,15 +206,18 @@ function setScalePivotGizmo()
 	if(!obj) return;
 	
 	if(myCameraOrbit.activeCam.userData.isCam2D)
-	{		
-		var scale = 1/camera.zoom+0.0;	
+	{
+		const cam2D = myCameraOrbit.activeCam;
+		var scale = 1/cam2D.zoom+0.0;	
 		
 		pivot.scale.set( scale,scale,scale );
 		gizmo.scale.set( scale,scale,scale );
 	}
-	else
+	
+	if(myCameraOrbit.activeCam.userData.isCam3D)
 	{
-		var dist = camera.position.distanceTo(obj.position); 					
+		const cam3D = myCameraOrbit.activeCam;
+		var dist = cam3D.position.distanceTo(obj.position); 					
 		var scale = dist/6;	
 		
 		pivot.scale.set( scale,scale,scale );

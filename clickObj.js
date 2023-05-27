@@ -157,13 +157,13 @@ function clickMouseUpObject(obj)
 { 
 	if(clickO.actMove)
 	{		 
-		updateCubeCam({obj: obj});	// CubeCamera (material Reflection)
-		
-		
+
 		getInfoEvent23({obj: obj, type: 'move'}); 
 		
 		if(myCameraOrbit.activeCam.userData.isCam2D)
 		{	
+			const cam2D = myCameraOrbit.activeCam;
+			
 			// svg линии
 			if(1==1)
 			{
@@ -174,7 +174,7 @@ function clickMouseUpObject(obj)
 					var x = ( ( circle[i].cx.baseVal.value - containerF.offsetLeft ) / containerF.clientWidth ) * 2 - 1;
 					var y = - ( ( circle[i].cy.baseVal.value - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
 					var A = new THREE.Vector3(x, y, -1);
-					A.unproject(camera);
+					A.unproject(cam2D);
 					
 					circle[i].userData.svg.circle.pos = A;
 					
@@ -193,7 +193,7 @@ function clickMouseUpObject(obj)
 						var x = ( ( arrS.x - containerF.offsetLeft ) / containerF.clientWidth ) * 2 - 1;
 						var y = - ( ( arrS.y - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
 						var A = new THREE.Vector3(x, y, -1);
-						A.unproject(camera);
+						A.unproject(cam2D);
 
 						arrP[arrP.length] = A;
 					}	
@@ -216,7 +216,7 @@ function clickMouseUpObject(obj)
 						var x = ( ( arrS.x - containerF.offsetLeft ) / containerF.clientWidth ) * 2 - 1;
 						var y = - ( ( arrS.y - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
 						var A = new THREE.Vector3(x, y, -1);
-						A.unproject(camera);
+						A.unproject(cam2D);
 
 						arrP[arrP.length] = A;
 					}	

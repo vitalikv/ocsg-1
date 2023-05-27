@@ -115,13 +115,13 @@ function showRulerWD(obj)
 	
 	var boundPos = [];
 	
-	if(camera == cameraWall)
+/* 	if(camera == cameraWall)
 	{
 		var arr = detectDirectionWall_1(wall, arrWallFront.wall[0].index, detectRoomWallSide(wall, (arrWallFront.wall[0].index == 1) ? 1 : 0));
 		boundPos[0] = arr[0].clone();
 		boundPos[1] = arr[2].clone();		
-	}
-	else	
+	} 
+	else*/	
 	{
 		// находим (границы) позиции от выбранного окна/двери до ближайших окон/дверей/края стены
 		var arr = detectDirectionWall_1(wall, 1, detectRoomWallSide(wall, 1));	
@@ -313,7 +313,7 @@ function clickToggleChangeWin( intersect, cdm )
 		if(m == 0) { pos2 = wall.localToWorld( new THREE.Vector3(wd.userData.door.bound.min.x, controll.position.y, z) ); }
 		else if(m == 1) { pos2 = wall.localToWorld( new THREE.Vector3(wd.userData.door.bound.max.x, controll.position.y, z) ); }				
 	}
-	else if(camera == cameraWall)
+/* 	else if(camera == cameraWall)
 	{
 		//clickO.obj = null;
 		planeMath.position.copy( intersect.point );
@@ -325,7 +325,7 @@ function clickToggleChangeWin( intersect, cdm )
 		else if(m == 1) { pos2 = new THREE.Vector3().subVectors( controll.position, dir ); }	
 		else if(m == 2) { pos2 = controll.position.clone(); pos2.y = -9999; }
 		else if(m == 3) { pos2 = controll.position.clone(); pos2.y = 9999; }
-	}
+	} */
 
 	
 	var offset = new THREE.Vector3().subVectors( intersect.object.position, intersect.point ); 

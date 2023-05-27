@@ -28,41 +28,6 @@ scene.background = new THREE.Color( 0xffffff );
 var aspect = containerF.clientWidth/containerF.clientHeight;
 var d = infProject.settings.cam2D;
 
-//----------- cameraTop
-var cameraTop = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 1, 1000 );
-cameraTop.position.set(0, 10, 0);
-cameraTop.lookAt(scene.position);
-cameraTop.zoom = infProject.settings.camera.zoom;
-cameraTop.updateMatrixWorld();
-cameraTop.updateProjectionMatrix();
-cameraTop.userData.camera = { save: { pos: cameraTop.position.clone(), zoom: cameraTop.zoom } };
-//----------- cameraTop
-
-
-//----------- camera3D
-var camera3D = new THREE.PerspectiveCamera( 65, containerF.clientWidth / containerF.clientHeight, 0.01, 1000 );  
-camera3D.rotation.order = 'YZX';		//'ZYX'
-camera3D.position.set(5, 7, 5);
-camera3D.lookAt(scene.position);
-camera3D.rotation.z = 0;
-camera3D.userData.camera = { type: 'fly', height: camera3D.position.y, startProject: true };
-camera3D.userData.camera.click = { pos: new THREE.Vector3() };
-camera3D.userData.camera.save = {}; 
-camera3D.userData.camera.save.pos = camera3D.position.clone();
-camera3D.userData.camera.save.radius = 0;
-//----------- camera3D
-
-
-
-
-//----------- cameraWall
-var cameraWall = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 1, 1000 );
-cameraWall.zoom = 2;
-//----------- cameraWall
-
-
-
-
 
 
 
@@ -89,39 +54,6 @@ function renderCamera()
 //----------- render
 
 
-//----------- onWindowResize
-window.addEventListener( 'resize', onWindowResize, false );
-function onWindowResize() 
-{ 
-	var aspect = containerF.clientWidth / containerF.clientHeight;
-	var d = infProject.settings.cam2D;
-	
-	cameraTop.left = -d * aspect;
-	cameraTop.right = d * aspect;
-	cameraTop.top = d;
-	cameraTop.bottom = -d;
-	cameraTop.updateProjectionMatrix();
-
-	 
-	camera3D.aspect = aspect;
-	camera3D.updateProjectionMatrix();
-	
-	cameraWall.left = -d * aspect;
-	cameraWall.right = d * aspect;
-	cameraWall.top = d;
-	cameraWall.bottom = -d;
-	cameraWall.updateProjectionMatrix();
-	
-	renderer.setSize(containerF.clientWidth, containerF.clientHeight);
-	upPosLabels_1({resize: true});
-	
-	renderCamera();
-}
-//----------- onWindowResize
-
-
-
-
 
 //----------- start
 
@@ -132,7 +64,7 @@ var resolutionD_h = window.screen.availHeight;
 var kof_rd = 1;
 
 var countId = 2;
-var camera = cameraTop;
+
 var obj_point = [];
 var room = [];
 var ceiling = [];
