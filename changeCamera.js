@@ -4,49 +4,34 @@
 
 
 // переключение камеры
-function changeCamera(cam)
+function changeCamera()
 {  
-	deActiveSelected();
-	
-	
-	myComposerRenderer.outlineRemoveObj();
-	myCameraOrbit.setActiveCam({cam});
+	changeDepthColor();		
 
 
-	if(cam === '2D')
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{	
 		ghostLevel.createLevel();	// показываем призрачный этаж
 		
-		myCameraOrbit.cam3D.userData.targetO.visible = false;
 		blockActiveObj({visible_1: false, visible_2: false});
-		
-		changeDepthColor();			
-		cameraZoomTop( myCameraOrbit.cam2D.zoom );
 
 		showAllWallRender();	// показываем стены, которые были спрятаны
 		
-		//infProject.scene.grid.visible = true;
+		clRoof.resetWall();
 	}
-	else if(cam === '3D')
+	else if(myCameraOrbit.activeCam.userData.isCam3D)
 	{	
 		ghostLevel.deleteLevel();	// прячем призрачный этаж
 		
-		myCameraOrbit.cam3D.userData.targetO.visible = true;
-		blockActiveObj({visible_1: true, visible_2: true});
-				 
-		cameraZoomTop( myCameraOrbit.cam2D.zoom );
-		changeDepthColor();				
+		blockActiveObj({visible_1: true, visible_2: true});			
 		
 		// прячем стены
 		getInfoRenderWall();
 		if(divLevelVisible.wallTransparent && myCameraOrbit.cam3D.userData.type === 'fly') wallAfterRender_2();	
 		else showAllWallRender();
 		
-		//infProject.scene.grid.visible = false;
+		clRoof.cgs();
 	}
-	
-	if(cam === '2D') clRoof.resetWall();
-	else clRoof.cgs();
 	
 	clRoof.changeMaterialTransparent();
 	
@@ -57,13 +42,11 @@ function changeCamera(cam)
 	
 	myLevels.changeVisibleLevels();
 	
-	if(cam === '2D')
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		myCameraOrbit.cam2D.updateMatrixWorld();
 		upPosLabels_1({resize: true});		
 	}
-	
-	myCameraOrbit.render();
 }
 
 

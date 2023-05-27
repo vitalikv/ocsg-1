@@ -2,41 +2,6 @@
 
 
 
-function cameraZoomTop( delta )
-{
-	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
-
-	myCameraOrbit.cam2D.zoom = delta;
-	myCameraOrbit.cam2D.updateProjectionMatrix();	
-	
-	infProject.tools.axis[0].scale.set(1,1/delta,1/delta);
-	infProject.tools.axis[1].scale.set(1,1/delta,1/delta);
-	
-	// zoom label
-	var k = 1 / delta;
-	if(k <= infProject.settings.camera.limitZoom && 1==2) 
-	{		
-		// point geometry
-		var point = infProject.tools.point;	
-		var v = point.geometry.vertices;
-		var v2 = point.userData.tool_point.v2;
-			
-		for ( var i = 0; i < v2.length; i++ )
-		{
-			v[i].x = v2[i].x * 1/delta;
-			v[i].z = v2[i].z * 1/delta;
-		}	
-
-		infProject.tools.point.geometry.verticesNeedUpdate = true;
-		infProject.tools.point.geometry.elementsNeedUpdate = true;
-
-
-		// wd рулетки 
-		for ( var i = 0; i < infProject.scene.size.wd_1.line.length; i++ ){ infProject.scene.size.wd_1.line[i].scale.set(1,1/delta,1/delta); }			
-	}
-}
-
-
 
 
 // центрируем камеру cameraTop

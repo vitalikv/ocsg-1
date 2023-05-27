@@ -94,6 +94,8 @@ class MyCameraOrbit
 		
 		this.activeCam = camera;
 		
+		this.cam3D.userData.targetO.visible = (cam === '2D') ? false : true;
+		
 		this.api.setActiveCam({camera})
 		
 		this.render();

@@ -43,7 +43,9 @@ class SwitchCamera
 			this.btnCamFirst.style.display = '';
 		}
 		
-		changeCamera(cam);
+		
+		myCameraOrbit.setActiveCam({cam});		
+		
 		tabs.upCurrentTab();	// обновляем текущую вкладку, например прячем в 3D вкладку 'Дом'
 		this.showHideDivTypeCam();	
 	}
