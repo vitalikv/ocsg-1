@@ -159,6 +159,8 @@
 	<script src="<?=$path?>new/oWindow.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/myDoor.js?<?=$vrs?>"></script>
 	
+	<script src="<?=$path?>new/core/composerRender.js?<?=$vrs?>"></script>
+	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		
 		

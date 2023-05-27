@@ -88,8 +88,8 @@ function objActiveColor_2D(obj)
 			
 	var tag = obj.userData.tag;
 	
-	if(tag == 'point'){ outlineAddObj({arr: [obj]}); }	 
-	else if(tag == 'wall'){ outlineAddObj({arr: [obj]}); } 	
+	if(tag == 'point'){ myComposerRenderer.outlineAddObj({arr: [obj]}); }	 
+	else if(tag == 'wall'){ myComposerRenderer.outlineAddObj({arr: [obj]}); } 	
 }
  
 
@@ -109,10 +109,10 @@ function objDeActiveColor_2D()
 		if(clickO.rayhit.object.userData.tag == 'controll_wd'){ if(clickO.rayhit.object.userData.controll_wd.obj == o) { return; } }      		
 	}
 	 
-	if(o.userData.tag == 'wall'){ outlineRemoveObj(); getCalcWall({wall: o}); }	
-	else if(o.userData.tag == 'point'){ outlineRemoveObj(); }	
-	else if(o.userData.tag == 'window'){ outlineRemoveObj(); }
-	else if(o.userData.tag == 'door'){ outlineRemoveObj(); }	
+	if(o.userData.tag == 'wall'){ myComposerRenderer.outlineRemoveObj(); getCalcWall({wall: o}); }	
+	else if(o.userData.tag == 'point'){ myComposerRenderer.outlineRemoveObj(); }	
+	else if(o.userData.tag == 'window'){ myComposerRenderer.outlineRemoveObj(); }
+	else if(o.userData.tag == 'door'){ myComposerRenderer.outlineRemoveObj(); }	
 	
 	if(clickO.hover == clickO.last_obj) { clickO.hover = null; }
 } 

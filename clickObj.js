@@ -59,8 +59,8 @@ function clickObject3D(cdm)
 	
 	setScalePivotGizmo();
 	
-	if(myCameraOrbit.activeCam.userData.isCam2D) { outlineRemoveObj(); }
-	if(myCameraOrbit.activeCam.userData.isCam3D) { outlineAddObj({arr: [obj]}); }
+	if(myCameraOrbit.activeCam.userData.isCam2D) { myComposerRenderer.outlineRemoveObj(); }
+	if(myCameraOrbit.activeCam.userData.isCam3D) { myComposerRenderer.outlineAddObj({arr: [obj]}); }
 	
 	tabObject.activeObjRightPanelUI_1({obj: obj});	// показываем меню UI
 
@@ -298,7 +298,7 @@ function deleteObjectPop(cdm)
 		scene.remove(arr[i]); 
 	}
 	
-	outlineRemoveObj();
+	myComposerRenderer.outlineRemoveObj();
 	
 	renderCamera();
 }
@@ -347,7 +347,7 @@ function hidePivotGizmo(obj)
 	
 	tabObject.activeObjRightPanelUI_1(); 	// UI
 	
-	outlineRemoveObj();
+	myComposerRenderer.outlineRemoveObj();
 }
 
 

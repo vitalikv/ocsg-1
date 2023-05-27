@@ -40,7 +40,7 @@ function clickWD( intersect )
 	showTableWD( obj );		// UI
 	tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
 	
-	outlineAddObj({arr: [obj]});
+	myComposerRenderer.outlineAddObj({arr: [obj]});
 }
 
 

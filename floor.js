@@ -240,13 +240,13 @@ function clickFloor({obj})
 	const plane = infProject.tools.floorPl;	
 	plane.geometry.dispose();
 	plane.geometry = new THREE.ShapeGeometry( new THREE.Shape(contour2) );	
-	//outlineAddObj({arr: [plane]});
+	//myComposerRenderer.outlineAddObj({arr: [plane]});
 	
 	
 	// TODO: прячем выделенный пол(клон с измененной геометрией), потому что при обрезки пола(клона) крышей,
 	// нужно дополнительно будет делать доп.расчеты для геометрии. вообщем долго объяснять 
 	plane.visible = false;	
-	outlineAddObj({arr: [obj]});
+	myComposerRenderer.outlineAddObj({arr: [obj]});
 	plane.userData.floorId = obj.userData.id;	// нужно чтобы понять к какому полу приклеплен
 	
 	tabObject.activeObjRightPanelUI_1({obj});

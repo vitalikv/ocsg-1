@@ -110,7 +110,7 @@ class MyLevels
 	{	
 		if(this.activeId === id) return;
 		
-		outlineRemoveObj();
+		myComposerRenderer.outlineRemoveObj();
 		deActiveSelected();
 		
 		const posY = this.getLevelPos0({lastId: this.activeId, newId: id});

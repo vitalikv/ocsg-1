@@ -94,12 +94,7 @@ class MyCameraOrbit
 		
 		this.activeCam = camera;
 		
-		if(composer)
-		{ 
-			renderPass.camera = this.activeCam;
-			outlinePass.renderCamera = this.activeCam;
-			if(saoPass) saoPass.camera = this.activeCam;
-		}
+		this.api.setActiveCam({camera})
 		
 		this.render();
 	}
@@ -666,7 +661,7 @@ class MyCameraOrbit
 
 	render() 
 	{
-		if (composer) { composer.render(); } 
+		if (myComposerRenderer) { myComposerRenderer.composer.render(); } 
 		else { this.renderer.render( this.scene, this.activeCam ); }
 	}
 	

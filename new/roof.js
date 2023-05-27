@@ -154,8 +154,8 @@ class Roof
 		
 		setScalePivotGizmo();
 		
-		if(myCameraOrbit.activeCam.userData.isCam2D) { outlineRemoveObj(); }
-		if(myCameraOrbit.activeCam.userData.isCam3D) { outlineAddObj({arr: [obj]}); }
+		if(myCameraOrbit.activeCam.userData.isCam2D) { myComposerRenderer.outlineRemoveObj(); }
+		if(myCameraOrbit.activeCam.userData.isCam3D) { myComposerRenderer.outlineAddObj({arr: [obj]}); }
 		
 		tabObject.activeObjRightPanelUI_1({obj: obj});	// показываем меню UI
 
@@ -312,7 +312,7 @@ class Roof
 		
 		myLevels.updateArrLevel();
 	
-		outlineRemoveObj();
+		myComposerRenderer.outlineRemoveObj();
 
 		this.updateCgsRoof()
 	

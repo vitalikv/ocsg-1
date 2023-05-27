@@ -500,9 +500,9 @@ function hideMenuObjUI_2D(cdm)
 		}
 		else if(cdm.type == 'up')
 		{
-			if(tag == 'wall' && isCam3D) { hideMenuUI(obj); outlineRemoveObj(); }
-			else if(tag == 'room' && isCam2D) { hideMenuUI(obj); outlineRemoveObj(); }
-			else if(tag == 'room' && isCam3D) { hideMenuUI(obj); outlineRemoveObj(); }
+			if(tag == 'wall' && isCam3D) { hideMenuUI(obj); myComposerRenderer.outlineRemoveObj(); }
+			else if(tag == 'room' && isCam2D) { hideMenuUI(obj); myComposerRenderer.outlineRemoveObj(); }
+			else if(tag == 'room' && isCam3D) { hideMenuUI(obj); myComposerRenderer.outlineRemoveObj(); }
 			else if(tag == 'obj' && isCam3D) { hidePivotGizmo(obj); }
 			else if(tag == 'roof' && isCam3D) { hidePivotGizmo(obj); }
 			else if(tag == 'window' && isCam3D) { hidePivotGizmo(obj); }

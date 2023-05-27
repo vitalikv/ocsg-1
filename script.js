@@ -240,76 +240,6 @@ var offset = new THREE.Vector3();
 }
 
 
-var ccc = new THREE.Color().setHex( '0x'+infProject.settings.profile.color );
-
-
-// outline render
-{
-	var composer = new THREE.EffectComposer( renderer );
-	var renderPass = new THREE.RenderPass( scene, cameraTop );
-	var outlinePass = new THREE.OutlinePass( new THREE.Vector2( containerF.clientWidth, containerF.clientHeight ), scene, cameraTop );	
-	
-	composer.setSize( containerF.clientWidth, containerF.clientHeight );
-	composer.addPass( renderPass );
-	composer.addPass( outlinePass );
-
-
-	if(infProject.settings.shader.saoPass)
-	{
-		var saoPass = new THREE.SAOPass(scene, camera, true, true);	
-		//saoPass.resolution.set(8192, 8192);
-		saoPass['params']['output'] = THREE.SAOPass.OUTPUT.Default;
-		saoPass['params']['saoBias'] = 1;
-		saoPass['params']['saoIntensity'] = .05;
-		saoPass['params']['saoScale'] = 100;
-		saoPass['params']['saoKernelRadius'] = 5;
-		saoPass['params']['saoMinResolution'] = 0;
-		saoPass['params']['saoBlur'] = true;
-		saoPass['params']['saoBlurRadius'] = 8;
-		saoPass['params']['saoBlurStdDev'] = 4;
-		saoPass['params']['saoBlurDepthCutoff'] = .01;
-		
-		composer.addPass( saoPass );		
-	}
-	
-	//if(infProject.settings.shader.fxaaPass !== undefined)
-	if(1 == 1)	
-	{
-		var fxaaPass = new THREE.ShaderPass( THREE.FXAAShader );	
-		fxaaPass.material.uniforms[ 'resolution' ].value.x = 1 / ( containerF.clientWidth * window.devicePixelRatio );
-		fxaaPass.material.uniforms[ 'resolution' ].value.y = 1 / ( containerF.clientHeight * window.devicePixelRatio );	
-		fxaaPass.enabled = false;
-		
-		composer.addPass( fxaaPass ); 	
-	}	
-	
-	
-	outlinePass.visibleEdgeColor.set( ccc );
-	outlinePass.hiddenEdgeColor.set( ccc );
-	outlinePass.edgeStrength = Number( 5 );		// сила/прочность
-	outlinePass.edgeThickness = Number( 0.01 );	// толщина
-
-	outlinePass.selectedObjects = [];
-
-
-	function outlineAddObj( cdm )
-	{	
-		if(!cdm) cdm = {};
-		
-		var arr = cdm.arr;	
-		
-		if(cdm.type == 'hover') { if(clickO.last_obj) { arr.push(clickO.last_obj); } }
-		
-		outlinePass.selectedObjects = arr;  
-	}
-
-	function outlineRemoveObj()
-	{
-		outlinePass.selectedObjects = [];
-	}	
-}
-
-
 
 // cdm
 {	
@@ -1110,7 +1040,7 @@ function createPoint( pos, id )
 	point.userData.point.last = { pos : pos.clone(), cdm : '', cross : null };
 	//point.userData.level = myLevels.activeId;
 	
-	point.visible = (camera == cameraTop) ? true : false;	
+	point.visible = (myCameraOrbit.activeCam.userData.isCam2D) ? true : false;	
 	
 	scene.add( point );	
 	
@@ -1449,18 +1379,10 @@ function clickButton( event )
 {
 	if(!clickO.button) return;	
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		planeMath.position.set(0, 0, 0);
 		planeMath.rotation.set(-Math.PI/2, 0, 0);
-	}
-	if(camera == cameraWall)
-	{
-		var dir = camera.getWorldDirection();
-		dir.addScalar(-10);
-		planeMath.position.copy(camera.position);
-		planeMath.position.add(dir);  
-		planeMath.rotation.copy( camera.rotation ); 				
 	}
 	
 	planeMath.updateMatrixWorld();
@@ -1469,7 +1391,7 @@ function clickButton( event )
 	
 	if(intersects.length == 0) return;	
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{ 
 		if(clickO.button == 'create_wall')
 		{
@@ -1506,7 +1428,7 @@ function clickButton( event )
 			loadObjServer({lotid: clickO.options, cursor: true});
 		}		
 	}
-	else if(camera == camera3D)
+	else if(myCameraOrbit.activeCam.userData.isCam3D)
 	{
 		if(clickO.button == 'add_lotid')
 		{
@@ -1821,7 +1743,7 @@ document.addEventListener("keyup", function (e)
 	if(infProject.settings.blockKeyCode) return;
 	clickO.keys[e.keyCode] = false;
 	
-	if(camera == cameraTop)
+	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{
 		if(e.keyCode == 16){ selectionBoxHide(); } 
 	}
@@ -1964,9 +1886,12 @@ let switchCamera;
 
 let myCameraOrbit;
 let myCameraMoveKey;
+let myComposerRenderer;
 let myLevels;
 let myToolPG;
 let startProject;
+
+
 
 document.addEventListener("DOMContentLoaded", ()=>
 {
@@ -1974,6 +1899,9 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	myCameraOrbit = new MyCameraOrbit({container: containerF, renderer, scene});
 	myCameraMoveKey = new MyCameraMoveKey();
+	
+	myComposerRenderer = new MyComposerRenderer({container: containerF, renderer, scene, camera: myCameraOrbit.activeCam});
+	
 	myLevels = new MyLevels();
 
 	tabs = new Tabs();

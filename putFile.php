@@ -59,6 +59,7 @@ new/myCamera.js
 new/myCameraPerspective.js
 new/camera/cameraMoveKey.js
 new/event/eventMyCamera.js
+new/core/composerRender.js
 ';
 
 $arrF = array();

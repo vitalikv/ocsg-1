@@ -10,7 +10,15 @@ class EventMyCamera
 	{
 		
 	}
-
+	
+	setActiveCam({camera})
+	{
+		if(myComposerRenderer)
+		{ 
+			myComposerRenderer.changeCamera({camera});
+		}		
+	}
+		
 	moveCam2D()
 	{  
 		upPosLabels_1();

@@ -140,7 +140,7 @@ function getBoundSelectionBox()
 	
 	clickO.selectBox.arr = arr;
 	
-	outlineAddObj({arr: arr});	
+	myComposerRenderer.outlineAddObj({arr: arr});	
 }
 
 
@@ -174,7 +174,7 @@ function clickWall_2D_selectBox( intersect )
 		}	
 	}
 	
-	outlineAddObj({arr: arr});
+	myComposerRenderer.outlineAddObj({arr: arr});
 	
 	return flag;
 }
@@ -232,7 +232,7 @@ function objDeActiveColor_2D_selectBox(obj)
 	}
 	 
 
-	outlineRemoveObj();
+	myComposerRenderer.outlineRemoveObj();
 	clickO.selectBox.arr = [];
 	
 	return false;

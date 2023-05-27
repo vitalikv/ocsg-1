@@ -9,7 +9,7 @@ function changeCamera(cam)
 	deActiveSelected();
 	
 	
-	outlineRemoveObj();
+	myComposerRenderer.outlineRemoveObj();
 	myCameraOrbit.setActiveCam({cam});
 
 
