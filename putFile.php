@@ -57,6 +57,7 @@ new/tools/myToolPG.js
 new/tools/myPivot.js
 new/myCamera.js
 new/myCameraPerspective.js
+new/camera/cameraMoveKey.js
 new/event/eventMyCamera.js
 ';
 

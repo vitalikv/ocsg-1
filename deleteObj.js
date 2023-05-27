@@ -14,7 +14,7 @@ function detectDeleteObj()
 	
 	var tag = obj.userData.tag;
 	
-	if(camera == camera3D)
+	if(myCameraOrbit.activeCam.userData.isCam3D)
 	{
 		if ( tag == 'wall' ) return;
 	}

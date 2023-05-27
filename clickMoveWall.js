@@ -126,7 +126,7 @@ function compileArrPickZone( wall )
 function moveWall( event, obj ) 
 {		
 	
-	if(camera == camera3D) { cameraMove3D( event ); return; }
+	if(myCameraOrbit.activeCam.userData.isCam3D) { return; }
 	
 	if(param_win.click) 
 	{

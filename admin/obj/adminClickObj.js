@@ -168,7 +168,7 @@ function saveAsImagePreview()
 		var rd = 200/containerF.clientWidth;
 		
 		renderer.setSize( 200, containerF.clientHeight *rd );
-		if(camera == camera3D) { infProject.camera.d3.targetO.visible = false; }
+		if(myCameraOrbit.activeCam.userData.isCam3D) { infProject.camera.d3.targetO.visible = false; }
 		
 		var arrObj = infProject.scene.array.obj;
 		for ( var i = 0; i < arrObj.length; i++ )
@@ -186,7 +186,7 @@ function saveAsImagePreview()
 		var imgData = renderer.domElement.toDataURL("image/jpeg", 0.7);	
 
 		renderer.setSize( containerF.clientWidth, containerF.clientHeight );
-		if(camera == camera3D) { infProject.camera.d3.targetO.visible = true; }
+		if(myCameraOrbit.activeCam.userData.isCam3D) { infProject.camera.d3.targetO.visible = true; }
 		
 		var arrObj = infProject.scene.array.obj;
 		for ( var i = 0; i < arrObj.length; i++ )

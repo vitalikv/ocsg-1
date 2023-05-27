@@ -144,7 +144,7 @@ function getMinDistanceVertex(v, pos)
 
 function moveWD( event, wd ) 
 {
-	if(camera == camera3D) { return; }
+	if(myCameraOrbit.activeCam.userData.isCam3D) { return; }
 	
 	var intersects = rayIntersect( event, planeMath, 'one' ); 	
 	if ( intersects.length > 0 ) { moveWD_2( wd, intersects[ 0 ].point ); }	
@@ -227,34 +227,24 @@ function hideSizeWD( obj )
 		}		
 	}		
 		
-	if(camera == cameraTop || camera == camera3D) 
-	{ 		
-		if(obj)
+	if(obj)
+	{
+		if(obj.userData.tag == 'door' || obj.userData.tag == 'window')
 		{
-			if(obj.userData.tag == 'door' || obj.userData.tag == 'window')
+			for ( var i = 0; i < arrWallFront.wall.length; i++ )
 			{
-				if(camera == camera3D)
-				{
-					
-				}
-				else
-				{
-					for ( var i = 0; i < arrWallFront.wall.length; i++ )
-					{
-						if(!arrWallFront.wall[i].obj.userData.wall.html.label) continue;
-						
-						arrWallFront.wall[i].obj.userData.wall.html.label[0].style.display = 'block';
-						arrWallFront.wall[i].obj.userData.wall.html.label[1].style.display = 'block';
-						 
-						arrWallFront.wall[i].obj.userData.wall.html.label[0].userData.elem.show = true;
-						arrWallFront.wall[i].obj.userData.wall.html.label[1].userData.elem.show = true;	
+				if(!arrWallFront.wall[i].obj.userData.wall.html.label) continue;
+				
+				arrWallFront.wall[i].obj.userData.wall.html.label[0].style.display = 'block';
+				arrWallFront.wall[i].obj.userData.wall.html.label[1].style.display = 'block';
+				 
+				arrWallFront.wall[i].obj.userData.wall.html.label[0].userData.elem.show = true;
+				arrWallFront.wall[i].obj.userData.wall.html.label[1].userData.elem.show = true;	
 
-						upPosLabels_2({elem: arrWallFront.wall[i].obj.userData.wall.html.label[0]});
-						upPosLabels_2({elem: arrWallFront.wall[i].obj.userData.wall.html.label[1]});
-					}					
-				}
-			}			
-		}
+				upPosLabels_2({elem: arrWallFront.wall[i].obj.userData.wall.html.label[0]});
+				upPosLabels_2({elem: arrWallFront.wall[i].obj.userData.wall.html.label[1]});
+			}					
+		}			
 	}
 	
 	for ( var i = 0; i < infProject.tools.controllWD.length; i++ ) { infProject.tools.controllWD[i].visible = false; }

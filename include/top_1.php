@@ -26,16 +26,6 @@
 			</div>	
 		</div>		
 
-		<div class="button1-wrap-1" nameId='zoom_camera_butt_m'>
-			<div class="button1 button_gradient_1" style="width: 19px;"> 
-				-
-			</div>	
-		</div>
-		<div class="button1-wrap-1" nameId='zoom_camera_butt_p'>
-			<div class="button1 button_gradient_1" style="width: 19px;"> 
-				+
-			</div>	
-		</div>
 		<div class="button1-wrap-1">
 			<div nameId='screenshot' class="button1 button_gradient_1"><img src="<?=$path?>img/screenshot.png"></div>
 		</div>		

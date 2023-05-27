@@ -16,7 +16,7 @@ function createImageScene()
 		scene.background = new THREE.Color( 0xffffff );
 		infProject.scene.grid.visible = false;
 		infProject.settings.shader.fxaaPass.enabled = true;
-		renderer.render( scene, camera );
+		renderer.render( scene, myCameraOrbit.activeCam );
 		
 		var strMime = "image/png";
 		var imgData = renderer.domElement.toDataURL(strMime);	
@@ -25,10 +25,10 @@ function createImageScene()
 		scene.background = background;
 		infProject.scene.grid.visible = true;
 		infProject.settings.shader.fxaaPass.enabled = false;
-		renderer.render( scene, camera );
+		renderer.render( scene, myCameraOrbit.activeCam );
  
 				
-		if(camera == camera3D)
+		if(myCameraOrbit.activeCam.userData.isCam3D)
 		{
 			openFileImage(imgData.replace(strMime, "image/octet-stream"), "screenshot.png");
 		}
@@ -61,7 +61,7 @@ function createImageScene()
 
 function showHidePoint(cdm)
 {
-	if(camera == camera3D) return;
+	if(myCameraOrbit.activeCam.userData.isCam3D) return;
 	
 	var point = infProject.scene.array.point;
 	
@@ -124,7 +124,7 @@ function convertImgToBase64(src, callback)
 
 function createImageSvg() 
 {
-	if(camera == camera3D) return;
+	if(myCameraOrbit.activeCam.userData.isCam3D) return;
 		
 	var arr_2 = [];
 	var svg = document.querySelector('#svgFrame');

@@ -137,6 +137,8 @@
 	
 	<script src="<?=$path?>new/myCamera.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/myCameraPerspective.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/camera/cameraMoveKey.js?<?=$vrs?>"></script>
+	
 	<script src="<?=$path?>new/tools/myToolPG.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myPivot.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/switchCamera.js?<?=$vrs?>"></script>

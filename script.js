@@ -70,11 +70,8 @@ cameraWall.zoom = 2;
 function animate() 
 {
 	requestAnimationFrame( animate );	
-
-	cameraZoomTopLoop();	
-	moveCameraToNewPosition();
 	
-	updateKeyDown();
+	myCameraMoveKey.updateKeyDown();
 }
 
 
@@ -1743,8 +1740,6 @@ containerF.addEventListener( 'touchstart', onDocumentMouseDown, false );
 containerF.addEventListener( 'touchmove', onDocumentMouseMove, false );
 containerF.addEventListener( 'touchend', onDocumentMouseUp, false );
 
-//containerF.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
-//containerF.addEventListener('mousewheel', onDocumentMouseWheel, false);	
 
 
 document.addEventListener("keydown", function (e) 
@@ -1814,28 +1809,17 @@ document.addEventListener("keydown", function (e)
 	//if(e.keyCode == 86) { switchLight({switch: true}); } 	// v
 	if(e.keyCode == 89 && !e.ctrlKey) { saveFile({txt: true}); } 			// y
 	//if(e.keyCode == 86) { resetScene(); getAutoBuildingJson(); } // v
+	
+	if(!infProject.settings.blockKeyCode) clickO.keys[e.keyCode] = true;
+	
 } );
 
-document.addEventListener("keydown", function (e) 
-{ 
-	if(infProject.settings.blockKeyCode) return;
-	clickO.keys[e.keyCode] = true;
-	if(e.keyCode == 61) { zoomLoop = 'zoomIn'; }
-	if(e.keyCode == 173) { zoomLoop = 'zoomOut'; }
-	if(e.keyCode == 187) { zoomLoop = 'zoomIn'; }
-	if(e.keyCode == 189) { zoomLoop = 'zoomOut'; }	
-});
+
 
 document.addEventListener("keyup", function (e) 
 { 
 	if(infProject.settings.blockKeyCode) return;
 	clickO.keys[e.keyCode] = false;
-	if(e.keyCode == 173) { zoomLoop = ''; }
-	if(e.keyCode == 61) { zoomLoop = ''; }
-	if(e.keyCode == 187) { zoomLoop = ''; }
-	if(e.keyCode == 189) { zoomLoop = ''; }
-
-	if(zoomLoop != '')	{ zoomLoop = ''; }
 	
 	if(camera == cameraTop)
 	{
@@ -1979,6 +1963,7 @@ let tabObject;
 let switchCamera;
 
 let myCameraOrbit;
+let myCameraMoveKey;
 let myLevels;
 let myToolPG;
 let startProject;
@@ -1988,6 +1973,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	docReady = true; 	
 	
 	myCameraOrbit = new MyCameraOrbit({container: containerF, renderer, scene});
+	myCameraMoveKey = new MyCameraMoveKey();
 	myLevels = new MyLevels();
 
 	tabs = new Tabs();

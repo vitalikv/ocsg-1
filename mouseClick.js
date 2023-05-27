@@ -99,9 +99,6 @@ function onDocumentMouseDown( event )
 	infProject.tools.axis[0].visible = false;
 	infProject.tools.axis[1].visible = false;
 
-	//clickSetCamera2D( event, vk_click );
-	//clickSetCamera3D( event, vk_click );
-
 
 	if ( vk_click == 'right' ) { mouseDownRight( event ); return; } 
 
@@ -385,7 +382,7 @@ function onDocumentMouseMove( event )
 		else if ( tag == 'door' ) { moveWD( event, obj ); }
 		else if ( tag == 'controll_wd' ) { moveToggleChangeWin( event, obj ); }
 		else if ( tag == 'point' ) { movePoint( event, obj ); }
-		else if ( tag == 'room' ) { cameraMove3D( event ); }		
+		else if ( tag == 'room' ) {  }		
 		else if ( tag == 'free_dw' ) { dragWD_2( event, obj ); }
 		else if ( tag == 'obj' ) { moveObjectPop( event ); }
 		else if ( tag == 'obj_spot' ) { moveObjectPop( event ); }

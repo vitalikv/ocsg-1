@@ -192,7 +192,7 @@ class Roof
 	{ 
 		if(!clickO.actMove) return;
 
-		if(camera === camera3D) 
+		if(myCameraOrbit.activeCam.userData.isCam3D) 
 		{
 			this.updateCgsRoof();			
 		}				
@@ -372,7 +372,7 @@ class Roof
 	// обновление обрезаных стен
 	updateCgsRoof()
 	{
-		if(camera !== camera3D) return;
+		if(!myCameraOrbit.activeCam.userData.isCam3D) return;
 		
 		clRoof.resetWall({force: true});
 		clRoof.cgs();

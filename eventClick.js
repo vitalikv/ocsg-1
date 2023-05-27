@@ -21,14 +21,6 @@ $('[data-action="create_gate_1"]').mousedown(function () { clickInterface({butto
 $('[nameId="screenshot"]').mousedown(function () { createImageSvg(); createImageScene(); }); 				
 
 
-$('[nameId="zoom_camera_butt_m"]').mousedown(function () { zoomLoop = 'zoomOut'; });
-$('[nameId="zoom_camera_butt_p"]').mousedown(function () { zoomLoop = 'zoomIn'; });
-$(window).mouseup(function () { zoomLoop = ''; });
-
-
-
-$('[data-action="addPointCenterWall"]').mousedown(function () { addPointCenterWall(); return false; });
-
 
 
 $('input').on('focus', function () { actionInputUI({el: $(this), act: 'down'}); });
@@ -127,7 +119,7 @@ $('[nameId="but_back_catalog_texture_1"]').mousedown(function ()
 $('[add_texture]').mousedown(function () 
 { 
 	var inf = {obj: clickO.last_obj, material: {img: this.attributes.add_texture.value, index: clickO.click.side_wall}, ui: true};
-	if(camera == camera3D)
+	if(myCameraOrbit.activeCam.userData.isCam3D)
 	{ 
 		if(clickO.index) 
 		{ 
