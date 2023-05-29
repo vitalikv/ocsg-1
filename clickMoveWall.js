@@ -65,8 +65,6 @@ function clickWall_3D(cdm)
 
 	myComposerRenderer.outlineAddObj({arr: [obj]});
 	tabObject.activeObjRightPanelUI_1({obj: obj, side: index});
-
-	//createSideFormWall({obj: obj});
 }
 
 

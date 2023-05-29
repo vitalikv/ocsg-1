@@ -56,7 +56,7 @@ class StartProject
 	
 	setCamera()
 	{
-		centerCamera2D({arr: obj_point});
+		myCameraOrbit.centerCamera2D({arr: obj_point});
 		
 			
 		if(this.name === 'demo 1' || this.name === 'demo 2' || this.name === 'demo 3' || this.name === 'demo 4')

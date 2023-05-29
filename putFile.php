@@ -14,7 +14,6 @@ addWD.js
 boxScale2D.js
 mouseClick.js
 changeCamera.js
-moveCamera.js
 clickChangeWD.js
 clickMovePoint.js
 clickMoveWall.js

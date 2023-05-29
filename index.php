@@ -108,7 +108,6 @@
     <script src="<?=$path?>addWD.js?<?=$vrs?>"></script>
     <script src="<?=$path?>mouseClick.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>changeCamera.js?<?=$vrs?>"></script>
-    <script src="<?=$path?>moveCamera.js?<?=$vrs?>"></script>
     <script src="<?=$path?>clickChangeWD.js?<?=$vrs?>"></script>
     <script src="<?=$path?>clickMovePoint.js?<?=$vrs?>"></script>
     <script src="<?=$path?>clickMoveWall.js?<?=$vrs?>"></script>

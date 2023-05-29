@@ -641,7 +641,33 @@ class MyCameraOrbit
 		this.render();
 	}
 	
-	
+
+	// центрируем камеру Camera2D по массиву точек
+	centerCamera2D({arr}={})
+	{
+		if(!arr) return;
+		if(arr.length === 0) return;
+		
+		let pos = new THREE.Vector3();
+
+		let minX = Infinity; 
+		let maxX = -Infinity;
+		let minZ = Infinity; 
+		let maxZ = -Infinity;		
+		
+		for ( let i = 0; i < arr.length; i++ )
+		{
+			if(arr[i].position.x < minX) { minX = arr[i].position.x; }
+			if(arr[i].position.x > maxX) { maxX = arr[i].position.x; }
+			if(arr[i].position.z < minZ) { minZ = arr[i].position.z; }
+			if(arr[i].position.z > maxZ) { maxZ = arr[i].position.z; }
+		}				
+		
+		pos = new THREE.Vector3((maxX - minX)/2 + minX, 0, (maxZ - minZ)/2 + minZ);		
+				
+		this.cam2D.position.x = pos.x;
+		this.cam2D.position.z = pos.z;
+	}	
 	
 	detectBrowser()
 	{

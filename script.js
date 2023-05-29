@@ -1,32 +1,21 @@
 
 var containerF = document.getElementById( 'canvasFrame' );
-//var containerF = document;
-
-
 var canvas = document.createElement( 'canvas' );
 var context = canvas.getContext( 'webgl2' );
 var renderer = new THREE.WebGLRenderer( { canvas: canvas, context: context, preserveDrawingBuffer: true, } );
-
-
-//renderer.gammaInput = true;
-//renderer.gammaOutput = true;
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.localClippingEnabled = true;
-renderer.shadowMap.enabled = true;
+renderer.shadowMap.enabled = false;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
-//renderer.autoClear = false;
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( containerF.clientWidth, containerF.clientHeight );
-//renderer.setClearColor (0xffffff, 1);
-//renderer.setClearColor (0x9c9c9c, 1);
 containerF.appendChild( renderer.domElement );
 
 var scene = new THREE.Scene();
 scene.background = new THREE.Color( 0xffffff );
 //scene.fog = new THREE.Fog('lightblue', 100, 200);
 
-var aspect = containerF.clientWidth/containerF.clientHeight;
-var d = infProject.settings.cam2D;
+
 
 
 
@@ -58,8 +47,7 @@ function renderCamera()
 //----------- start
 
 
-var resolutionD_w = window.screen.availWidth;
-var resolutionD_h = window.screen.availHeight;
+
 
 var kof_rd = 1;
 
@@ -187,42 +175,6 @@ var offset = new THREE.Vector3();
 
 //----------- start
 
-
-if(1==2)
-{
-	var l1 = createSvgLine({count: 1, x1: 400, y1: 700, x2: 800, y2: 400})[0];
-	l1.setAttribute("display", "block");
-	var l2 = createSvgLine({count: 1, x1: 800, y1: 400, x2: 600, y2: 200})[0];
-	l2.setAttribute("display", "block");
-
-	var dir = new THREE.Vector2(l1.x2.baseVal.value - l1.x1.baseVal.value, -(l1.y2.baseVal.value - l1.y1.baseVal.value)).normalize();
-
-	var rotY = Math.atan2(dir.x, dir.y) - Math.PI/2;
-
-
-	var pos = new THREE.Vector2(l1.x2.baseVal.value - l1.x1.baseVal.value, -(l1.y2.baseVal.value - l1.y1.baseVal.value));
-
-	var dx = new THREE.Vector2();
-	dx.x = pos.x * Math.cos(rotY) - pos.y * Math.sin(rotY);
-	dx.y = pos.x * Math.sin(rotY) + pos.y * Math.cos(rotY);
-
-	var l3 = createSvgLine({count: 1, x1: l1.x1.baseVal.value, y1: l1.y1.baseVal.value, x2: dx.x+l1.x1.baseVal.value, y2: -dx.y+l1.y1.baseVal.value})[0];
-	l3.setAttribute("display", "block");
-
-	var x1 = l3.x2.baseVal.value - l1.x2.baseVal.value;
-	var y1 = l3.y2.baseVal.value - l1.y2.baseVal.value;
-
-	var pos = new THREE.Vector2(l2.x2.baseVal.value - l2.x1.baseVal.value, -(l2.y2.baseVal.value - l2.y1.baseVal.value));
-
-	var dx = new THREE.Vector2();
-	dx.x = pos.x * Math.cos(rotY) - pos.y * Math.sin(rotY);
-	dx.y = pos.x * Math.sin(rotY) + pos.y * Math.cos(rotY);
-
-	var l4 = createSvgLine({count: 1, x1: l2.x1.baseVal.value + x1, y1: l2.y1.baseVal.value + y1, x2: dx.x+l2.x1.baseVal.value + x1, y2: -dx.y+l2.y1.baseVal.value + y1})[0];
-	l4.setAttribute("display", "block");
-
-	console.log(2222, THREE.Math.radToDeg(rotY));
-}
 
 
 
@@ -1629,11 +1581,6 @@ document.addEventListener("keydown", function (e)
 		return; 
 	}
 	
-	if(clickO.keys[18] && e.keyCode == 90) 	// alt + z
-	{ 
-		exportToGLB();
-		return;
-	}	
 
 
 	if(e.keyCode == 46) { detectDeleteObj(); }
@@ -1854,244 +1801,6 @@ document.addEventListener("DOMContentLoaded", ()=>
 	renderCamera();	
 });
 
-
-
-
-
-
-function exportToGLB()
-{
-	var arr = [];
-	
-	var point = infProject.scene.array.point;
-	var wall = infProject.scene.array.wall;
-	var window = infProject.scene.array.window;
-	var door = infProject.scene.array.door;
-	var obj = infProject.scene.array.obj;
-	var floor = infProject.scene.array.floor;
-	
-	
-	for ( var i = 0; i < 0; i++ )
-	{ 		
-		var userData = {};
-		userData.id = point[i].userData.id;
-		userData.tag = point[i].userData.tag;		
-		point[i].userData = userData;
-		
-		point[i].geometry = new THREE.BufferGeometry().setFromObject(point[i]);
-		point[i].visible = false;
-		
-		arr[arr.length] = point[i];
-	}	
-	
-	for ( var i = 0; i < wall.length; i++ )
-	{ 		
-		var userData = {};
-		userData.id = wall[i].userData.id;
-		userData.tag = wall[i].userData.tag;
-		userData.point = [wall[i].userData.wall.p[0].position, wall[i].userData.wall.p[1].position];
-		userData.wd = [];
-		
-		for ( var i2 = 0; i2 < wall[i].userData.wall.arrO.length; i2++ )
-		{
-			userData.wd[userData.wd.length] = wall[i].userData.wall.arrO[i2].userData.id
-		}
-		
-		var side = {n: 0, id: 0};
-		for ( var i2 = 0; i2 < wall[i].userData.wall.room.side2.length; i2++ )
-		{
-			var side2 = wall[i].userData.wall.room.side2[i2];			
-			if(side2) { side.n += 1; side.id = i2; }
-		}
-		
-		if(side.n == 1) { userData.hide = side.id; }				
-
-		//var o = createSideFormWall({obj: wall[i]});		
-		wall[i].userData = userData;
-		
-		//arr[arr.length] = o;
-		
-		//wall[i].geometry.sortFacesByMaterialIndex();
-		//wall[i].geometry = new THREE.BufferGeometry().setFromObject(wall[i]);
-		arr[arr.length] = wall[i];
-		wall[i].material[0].map = null;
-		wall[i].material[1].map = null;
-		wall[i].material[2].map = null;
-		wall[i].material[3].map = null;
-		//wall[i].visible = false;
-	}		
-	
-	for ( var i = 0; i < window.length; i++ )
-	{ 
-		var userData = {};
-		userData.id = window[i].userData.id;
-		userData.tag = window[i].userData.tag;		
-		window[i].userData = userData;
-		
-		window[i].material.opacity = 0;
-		window[i].material.transparent = true;
-		window[i].children[0].material.opacity = 0;
-		window[i].children[0].material.transparent = true;
-
-		window[i].geometry = new THREE.BufferGeometry().fromGeometry(window[i].geometry.clone());
-		arr[arr.length] = window[i];
-	}
-	
-	for ( var i = 0; i < door.length; i++ )
-	{ 
-		var userData = {};
-		userData.id = door[i].userData.id;
-		userData.tag = door[i].userData.tag;
-		door[i].userData = userData;
-		
-		door[i].material.opacity = 0;
-		door[i].material.transparent = true;
-		door[i].children[0].material.opacity = 0;
-		door[i].children[0].material.transparent = true;
-
-		door[i].geometry = new THREE.BufferGeometry().fromGeometry(door[i].geometry.clone());
-		arr[arr.length] = door[i];
-	}		
-	
-	for ( var i = 0; i < floor.length; i++ )
-	{		
-		var userData = {};
-		userData.id = floor[i].userData.id;
-		userData.tag = floor[i].userData.tag;
-		floor[i].userData = userData;
-		
-		arr[arr.length] = floor[i];
-		floor[i].material.map = null;
-	}
-	
-	for ( var i = 0; i < obj.length; i++ )
-	{ 
-		obj[i].material.opacity = 0;
-		obj[i].material.transparent = true;
-		
-		arr[arr.length] = obj[i];
-	}	
-	
-	var options = 
-	{
-		trs: true,
-		onlyVisible: false,
-		truncateDrawRange: true,
-		binary: true,
-		forceIndices: true,
-		forcePowerOfTwoTextures: false,
-		maxTextureSize: Number( 20000 ),		
-	};
-
-	var exporter = new THREE.GLTFExporter();
-
-	// Parse the input and generate the glTF output
-	exporter.parse( arr, function ( gltf ) 
-	{
-		
-		if(1==1)
-		{
-			var link = document.createElement( 'a' );
-			link.style.display = 'none';
-			document.body.appendChild( link );			
-			
-			if ( gltf instanceof ArrayBuffer ) 
-			{ 
-				console.log( gltf ); 
-				link.href = URL.createObjectURL( new Blob( [ gltf ], { type: 'application/octet-stream' } ) );
-				link.download = 'file.glb';	
-			}
-			else
-			{
-				console.log( gltf );
-				var gltf = JSON.stringify( gltf, null, 2 );
-				
-				link.href = URL.createObjectURL( new Blob( [ gltf ], { type: 'text/plain' } ) );
-				link.download = 'file.gltf';
-			}
-
-			link.click();			
-			
-		}
-		
-	}, options );
-	
-}
-
-
-function createSideFormWall(cdm)
-{
-	var obj = cdm.obj;
-	
-	var group = {};
-	group.side1 = {};
-	group.side2 = {};
-	group.side3 = {};
-	group.side4 = {};
-	group.side1.geometry = new THREE.Geometry();
-	group.side1.material = obj.material[1].clone();
-	group.side2.geometry = new THREE.Geometry();
-	group.side2.material = obj.material[2].clone();	
-	group.side3.geometry = new THREE.Geometry();
-	group.side3.material = obj.material[3].clone();
-	group.side4.geometry = new THREE.Geometry();
-	group.side4.material = obj.material[0].clone();	
-		
-	
-	for ( var i = 0; i < obj.geometry.vertices.length; i++ )
-	{
-		group.side1.geometry.vertices.push(obj.geometry.vertices[i]);
-		group.side2.geometry.vertices.push(obj.geometry.vertices[i]);
-		group.side3.geometry.vertices.push(obj.geometry.vertices[i]);
-		group.side4.geometry.vertices.push(obj.geometry.vertices[i]);
-	}
-	
-	for ( var i = 0; i < obj.geometry.faceVertexUvs[0].length; i++ )
-	{
-		group.side1.geometry.faceVertexUvs[0].push(obj.geometry.faceVertexUvs[0][i]);
-		group.side2.geometry.faceVertexUvs[0].push(obj.geometry.faceVertexUvs[0][i]);
-		group.side3.geometry.faceVertexUvs[0].push(obj.geometry.faceVertexUvs[0][i]);
-		group.side4.geometry.faceVertexUvs[0].push(obj.geometry.faceVertexUvs[0][i]);
-	}	
-	
-	
-	for ( var i = 0; i < obj.geometry.faces.length; i++ ) 
-	{	
-		var id = obj.geometry.faces[i].materialIndex;		
-
-		var face = obj.geometry.faces[i]; 
-
-		if(id == 1) group.side1.geometry.faces.push(face.clone());
-		if(id == 2) group.side2.geometry.faces.push(face.clone());
-		if(id == 3) group.side3.geometry.faces.push(face.clone());
-		if(id == 0) group.side4.geometry.faces.push(face.clone());		
-	}
-	
-	var groupWall = new THREE.Group();
-		
-	for(var index in group) 
-	{ 
-		var geometry = new THREE.BufferGeometry().fromGeometry(group[index].geometry);
-		
-		var faceO = new THREE.Mesh( geometry, group[index].material );
-		//faceO.material.transparent = false;
-		groupWall.add(faceO);
-		
-		//faceO.position.copy(obj.position);
-		//faceO.rotation.copy(obj.rotation);		
-	}
-	
-		
-	groupWall.position.copy(obj.position);
-	groupWall.rotation.copy(obj.rotation);	
-	scene.add(groupWall);
-	
-	groupWall.userData = obj.userData;
-
-	console.log(555, groupWall);
-	
-	return groupWall;	
-}
 
 
 
