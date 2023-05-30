@@ -59,6 +59,8 @@ new/myCameraPerspective.js
 new/camera/cameraMoveKey.js
 new/event/eventMyCamera.js
 new/core/composerRender.js
+new/core/myMouse.js
+new/core/myManagerClick.js
 ';
 
 $arrF = array();
@@ -127,8 +129,12 @@ for ($i = 0; $i < count($arrF); $i++)
 	//echo $str[0][0].' '.count($str[0]).'<br>';	
 	
 	//echo 'fname_s_0'.($i+1).'|'.$arrF[$i].'<br>';
-	
-	if (preg_match('#\b'.$arrF[$i].'\b#Us', 'renderCamera')) 
+
+	if (preg_match('#\b'.$arrF[$i].'\b#Us', 'hide')) 
+	{
+		echo "Пропускаем <br>". $arrF[$i]."<br><br>";
+	}	
+	else if (preg_match('#\b'.$arrF[$i].'\b#Us', 'renderCamera')) 
 	{
 		echo "Пропускаем <br>". $arrF[$i]."<br><br>";
 	}

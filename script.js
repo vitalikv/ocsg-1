@@ -1330,7 +1330,7 @@ function clickInterface(cdm)
 	if(clickO.move)
 	{
 		deActiveSelected();
-		mouseDownRight();
+		myMouse.mouseDownRight();
 	}
 
 	console.log(cdm);
@@ -1536,15 +1536,7 @@ function findObjFromId( cdm, id )
 
 
 
-containerF.addEventListener('contextmenu', function(event) { event.preventDefault() });
-containerF.addEventListener( 'mousedown', onDocumentMouseDown, false );
-containerF.addEventListener( 'mousemove', onDocumentMouseMove, false );
-containerF.addEventListener( 'mouseup', onDocumentMouseUp, false );
 
-
-containerF.addEventListener( 'touchstart', onDocumentMouseDown, false );
-containerF.addEventListener( 'touchmove', onDocumentMouseMove, false );
-containerF.addEventListener( 'touchend', onDocumentMouseUp, false );
 
 
 
@@ -1763,6 +1755,8 @@ let tabPlan;
 let tabObject;
 let switchCamera;
 
+let myMouse;
+let myManagerClick;
 let myCameraOrbit;
 let myCameraMoveKey;
 let myComposerRenderer;
@@ -1776,6 +1770,8 @@ document.addEventListener("DOMContentLoaded", ()=>
 {
 	docReady = true; 	
 	
+	myManagerClick = new MyManagerClick();
+	myMouse = new MyMouse({container: containerF, scene});
 	myCameraOrbit = new MyCameraOrbit({container: containerF, renderer, scene});
 	myCameraMoveKey = new MyCameraMoveKey();
 	
