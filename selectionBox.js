@@ -25,7 +25,7 @@ function selectionBoxDown(event)
 	else { return false; }
 
 	clickO.rayhit = null;
-	hideMenuObjUI_2D();
+	myManagerClick.hideMenuObjUI_2D();
 	
 	infProject.tools.selectionBox.msdown = true;
 	infProject.tools.selectionBox.coords = coords(event);

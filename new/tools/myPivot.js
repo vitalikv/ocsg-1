@@ -543,7 +543,7 @@ function crPivot(params)
 			startPivot(params);
 			
 			camOrbit.stopMove = true;
-			setMouseStop(true);
+			myMouse.setMouseStop(true);
 			
 			container.onmousemove = (e) => 
 			{
@@ -558,7 +558,7 @@ function crPivot(params)
 				container.onmouseup = null;
 				
 				camOrbit.stopMove = false;
-				setMouseStop(false);
+				myMouse.setMouseStop(false);
 
 				camOrbit.render();
 			};			

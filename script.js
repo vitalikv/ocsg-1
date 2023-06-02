@@ -178,18 +178,7 @@ var offset = new THREE.Vector3();
 
 
 
-if(1==2)
-{
-	var svgline = createSvgLine({count: 1, x1: 400, y1: 700, x2: 800, y2: 700, display: "block"})[0]; 
-	upSvgLinePosScene({el: [svgline]});
-	updateSvgLine({el: svgline});
 
-	var svgline2 = createSvgPath({count: 1, arrS: [new THREE.Vector2(420, 710), new THREE.Vector2(400, 700), new THREE.Vector2(420, 690)], stroke_width: "2px", display: "block"})[0];
-	upSvgPathPosScene({el: [svgline2]});  
-
-	console.log(55555, svgline);
-	console.log(55555, svgline2); 
-}
 
 
 // создаем круг (объект), для обозначения куда смотрит камера в 3D режиме
@@ -1258,72 +1247,7 @@ function setTexture(cdm)
 
 
 
-// нажали на кнопку интерфейса, загружаем объект	
-function clickButton( event )
-{
-	if(!clickO.button) return;	
-	
-	if(myCameraOrbit.activeCam.userData.isCam2D)
-	{
-		planeMath.position.set(0, 0, 0);
-		planeMath.rotation.set(-Math.PI/2, 0, 0);
-	}
-	
-	planeMath.updateMatrixWorld();
 
-	var intersects = rayIntersect( event, planeMath, 'one' );
-	
-	if(intersects.length == 0) return;	
-	
-	if(myCameraOrbit.activeCam.userData.isCam2D)
-	{ 
-		if(clickO.button == 'create_wall')
-		{
-			clickO.obj = null; 
-			clickO.last_obj = null;
-			
-			var point = createPoint( intersects[0].point, 0 );
-			point.position.y = 0;
-			point.userData.point.type = clickO.button; 
-			clickO.move = point;				
-		}
-		else if(clickO.button == 'create_wd_1')
-		{
-			createEmptyFormWD_1({type:'door', lotid: null});
-		}		
-		else if(clickO.button == 'create_wd_2')
-		{
-			createEmptyFormWD_1({type:'door', lotid: 10});
-		}
-		else if(clickO.button == 'add_wind')
-		{
-			createEmptyFormWD_1({type:'window', lotid: clickO.options});
-		}
-		else if(clickO.button == 'create_gate_1')
-		{
-			createEmptyFormWD_1({type:'door', lotid: -2});
-		}			
-		else if(clickO.button == 'add_roof')
-		{
-			loadObjServer({lotid: clickO.options, roof: true, cursor: true});
-		}		
-		else if(clickO.button == 'add_lotid')
-		{
-			loadObjServer({lotid: clickO.options, cursor: true});
-		}		
-	}
-	else if(myCameraOrbit.activeCam.userData.isCam3D)
-	{
-		if(clickO.button == 'add_lotid')
-		{
-			loadObjServer({lotid: clickO.options, cursor: true});
-		}		
-	}
-	
-	clickO.buttonAct = clickO.button;
-	clickO.button = null;
-}	
-	
 
 function clickInterface(cdm)
 {
@@ -1338,35 +1262,23 @@ function clickInterface(cdm)
 	{		
 		deActiveSelected();	
 		
-		if(cdm.button == 'point_1')
+		if(cdm.button === 'point_1') clickO.button = 'create_wall';
+		else if(cdm.button === 'create_wd_1') clickO.button = cdm.button;	
+		else if(cdm.button === 'create_wd_2') clickO.button = cdm.button;
+		else if(cdm.button === 'create_gate_1') clickO.button = cdm.button;
+		else if(cdm.button === 'add_wind')
 		{
-			clickO.button = 'create_wall';
-		}
-		else if(cdm.button == 'create_wd_1')
-		{
-			clickO.button = 'create_wd_1';
-		}		
-		else if(cdm.button == 'create_wd_2')
-		{
-			clickO.button = 'create_wd_2';
-		}
-		else if(cdm.button == 'add_wind')
-		{
-			clickO.button = 'add_wind';
+			clickO.button = cdm.button;
 			clickO.options = cdm.id;
-		}
-		else if(cdm.button == 'create_gate_1')
-		{
-			clickO.button = 'create_gate_1';
 		}		
-		else if(cdm.button == 'add_roof')
+		else if(cdm.button === 'add_roof')
 		{
-			clickO.button = 'add_roof';
+			clickO.button = cdm.button;
 			clickO.options = cdm.lotid;
 		}		
-		else if(cdm.button == 'add_lotid')
+		else if(cdm.button === 'add_lotid')
 		{
-			clickO.button = 'add_lotid';
+			clickO.button = cdm.button;
 			clickO.options = cdm.value;
 		}					
 	}
@@ -1381,7 +1293,7 @@ function deActiveSelected()
 	clickO.obj = null;
 	clickO.rayhit = null;
 	
-	hideMenuObjUI_2D();		
+	myManagerClick.hideMenuObjUI_2D();		
 }
 
 
@@ -1799,7 +1711,19 @@ document.addEventListener("DOMContentLoaded", ()=>
 
 
 
+function testSss()
+{
+	var svgline = createSvgLine({count: 1, x1: 400, y1: 700, x2: 800, y2: 700, display: "block"})[0]; 
+	upSvgLinePosScene({el: [svgline]});
+	updateSvgLine({el: svgline});
 
+	var svgline2 = createSvgPath({count: 1, arrS: [new THREE.Vector2(420, 710), new THREE.Vector2(400, 700), new THREE.Vector2(420, 690)], stroke_width: "2px", display: "block"})[0];
+	upSvgPathPosScene({el: [svgline2]});  
+
+	console.log(55555, svgline);
+	console.log(55555, svgline2); 
+}	
+	
 
 
 

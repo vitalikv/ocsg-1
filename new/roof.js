@@ -167,13 +167,10 @@ class Roof
 	// перемещение крыши по мыши
 	moveRoof( event )
 	{	
-		let intersects = rayIntersect( event, planeMath, 'one' ); 
+		let intersects = rayIntersect( event, planeMath, 'one' ); 		
+		if(intersects.length === 0) return;
 		
-		if(intersects.length == 0) return;
-		
-		let obj = clickO.move;
-		
-		if(!clickO.actMove) clickO.actMove = true;		
+		let obj = clickO.move;	
 		
 		let pos = new THREE.Vector3().addVectors( intersects[ 0 ].point, clickO.offset );	
 		
@@ -190,8 +187,6 @@ class Roof
 
 	clickUpRoof(obj)
 	{ 
-		if(!clickO.actMove) return;
-
 		if(myCameraOrbit.activeCam.userData.isCam3D) 
 		{
 			this.updateCgsRoof();			

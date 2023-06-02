@@ -31,7 +31,7 @@ function detectDeleteObj()
 
 function deleteWall_1( wall )
 {	
-	hideMenuUI(wall);
+	myManagerClick.hideMenuUI(wall);
 	
 	var points = wall.userData.wall.p;
 
@@ -144,7 +144,7 @@ function deletePoint( point )
 	if(!point){ return [ null, null ]; }
 	if(point.p.length != 2){ return [ null, null ]; }
 	
-	hideMenuUI(point);
+	myManagerClick.hideMenuUI(point);
 	
 	var wall_1 = point.w[0];
 	var wall_2 = point.w[1];
@@ -282,8 +282,8 @@ function deleteWinDoor(cdm)
 			deleteValueFromArrya({arr: wall.userData.wall.arrO, o: wd});
 		}	
 		
-		if(wd.userData.tag == 'window') { hideMenuUI(wd); }
-		if(wd.userData.tag == 'door') { hideMenuUI(wd); }
+		if(wd.userData.tag == 'window') { myManagerClick.hideMenuUI(wd); }
+		if(wd.userData.tag == 'door') { myManagerClick.hideMenuUI(wd); }
 		
 		clickO = resetPop.clickO();
 		hideSizeWD( wd ); 

@@ -123,13 +123,7 @@ function clickGizmo( intersect )
 function moveGizmo( event )
 {	
 	var intersects = rayIntersect( event, planeMath, 'one' );	 	 
-	if(intersects.length == 0) return;
-	
-	if(!clickO.actMove)
-	{
-		clickO.actMove = true;
-	}	
-	
+	if(intersects.length === 0) return;
 	
 	var gizmo = infProject.tools.gizmo;
 	var pivot = infProject.tools.pivot;
@@ -196,12 +190,12 @@ function moveGizmo( event )
 
 function clickMouseUpGizmo(cdm)
 {	
-	if(clickO.actMove && infProject.tools.gizmo.userData.gizmo.obj.userData.tag === 'obj')
+	if(infProject.tools.gizmo.userData.gizmo.obj.userData.tag === 'obj')
 	{	
 		getInfoEvent23({obj: infProject.tools.gizmo.userData.gizmo.obj, type: 'move'});
 	}
 
-	if(clickO.actMove && infProject.tools.pivot.userData.pivot.obj.userData.tag === 'roof')
+	if(infProject.tools.pivot.userData.pivot.obj.userData.tag === 'roof')
 	{
 		clRoof.updateCgsRoof();
 	}	

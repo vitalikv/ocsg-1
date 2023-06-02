@@ -127,16 +127,10 @@ function getInfoObj_UndoRedo(cdm)
 // перемещение по 2D плоскости 
 function moveObjectPop( event )
 {	
-	var intersects = rayIntersect( event, planeMath, 'one' ); 
+	var intersects = rayIntersect( event, planeMath, 'one' ); 	
+	if(intersects.length === 0) return;
 	
-	if(intersects.length == 0) return;
-	
-	var obj = clickO.move;
-	
-	if(!clickO.actMove)
-	{
-		clickO.actMove = true;
-	}		
+	var obj = clickO.move;		
 	
 	var pos = new THREE.Vector3().addVectors( intersects[ 0 ].point, clickO.offset );	
 	
@@ -155,85 +149,82 @@ function moveObjectPop( event )
 
 function clickMouseUpObject(obj)
 { 
-	if(clickO.actMove)
-	{		 
-
-		getInfoEvent23({obj: obj, type: 'move'}); 
+	getInfoEvent23({obj: obj, type: 'move'}); 
+	
+	if(myCameraOrbit.activeCam.userData.isCam2D)
+	{	
+		const cam2D = myCameraOrbit.activeCam;
 		
-		if(myCameraOrbit.activeCam.userData.isCam2D)
-		{	
-			const cam2D = myCameraOrbit.activeCam;
-			
-			// svg линии
-			if(1==1)
-			{
-				var circle = infProject.svg.furn.boxCircle.elem;	
+		// svg линии
+		if(1==1)
+		{
+			var circle = infProject.svg.furn.boxCircle.elem;	
 
-				for ( var i = 0; i < circle.length; i++ )
+			for ( var i = 0; i < circle.length; i++ )
+			{
+				var x = ( ( circle[i].cx.baseVal.value - containerF.offsetLeft ) / containerF.clientWidth ) * 2 - 1;
+				var y = - ( ( circle[i].cy.baseVal.value - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
+				var A = new THREE.Vector3(x, y, -1);
+				A.unproject(cam2D);
+				
+				circle[i].userData.svg.circle.pos = A;
+				
+				//updateSvgCircle({el: circle[i]});
+			}
+			
+			// box1
+			{	
+				var arrP = [];
+				var box1 = infProject.svg.furn.box1; 			
+					
+				for ( var i = 0; i < box1.userData.svg.path.arrS.length; i++ )
 				{
-					var x = ( ( circle[i].cx.baseVal.value - containerF.offsetLeft ) / containerF.clientWidth ) * 2 - 1;
-					var y = - ( ( circle[i].cy.baseVal.value - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
+					var arrS = box1.userData.svg.path.arrS[i];
+					
+					var x = ( ( arrS.x - containerF.offsetLeft ) / containerF.clientWidth ) * 2 - 1;
+					var y = - ( ( arrS.y - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
 					var A = new THREE.Vector3(x, y, -1);
 					A.unproject(cam2D);
-					
-					circle[i].userData.svg.circle.pos = A;
-					
-					//updateSvgCircle({el: circle[i]});
-				}
+
+					arrP[arrP.length] = A;
+				}	
+						
+				arrP[arrP.length] = arrP[0];
 				
-				// box1
-				{	
-					var arrP = [];
-					var box1 = infProject.svg.furn.box1; 			
-						
-					for ( var i = 0; i < box1.userData.svg.path.arrS.length; i++ )
-					{
-						var arrS = box1.userData.svg.path.arrS[i];
-						
-						var x = ( ( arrS.x - containerF.offsetLeft ) / containerF.clientWidth ) * 2 - 1;
-						var y = - ( ( arrS.y - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
-						var A = new THREE.Vector3(x, y, -1);
-						A.unproject(cam2D);
-
-						arrP[arrP.length] = A;
-					}	
-							
-					arrP[arrP.length] = arrP[0];
-					
-					box1.userData.svg.path.arrP = arrP;
-					//updateSvgPath({el: box1});
-				}
-				
-				// box2
-				{	
-					var arrP = [];
-					var box2 = infProject.svg.furn.box2; 
-					
-					for ( var i = 0; i < box2.userData.svg.path.arrS.length; i++ )
-					{
-						var arrS = box2.userData.svg.path.arrS[i];
-						
-						var x = ( ( arrS.x - containerF.offsetLeft ) / containerF.clientWidth ) * 2 - 1;
-						var y = - ( ( arrS.y - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
-						var A = new THREE.Vector3(x, y, -1);
-						A.unproject(cam2D);
-
-						arrP[arrP.length] = A;
-					}	
-							
-					arrP[arrP.length] = arrP[0];
-					
-					box2.userData.svg.path.arrP = arrP;
-					//updateSvgPath({el: box2});
-				}
-
-
-				// offsetLine
-				upSvgLinePosScene({el: infProject.svg.furn.offset.elem});
-				upSvgLinePosScene({el: infProject.svg.furn.size.elem});
+				box1.userData.svg.path.arrP = arrP;
+				//updateSvgPath({el: box1});
 			}
+			
+			// box2
+			{	
+				var arrP = [];
+				var box2 = infProject.svg.furn.box2; 
+				
+				for ( var i = 0; i < box2.userData.svg.path.arrS.length; i++ )
+				{
+					var arrS = box2.userData.svg.path.arrS[i];
+					
+					var x = ( ( arrS.x - containerF.offsetLeft ) / containerF.clientWidth ) * 2 - 1;
+					var y = - ( ( arrS.y - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
+					var A = new THREE.Vector3(x, y, -1);
+					A.unproject(cam2D);
+
+					arrP[arrP.length] = A;
+				}	
+						
+				arrP[arrP.length] = arrP[0];
+				
+				box2.userData.svg.path.arrP = arrP;
+				//updateSvgPath({el: box2});
+			}
+
+
+			// offsetLine
+			upSvgLinePosScene({el: infProject.svg.furn.offset.elem});
+			upSvgLinePosScene({el: infProject.svg.furn.size.elem});
 		}
-	}	
+	}
+	
 }
 
 

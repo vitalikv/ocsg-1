@@ -149,14 +149,8 @@ function clickPivot( intersect )
 
 function movePivot( event )
 {	
-	var intersects = rayIntersect( event, planeMath, 'one' ); 
-	
-	if(intersects.length == 0) return;
-	
-	if(!clickO.actMove)
-	{
-		clickO.actMove = true;
-	}		
+	var intersects = rayIntersect( event, planeMath, 'one' ); 	
+	if(intersects.length === 0) return;	
 	
 	var pivot = infProject.tools.pivot;
 	var gizmo = infProject.tools.gizmo;
@@ -230,13 +224,14 @@ function setScalePivotGizmo()
 
 function clickMouseUpPivot(cdm)
 {	
-	if(clickO.actMove && infProject.tools.pivot.userData.pivot.obj.userData.tag === 'obj')
+	if(infProject.tools.pivot.userData.pivot.obj.userData.tag === 'obj')
 	{	
 		getInfoEvent23({obj: infProject.tools.pivot.userData.pivot.obj, type: 'move'});
 	}
 
-	if(clickO.actMove && infProject.tools.pivot.userData.pivot.obj.userData.tag === 'roof')
+	if(infProject.tools.pivot.userData.pivot.obj.userData.tag === 'roof')
 	{
+		console.log(9999999)
 		clRoof.updateCgsRoof();
 	}
 }

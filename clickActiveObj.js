@@ -5,7 +5,7 @@
 function activeHover2D( event )
 {
 	if (!myCameraOrbit.activeCam.userData.isCam2D) { return; }
-	if (isMouseDown1) { return; }
+	//if (isMouseDown1) { return; }
 
 	if ( clickO.move ) 
 	{
@@ -15,9 +15,7 @@ function activeHover2D( event )
 		if (tag == 'point') { if (clickO.move.userData.point.type) return; }		
 	}
 	
-	var rayhit = null;
-		
-	
+	let rayhit = null;
 
 	if(!infProject.scene.block.hover.point)
 	{
@@ -26,21 +24,18 @@ function activeHover2D( event )
 	}
 	
 
-	if ( rayhit ) 
+	if(rayhit) 
 	{
-		// выделяем объект
 		var object = rayhit.object;
 		var tag = object.userData.tag; 				
 
-		//if ( clickO.last_obj == object ) { activeHover2D_2(); return; }	// объект активирован (крансый цвет), поэтому не подсвечиваем
 		if ( clickO.hover == object ) { return; }				// объект уже подсвечен
 
 
 		if ( tag == 'point' ) 
 		{ 
-			//object.material.color = new THREE.Color(infProject.listColor.hover2D); 
 			object.material.opacity = 1;
-			$('html,body').css('cursor', 'move');
+			containerF.style.cursor = 'move';
 		}
 
 		
@@ -66,9 +61,8 @@ function activeHover2D_2()
 	
 	if( tag == 'point' ) 
 	{ 
-		//object.material.color = object.userData.point.color;
 		object.material.opacity = 0.75;
-		$('html,body').css('cursor', 'default');
+		containerF.style.cursor = 'default';
 	}
 	
 	clickO.hover = null;
@@ -78,19 +72,6 @@ function activeHover2D_2()
 
 
 
-// выделяем/активируем объект
-// кликнули на объект (выделение) (cameraTop)
-function objActiveColor_2D(obj)
-{ 
-	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
-	if(!obj) { return; }   
-	if(clickO.last_obj == obj) { return; }
-			
-	var tag = obj.userData.tag;
-	
-	if(tag == 'point'){ myComposerRenderer.outlineAddObj({arr: [obj]}); }	 
-	else if(tag == 'wall'){ myComposerRenderer.outlineAddObj({arr: [obj]}); } 	
-}
  
 
 	

@@ -6,7 +6,9 @@ class MyMouse
 	container;
 	longClick = false;
 	lastClickTime = 0;
-	catchTime = 0.30;	
+	catchTime = 0.30;
+
+	isMove = false;
 	
 	constructor({container, scene})
 	{
@@ -85,20 +87,20 @@ class MyMouse
 
 		if(selectionBoxDown(event)) { return; }		// selectionBox
 		
-		let clickButton = '';
+		let btn = '';
 		
 		if(event.changedTouches)
 		{
 			event.clientX = event.changedTouches[0].clientX;
 			event.clientY = event.changedTouches[0].clientY;
-			clickButton = 'left';
+			btn = 'left';
 		}	
 
 		switch ( event.button ) 
 		{
-			case 0: clickButton = 'left'; break;
-			case 1: clickButton = 'right'; /*middle*/ break;
-			case 2: clickButton = 'right'; break;
+			case 0: btn = 'left'; break;
+			case 1: btn = 'right'; /*middle*/ break;
+			case 2: btn = 'right'; break;
 		}
 
 
@@ -106,23 +108,22 @@ class MyMouse
 		infProject.tools.axis[1].visible = false;
 
 
-		if (clickButton == 'right') { this.mouseDownRight( event ); return; } 
+		if (btn === 'right') { this.mouseDownRight( event ); return; } 
 
 
-		if(clickO.move)
+		if(clickO.move && clickO.move.userData.tag === 'point' && clickO.move.userData.point.type)
 		{
-			if(clickO.move.userData.tag == 'point') 
-			{			
-				if(clickO.move.userData.point.type) { clickCreateWall( clickO.move ); return; }  
-			}
+			clickCreateWall( clickO.move ); return;
 		}
-		 
-		clickO.obj = null; 	
-		clickO.actMove = false;	
+		
+		this.isMove = false;
+		
+		clickO.obj = null; 				
 		clickO.selectBox.drag = false;
 		clickO.rayhit = myManagerClick.getRayhit(event); 
 		
-		myManagerClick.click({type: 'down'});
+		const result = myManagerClick.click({type: 'down'});		
+		if(result) this.setMouseStop(true);
 		
 		this.render();
 	}
@@ -131,6 +132,7 @@ class MyMouse
 	onmousemove = (event) => 
 	{ 
 		//if(onfM.stop) return;
+		this.isMove = true;
 		
 		if(event.changedTouches)
 		{
@@ -142,7 +144,7 @@ class MyMouse
 		
 		if(clickO.elem) { moveElementBoxScale2D(event); }
 
-		clickButton( event );
+		this.clickButton( event );
 			
 
 		if (!this.longClick) { this.longClick = ( this.lastClickTime - new Date().getTime() < this.catchTime ) ? true : false; }
@@ -175,7 +177,7 @@ class MyMouse
 		
 		activeHover2D( event );
 
-		renderCamera();
+		this.render();
 	}
 
 
@@ -188,7 +190,8 @@ class MyMouse
 		
 		if(!this.longClick) 
 		{ 
-			myManagerClick.click({type: 'up'}); 
+			const result = myManagerClick.click({type: 'up'});		
+			if(result) this.setMouseStop(true);			
 		}	
 		
 		var obj = clickO.move;		
@@ -212,10 +215,10 @@ class MyMouse
 			else if(tag == 'wall') { clickWallMouseUp(obj); }
 			else if(tag == 'window' || obj.userData.tag == 'door') { clickWDMouseUp(obj); }	
 			else if(tag == 'controll_wd') { clickMouseUpToggleWD(obj); } 
-			else if(tag == 'obj') { clickMouseUpObject(obj); }
-			else if(tag == 'pivot') { clickMouseUpPivot(); }
-			else if(tag == 'gizmo') { clickMouseUpGizmo(); }
-			else if ( tag == 'roof' ) { clRoof.moveRoof( event ); clRoof.clickUpRoof(obj); }
+			else if(tag == 'obj' && this.isMove) { clickMouseUpObject(obj); }
+			else if(tag == 'pivot' && this.isMove) { clickMouseUpPivot(); }
+			else if(tag == 'gizmo' && this.isMove) { clickMouseUpGizmo(); }
+			else if ( tag == 'roof' && this.isMove) { clRoof.moveRoof( event ); clRoof.clickUpRoof(obj); }
 			
 			if(tag == 'free_dw') {  }
 			else if (tag == 'point') 
@@ -230,9 +233,9 @@ class MyMouse
 			upSelectionBox();
 		}	
 		
-		if(clickO.move === null) setMouseStop(false);
+		if(clickO.move === null) this.setMouseStop(false);
 		param_win.click = false;
-		isMouseDown1 = false;
+		
 		clickO.elem = null;
 		
 		infProject.tools.axis[0].visible = false;
@@ -243,8 +246,78 @@ class MyMouse
 		this.render();
 	}
 
+	// если кликнули на объект, то блокируем камеру
+	setMouseStop(value) 
+	{
+		myCameraOrbit.stopMove = value;
+	}
 
+	// нажали на кнопку интерфейса, загружаем объект	
+	clickButton( event )
+	{
+		if(!clickO.button) return;	
+		
+		if(myCameraOrbit.activeCam.userData.isCam2D)
+		{
+			planeMath.position.set(0, 0, 0);
+			planeMath.rotation.set(-Math.PI/2, 0, 0);
+		}
+		
+		planeMath.updateMatrixWorld();
 
+		var intersects = rayIntersect( event, planeMath, 'one' );
+		
+		if(intersects.length == 0) return;	
+		
+		if(myCameraOrbit.activeCam.userData.isCam2D)
+		{ 
+			if(clickO.button == 'create_wall')
+			{
+				clickO.obj = null; 
+				clickO.last_obj = null;
+				
+				var point = createPoint( intersects[0].point, 0 );
+				point.position.y = 0;
+				point.userData.point.type = clickO.button; 
+				clickO.move = point;				
+			}
+			else if(clickO.button == 'create_wd_1')
+			{
+				createEmptyFormWD_1({type:'door', lotid: null});
+			}		
+			else if(clickO.button == 'create_wd_2')
+			{
+				createEmptyFormWD_1({type:'door', lotid: 10});
+			}
+			else if(clickO.button == 'add_wind')
+			{
+				createEmptyFormWD_1({type:'window', lotid: clickO.options});
+			}
+			else if(clickO.button == 'create_gate_1')
+			{
+				createEmptyFormWD_1({type:'door', lotid: -2});
+			}			
+			else if(clickO.button == 'add_roof')
+			{
+				loadObjServer({lotid: clickO.options, roof: true, cursor: true});
+			}		
+			else if(clickO.button == 'add_lotid')
+			{
+				loadObjServer({lotid: clickO.options, cursor: true});
+			}		
+		}
+		else if(myCameraOrbit.activeCam.userData.isCam3D)
+		{
+			if(clickO.button == 'add_lotid')
+			{
+				loadObjServer({lotid: clickO.options, cursor: true});
+			}		
+		}
+		
+		clickO.buttonAct = clickO.button;
+		clickO.button = null;
+	}	
+	
 	
 	render()
 	{
