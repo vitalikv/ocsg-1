@@ -265,9 +265,8 @@ class MyMouse
 		
 		planeMath.updateMatrixWorld();
 
-		var intersects = rayIntersect( event, planeMath, 'one' );
-		
-		if(intersects.length == 0) return;	
+		const intersects = rayIntersect( event, planeMath, 'one' );		
+		if(intersects.length === 0) return;	
 		
 		if(myCameraOrbit.activeCam.userData.isCam2D)
 		{ 
@@ -276,7 +275,7 @@ class MyMouse
 				clickO.obj = null; 
 				clickO.last_obj = null;
 				
-				var point = createPoint( intersects[0].point, 0 );
+				const point = createPoint( intersects[0].point, 0 );
 				point.position.y = 0;
 				point.userData.point.type = clickO.button; 
 				clickO.move = point;				
@@ -316,7 +315,17 @@ class MyMouse
 		
 		clickO.buttonAct = clickO.button;
 		clickO.button = null;
-	}	
+	}
+
+
+	// очищаем клик/декативируем старое выделение (объект и меню)
+	clearClick()
+	{
+		clickO.obj = null;
+		clickO.rayhit = null;
+		
+		myManagerClick.hideMenuObjUI_2D();			
+	}
 	
 	
 	render()

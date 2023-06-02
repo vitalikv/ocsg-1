@@ -1,22 +1,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // находим родитель у дочернего объекта
 function getParentObj(cdm)
 {
@@ -69,21 +53,5 @@ function getParentObj(cdm)
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

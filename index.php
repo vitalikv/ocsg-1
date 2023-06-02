@@ -106,7 +106,6 @@
     <script src="<?=$path?>crossWall.js?<?=$vrs?>"></script>
     <script src="<?=$path?>addPoint.js?<?=$vrs?>"></script>
     <script src="<?=$path?>addWD.js?<?=$vrs?>"></script>
-    <script src="<?=$path?>mouseClick.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>changeCamera.js?<?=$vrs?>"></script>
     <script src="<?=$path?>clickChangeWD.js?<?=$vrs?>"></script>
     <script src="<?=$path?>clickMovePoint.js?<?=$vrs?>"></script>
@@ -161,6 +160,7 @@
 	<script src="<?=$path?>new/core/myMouse.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/core/myManagerClick.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/core/composerRender.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/core/commonFunc.js?<?=$vrs?>"></script>
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		

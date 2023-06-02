@@ -12,7 +12,6 @@ calculationArea.js
 addPoint.js
 addWD.js
 boxScale2D.js
-mouseClick.js
 changeCamera.js
 clickChangeWD.js
 clickMovePoint.js
@@ -61,6 +60,7 @@ new/event/eventMyCamera.js
 new/core/composerRender.js
 new/core/myMouse.js
 new/core/myManagerClick.js
+new/core/commonFunc.js
 ';
 
 $arrF = array();

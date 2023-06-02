@@ -124,7 +124,7 @@ function setInfoEvent1( cdm )
 	
 	infProject.ur.count = n; 
 	
-	deActiveSelected();
+	myMouse.clearClick();
 	
 	
 	if(infProject.ur.back[n].cdm == 'objPop_move'){ setInfoEvent23(cdm); }

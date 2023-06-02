@@ -111,7 +111,7 @@ class MyLevels
 		if(this.activeId === id) return;
 		
 		myComposerRenderer.outlineRemoveObj();
-		deActiveSelected();
+		myMouse.clearClick();
 		
 		const posY = this.getLevelPos0({lastId: this.activeId, newId: id});
 		
@@ -358,7 +358,7 @@ class MyLevels
 	// удаляем один этаж
 	deleteOneLevel(id)
 	{
-		deActiveSelected();
+		myMouse.clearClick();
 		
 		let { walls: wall, points: point, doors: door, windows: window, floors: floor, ceilings: ceiling, objs: obj, roofs: roof } = this.getDestructObject(id);
 		

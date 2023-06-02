@@ -1253,14 +1253,14 @@ function clickInterface(cdm)
 {
 	if(clickO.move)
 	{
-		deActiveSelected();
+		myMouse.clearClick();
 		myMouse.mouseDownRight();
 	}
 
 	console.log(cdm);
 	if(cdm)
 	{		
-		deActiveSelected();	
+		myMouse.clearClick();	
 		
 		if(cdm.button === 'point_1') clickO.button = 'create_wall';
 		else if(cdm.button === 'create_wd_1') clickO.button = cdm.button;	
@@ -1286,15 +1286,6 @@ function clickInterface(cdm)
 }	
 
 
-
-// декативируем старое выделение (объект и меню)
-function deActiveSelected()
-{
-	clickO.obj = null;
-	clickO.rayhit = null;
-	
-	myManagerClick.hideMenuObjUI_2D();		
-}
 
 
 function boxUnwrapUVs(geometry, scale = new THREE.Vector3(1, 1, 1)) {

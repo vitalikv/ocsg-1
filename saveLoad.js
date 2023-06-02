@@ -79,7 +79,7 @@ var resetPop =
 
 function resetScene() 
 {
-	deActiveSelected();
+	myMouse.clearClick();
 	//hideMenuUI(clickO.last_obj);		
 	
 	myLevels.deleteOneLevel(myLevels.activeId);

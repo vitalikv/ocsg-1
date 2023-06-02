@@ -13,7 +13,7 @@ class EventMyCamera
 	
 	setActiveCam({camera})
 	{
-		deActiveSelected();
+		myMouse.clearClick();
 		myComposerRenderer.outlineRemoveObj();	
 		if(myComposerRenderer) myComposerRenderer.changeCamera({camera});
 
