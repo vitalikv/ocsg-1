@@ -109,22 +109,21 @@ class MyManagerClick
 	}
 
 
-	click(cdm)
+	click({type, rayhit})
 	{ 
-		if(!clickO.rayhit) { this.hideMenuObjUI_2D(cdm); return; }
+		if(!rayhit) { this.hideMenuObjUI_2D({type}); return; }
 
-		var obj = clickO.obj = clickO.rayhit.object;
-		this.hideMenuObjUI_2D(cdm);
+		var obj = clickO.obj = rayhit.object;
+		this.hideMenuObjUI_2D({type});
 		
 		
-		var tag = obj.userData.tag;
-		var rayhit = clickO.rayhit;
-		var flag = true;
+		const tag = obj.userData.tag;
+		let flag = true;
 		
 		const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
 		const isCam3D = myCameraOrbit.activeCam.userData.isCam3D;
 		
-		if(cdm.type == 'down')
+		if(type == 'down')
 		{  
 			if(clickToolWD(clickO.move)) { flag = false; }
 			else if( tag == 'pivot' ) { clickPivot( rayhit ); }
@@ -134,19 +133,19 @@ class MyManagerClick
 			else if( tag == 'window' && isCam2D ) { clickWD( rayhit ); }
 			else if( tag == 'door' && isCam2D ) { clickWD( rayhit ); }
 			else if( tag == 'controll_wd' ) { clickToggleChangeWin( rayhit ); }
-			else if( tag == 'obj' && isCam2D ) { clickObject3D({obj: obj, rayhit: rayhit}); }
-			else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clickObject3D({obj: obj, rayhit: rayhit}); }
-			else if( tag == 'roof' && isCam2D ) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }
-			else if( tag == 'roof' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }		
+			else if( tag == 'obj' && isCam2D ) { clickObject3D({obj, rayhit}); }
+			else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clickObject3D({obj, rayhit}); }
+			else if( tag == 'roof' && isCam2D ) { clRoof.clickRoof({obj, rayhit}); }
+			else if( tag == 'roof' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clRoof.clickRoof({obj, rayhit}); }		
 			else { flag = false; }
 		}
-		else if(cdm.type == 'up')
+		else if(type == 'up')
 		{	
-			if( tag == 'wall' && isCam3D ) { clickWall_3D({obj: obj, rayhit: rayhit}); }
-			else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clickObject3D({obj: obj, rayhit: rayhit}); }
-			else if( tag == 'room' && isCam3D ) { clickFloor({obj: obj}); }
-			else if( tag == 'room' && isCam3D ) { clickFloor({obj: obj}); }
-			else if( tag == 'roof' && isCam3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clRoof.clickRoof({obj: obj, rayhit: rayhit}); }
+			if( tag == 'wall' && isCam3D ) { clickWall_3D({obj, rayhit}); }
+			else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clickObject3D({obj, rayhit}); }
+			else if( tag == 'room' && isCam3D ) { clickFloor({obj}); }
+			else if( tag == 'room' && isCam3D ) { clickFloor({obj}); }
+			else if( tag == 'roof' && isCam3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clRoof.clickRoof({obj, rayhit}); }
 			else if( tag == 'window' && isCam3D) { clickWD( rayhit ); }
 			else if( tag == 'door' && isCam3D) { clickWD( rayhit ); }		
 			else { flag = false; }
@@ -165,7 +164,7 @@ class MyManagerClick
 			this.consoleInfo( obj );
 		}
 		
-		return flag;
+		return flag ? obj : null;
 	}
 
 	// выделяем/активируем объект
@@ -184,13 +183,11 @@ class MyManagerClick
 
 	
 	// деактивируем выбранный объект
-	hideMenuObjUI_2D(cdm)
+	hideMenuObjUI_2D({type} = {type: ''})
 	{
 		if(objDeActiveColor_2D_selectBox(clickO.obj)) { return; }
 		
-		var obj = clickO.last_obj;
-		if(!cdm) { cdm = {type: ''}; }
-		
+		var obj = clickO.last_obj;		
 		var flag = true;
 		
 		const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
@@ -201,23 +198,23 @@ class MyManagerClick
 			objDeActiveColor_2D(); 
 			console.log(obj.userData.tag);
 
-			var tag = obj.userData.tag;
+			const tag = obj.userData.tag;
 			
-			if(cdm.type == 'down')
+			if(type === 'down')
 			{
-				if(tag == 'wall' && isCam2D) { this.hideMenuUI(obj); }
-				else if(tag == 'point' && isCam2D) { this.hideMenuUI(obj); }
-				else if(tag == 'window' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(obj); }
-				else if(tag == 'door' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(obj); }
+				if(tag == 'wall' && isCam2D) { this.hideMenuUI(); }
+				else if(tag == 'point' && isCam2D) { this.hideMenuUI(); }
+				else if(tag == 'window' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(); }
+				else if(tag == 'door' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(); }
 				else if(tag == 'obj' && isCam2D) { hidePivotGizmo(obj); }
 				else if(tag == 'roof' && isCam2D) { hidePivotGizmo(obj); }
 				else { flag = false; }
 			}
-			else if(cdm.type == 'up')
+			else if(type === 'up')
 			{
-				if(tag == 'wall' && isCam3D) { this.hideMenuUI(obj); myComposerRenderer.outlineRemoveObj(); }
-				else if(tag == 'room' && isCam2D) { this.hideMenuUI(obj); myComposerRenderer.outlineRemoveObj(); }
-				else if(tag == 'room' && isCam3D) { this.hideMenuUI(obj); myComposerRenderer.outlineRemoveObj(); }
+				if(tag == 'wall' && isCam3D) { this.hideMenuUI();  }
+				else if(tag == 'room' && isCam2D) { this.hideMenuUI(); }
+				else if(tag == 'room' && isCam3D) { this.hideMenuUI(); }
 				else if(tag == 'obj' && isCam3D) { hidePivotGizmo(obj); }
 				else if(tag == 'roof' && isCam3D) { hidePivotGizmo(obj); }
 				else if(tag == 'window' && isCam3D) { hidePivotGizmo(obj); }
@@ -226,11 +223,11 @@ class MyManagerClick
 			}
 			else
 			{
-				if(tag == 'wall') { this.hideMenuUI(obj); }
-				else if(tag == 'point') { this.hideMenuUI(obj); }
-				else if(tag == 'window') { hideSizeWD(obj); this.hideMenuUI(obj); }
-				else if(tag == 'door') { hideSizeWD(obj); this.hideMenuUI(obj); }
-				else if(tag == 'room') { this.hideMenuUI(obj); }
+				if(tag == 'wall') { this.hideMenuUI(); }
+				else if(tag == 'point') { this.hideMenuUI(); }
+				else if(tag == 'window') { hideSizeWD(obj); this.hideMenuUI(); }
+				else if(tag == 'door') { hideSizeWD(obj); this.hideMenuUI(); }
+				else if(tag == 'room') { this.hideMenuUI(); }
 				else if(tag == 'obj') { hidePivotGizmo(obj); }
 				else if(tag == 'roof') { hidePivotGizmo(obj); }
 				else { flag = false; }
@@ -243,19 +240,12 @@ class MyManagerClick
 		}
 	}
 
-	hideMenuUI(obj) 
+	hideMenuUI() 
 	{
-		if(!obj) return;  console.log('hideMenuUI', obj);
-		if(!obj.userData) return;
-		if(!obj.userData.tag) return;
-		
-		const tag = obj.userData.tag;
-		
-		if(tag == 'wall') { tabObject.activeObjRightPanelUI_1(); }
-		else if(tag == 'point') { tabObject.activeObjRightPanelUI_1(); }
-		else if(tag == 'window') { tabObject.activeObjRightPanelUI_1(); }
-		else if(tag == 'door') { tabObject.activeObjRightPanelUI_1(); }
-		else if(tag == 'room') { tabObject.activeObjRightPanelUI_1(); }
+		console.log('hideMenuUI');
+
+		tabObject.activeObjRightPanelUI_1();
+		myComposerRenderer.outlineRemoveObj();
 	}
 
 	

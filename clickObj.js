@@ -307,13 +307,13 @@ function hidePivotGizmo(obj)
 	var gizmo = infProject.tools.gizmo;
 				
 	
-	if(clickO.rayhit)
+	if(myMouse.rayhit)
 	{
-		if(pivot.userData.pivot.obj == clickO.rayhit.object) return;		
-		if(clickO.rayhit.object.userData.tag == 'pivot') return;
+		if(pivot.userData.pivot.obj == myMouse.rayhit.object) return;		
+		if(myMouse.rayhit.object.userData.tag == 'pivot') return;
 		
-		if(gizmo.userData.gizmo.obj == clickO.rayhit.object) return;		
-		if(clickO.rayhit.object.userData.tag == 'gizmo') return;
+		if(gizmo.userData.gizmo.obj == myMouse.rayhit.object) return;		
+		if(myMouse.rayhit.object.userData.tag == 'gizmo') return;
 	}	
 	
 	
@@ -332,8 +332,7 @@ function hidePivotGizmo(obj)
 	
 	hideElementHtml(infProject.html.furn.size);
 	hideElementHtml(infProject.html.furn.offset);
-	
-	//clickO.obj = null;  
+	 
 	clickO.last_obj = null;
 	
 	tabObject.activeObjRightPanelUI_1(); 	// UI

@@ -7,9 +7,6 @@
 function inputChangeWall_1(cdm)
 {
 	var wall = infProject.scene.array.wall[0];
-	//if(!clickO.obj){ return; } 
-	//if(clickO.obj.userData.tag != 'wall'){ return; } 	
-	//var wall = clickO.obj; 
 	 
 	cdm.wall = wall;
 	cdm.type = 'wallRedBlue';

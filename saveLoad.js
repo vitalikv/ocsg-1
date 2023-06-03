@@ -51,7 +51,7 @@ var resetPop =
 	
 	clickO : function()
 	{
-		var inf = { obj: null, last_obj: null, hover: null, rayhit : null, button : null, buttonAct : null };
+		var inf = { obj: null, last_obj: null, hover: null, rayhit : null, button : null };
 		inf.down = null;
 		inf.move = null;
 		inf.up = null;

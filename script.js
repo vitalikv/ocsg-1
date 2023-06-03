@@ -1249,42 +1249,6 @@ function setTexture(cdm)
 
 
 
-function clickInterface(cdm)
-{
-	if(clickO.move)
-	{
-		myMouse.clearClick();
-		myMouse.mouseDownRight();
-	}
-
-	console.log(cdm);
-	if(cdm)
-	{		
-		myMouse.clearClick();	
-		
-		if(cdm.button === 'point_1') clickO.button = 'create_wall';
-		else if(cdm.button === 'create_wd_1') clickO.button = cdm.button;	
-		else if(cdm.button === 'create_wd_2') clickO.button = cdm.button;
-		else if(cdm.button === 'create_gate_1') clickO.button = cdm.button;
-		else if(cdm.button === 'add_wind')
-		{
-			clickO.button = cdm.button;
-			clickO.options = cdm.id;
-		}		
-		else if(cdm.button === 'add_roof')
-		{
-			clickO.button = cdm.button;
-			clickO.options = cdm.lotid;
-		}		
-		else if(cdm.button === 'add_lotid')
-		{
-			clickO.button = cdm.button;
-			clickO.options = cdm.value;
-		}					
-	}
-
-}	
-
 
 
 

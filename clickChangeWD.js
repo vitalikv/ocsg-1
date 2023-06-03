@@ -153,11 +153,11 @@ function showRulerWD(obj)
 	// инфа для перемещения линеек	
 	obj.userData.door.ruler.boundPos = boundPos;	
 	
-	// может быть clickO.rayhit.object.userData.tag == 'controll_wd' ( когда кликнули на контроллер, а потом ввели значение в input и нажали enter )
-	if(clickO.rayhit.object.userData.tag == 'window' || clickO.rayhit.object.userData.tag == 'door') 
+	// может быть myMouse.rayhit.object.userData.tag == 'controll_wd' ( когда кликнули на контроллер, а потом ввели значение в input и нажали enter )
+	if(myMouse.rayhit.object.userData.tag == 'window' || myMouse.rayhit.object.userData.tag == 'door') 
 	{ 
-		//obj.userData.door.ruler.faceIndex = clickO.rayhit.faceIndex; 		
-		obj.userData.door.ruler.faceIndex = clickO.rayhit.face.normal.z;
+		//obj.userData.door.ruler.faceIndex = myMouse.rayhit.faceIndex; 		
+		obj.userData.door.ruler.faceIndex = myMouse.rayhit.face.normal.z;
 	}	 
 	
 	showRulerWD_2D(obj);  
@@ -315,7 +315,6 @@ function clickToggleChangeWin( intersect, cdm )
 	}
 /* 	else if(camera == cameraWall)
 	{
-		//clickO.obj = null;
 		planeMath.position.copy( intersect.point );
 		planeMath.rotation.set( 0, controll.rotation.y, 0 );
 		

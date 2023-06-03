@@ -9,6 +9,8 @@ class MyMouse
 	catchTime = 0.30;
 
 	isMove = false;
+	rayhit = null;
+	selectedObj = null;
 	
 	constructor({container, scene})
 	{
@@ -32,7 +34,6 @@ class MyMouse
 
 	mouseDownRight()
 	{		
-		clickO.buttonAct = null;
 		clickO.button = null; 
 		
 		var obj = clickO.move;
@@ -120,10 +121,10 @@ class MyMouse
 		
 		clickO.obj = null; 				
 		clickO.selectBox.drag = false;
-		clickO.rayhit = myManagerClick.getRayhit(event); 
+		this.rayhit = myManagerClick.getRayhit(event); 
 		
-		const result = myManagerClick.click({type: 'down'});		
-		if(result) this.setMouseStop(true);
+		this.selectedObj = myManagerClick.click({type: 'down', rayhit: this.rayhit});		
+		if(this.selectedObj) this.setMouseStop(true);
 		
 		this.render();
 	}
@@ -190,8 +191,8 @@ class MyMouse
 		
 		if(!this.longClick) 
 		{ 
-			const result = myManagerClick.click({type: 'up'});		
-			if(result) this.setMouseStop(true);			
+			this.selectedObj = myManagerClick.click({type: 'up', rayhit: this.rayhit});		
+			if(this.selectedObj) this.setMouseStop(true);			
 		}	
 		
 		var obj = clickO.move;		
@@ -274,6 +275,7 @@ class MyMouse
 			{
 				clickO.obj = null; 
 				clickO.last_obj = null;
+				this.selectedObj = null;
 				
 				const point = createPoint( intersects[0].point, 0 );
 				point.position.y = 0;
@@ -313,7 +315,7 @@ class MyMouse
 			}		
 		}
 		
-		clickO.buttonAct = clickO.button;
+		
 		clickO.button = null;
 	}
 
@@ -322,7 +324,8 @@ class MyMouse
 	clearClick()
 	{
 		clickO.obj = null;
-		clickO.rayhit = null;
+		
+		this.rayhit = null;
 		
 		myManagerClick.hideMenuObjUI_2D();			
 	}

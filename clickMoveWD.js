@@ -218,13 +218,13 @@ function moveWD_2( wd, pos )
 function hideSizeWD( obj )
 {	
 	
-	if(clickO.rayhit) 
+	if(myMouse.rayhit) 
 	{
-		if(clickO.rayhit.object == obj) return;	// кликнули на один и тот же активный объект
+		if(myMouse.rayhit.object == obj) return;	// кликнули на один и тот же активный объект
 		
-		if(clickO.rayhit.object.userData.tag == 'controll_wd')
+		if(myMouse.rayhit.object.userData.tag == 'controll_wd')
 		{
-			if(clickO.rayhit.object.userData.controll_wd.obj == obj) { return; }
+			if(myMouse.rayhit.object.userData.controll_wd.obj == obj) { return; }
 		}		
 	}		
 		

@@ -119,12 +119,8 @@ function findCommmonWallPoint(point1, point2)
 
 
 // разделение стены на две половины по центру 
-function addPointCenterWall()
-{
-	var wall = clickO.obj;
-	clickO.obj = null;
-	objDeActiveColor_2D();
-	
+function addPointCenterWall({wall})
+{	
 	var pos1 = wall.userData.wall.p[0].position;
 	var pos2 = wall.userData.wall.p[1].position;
 	

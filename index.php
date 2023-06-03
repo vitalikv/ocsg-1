@@ -124,8 +124,7 @@
 	
 	
 	<script src="<?=$path?>hideWall.js?<?=$vrs?>"></script>
-    <script src="<?=$path?>inputWall.js?<?=$vrs?>"></script>  	
-	<script src="<?=$path?>clickActiveObj.js?<?=$vrs?>"></script>    
+    <script src="<?=$path?>inputWall.js?<?=$vrs?>"></script>   
     <script src="<?=$path?>saveLoad.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>uiInterface.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>uiInterface_catalog.js?<?=$vrs?>"></script>
