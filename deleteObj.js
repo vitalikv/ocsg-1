@@ -227,8 +227,8 @@ function deletePoint( point )
 	var point1 = findObjFromId( 'point', p1.id );
 	var point2 = findObjFromId( 'point', p2.id );	
 	
-	if(point1 == null) { point1 = createPoint( p1.pos, p1.id ); }
-	if(point2 == null) { point2 = createPoint( p2.pos, p2.id ); }	
+	if(point1 == null) { point1 = myHouse.myPoint.createPoint( p1.pos, p1.id ); }
+	if(point2 == null) { point2 = myHouse.myPoint.createPoint( p2.pos, p2.id ); }	
 	
 	var wall = crtW({ p: [point1, point2], width: width, offsetZ : offsetZ, height : height }); 
 

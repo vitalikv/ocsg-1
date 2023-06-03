@@ -641,8 +641,8 @@ async function loadFileLevel(json)
 		var point1 = findObjFromId( 'point', wall[i].points[0].id );
 		var point2 = findObjFromId( 'point', wall[i].points[1].id );	
 		
-		if(point1 == null) { point1 = createPoint( wall[i].points[0].pos, wall[i].points[0].id ); }
-		if(point2 == null) { point2 = createPoint( wall[i].points[1].pos, wall[i].points[1].id ); }
+		if(point1 == null) { point1 = myHouse.myPoint.createPoint( wall[i].points[0].pos, wall[i].points[0].id ); }
+		if(point2 == null) { point2 = myHouse.myPoint.createPoint( wall[i].points[1].pos, wall[i].points[1].id ); }
 	
 
 		//var dir = new THREE.Vector3().subVectors( point2.position, point1.position ).normalize();

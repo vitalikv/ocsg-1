@@ -1,0 +1,172 @@
+
+
+class MyMovePoint 
+{
+	isDown = false;
+	offset = new THREE.Vector3();
+	isTypeToolPoint = false;	// режим добавления точки из каталога
+	sObj = null;
+	
+	constructor()
+	{
+		
+	}
+	
+	clickRight({obj})
+	{
+		if(!this.isTypeToolPoint) return;
+		
+		if(obj.w.length == 0){ deleteOnePoint(obj); }  
+		else 
+		{ 
+			if(obj.userData.point.type == 'continue_create_wall')
+			{
+				var point = obj.p[0]; 
+				deleteWall_3({wall: obj.w[0]}); 
+				//upLabelPlan_1([point.w[0]]);					
+			}
+			
+			if(point.userData.point.last.cdm == 'new_point_1') { deletePoint( point ).wall.userData.id = point.userData.point.last.cross.walls.old; }
+		}		
+	}
+	
+	onmousedown = ({event, obj, toolPoint, btn} = {event, obj, toolPoint: undefined, btn: undefined}) =>
+	{
+		this.isDown = false;
+		this.isMove = false;
+		this.sObj = obj;
+		
+		if(this.isTypeToolPoint) 
+		{
+			if(btn && btn === 'right')
+			{
+				this.clickRight({obj});
+				this.isTypeToolPoint = false;
+				return;				
+			}
+			
+			clickCreateWall( obj );
+			this.sObj = obj = clickO.move;
+			
+			if(!obj) 
+			{				
+				this.isTypeToolPoint = false;
+				return;
+			}
+		}
+		
+		if(toolPoint !== undefined) this.isTypeToolPoint = toolPoint;
+		
+		
+		planeMath.position.set( 0, obj.position.y, 0 );
+		planeMath.rotation.set(-Math.PI/2, 0, 0);
+		planeMath.updateMatrixWorld();
+		
+		const intersects = rayIntersect(event, planeMath, 'one');
+		if (intersects.length === 0) return;
+		this.offset = intersects[0].point;		
+
+		param_win.click = true;	
+		param_wall.wallR = detectChangeArrWall([], obj);
+
+		// запоминаем последнее положение точки и дверей/окон
+		if(1==1)
+		{  
+			obj.userData.point.last.pos = obj.position.clone(); 		
+			
+			for ( var i = 0; i < param_wall.wallR.length; i++ )
+			{						
+				for ( var i2 = 0; i2 < param_wall.wallR[i].userData.wall.arrO.length; i2++ )
+				{
+					var wd = param_wall.wallR[i].userData.wall.arrO[i2];
+					 
+					wd.userData.door.last.pos = wd.position.clone();
+					wd.userData.door.last.rot = wd.rotation.clone(); 
+				}
+			}		 			
+		}
+
+		tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
+
+		this.isDown = true;		
+	}
+	
+	onmousemove = (event) =>
+	{
+		if (!this.isDown) return;
+		this.isMove = true;
+		
+		const obj = this.sObj;
+	
+		if(obj.userData.point.type) 
+		{ 
+			if(obj.userData.point.type == 'continue_create_wall') {  } 
+			else { dragToolPoint( event, obj ); return; } 
+		}	
+		
+		if(param_win.click) 
+		{
+			clickMovePoint_BSP(param_wall.wallR);
+			param_win.click = false;
+		}	
+		
+		const intersects = rayIntersect(event, planeMath, 'one');
+		if (intersects.length === 0) return;
+
+		const offset = new THREE.Vector3().subVectors(intersects[0].point, this.offset);
+		this.offset = intersects[0].point;		
+		
+		offset.y = 0;		
+		
+		obj.position.add( offset );				
+		dragToolPoint( event, obj );	// направляющие
+				
+		 
+		for ( let i = 0; i < obj.w.length; i++ )
+		{			
+			updateWall(obj.w[i]);	
+		}		
+	
+		upLineYY(obj);			
+		
+		
+		// отображение длины стен
+		let arrW = [];
+		for ( let i = 0; i < obj.p.length; i++ )
+		{
+			arrW.push(...obj.p[i].w);		
+		}		
+		arrW = [...new Set(arrW)];
+		upLabelPlan_1(arrW);
+	}
+	
+	onmouseup = ({event}) =>
+	{
+		if (!this.isDown) return;
+		if (!this.isMove) return;
+
+		const obj = this.sObj;
+		
+		this.isDown = false;
+		this.isMove = false;
+		this.sObj = null;
+		
+		obj.userData.point.last.pos = obj.position.clone();
+		
+		upLineYY(obj);			
+		
+		upLabelPlan_1(param_wall.wallR);
+
+		if(!obj.userData.point.type) 
+		{ 
+			clickCreateWall(obj);
+		}
+	}
+}
+
+
+
+
+
+
+

@@ -101,7 +101,7 @@ infProject.svg.furn.boxCircle.elem = createSvgCircle({count: 8, color: infProjec
 infProject.svg.furn.boxCircle.show = infProject.settings.obj.cam2D.show.scale; 
 
 // controllWD контроллеры для изменения ширины/длины wd
-infProject.tools = { pivot: createPivot_2(), gizmo: createGizmo360_2(), cutWall: [], point: createToolPoint(), axis: createLineAxis(), controllWD: createControllWD() }; 
+infProject.tools = { pivot: createPivot_2(), gizmo: createGizmo360_2(), cutWall: [], axis: createLineAxis(), controllWD: createControllWD() }; 
 infProject.tools.floorPl = createPlaneOutlineFloor();
 infProject.catalog = { texture: infoListTexture() }; 
 infProject.listColor = resetPop.listColor(); 
@@ -825,34 +825,6 @@ function createGeometryCone_1(cdm)
 }
 
 
-function createToolPoint()
-{	
-	var n = 0;
-	var v = [];
-	
-	var geometry = new THREE.SphereGeometry( 0.1, 16, 16 );
-	
-	var obj = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial( { color : 0xcccccc, transparent: true, opacity: 0.5, depthTest: false } ) );
-	obj.userData.tag = 'tool_point';
-	obj.userData.tool_point = {};
-	obj.renderOrder = 1;
-	obj.position.set(0,0,0);
-	obj.visible = false;	
-	scene.add( obj );
-	
-	//default vertices
-	if(1==1)
-	{
-		var v2 = [];
-		var v = obj.geometry.vertices;
-		for ( var i = 0; i < v.length; i++ ) { v2[i] = v[i].clone(); }
-		obj.userData.tool_point.v2 = v2;		
-	}	
-	
-	//upUvs_4( obj )
-	return obj;
-}
-
 
 
 
@@ -888,37 +860,6 @@ function upUvs_4( obj )
 
 
 
-
-function createPoint( pos, id )
-{
-	var point = obj_point[obj_point.length] = new THREE.Mesh( infProject.tools.point.geometry, infProject.tools.point.material.clone() );
-	point.position.copy( pos );		
-
-	point.renderOrder = 1;
-	 
-	point.w = [];
-	point.p = [];
-	point.start = [];		
-	point.zone = [];
-	point.zoneP = [];
-	
-	
-	if(id == 0) { id = countId; countId++; }	
-	point.userData.id = id;	
-	point.userData.tag = 'point';
-	point.userData.point = {};
-	point.userData.point.color = point.material.color.clone();
-	point.userData.point.cross = null;
-	point.userData.point.type = null;
-	point.userData.point.last = { pos : pos.clone(), cdm : '', cross : null };
-	//point.userData.level = myLevels.activeId;
-	
-	point.visible = (myCameraOrbit.activeCam.userData.isCam2D) ? true : false;	
-	
-	scene.add( point );	
-	
-	return point;
-}
 
 
   
@@ -1629,6 +1570,7 @@ let myCameraMoveKey;
 let myComposerRenderer;
 let myLevels;
 let myToolPG;
+let myHouse;
 let startProject;
 
 
@@ -1656,6 +1598,8 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	
 	myToolPG = new MyToolPG();
+	
+	myHouse = new MyHouse();
 	
 	startProject = new StartProject();
 	startProject.init();

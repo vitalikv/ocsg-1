@@ -43,20 +43,7 @@ class EventMyCamera
 		const k = 1 / delta;
 		if(k <= infProject.settings.camera.limitZoom) 
 		{		
-			// point geometry
-			const point = infProject.tools.point;	
-			const v = point.geometry.vertices;
-			const v2 = point.userData.tool_point.v2;
-				
-			for ( let i = 0; i < v2.length; i++ )
-			{
-				v[i].x = v2[i].x * 1/delta;
-				v[i].z = v2[i].z * 1/delta;
-			}	
-
-			infProject.tools.point.geometry.verticesNeedUpdate = true;
-			infProject.tools.point.geometry.elementsNeedUpdate = true;
-
+			myHouse.myPoint.setScale({value: delta});
 
 			// wd рулетки 
 			for ( let i = 0; i < infProject.scene.size.wd_1.line.length; i++ ){ infProject.scene.size.wd_1.line[i].scale.set(1,1/delta,1/delta); }			

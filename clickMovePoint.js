@@ -1,44 +1,6 @@
 
 
 
-function clickPoint( intersect )
-{
-	if(clickO.move)
-	{
-		if(clickO.move.userData.tag == 'free_dw') { return; }	// кликнули на точку, когда добавляем окно
-	}	 
-	
-	var obj = intersect.object;	
-	clickO.move = obj;
-	
-
-	offset = new THREE.Vector3().subVectors( intersect.object.position, intersect.point );
-	planeMath.position.set( 0, intersect.point.y, 0 );
-	planeMath.rotation.set(-Math.PI/2, 0, 0);	
-
-	param_win.click = true;	
-	param_wall.wallR = detectChangeArrWall([], clickO.move);
-
-	// запоминаем последнее положение точки и дверей/окон
-	if(1==1)
-	{  
-		obj.userData.point.last.pos = obj.position.clone(); 		
-		
-		for ( var i = 0; i < param_wall.wallR.length; i++ )
-		{						
-			for ( var i2 = 0; i2 < param_wall.wallR[i].userData.wall.arrO.length; i2++ )
-			{
-				var wd = param_wall.wallR[i].userData.wall.arrO[i2];
-				 
-				wd.userData.door.last.pos = wd.position.clone();
-				wd.userData.door.last.rot = wd.rotation.clone(); 
-			}
-		}		 			
-	}
-
-	tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
-}
-
 
 
 function getWallArrOUR()
@@ -62,54 +24,6 @@ function getWallArrOUR()
 
 
 
-
-
-function movePoint( event, obj )
-{
-	if(obj.userData.point.type) 
-	{ 
-		if(obj.userData.point.type == 'continue_create_wall') {  } 
-		else { dragToolPoint( event, obj ); return; } 
-	}	
-	
-	if(param_win.click) 
-	{
-		clickMovePoint_BSP(param_wall.wallR);
-		param_win.click = false;
-	}	
-	
-	var intersects = rayIntersect( event, planeMath, 'one' ); 
-	
-	if ( intersects.length > 0 ) 
-	{
-		var pos = new THREE.Vector3().addVectors( intersects[ 0 ].point, offset );				
-		pos.y = obj.position.y; 
-		
-		var pos2 = new THREE.Vector3().subVectors( pos, obj.position );
-		
-		obj.position.copy( pos );				
-		dragToolPoint( event, obj );	// направляющие
-				
-		 
-		for ( var i = 0; i < obj.w.length; i++ )
-		{			
-			updateWall(obj.w[i]);	
-		}		
-	
-		upLineYY(obj);			
-		
-		
-		// отображение длины стен
-		let arrW = [];
-		for ( let i = 0; i < obj.p.length; i++ )
-		{
-			arrW.push(...obj.p[i].w);		
-		}		
-		arrW = [...new Set(arrW)];
-		upLabelPlan_1(arrW);
-	}
-	
-}
 
 
 function limitMovePoint(point, point2, wall, side, pos2)
@@ -620,16 +534,7 @@ function undoRedoChangeMovePoint( point, walls )
 }
 
 
-function clickPointMouseUp(obj)
-{  	
-	if(comparePos(obj.userData.point.last.pos, obj.position)) { return; }		// не двигали
-	
-	obj.userData.point.last.pos = obj.position.clone();
-	
-	upLineYY(obj);			
-	
-	upLabelPlan_1(param_wall.wallR);	 
-}
+
 
 
 

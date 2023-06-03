@@ -125,7 +125,7 @@ function addPointCenterWall({wall})
 	var pos2 = wall.userData.wall.p[1].position;
 	
 	var pos = new THREE.Vector3().subVectors( pos2, pos1 ).divideScalar( 2 ).add(pos1); 
-	var point = createPoint( pos, 0 );
+	var point = myHouse.myPoint.createPoint( pos, 0 );
 	
 	addPoint_1( wall, point );
 }
@@ -230,8 +230,8 @@ function splitWalls( wall, point )
 	var point1 = findObjFromId( 'point', p1.id );
 	var point2 = findObjFromId( 'point', p2.id );	
 	
-	if(point1 == null) { point1 = createPoint( p1.pos, p1.id ); }
-	if(point2 == null) { point2 = createPoint( p2.pos, p2.id ); }		
+	if(point1 == null) { point1 = myHouse.myPoint.createPoint( p1.pos, p1.id ); }
+	if(point2 == null) { point2 = myHouse.myPoint.createPoint( p2.pos, p2.id ); }		
 	
 	// создаем 2 новых стены
 	var wall_1 = crtW({ p: [point1, point], width: width, offsetZ : offsetZ, height : height });	 			
@@ -329,7 +329,7 @@ function addPoint_4( point )
 			if(crossLineOnLine_1(point)) return; 	// произошло пересечение с другой стеной			
 			
 			point.userData.point.type = null; 			
-			var point2 = createPoint( point.position, 0 );			
+			var point2 = myHouse.myPoint.createPoint( point.position, 0 );			
 			var wall = crtW({ p: [point, point2] }); 			
 			clickO.move = point2;
 			upLabelPlan_1( point.p[0].w );			
@@ -482,7 +482,7 @@ function addPoint_5( wall, point )
 		point.userData.point.type = null;
 		point.userData.point.last.cdm = 'new_point_1'; 
 		var point1 = point;		
-		var point2 = createPoint( point.position.clone(), 0 );			 							
+		var point2 = myHouse.myPoint.createPoint( point.position.clone(), 0 );			 							
 		
 		point2.userData.point.cross = point1;
 		
@@ -563,7 +563,7 @@ function addPoint_5( wall, point )
 function addPoint_6( point1 )
 {  		
 	point1.userData.point.type = null;		
-	var point2 = createPoint( point1.position.clone(), 0 );			
+	var point2 = myHouse.myPoint.createPoint( point1.position.clone(), 0 );			
 	point2.userData.point.type = 'continue_create_wall';
 	
 	var wall = crtW({ p: [point1, point2] });		

@@ -161,6 +161,10 @@
 	<script src="<?=$path?>new/core/composerRender.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/core/commonFunc.js?<?=$vrs?>"></script>
 	
+	<script src="<?=$path?>new/house/myHouse.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/point/myPoint.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/point/myMovePoint.js?<?=$vrs?>"></script>
+	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		
 		

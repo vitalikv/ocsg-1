@@ -109,7 +109,7 @@ class MyManagerClick
 	}
 
 
-	click({type, rayhit})
+	click({event, type, rayhit})
 	{ 		
 		this.hideMenuObjUI_2D({type, obj: myMouse.selectedObj});		
 		if(!rayhit) return;
@@ -128,7 +128,7 @@ class MyManagerClick
 			else if( tag == 'pivot' ) { clickPivot( rayhit ); }
 			else if( tag == 'gizmo' ) { clickGizmo( rayhit ); } 
 			else if( tag == 'wall' && isCam2D ) { clickWall_2D( rayhit ); }
-			else if( tag == 'point' ) { clickPoint( rayhit ); }
+			else if( tag == 'point' ) { myHouse.myMovePoint.onmousedown({event, obj}); }
 			else if( tag == 'window' && isCam2D ) { clickWD( rayhit ); }
 			else if( tag == 'door' && isCam2D ) { clickWD( rayhit ); }
 			else if( tag == 'controll_wd' ) { clickToggleChangeWin( rayhit ); }
@@ -158,6 +158,7 @@ class MyManagerClick
 			if(tag == 'pivot') { obj = infProject.tools.pivot.userData.pivot.obj; }
 			else if(tag == 'gizmo') { obj = infProject.tools.gizmo.userData.gizmo.obj; }		
 			
+			clickO.move = obj;
 			clickO.last_obj = obj;
 			
 			this.consoleInfo( obj );
@@ -166,6 +167,53 @@ class MyManagerClick
 		return flag ? obj : null;
 	}
 
+
+	onmousemove = (event, obj) =>
+	{
+		const tag = obj.userData.tag;
+			
+		if ( tag == 'pivot' ) { movePivot( event ); }
+		else if ( tag == 'gizmo' ) { moveGizmo( event ); }
+		else if ( tag == 'wall' ) { moveWall( event, obj ); }
+		else if ( tag == 'window' ) { moveWD( event, obj ); }
+		else if ( tag == 'door' ) { moveWD( event, obj ); }
+		else if ( tag == 'controll_wd' ) { moveToggleChangeWin( event, obj ); }
+		else if ( tag == 'point' ) { myHouse.myMovePoint.onmousemove( event, obj ); }
+		else if ( tag == 'room' ) {  }		
+		else if ( tag == 'free_dw' ) { dragWD_2( event, obj ); }
+		else if ( tag == 'obj' ) { moveObjectPop( event ); }
+		else if ( tag == 'obj_spot' ) { moveObjectPop( event ); }
+		else if ( tag == 'roof' ) { clRoof.moveRoof( event ); }		
+	}
+
+
+	onmouseup = (event, obj) =>
+	{
+		var tag = obj.userData.tag;
+		
+		if(tag == 'point') 
+		{  		
+			myHouse.myMovePoint.onmouseup({event, obj}); 									
+		}
+		else if(tag == 'wall') { clickWallMouseUp(obj); }
+		else if(tag == 'window' || obj.userData.tag == 'door') { clickWDMouseUp(obj); }	
+		else if(tag == 'controll_wd') { clickMouseUpToggleWD(obj); } 
+		else if(tag == 'obj' && this.isMove) { clickMouseUpObject(obj); }
+		else if(tag == 'pivot' && this.isMove) { clickMouseUpPivot(); }
+		else if(tag == 'gizmo' && this.isMove) { clickMouseUpGizmo(); }
+		else if ( tag == 'roof' && this.isMove) { clRoof.moveRoof( event ); clRoof.clickUpRoof(obj); }
+		
+		if(tag == 'free_dw') {  }
+		else if (tag == 'point') 
+		{
+			if(obj.userData.point.type) {  } 
+			else { clickO.move = null; }
+		}		
+		else { clickO.move = null; }		
+	}
+	
+	
+	
 	// выделяем/активируем объект
 	// кликнули на объект (выделение) (cameraTop)
 	objActiveColor_2D(obj)

@@ -43,21 +43,6 @@ class MyMouse
 			if(obj.userData.tag == 'free_dw') 
 			{ 
 				deleteWinDoor({wd: obj, upWall: false}); 
-			}		
-			else if(obj.userData.tag == 'point') 
-			{ 	
-				if(obj.w.length == 0){ deleteOnePoint(obj); }  
-				else 
-				{ 
-					if(obj.userData.point.type == 'continue_create_wall')
-					{
-						var point = obj.p[0]; 
-						deleteWall_3({wall: obj.w[0]}); 
-						//upLabelPlan_1([point.w[0]]);					
-					}
-					
-					if(point.userData.point.last.cdm == 'new_point_1') { deletePoint( point ).wall.userData.id = point.userData.point.last.cross.walls.old; }
-				}
 			}
 			else if(obj.userData.tag == 'obj')
 			{
@@ -107,22 +92,22 @@ class MyMouse
 
 		infProject.tools.axis[0].visible = false;
 		infProject.tools.axis[1].visible = false;
+		
 
-
-		if (btn === 'right') { this.mouseDownRight( event ); return; } 
-
-
-		if(clickO.move && clickO.move.userData.tag === 'point' && clickO.move.userData.point.type)
+		if(myHouse.myMovePoint.isTypeToolPoint) 
 		{
-			clickCreateWall( clickO.move ); return;
+			myHouse.myMovePoint.onmousedown({event, obj: clickO.move, toolPoint: true, btn})
+			return;
 		}
+		
+		if (btn === 'right') { this.mouseDownRight( event ); return; } 
 		
 		this.isMove = false;
 		 				
 		clickO.selectBox.drag = false;
 		this.rayhit = myManagerClick.getRayhit(event); 
 		
-		const obj = myManagerClick.click({type: 'down', rayhit: this.rayhit});		
+		const obj = myManagerClick.click({event, type: 'down', rayhit: this.rayhit});		
 		if(obj) 
 		{
 			this.selectedObj = obj;
@@ -157,23 +142,10 @@ class MyMouse
 		
 		var obj = clickO.move;
 		
-		if ( obj ) 
-		{
-			var tag = obj.userData.tag;
-				
-			if ( tag == 'pivot' ) { movePivot( event ); }
-			else if ( tag == 'gizmo' ) { moveGizmo( event ); }
-			else if ( tag == 'wall' ) { moveWall( event, obj ); }
-			else if ( tag == 'window' ) { moveWD( event, obj ); }
-			else if ( tag == 'door' ) { moveWD( event, obj ); }
-			else if ( tag == 'controll_wd' ) { moveToggleChangeWin( event, obj ); }
-			else if ( tag == 'point' ) { movePoint( event, obj ); }
-			else if ( tag == 'room' ) {  }		
-			else if ( tag == 'free_dw' ) { dragWD_2( event, obj ); }
-			else if ( tag == 'obj' ) { moveObjectPop( event ); }
-			else if ( tag == 'obj_spot' ) { moveObjectPop( event ); }
-			else if ( tag == 'roof' ) { clRoof.moveRoof( event ); }
-		}
+		if (obj) 
+		{ 
+			myManagerClick.onmousemove(event, obj); 
+		}		
 		else if(isCam2D && clickO.selectBox.drag) 
 		{		
 			moveSelectionBox(event); 
@@ -212,29 +184,7 @@ class MyMouse
 		
 		if(obj)  
 		{
-			var tag = obj.userData.tag;
-			
-			if(tag == 'point') 
-			{  		
-				var point = clickO.move;
-				clickPointMouseUp(point); 
-				if(!clickO.move.userData.point.type) { clickCreateWall(clickO.move); }						
-			}
-			else if(tag == 'wall') { clickWallMouseUp(obj); }
-			else if(tag == 'window' || obj.userData.tag == 'door') { clickWDMouseUp(obj); }	
-			else if(tag == 'controll_wd') { clickMouseUpToggleWD(obj); } 
-			else if(tag == 'obj' && this.isMove) { clickMouseUpObject(obj); }
-			else if(tag == 'pivot' && this.isMove) { clickMouseUpPivot(); }
-			else if(tag == 'gizmo' && this.isMove) { clickMouseUpGizmo(); }
-			else if ( tag == 'roof' && this.isMove) { clRoof.moveRoof( event ); clRoof.clickUpRoof(obj); }
-			
-			if(tag == 'free_dw') {  }
-			else if (tag == 'point') 
-			{
-				if(obj.userData.point.type) {  } 
-				else { clickO.move = null; }
-			}		
-			else { clickO.move = null; }
+			myManagerClick.onmouseup(event, obj);
 		}
 		else if(clickO.selectBox.drag)
 		{		
@@ -283,10 +233,12 @@ class MyMouse
 				clickO.last_obj = null;
 				this.selectedObj = null;
 				
-				const point = createPoint( intersects[0].point, 0 );
+				const point = myHouse.myPoint.createPoint( intersects[0].point, 0 );
 				point.position.y = 0;
 				point.userData.point.type = clickO.button; 
-				clickO.move = point;				
+				clickO.move = point;
+				
+				myHouse.myMovePoint.onmousedown({event, obj: point, toolPoint: true})
 			}
 			else if(clickO.button == 'create_wd_1')
 			{

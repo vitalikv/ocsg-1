@@ -60,6 +60,9 @@ new/core/composerRender.js
 new/core/myMouse.js
 new/core/myManagerClick.js
 new/core/commonFunc.js
+new/house/myHouse.js
+new/house/point/myPoint.js
+new/house/point/myMovePoint.js
 ';
 
 $arrF = array();

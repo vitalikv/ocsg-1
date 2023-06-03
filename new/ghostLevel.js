@@ -33,10 +33,8 @@ class GhostLevel
 		
 		for ( let i = 0; i < point.length; i++ )
 		{ 
-			let p = new THREE.Mesh( infProject.tools.point.geometry, this.material.point );
-			p.position.set( point[i].position.x, 0, point[i].position.z );
-			scene.add(p);
-			point2[point2.length] = p;
+			const p = myHouse.myPoint.createGhostPoint({pos: new THREE.Vector3(point[i].position.x, 0, point[i].position.z)});
+			point2.push(p);
 		}		
 		
 		for ( let i = 0; i < wall.length; i++ )
