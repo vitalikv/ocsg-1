@@ -25,7 +25,7 @@ function selectionBoxDown(event)
 	else { return false; }
 
 	myMouse.rayhit = null;
-	myManagerClick.hideMenuObjUI_2D();
+	myManagerClick.hideMenuObjUI_2D({obj: myMouse.selectedObj});
 	
 	infProject.tools.selectionBox.msdown = true;
 	infProject.tools.selectionBox.coords = coords(event);
@@ -118,9 +118,6 @@ function getBoundSelectionBox()
 	if(pos1.z < pos2.z) { bound.min.z = pos1.z; bound.max.z = pos2.z; }
 	else { bound.min.z = pos2.z; bound.max.z = pos1.z; }
 
-
-	// возращаем стандартный цвет, тем объектам которые были выделены
-	clickO.obj = null;
 	
 	var arr = [];
 	

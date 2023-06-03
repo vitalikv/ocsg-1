@@ -118,13 +118,16 @@ class MyMouse
 		}
 		
 		this.isMove = false;
-		
-		clickO.obj = null; 				
+		 				
 		clickO.selectBox.drag = false;
 		this.rayhit = myManagerClick.getRayhit(event); 
 		
-		this.selectedObj = myManagerClick.click({type: 'down', rayhit: this.rayhit});		
-		if(this.selectedObj) this.setMouseStop(true);
+		const obj = myManagerClick.click({type: 'down', rayhit: this.rayhit});		
+		if(obj) 
+		{
+			this.selectedObj = obj;
+			this.setMouseStop(true);
+		}
 		
 		this.render();
 	}
@@ -191,8 +194,12 @@ class MyMouse
 		
 		if(!this.longClick) 
 		{ 
-			this.selectedObj = myManagerClick.click({type: 'up', rayhit: this.rayhit});		
-			if(this.selectedObj) this.setMouseStop(true);			
+			const obj = myManagerClick.click({type: 'up', rayhit: this.rayhit});		
+			if(obj) 
+			{
+				this.selectedObj = obj;
+				this.setMouseStop(true);
+			}		
 		}	
 		
 		var obj = clickO.move;		
@@ -273,7 +280,6 @@ class MyMouse
 		{ 
 			if(clickO.button == 'create_wall')
 			{
-				clickO.obj = null; 
 				clickO.last_obj = null;
 				this.selectedObj = null;
 				
@@ -322,12 +328,11 @@ class MyMouse
 
 	// очищаем клик/декативируем старое выделение (объект и меню)
 	clearClick()
-	{
-		clickO.obj = null;
-		
-		this.rayhit = null;
-		
-		myManagerClick.hideMenuObjUI_2D();			
+	{		
+		myManagerClick.hideMenuObjUI_2D({obj: this.selectedObj});
+
+		this.selectedObj = null;
+		this.rayhit = null;		
 	}
 	
 	

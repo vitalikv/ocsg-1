@@ -129,13 +129,14 @@ function objDeActiveColor_2D()
 {	
 	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
 	if(!clickO.last_obj){ return; }
-	if(clickO.last_obj == clickO.obj){ return; }
+	if(myMouse.rayhit && clickO.last_obj === myMouse.rayhit.object){ return; }
+	
 	
 	var o = clickO.last_obj;	
 
 	if(myMouse.rayhit)
 	{    
-		if(myMouse.rayhit.object.userData.tag == 'controll_wd'){ if(myMouse.rayhit.object.userData.controll_wd.obj == o) { return; } }      		
+		if(myMouse.rayhit.object.userData.tag == 'controll_wd'){ if(myMouse.rayhit.object.userData.controll_wd.obj === o) { return; } }      		
 	}
 	 
 	if(o.userData.tag == 'wall'){ myComposerRenderer.outlineRemoveObj(); getCalcWall({wall: o}); }	

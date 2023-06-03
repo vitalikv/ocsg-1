@@ -46,7 +46,7 @@ function clickWall_2D( intersect )
 }
 
 // кликнули на стену в 3D режиме
-function clickWall_3D(cdm)
+function clickWall_3D({obj, rayhit})
 {
 	var intersect = cdm.rayhit;
 	
@@ -58,9 +58,6 @@ function clickWall_3D(cdm)
 	if(index == 1 || index == 2) { } 
 	else { return; }
 	
-	var obj = intersect.object;	
-	
-	clickO.obj = obj;
 	clickO.index = index;  	
 
 	myComposerRenderer.outlineAddObj({arr: [obj]});

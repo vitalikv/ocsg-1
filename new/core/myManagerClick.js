@@ -110,12 +110,11 @@ class MyManagerClick
 
 
 	click({type, rayhit})
-	{ 
-		if(!rayhit) { this.hideMenuObjUI_2D({type}); return; }
+	{ 		
+		this.hideMenuObjUI_2D({type, obj: myMouse.selectedObj});		
+		if(!rayhit) return;
 
-		var obj = clickO.obj = rayhit.object;
-		this.hideMenuObjUI_2D({type});
-		
+		let obj = rayhit.object;				
 		
 		const tag = obj.userData.tag;
 		let flag = true;
@@ -123,7 +122,7 @@ class MyManagerClick
 		const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
 		const isCam3D = myCameraOrbit.activeCam.userData.isCam3D;
 		
-		if(type == 'down')
+		if(type === 'down')
 		{  
 			if(clickToolWD(clickO.move)) { flag = false; }
 			else if( tag == 'pivot' ) { clickPivot( rayhit ); }
@@ -139,7 +138,7 @@ class MyManagerClick
 			else if( tag == 'roof' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clRoof.clickRoof({obj, rayhit}); }		
 			else { flag = false; }
 		}
-		else if(type == 'up')
+		else if(type === 'up')
 		{	
 			if( tag == 'wall' && isCam3D ) { clickWall_3D({obj, rayhit}); }
 			else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clickObject3D({obj, rayhit}); }
@@ -183,15 +182,15 @@ class MyManagerClick
 
 	
 	// деактивируем выбранный объект
-	hideMenuObjUI_2D({type} = {type: ''})
+	hideMenuObjUI_2D({type, obj} = {type: '', obj: null})
 	{
-		if(objDeActiveColor_2D_selectBox(clickO.obj)) { return; }
-		
-		var obj = clickO.last_obj;		
-		var flag = true;
+		if(objDeActiveColor_2D_selectBox(obj)) { return; }
+						
+		let flag = true;
 		
 		const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
 		const isCam3D = myCameraOrbit.activeCam.userData.isCam3D;
+
 
 		if(obj)
 		{ 
@@ -237,6 +236,7 @@ class MyManagerClick
 		if(flag) 
 		{		
 			clickO.last_obj = null;
+			
 		}
 	}
 

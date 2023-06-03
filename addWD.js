@@ -254,7 +254,6 @@ function clickToolWD(obj)
 		// кликнули на стену, когда добавляем окно
 		if(obj.userData.tag == 'free_dw') 
 		{ 
-			clickO.obj = obj;
 			if(!obj.userData.door.wall) { return true; }
 			
 			clickO.last_obj = null;
@@ -348,7 +347,6 @@ async function addWD({ obj })
 	//обновляем svg форму
 	calcSvgFormWD({obj: obj});	
  	
-	clickO.obj = null;
 	clickO.last_obj = null;
 	clickO.move = null;
 	
