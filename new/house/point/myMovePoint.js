@@ -30,18 +30,20 @@ class MyMovePoint
 		}		
 	}
 	
-	onmousedown = ({event, obj, toolPoint, btn} = {event, obj, toolPoint: undefined, btn: undefined}) =>
+	onmousedown = ({event, obj, toolPoint, btn} = {event, obj: undefined, toolPoint: undefined, btn: undefined}) =>
 	{
 		this.isDown = false;
-		this.isMove = false;
-		this.sObj = obj;
+		this.isMove = false;		
 		
 		if(this.isTypeToolPoint) 
 		{
+			obj = this.sObj;
+			
 			if(btn && btn === 'right')
 			{
 				this.clickRight({obj});
 				this.isTypeToolPoint = false;
+				this.clearPoint();
 				return;				
 			}
 			
@@ -51,12 +53,14 @@ class MyMovePoint
 			if(!obj) 
 			{				
 				this.isTypeToolPoint = false;
+				this.clearPoint();
 				return;
 			}
 		}
 		
 		if(toolPoint !== undefined) this.isTypeToolPoint = toolPoint;
 		
+		this.sObj = obj;
 		
 		planeMath.position.set( 0, obj.position.y, 0 );
 		planeMath.rotation.set(-Math.PI/2, 0, 0);
@@ -147,9 +151,7 @@ class MyMovePoint
 
 		const obj = this.sObj;
 		
-		this.isDown = false;
-		this.isMove = false;
-		this.sObj = null;
+		this.clearPoint();
 		
 		obj.userData.point.last.pos = obj.position.clone();
 		
@@ -161,6 +163,13 @@ class MyMovePoint
 		{ 
 			clickCreateWall(obj);
 		}
+	}
+	
+	clearPoint()
+	{
+		this.isDown = false;
+		this.isMove = false;
+		if(!this.isTypeToolPoint) this.sObj = null;		
 	}
 }
 

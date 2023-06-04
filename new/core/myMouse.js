@@ -96,7 +96,8 @@ class MyMouse
 
 		if(myHouse.myMovePoint.isTypeToolPoint) 
 		{
-			myHouse.myMovePoint.onmousedown({event, obj: clickO.move, toolPoint: true, btn})
+			// к курсору приклеина toolPoint
+			myHouse.myMovePoint.onmousedown({event, toolPoint: true, btn})
 			return;
 		}
 		
@@ -107,12 +108,8 @@ class MyMouse
 		clickO.selectBox.drag = false;
 		this.rayhit = myManagerClick.getRayhit(event); 
 		
-		const obj = myManagerClick.click({event, type: 'down', rayhit: this.rayhit});		
-		if(obj) 
-		{
-			this.selectedObj = obj;
-			this.setMouseStop(true);
-		}
+		this.selectedObj = myManagerClick.click({event, type: 'down', rayhit: this.rayhit});
+		this.selectedObj !== undefined ? this.setMouseStop(true) : this.setMouseStop(false);
 		
 		this.render();
 	}
@@ -166,12 +163,8 @@ class MyMouse
 		
 		if(!this.longClick) 
 		{ 
-			const obj = myManagerClick.click({type: 'up', rayhit: this.rayhit});		
-			if(obj) 
-			{
-				this.selectedObj = obj;
-				this.setMouseStop(true);
-			}		
+			this.selectedObj = myManagerClick.click({type: 'up', rayhit: this.rayhit});
+			this.selectedObj !== undefined ? this.setMouseStop(true) : this.setMouseStop(false);		
 		}	
 		
 		var obj = clickO.move;		
@@ -182,16 +175,17 @@ class MyMouse
 			clickUpElementBoxScale();
 		}
 		
-		if(obj)  
+		if(this.selectedObj)  
 		{
-			myManagerClick.onmouseup(event, obj);
+			myManagerClick.onmouseup(event, this.selectedObj);
 		}
 		else if(clickO.selectBox.drag)
 		{		
 			upSelectionBox();
 		}	
 		
-		if(clickO.move === null) this.setMouseStop(false);
+		
+		//if(this.selectedObj === null) this.setMouseStop(false);
 		param_win.click = false;
 		
 		clickO.elem = null;
@@ -231,13 +225,15 @@ class MyMouse
 			if(clickO.button == 'create_wall')
 			{
 				clickO.last_obj = null;
-				this.selectedObj = null;
+				
 				
 				const point = myHouse.myPoint.createPoint( intersects[0].point, 0 );
 				point.position.y = 0;
 				point.userData.point.type = clickO.button; 
 				clickO.move = point;
+				this.selectedObj = point;
 				
+				// кликнули в интерфейсе на создание стены
 				myHouse.myMovePoint.onmousedown({event, obj: point, toolPoint: true})
 			}
 			else if(clickO.button == 'create_wd_1')
