@@ -5,7 +5,7 @@ class MyMovePoint
 	isDown = false;
 	offset = new THREE.Vector3();
 	isTypeToolPoint = false;	// режим добавления точки из каталога
-	sObj = null;
+	sObj = null;		// выделенный объект (точка)
 	
 	constructor()
 	{
@@ -30,7 +30,7 @@ class MyMovePoint
 		}		
 	}
 	
-	onmousedown = ({event, obj, toolPoint, btn} = {event, obj: undefined, toolPoint: undefined, btn: undefined}) =>
+	mousedown = ({event, obj, toolPoint, btn} = {event, obj: undefined, toolPoint: undefined, btn: undefined}) =>
 	{
 		this.isDown = false;
 		this.isMove = false;		
@@ -47,10 +47,12 @@ class MyMovePoint
 				return;				
 			}
 			
-			clickCreateWall( obj );
-			this.sObj = obj = clickO.move;
+			// определяем с чем точка пересеклась и дальнейшие действия
+			obj = myHouse.myPointAction.clickCreateWall( obj );
 			
-			if(!obj) 
+			this.sObj = obj;
+			
+			if(!this.sObj) 
 			{				
 				this.isTypeToolPoint = false;
 				this.clearPoint();
@@ -95,7 +97,7 @@ class MyMovePoint
 		this.isDown = true;		
 	}
 	
-	onmousemove = (event) =>
+	mousemove = (event) =>
 	{
 		if (!this.isDown) return;
 		this.isMove = true;
@@ -144,14 +146,16 @@ class MyMovePoint
 		upLabelPlan_1(arrW);
 	}
 	
-	onmouseup = ({event}) =>
+	mouseup = ({event}) =>
 	{
-		if (!this.isDown) return;
-		if (!this.isMove) return;
-
 		const obj = this.sObj;
+		const isDown = this.isDown;
+		const isMove = this.isMove;
 		
 		this.clearPoint();
+		
+		if (!isDown) return;
+		if (!isMove) return;
 		
 		obj.userData.point.last.pos = obj.position.clone();
 		
@@ -159,17 +163,17 @@ class MyMovePoint
 		
 		upLabelPlan_1(param_wall.wallR);
 
-		if(!obj.userData.point.type) 
-		{ 
-			clickCreateWall(obj);
-		}
+		// определяем с чем точка пересеклась и дальнейшие действия
+		if(!obj.userData.point.type) myHouse.myPointAction.clickCreateWall(obj);
 	}
 	
 	clearPoint()
 	{
+		if(this.isTypeToolPoint) return;
+		
+		this.sObj = null;
 		this.isDown = false;
-		this.isMove = false;
-		if(!this.isTypeToolPoint) this.sObj = null;		
+		this.isMove = false;		
 	}
 }
 

@@ -63,6 +63,7 @@ new/core/commonFunc.js
 new/house/myHouse.js
 new/house/point/myPoint.js
 new/house/point/myMovePoint.js
+new/house/point/myPointAction.js
 ';
 
 $arrF = array();

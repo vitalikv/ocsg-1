@@ -128,7 +128,7 @@ class MyManagerClick
 			else if( tag == 'pivot' ) { clickPivot( rayhit ); }
 			else if( tag == 'gizmo' ) { clickGizmo( rayhit ); } 
 			else if( tag == 'wall' && isCam2D ) { clickWall_2D( rayhit ); }
-			else if( tag == 'point' ) { myHouse.myMovePoint.onmousedown({event, obj}); }
+			else if( tag == 'point' ) { myHouse.myMovePoint.mousedown({event, obj}); }
 			else if( tag == 'window' && isCam2D ) { clickWD( rayhit ); }
 			else if( tag == 'door' && isCam2D ) { clickWD( rayhit ); }
 			else if( tag == 'controll_wd' ) { clickToggleChangeWin( rayhit ); }
@@ -168,7 +168,7 @@ class MyManagerClick
 	}
 
 
-	onmousemove = (event, obj) =>
+	mousemove = (event, obj) =>
 	{
 		const tag = obj.userData.tag;
 			
@@ -178,7 +178,7 @@ class MyManagerClick
 		else if ( tag == 'window' ) { moveWD( event, obj ); }
 		else if ( tag == 'door' ) { moveWD( event, obj ); }
 		else if ( tag == 'controll_wd' ) { moveToggleChangeWin( event, obj ); }
-		else if ( tag == 'point' ) { myHouse.myMovePoint.onmousemove( event, obj ); }
+		else if ( tag == 'point' ) { myHouse.myMovePoint.mousemove( event, obj ); }
 		else if ( tag == 'room' ) {  }		
 		else if ( tag == 'free_dw' ) { dragWD_2( event, obj ); }
 		else if ( tag == 'obj' ) { moveObjectPop( event ); }
@@ -187,13 +187,13 @@ class MyManagerClick
 	}
 
 
-	onmouseup = (event, obj) =>
+	mouseup = (event, obj) =>
 	{
 		var tag = obj.userData.tag;
 		
 		if(tag == 'point') 
 		{  		
-			myHouse.myMovePoint.onmouseup({event, obj}); 									
+			myHouse.myMovePoint.mouseup({event, obj}); 									
 		}
 		else if(tag == 'wall') { clickWallMouseUp(obj); }
 		else if(tag == 'window' || obj.userData.tag == 'door') { clickWDMouseUp(obj); }	

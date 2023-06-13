@@ -23,20 +23,20 @@ class MyMouse
 	initEvent()
 	{
 		this.container.addEventListener( 'contextmenu', (event) => { event.preventDefault() });
-		this.container.addEventListener( 'mousedown', this.onmousedown );
-		this.container.addEventListener( 'mousemove', this.onmousemove );
-		this.container.addEventListener( 'mouseup', this.onmouseup );
+		this.container.addEventListener( 'mousedown', this.mousedown );
+		this.container.addEventListener( 'mousemove', this.mousemove );
+		this.container.addEventListener( 'mouseup', this.mouseup );
 
-		this.container.addEventListener( 'touchstart', this.onmousedown );
-		this.container.addEventListener( 'touchmove', this.onmousemove );
-		this.container.addEventListener( 'touchend', this.onmouseup );				
+		this.container.addEventListener( 'touchstart', this.mousedown );
+		this.container.addEventListener( 'touchmove', this.mousemove );
+		this.container.addEventListener( 'touchend', this.mouseup );				
 	}
 
 	mouseDownRight()
 	{		
 		clickO.button = null; 
 		
-		var obj = clickO.move;
+		var obj = this.selectedObj;
 		
 		if(obj)
 		{
@@ -52,11 +52,11 @@ class MyMouse
 			clickO = resetPop.clickO();
 		}	
 		
-		clickO.move = null;	
+		this.selectedObj = null;	
 	}
 
 	
-	onmousedown = (event) =>
+	mousedown = (event) =>
 	{
 		//if(onfM.stop) return;
 
@@ -95,9 +95,9 @@ class MyMouse
 		
 
 		if(myHouse.myMovePoint.isTypeToolPoint) 
-		{
+		{ 
 			// к курсору приклеина toolPoint
-			myHouse.myMovePoint.onmousedown({event, toolPoint: true, btn})
+			myHouse.myMovePoint.mousedown({event, toolPoint: true, btn})
 			return;
 		}
 		
@@ -115,7 +115,7 @@ class MyMouse
 	}
 	
 
-	onmousemove = (event) => 
+	mousemove = (event) => 
 	{ 
 		//if(onfM.stop) return;
 		this.isMove = true;
@@ -137,11 +137,11 @@ class MyMouse
 
 		const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
 		
-		var obj = clickO.move;
+		const obj = this.selectedObj;
 		
 		if (obj) 
 		{ 
-			myManagerClick.onmousemove(event, obj); 
+			myManagerClick.mousemove(event, obj); 
 		}		
 		else if(isCam2D && clickO.selectBox.drag) 
 		{		
@@ -155,19 +155,17 @@ class MyMouse
 
 
 
-	onmouseup = (event) => 
+	mouseup = (event) => 
 	{
 		//if(onfM.stop) return;
 		
 		if(selectionBoxUp(event)) { return; }		// selectionBox	
 		
-		if(!this.longClick) 
+		if(!this.longClick && !this.selectedObj) 
 		{ 
 			this.selectedObj = myManagerClick.click({type: 'up', rayhit: this.rayhit});
 			this.selectedObj !== undefined ? this.setMouseStop(true) : this.setMouseStop(false);		
-		}	
-		
-		var obj = clickO.move;		
+		}			
 		
 		
 		if(clickO.elem)
@@ -176,8 +174,8 @@ class MyMouse
 		}
 		
 		if(this.selectedObj)  
-		{
-			myManagerClick.onmouseup(event, this.selectedObj);
+		{			
+			myManagerClick.mouseup(event, this.selectedObj);
 		}
 		else if(clickO.selectBox.drag)
 		{		
@@ -191,9 +189,7 @@ class MyMouse
 		clickO.elem = null;
 		
 		infProject.tools.axis[0].visible = false;
-		infProject.tools.axis[1].visible = false;	
-		
-		clickO.offset = new THREE.Vector3();
+		infProject.tools.axis[1].visible = false;			
 		
 		this.render();
 	}
@@ -230,11 +226,10 @@ class MyMouse
 				const point = myHouse.myPoint.createPoint( intersects[0].point, 0 );
 				point.position.y = 0;
 				point.userData.point.type = clickO.button; 
-				clickO.move = point;
 				this.selectedObj = point;
 				
 				// кликнули в интерфейсе на создание стены
-				myHouse.myMovePoint.onmousedown({event, obj: point, toolPoint: true})
+				myHouse.myMovePoint.mousedown({event, obj: point, toolPoint: true})
 			}
 			else if(clickO.button == 'create_wd_1')
 			{
