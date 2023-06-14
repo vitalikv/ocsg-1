@@ -165,6 +165,8 @@
 	<script src="<?=$path?>new/house/point/myPoint.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/point/myMovePoint.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/point/myPointAction.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/wall/myWall.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/wall/myWallMove.js?<?=$vrs?>"></script>
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		

@@ -127,7 +127,7 @@ class MyManagerClick
 			if(clickToolWD(clickO.move)) { flag = false; }
 			else if( tag == 'pivot' ) { clickPivot( rayhit ); }
 			else if( tag == 'gizmo' ) { clickGizmo( rayhit ); } 
-			else if( tag == 'wall' && isCam2D ) { clickWall_2D( rayhit ); }
+			else if( tag == 'wall' && isCam2D ) { myHouse.myWallMove.mousedown({event, obj}); }
 			else if( tag == 'point' ) { myHouse.myMovePoint.mousedown({event, obj}); }
 			else if( tag == 'window' && isCam2D ) { clickWD( rayhit ); }
 			else if( tag == 'door' && isCam2D ) { clickWD( rayhit ); }
@@ -153,8 +153,6 @@ class MyManagerClick
 		
 		if(flag) 
 		{			
-			this.objActiveColor_2D(obj);		
-
 			if(tag == 'pivot') { obj = infProject.tools.pivot.userData.pivot.obj; }
 			else if(tag == 'gizmo') { obj = infProject.tools.gizmo.userData.gizmo.obj; }		
 			
@@ -174,11 +172,11 @@ class MyManagerClick
 			
 		if ( tag == 'pivot' ) { movePivot( event ); }
 		else if ( tag == 'gizmo' ) { moveGizmo( event ); }
-		else if ( tag == 'wall' ) { moveWall( event, obj ); }
+		else if ( tag == 'wall' ) { myHouse.myWallMove.mousemove( event ); }
 		else if ( tag == 'window' ) { moveWD( event, obj ); }
 		else if ( tag == 'door' ) { moveWD( event, obj ); }
 		else if ( tag == 'controll_wd' ) { moveToggleChangeWin( event, obj ); }
-		else if ( tag == 'point' ) { myHouse.myMovePoint.mousemove( event, obj ); }
+		else if ( tag == 'point' ) { myHouse.myMovePoint.mousemove( event ); }
 		else if ( tag == 'room' ) {  }		
 		else if ( tag == 'free_dw' ) { dragWD_2( event, obj ); }
 		else if ( tag == 'obj' ) { moveObjectPop( event ); }
@@ -195,7 +193,7 @@ class MyManagerClick
 		{  		
 			myHouse.myMovePoint.mouseup({event, obj}); 									
 		}
-		else if(tag == 'wall') { clickWallMouseUp(obj); }
+		else if(tag == 'wall') { myHouse.myWallMove.mouseup(); }
 		else if(tag == 'window' || obj.userData.tag == 'door') { clickWDMouseUp(obj); }	
 		else if(tag == 'controll_wd') { clickMouseUpToggleWD(obj); } 
 		else if(tag == 'obj' && this.isMove) { clickMouseUpObject(obj); }
@@ -210,22 +208,6 @@ class MyManagerClick
 			else { clickO.move = null; }
 		}		
 		else { clickO.move = null; }		
-	}
-	
-	
-	
-	// выделяем/активируем объект
-	// кликнули на объект (выделение) (cameraTop)
-	objActiveColor_2D(obj)
-	{ 
-		if(!myCameraOrbit.activeCam.userData.isCam2D) return;
-		if(!obj) { return; }   
-		if(clickO.last_obj == obj) { return; }
-				
-		const tag = obj.userData.tag;
-		
-		if(tag === 'point'){ myComposerRenderer.outlineAddObj({arr: [obj]}); }	 
-		else if(tag === 'wall'){ myComposerRenderer.outlineAddObj({arr: [obj]}); } 	
 	}
 
 	

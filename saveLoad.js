@@ -651,7 +651,7 @@ async function loadFileLevel(json)
 		var inf = { id: wall[i].id, p: [point1, point2], width: wall[i].width, offsetZ: -offsetZ, height: wall[i].height, load: true };
 		//inf.material = wall[i].material; 
 		
-		var obj = crtW(inf); 		
+		var obj = myHouse.myWall.createWall(inf); 		
 		
 		obj.updateMatrixWorld();
 		arrW[arrW.length] = obj;

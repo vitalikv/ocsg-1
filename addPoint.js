@@ -185,8 +185,8 @@ function splitWalls( wall, point )
 	if(point2 == null) { point2 = myHouse.myPoint.createPoint( p2.pos, p2.id ); }		
 	
 	// создаем 2 новых стены
-	var wall_1 = crtW({ p: [point1, point], width: width, offsetZ : offsetZ, height : height });	 			
-	var wall_2 = crtW({ p: [point, point2], width: width, offsetZ : offsetZ, height : height });
+	var wall_1 = myHouse.myWall.createWall({ p: [point1, point], width: width, offsetZ : offsetZ, height : height });	 			
+	var wall_2 = myHouse.myWall.createWall({ p: [point, point2], width: width, offsetZ : offsetZ, height : height });
 
 	// накладываем материал
 	wall_1.material = [ material[0].clone(), material[1].clone(), material[2].clone(), material[3].clone() ];  

@@ -4,46 +4,6 @@
 var param_wall = { click : false, wallR : [], posS : 0, qt_1 : [], qt_2 : [], arrZone : [] };
 
 
-function clickWall_2D( intersect )
-{
-	var obj = intersect.object;
-	
-	clickO.move = obj;
-	
-	offset = new THREE.Vector3().subVectors( obj.position, intersect.point );
-	planeMath.position.set( 0, intersect.point.y, 0 );	
-	planeMath.rotation.set(-Math.PI/2, 0, 0);	
-
-	param_win.click = true;	
-	param_wall.posS = new THREE.Vector3().addVectors( intersect.point, offset );	// стартовое положение
-	  
-	param_wall.wallR = detectChangeArrWall_2(obj);
-
-	var p = obj.userData.wall.p;
-	
-	for ( var i = 0; i < p[0].w.length; i++ )
-	{  
-		var dir = new THREE.Vector3().subVectors( p[0].position, p[0].p[i].position ).normalize();	
-		param_wall.qt_1[i] = quaternionDirection(dir);
-	}
-	
-	for ( var i = 0; i < p[1].w.length; i++ )
-	{ 
-		var dir = new THREE.Vector3().subVectors( p[1].position, p[1].p[i].position ).normalize();
-		param_wall.qt_2[i] = quaternionDirection(dir);
-	}
-	
-	param_wall.arrZone = compileArrPickZone(obj);
-
-	clickO.click.wall = [...new Set([...p[0].w, ...p[1].w])];  
-	
-	getInfoUndoWall(obj);
-	
-	if(myCameraOrbit.activeCam.userData.isCam2D)
-	{
-		tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
-	}
-}
 
 // кликнули на стену в 3D режиме
 function clickWall_3D({obj, rayhit})
@@ -112,67 +72,6 @@ function compileArrPickZone( wall )
 	return arr;	
 }
 
-
-
-
-
-
-
-function moveWall( event, obj ) 
-{		
-	
-	if(myCameraOrbit.activeCam.userData.isCam3D) { return; }
-	
-	if(param_win.click) 
-	{
-		clickMovePoint_BSP(param_wall.wallR);
-		param_win.click = false;
-	}	
-	
-	var intersects = rayIntersect( event, planeMath, 'one' );
-	
-	if ( intersects.length > 0 ) 
-	{
-		var pos = new THREE.Vector3().addVectors( intersects[ 0 ].point, offset );	
-		
-		
-		// перемещение стены вдоль своей оси
-		var x1 = obj.userData.wall.p[1].position.z - obj.userData.wall.p[0].position.z;
-		var z1 = obj.userData.wall.p[0].position.x - obj.userData.wall.p[1].position.x;	
-		var dir = new THREE.Vector3(x1, 0, z1).normalize();						// перпендикуляр стены	
-		
-		var qt1 = quaternionDirection(dir);
-		var v1 = localTransformPoint( new THREE.Vector3().subVectors( pos, param_wall.posS ), qt1 );	
-		v1 = new THREE.Vector3().addScaledVector( dir, v1.z );
-		pos = new THREE.Vector3().addVectors( param_wall.posS, v1 );
-
-		var pos3 = obj.position.clone();
-		var pos2 = new THREE.Vector3().subVectors( pos, obj.position );			
-		// ------------
-		
-		
-		pos2 = new THREE.Vector3().subVectors ( changeWallLimit(obj.userData.wall.p[0], pos2, param_wall.qt_1, dir), obj.userData.wall.p[0].position ); 
-		pos2 = new THREE.Vector3().subVectors ( changeWallLimit(obj.userData.wall.p[1], pos2, param_wall.qt_2, dir), obj.userData.wall.p[1].position );
-		
-		
-		pos2 = new THREE.Vector3(pos2.x, 0, pos2.z);
-						
-		obj.userData.wall.p[0].position.add( pos2 );
-		obj.userData.wall.p[1].position.add( pos2 );		
-		
-		
-		for ( var i = 0; i < clickO.click.wall.length; i++ )
-		{ 
-			updateWall(clickO.click.wall[i]);		
-		}
-		
-		upLineYY(obj.userData.wall.p[0]);
-		upLineYY(obj.userData.wall.p[1]);
-		
-		upLabelPlan_1(obj.userData.wall.p[0].w);
-		upLabelPlan_1(obj.userData.wall.p[1].w);
-	}	
-}
 
 
 

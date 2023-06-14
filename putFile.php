@@ -64,6 +64,8 @@ new/house/myHouse.js
 new/house/point/myPoint.js
 new/house/point/myMovePoint.js
 new/house/point/myPointAction.js
+new/house/wall/myWall.js
+new/house/wall/myWallMove.js
 ';
 
 $arrF = array();

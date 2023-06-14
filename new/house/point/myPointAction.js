@@ -1,5 +1,5 @@
 
-
+// класс для определения действий с выбранной точкой, создание стены, перетаскивание, разделение стены и т.д.
 class MyPointAction 
 {
 	sObj = null;
@@ -59,7 +59,7 @@ class MyPointAction
 		// 1. кликнули на точку, создаем новую стену из этой точки (создаем стену: от точки)
 		if(point.userData.point.type == 'create_wall')			
 		{		 	
-			var wall = crtW({ p: [point, point.userData.point.cross] }); 		 
+			var wall = myHouse.myWall.createWall({ p: [point, point.userData.point.cross] }); 		 
 			point.userData.point.type = 'continue_create_wall';
 			point.userData.point.cross.userData.point.last.cdm = 'new_wall_from_point';
 			this.sObj = point;
@@ -78,7 +78,7 @@ class MyPointAction
 				
 				point.userData.point.type = null; 			
 				var point2 = myHouse.myPoint.createPoint( point.position, 0 );			
-				var wall = crtW({ p: [point, point2] }); 			
+				var wall = myHouse.myWall.createWall({ p: [point, point2] }); 			
 				this.sObj = point2;
 				upLabelPlan_1( point.p[0].w );			
 				point2.userData.point.type = 'continue_create_wall'; 
@@ -170,7 +170,7 @@ class MyPointAction
 			
 			point2.userData.point.cross = point1;
 			
-			var newWall = crtW({p: [point1, point2] }); 
+			var newWall = myHouse.myWall.createWall({p: [point1, point2] }); 
 			var arrW = splitWalls( wall, point1 );
 			
 			// для undo/redo и для отмены правой кнопкой 
@@ -248,7 +248,7 @@ class MyPointAction
 		var point2 = myHouse.myPoint.createPoint( point1.position.clone(), 0 );			
 		point2.userData.point.type = 'continue_create_wall';
 		
-		var wall = crtW({ p: [point1, point2] });		
+		var wall = myHouse.myWall.createWall({ p: [point1, point2] });		
 		
 		this.sObj = point2; 
 		

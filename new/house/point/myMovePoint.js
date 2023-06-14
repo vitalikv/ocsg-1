@@ -3,6 +3,7 @@
 class MyMovePoint 
 {
 	isDown = false;
+	isMove = false;
 	offset = new THREE.Vector3();
 	isTypeToolPoint = false;	// режим добавления точки из каталога
 	sObj = null;		// выделенный объект (точка)
@@ -71,8 +72,7 @@ class MyMovePoint
 		const intersects = rayIntersect(event, planeMath, 'one');
 		if (intersects.length === 0) return;
 		this.offset = intersects[0].point;		
-
-		param_win.click = true;	
+		
 		param_wall.wallR = detectChangeArrWall([], obj);
 
 		// запоминаем последнее положение точки и дверей/окон
@@ -92,6 +92,7 @@ class MyMovePoint
 			}		 			
 		}
 
+		myComposerRenderer.outlineAddObj({arr: [obj]});
 		tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
 
 		this.isDown = true;		
@@ -100,6 +101,7 @@ class MyMovePoint
 	mousemove = (event) =>
 	{
 		if (!this.isDown) return;
+		const isMove = this.isMove;
 		this.isMove = true;
 		
 		const obj = this.sObj;
@@ -110,11 +112,7 @@ class MyMovePoint
 			else { dragToolPoint( event, obj ); return; } 
 		}	
 		
-		if(param_win.click) 
-		{
-			clickMovePoint_BSP(param_wall.wallR);
-			param_win.click = false;
-		}	
+		if(!isMove) clickMovePoint_BSP(param_wall.wallR);	
 		
 		const intersects = rayIntersect(event, planeMath, 'one');
 		if (intersects.length === 0) return;

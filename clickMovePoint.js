@@ -3,27 +3,6 @@
 
 
 
-function getWallArrOUR()
-{
-	var arr = [];
-	
-	for ( var i = 0; i < clickO.move.w.length; i++ )
-	{
-		arr[i] = { id : clickO.move.w[i].userData.id, arrO : [] };
-		
-		for ( var i2 = 0; i2 < clickO.move.w[i].userData.wall.arrO.length; i2++ )
-		{
-			arr[i].arrO[i2] = { pos : '', rot : '' };
-			arr[i].arrO[i2].pos = clickO.move.w[i].userData.wall.arrO[i2].position.clone();
-			arr[i].arrO[i2].rot = clickO.move.w[i].userData.wall.arrO[i2].rotation.clone();			 
-		}
-	}
-
-	return arr;
-}
-
-
-
 
 
 function limitMovePoint(point, point2, wall, side, pos2)
