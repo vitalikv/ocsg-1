@@ -5,24 +5,6 @@ var param_wall = { click : false, wallR : [], posS : 0, qt_1 : [], qt_2 : [], ar
 
 
 
-// кликнули на стену в 3D режиме
-function clickWall_3D({obj, rayhit})
-{
-	var intersect = rayhit;
-	
-	//if(camera != cameraWall) return;
-	if(!intersect) return;
-	if(!intersect.face) return;
-	var index = intersect.face.materialIndex;	
-	
-	if(index == 1 || index == 2) { } 
-	else { return; }
-	
-	clickO.index = index;  	
-
-	myComposerRenderer.outlineAddObj({arr: [obj]});
-	tabObject.activeObjRightPanelUI_1({obj: obj, side: index});
-}
 
 
 // собираем инфу для undo/redo
@@ -449,17 +431,5 @@ function detectRoomWallSide(wall, index)
 
 
 
-// сняли клик с мышки после токо как кликнули на стену
-function clickWallMouseUp(wall)
-{
-	if(comparePos(wall.userData.wall.last.pos, wall.position)) { return; }		// не двигали
-	
-	upLineYY( wall.userData.wall.p[ 0 ] );
-	upLineYY( wall.userData.wall.p[ 1 ] );
-	upLabelPlan_1( param_wall.wallR ); 
-	updateShapeFloor( param_wall.arrZone ); 		
-	
-	clickPointUP_BSP(param_wall.wallR);
-}
 
 

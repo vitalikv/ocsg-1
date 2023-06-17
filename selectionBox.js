@@ -24,8 +24,7 @@ function selectionBoxDown(event)
 	if(myCameraOrbit.activeCam.userData.isCam2D && clickO.keys[16]){} 
 	else { return false; }
 
-	myMouse.rayhit = null;
-	myManagerClick.hideMenuObjUI_2D({obj: myMouse.selectedObj});
+	myMouse.clearClick();
 	
 	infProject.tools.selectionBox.msdown = true;
 	infProject.tools.selectionBox.coords = coords(event);

@@ -272,7 +272,7 @@ class MyMouse
 	// очищаем клик/декативируем старое выделение (объект и меню)
 	clearClick()
 	{		
-		myManagerClick.hideMenuObjUI_2D({obj: this.selectedObj});
+		myManagerClick.hideMenuObjUI_2D();
 
 		this.selectedObj = null;
 		this.rayhit = null;		

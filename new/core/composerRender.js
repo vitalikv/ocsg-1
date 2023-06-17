@@ -92,6 +92,13 @@ class MyComposerRenderer
 	{			
 		this.outlinePass.selectedObjects = arr;  
 	}
+	
+	getOutlineObj()
+	{
+		const obj = (this.outlinePass.selectedObjects.length > 0) ? this.outlinePass.selectedObjects[0] : null;
+		
+		return obj;
+	}
 
 	outlineRemoveObj()
 	{

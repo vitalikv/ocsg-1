@@ -5,6 +5,7 @@ class MyWallMove
 	isDown = false;
 	isMove = false;
 	startPos = new THREE.Vector3();
+	idSide = 0;
 	
 	sObj = null;		// выделенный объект (стена)
 	
@@ -136,6 +137,28 @@ class MyWallMove
 		this.isDown = false;
 		this.isMove = false;		
 	}
+
+
+	// кликнули на стену в 3D режиме
+	click3D({obj, rayhit})
+	{
+		var intersect = rayhit;
+
+		if(!intersect) return;
+		if(!intersect.face) return;
+		var index = intersect.face.materialIndex;	
+		
+		if(index == 1 || index == 2) { } 
+		else { return; }
+		
+		clickO.index = index;
+		this.idSide = index;
+
+		myComposerRenderer.outlineAddObj({arr: [obj]});
+		tabObject.activeObjRightPanelUI_1({obj: obj, side: index});
+	}
+
+
 }
 
 

@@ -111,7 +111,7 @@ class MyManagerClick
 
 	click({event, type, rayhit})
 	{ 		
-		this.hideMenuObjUI_2D({type, obj: myMouse.selectedObj});		
+		this.hideMenuObjUI_2D({type});		
 		if(!rayhit) return;
 
 		let obj = rayhit.object;				
@@ -140,7 +140,7 @@ class MyManagerClick
 		}
 		else if(type === 'up')
 		{	
-			if( tag == 'wall' && isCam3D ) { clickWall_3D({obj, rayhit}); }
+			if( tag == 'wall' && isCam3D ) { myHouse.myWallMove.click3D({obj, rayhit}); }
 			else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clickObject3D({obj, rayhit}); }
 			else if( tag == 'room' && isCam3D ) { clickFloor({obj}); }
 			else if( tag == 'room' && isCam3D ) { clickFloor({obj}); }
@@ -212,15 +212,16 @@ class MyManagerClick
 
 	
 	// деактивируем выбранный объект
-	hideMenuObjUI_2D({type, obj} = {type: '', obj: null})
+	hideMenuObjUI_2D({type} = {type: ''})
 	{
+		const obj = myComposerRenderer.getOutlineObj();
+		
 		if(objDeActiveColor_2D_selectBox(obj)) { return; }
 						
 		let flag = true;
 		
 		const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
 		const isCam3D = myCameraOrbit.activeCam.userData.isCam3D;
-
 
 		if(obj)
 		{ 
@@ -304,7 +305,7 @@ class MyManagerClick
 		else if( tag == 'wall' )
 		{ 
 			console.log(obj);
-			console.log( "wall id : " + obj.userData.id + " index : " + clickO.index + " | point : " + obj.userData.wall.p[0].userData.id + " | " + obj.userData.wall.p[1].userData.id + " | userData : ", obj.userData ); 
+			console.log( "wall id : " + obj.userData.id + " | point : " + obj.userData.wall.p[0].userData.id + " | " + obj.userData.wall.p[1].userData.id + " | userData : ", obj.userData ); 
 		}
 		else if( tag == 'point' )
 		{ 
