@@ -25,7 +25,6 @@ class MyWDMove
 		planeMath.rotation.set(-Math.PI/2, 0, 0);
 		planeMath.updateMatrixWorld();
 		
-		console.log(555, event);
 		const intersects = rayIntersect(event, planeMath, 'one');
 		if (intersects.length === 0) return;
 		this.offset = intersects[0].point;		
@@ -103,7 +102,7 @@ class MyWDMove
 
 		wd.userData.door.h1 += pos2.y;
 		
-		for ( let i = 0; i < infProject.tools.controllWD.length; i++ ) { infProject.tools.controllWD[i].position.add( pos2 ); } 	// меняем расположение контроллеров
+		myHouse.myWDPoints.setOffset(pos2);	// меняем расположение контроллеров	
 		
 		showRulerWD_2D(wd); 	// перемещаем линейки и лайблы
 		

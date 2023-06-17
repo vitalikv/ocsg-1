@@ -67,6 +67,8 @@ new/house/wall/myWallMove.js
 new/house/wd/myDoor.js
 new/house/wd/myWindow.js
 new/house/wd/myWDMove.js
+new/house/wd/myWDPoints.js
+new/house/wd/myWDPointsMove.js
 ';
 
 $arrF = array();

@@ -32,7 +32,7 @@ class MyManagerClick
 
 		if(!infProject.scene.block.click.controll_wd)
 		{
-			var ray = rayIntersect( event, [infProject.tools.controllWD[0], infProject.tools.controllWD[1]], 'arr' );
+			var ray = rayIntersect( event, [myHouse.myWDPoints.points[0], myHouse.myWDPoints.points[1]], 'arr' );
 			if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
 		}
 		
@@ -131,7 +131,7 @@ class MyManagerClick
 			else if( tag == 'point' ) { myHouse.myMovePoint.mousedown({event, obj}); }
 			else if( tag == 'window' && isCam2D ) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if( tag == 'door' && isCam2D ) { myHouse.myWDMove.mousedown({event, obj}); }
-			else if( tag == 'controll_wd' ) { clickToggleChangeWin( rayhit ); }
+			else if( tag == 'controll_wd' ) { myHouse.myWDPointsMove.mousedown({event, obj}); }
 			else if( tag == 'obj' && isCam2D ) { clickObject3D({obj, rayhit}); }
 			else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clickObject3D({obj, rayhit}); }
 			else if( tag == 'roof' && isCam2D ) { clRoof.clickRoof({obj, rayhit}); }
@@ -139,7 +139,7 @@ class MyManagerClick
 			else { flag = false; }
 		}
 		else if(type === 'up')
-		{	console.log(444, event);
+		{	
 			if( tag == 'wall' && isCam3D ) { myHouse.myWallMove.click3D({obj, rayhit}); }
 			else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clickObject3D({obj, rayhit}); }
 			else if( tag == 'room' && isCam3D ) { clickFloor({obj}); }
@@ -172,10 +172,10 @@ class MyManagerClick
 			
 		if ( tag == 'pivot' ) { movePivot( event ); }
 		else if ( tag == 'gizmo' ) { moveGizmo( event ); }
-		else if ( tag == 'wall' ) { myHouse.myWallMove.mousemove( event ); }
+		else if ( tag == 'wall' ) { myHouse.myWallMove.mousemove(event); }
 		else if ( tag == 'window' ) { myHouse.myWDMove.mousemove(event); }
 		else if ( tag == 'door' ) { myHouse.myWDMove.mousemove(event); }
-		else if ( tag == 'controll_wd' ) { moveToggleChangeWin( event, obj ); }
+		else if ( tag == 'controll_wd' ) { myHouse.myWDPointsMove.mousemove(event); }
 		else if ( tag == 'point' ) { myHouse.myMovePoint.mousemove( event ); }
 		else if ( tag == 'room' ) {  }		
 		else if ( tag == 'free_dw' ) { dragWD_2( event, obj ); }
@@ -195,7 +195,7 @@ class MyManagerClick
 		}
 		else if(tag == 'wall') { myHouse.myWallMove.mouseup(); }
 		else if(tag == 'window' || obj.userData.tag == 'door') { myHouse.myWDMove.mouseup(); }	
-		else if(tag == 'controll_wd') { clickMouseUpToggleWD(obj); } 
+		else if(tag == 'controll_wd') { myHouse.myWDPointsMove.mouseup(); } 
 		else if(tag == 'obj' && this.isMove) { clickMouseUpObject(obj); }
 		else if(tag == 'pivot' && this.isMove) { clickMouseUpPivot(); }
 		else if(tag == 'gizmo' && this.isMove) { clickMouseUpGizmo(); }

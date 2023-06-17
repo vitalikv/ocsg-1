@@ -1,35 +1,5 @@
 
 
-// создаем контроллеры для изменения ширины/высоты окна (при клике на оконо они появляются)
-function createControllWD() 
-{
-	var arr = []; 
-	
-	var geometry1 = new THREE.SphereGeometry( 0.07, 16, 16 );
-	var geometry2 = new THREE.SphereGeometry( 0.05, 16, 16 );
-	
-	for ( var i = 0; i < 4; i++ )
-	{
-		var obj = new THREE.Mesh( geometry1, new THREE.MeshLambertMaterial( { transparent: true, opacity: 0 } ) );
-		
-		obj.userData.tag = 'controll_wd';
-		obj.userData.controll_wd = { id : i, obj : null };		
-		obj.visible = false;
-		
-		
-		var child = new THREE.Mesh( geometry2, new THREE.MeshLambertMaterial( { color : 0xcccccc, transparent: true, opacity: 1, depthTest: false, lightMap : lightMap_1 } ) );
-		child.renderOrder = 2;
-		obj.add( child );
-		 
-		arr[i] = obj;
-		scene.add( arr[i] );
-	}		
-	
-	return arr;
-}
-
-
-
 
 
 // показываем контроллеры
@@ -88,7 +58,7 @@ function showControllWD( wall, obj )
 		p[3] = obj.localToWorld( new THREE.Vector3(center.x, bound.max.y, center.z) );		
 	}
 
-	var arr = infProject.tools.controllWD;
+	var arr = myHouse.myWDPoints.points;
 	for ( var i = 0; i < arr.length; i++ )
 	{		
 		arr[i].position.copy( p[i] );	
@@ -108,10 +78,10 @@ function showRulerWD(obj)
 {
 	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
 	
-	var wall = obj.userData.door.wall;   
-
-	showControllWD( wall, obj );		// показываем контроллеры 
+	   
+	myHouse.myWDPoints.show( obj );		// показываем контроллеры 
 	
+	var wall = obj.userData.door.wall;
 	
 	var boundPos = [];
 	
@@ -340,7 +310,7 @@ function clickToggleChangeWin( intersect, cdm )
 	wd.userData.door.wall.controll.offset = offset;
 	
 	var ps = [];
-	var arr = infProject.tools.controllWD;
+	var arr = myHouse.myWDPoints.points;
 	ps[ps.length] = wall.worldToLocal( arr[0].position.clone() );
 	ps[ps.length] = wall.worldToLocal( arr[1].position.clone() );
 	ps[ps.length] = wall.worldToLocal( arr[2].position.clone() );
@@ -441,7 +411,7 @@ function moveToggleChangeWin( event, controll )
 
 	// обновляем форму окна/двери и с новыми размерами вырезаем отверстие в стене
 	{
-		var arr = infProject.tools.controllWD;
+		var arr = myHouse.myWDPoints.points;
 		
 		var x = arr[0].position.distanceTo(arr[1].position);
 		var y = arr[2].position.distanceTo(arr[3].position);
@@ -452,7 +422,7 @@ function moveToggleChangeWin( event, controll )
 	}
 	
 	// устанавливаем второстепенные контроллеры, в правильное положение
-	var arr = infProject.tools.controllWD;	
+	var arr = myHouse.myWDPoints.points;	
 	if(controll.userData.controll_wd.id == 0 || controll.userData.controll_wd.id == 1)
 	{ 
 		arr[2].position.add( pos2.clone().divideScalar( 2 ) );

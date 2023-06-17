@@ -101,7 +101,7 @@ infProject.svg.furn.boxCircle.elem = createSvgCircle({count: 8, color: infProjec
 infProject.svg.furn.boxCircle.show = infProject.settings.obj.cam2D.show.scale; 
 
 // controllWD контроллеры для изменения ширины/длины wd
-infProject.tools = { pivot: createPivot_2(), gizmo: createGizmo360_2(), cutWall: [], axis: createLineAxis(), controllWD: createControllWD() }; 
+infProject.tools = { pivot: createPivot_2(), gizmo: createGizmo360_2(), cutWall: [], axis: createLineAxis() }; 
 infProject.tools.floorPl = createPlaneOutlineFloor();
 infProject.catalog = { texture: infoListTexture() }; 
 infProject.listColor = resetPop.listColor(); 

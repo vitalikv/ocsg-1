@@ -5,8 +5,7 @@ class MyWallMove
 	isDown = false;
 	isMove = false;
 	startPos = new THREE.Vector3();
-	idSide = 0;
-	
+	idSide = 0;	
 	sObj = null;		// выделенный объект (стена)
 	
 	constructor()

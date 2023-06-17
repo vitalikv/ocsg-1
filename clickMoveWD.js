@@ -104,7 +104,6 @@ function getMinDistanceVertex(v, pos)
 
 
 var objsBSP = null;
-var objClone = new THREE.Mesh();
 var wallClone = new THREE.Mesh();
 
 
@@ -143,7 +142,7 @@ function hideSizeWD( obj )
 		}			
 	}
 	
-	for ( var i = 0; i < infProject.tools.controllWD.length; i++ ) { infProject.tools.controllWD[i].visible = false; }
+	myHouse.myWDPoints.hide();
 	for ( var i = 0; i < infProject.scene.size.wd_1.line.length; i++ ) 
 	{ 
 		var line = infProject.scene.size.wd_1.line[i];
