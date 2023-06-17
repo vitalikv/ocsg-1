@@ -96,35 +96,35 @@ async function getObjFromBase({lotid})
 	if(lotid === 5)
 	{
 		inf.name = 'окно глухое';
-		inf.obj = myWindows.createWind({id: 1});
+		inf.obj = myHouse.myWindow.createWind({id: 1});
 		inf.planeMath = 0.0;
 	}
 
 	if(lotid === 6)
 	{
 		inf.name = 'окно двухстворчатое';
-		inf.obj = myWindows.createWind({id: 2});
+		inf.obj = myHouse.myWindow.createWind({id: 2});
 		inf.planeMath = 0.0;
 	}
 
 	if(lotid === 7)
 	{
 		inf.name = 'окно трехстворчатое';
-		inf.obj = myWindows.createWind({id: 3});
+		inf.obj = myHouse.myWindow.createWind({id: 3});
 		inf.planeMath = 0.0;
 	}	
 
 	if(lotid === 8)
 	{
 		inf.name = 'окно треугольное';
-		inf.obj = myWindows.createWind({id: 4});
+		inf.obj = myHouse.myWindow.createWind({id: 4});
 		inf.planeMath = 0.0;
 	}	
 
 	if(lotid === 9)
 	{
 		inf.name = 'окно треугольное';
-		inf.obj = myWindows.createWind({id: 5});
+		inf.obj = myHouse.myWindow.createWind({id: 5});
 		inf.planeMath = 0.0;
 	}	
 

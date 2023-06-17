@@ -163,7 +163,7 @@ class MyMouse
 		
 		if(!this.longClick && !this.selectedObj) 
 		{ 
-			this.selectedObj = myManagerClick.click({type: 'up', rayhit: this.rayhit});
+			this.selectedObj = myManagerClick.click({event, type: 'up', rayhit: this.rayhit});
 			this.selectedObj !== undefined ? this.setMouseStop(true) : this.setMouseStop(false);		
 		}			
 		

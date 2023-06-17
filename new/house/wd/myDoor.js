@@ -1,6 +1,6 @@
 
 
-class MyDoors 
+class MyDoor 
 {
 	constructor()
 	{
@@ -22,7 +22,6 @@ class MyDoors
 
 }
 
-const myDoors = new MyDoors()
 
 
 

@@ -1,6 +1,6 @@
 
 
-class MyWindows 
+class MyWindow 
 {
 	constructor()
 	{
@@ -704,7 +704,7 @@ class MyWindows
 
 }
 
-const myWindows = new MyWindows()
+
 
 
 

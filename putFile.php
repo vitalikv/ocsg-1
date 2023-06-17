@@ -42,8 +42,6 @@ new/myRoof.js
 new/startProject.js
 new/myObj.js
 new/csgBox.js
-new/oWindow.js
-new/myDoor.js
 new/ui/switchCamera.js
 new/ui/right-panel/tabs.js
 new/ui/right-panel/tabLevel.js
@@ -66,6 +64,9 @@ new/house/point/myMovePoint.js
 new/house/point/myPointAction.js
 new/house/wall/myWall.js
 new/house/wall/myWallMove.js
+new/house/wd/myDoor.js
+new/house/wd/myWindow.js
+new/house/wd/myWDMove.js
 ';
 
 $arrF = array();

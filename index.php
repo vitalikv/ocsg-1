@@ -153,8 +153,7 @@
 	<script src="<?=$path?>new/startProject.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/csgBox.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/test.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/oWindow.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/myDoor.js?<?=$vrs?>"></script>
+	
 	
 	<script src="<?=$path?>new/core/myMouse.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/core/myManagerClick.js?<?=$vrs?>"></script>
@@ -167,6 +166,9 @@
 	<script src="<?=$path?>new/house/point/myPointAction.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wall/myWall.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wall/myWallMove.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/wd/myDoor.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/wd/myWindow.js?<?=$vrs?>"></script>	
+	<script src="<?=$path?>new/house/wd/myWDMove.js?<?=$vrs?>"></script>
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		

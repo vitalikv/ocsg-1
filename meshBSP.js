@@ -70,7 +70,7 @@ function createCloneWD_BSP( wd )
 	// парметрическое окно
 	if(wd.children.length > 0 && wd.children[0].userData.contour && wd.children[0].userData.contour.length > 0)
 	{
-		const wdCSG = myWindows.calcContourCSG(wd.children[0]);		
+		const wdCSG = myHouse.myWindow.calcContourCSG(wd.children[0]);		
 		return wdCSG;
 	}
 	

@@ -3,47 +3,6 @@
 var param_win = { click : false };
 
 
-function clickWD( intersect )
-{	
-	var obj = intersect.object;
-
-	clickO.move = obj;
-	
-	var pos = intersect.point;
-	
-	pos.y = obj.position.y;
-	
-	if(myCameraOrbit.activeCam.userData.isCam2D) 
-	{
-		planeMath.position.set( 0, pos.y, 0 );
-		planeMath.rotation.set(-Math.PI/2, 0, 0);			
-	}
-	else
-	{
-		planeMath.position.copy( pos );
-		planeMath.rotation.set( 0, obj.rotation.y, 0 );					
-	}	
-	
-	planeMath.updateMatrixWorld();  //  (для того, что бы при первом клике, окно не улетало на старое место, где до этого стояла мат.плоскость)	
-
-	param_win.click = true;
-
-	obj.userData.door.offset = new THREE.Vector3().subVectors( obj.position, pos );	
-	
-	findOnWallWD(obj);	
-	
-	if(myCameraOrbit.activeCam.userData.isCam2D)
-	{
-		showRulerWD( obj ); 	// показываем линейки 
-	}
-	
-	showTableWD( obj );		// UI
-	tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
-	
-	myComposerRenderer.outlineAddObj({arr: [obj]});
-}
-
-
 
 
 // находим у окна/двери ближайшие объекты (ограничевающие перемещение)
@@ -142,75 +101,11 @@ function getMinDistanceVertex(v, pos)
 
  
 
-function moveWD( event, wd ) 
-{
-	if(myCameraOrbit.activeCam.userData.isCam3D) { return; }
-	
-	var intersects = rayIntersect( event, planeMath, 'one' ); 	
-	if ( intersects.length > 0 ) { moveWD_2( wd, intersects[ 0 ].point ); }	
-}
 
 
 var objsBSP = null;
 var objClone = new THREE.Mesh();
 var wallClone = new THREE.Mesh();
-
-function moveWD_2( wd, pos )
-{
-	var wall = wd.userData.door.wall;
-	
-	if(param_win.click)  
-	{ 
-		param_win.click = false; 
-
-		wallClone.geometry = clickMoveWD_BSP( wd ).geometry.clone(); 
-		wallClone.position.copy( wd.userData.door.wall.position ); 
-		wallClone.rotation.copy( wd.userData.door.wall.rotation );
-		
-		objsBSP = { wall : wallClone, wd : createCloneWD_BSP( wd ) };
-		
-		// меняем цвет у wd
-		wd.material.depthTest = false;  
-		wd.material.opacity = 1.0; 		 			
-	}
-	
-	pos = new THREE.Vector3().addVectors( wd.userData.door.offset, pos );			
-	pos = wall.worldToLocal( pos.clone() );
-	
-	var x_min = wd.geometry.boundingBox.min.x;
-	var x_max = wd.geometry.boundingBox.max.x;
-	var y_min = wd.geometry.boundingBox.min.y;
-	var y_max = wd.geometry.boundingBox.max.y;
-	
-	var bound = wd.userData.door.bound;
-	
-	if(pos.x + x_min < bound.min.x){ pos.x = bound.min.x - x_min; }
-	else if(pos.x + x_max > bound.max.x){ pos.x = bound.max.x - x_max; }	
-	
-	// ограничение по высоте при перемещении wd
-	if(!myCameraOrbit.activeCam.userData.isCam2D)
-	{
-		if(pos.y + y_min < bound.min.y){ pos.y = bound.min.y - y_min; }
-		else if(pos.y + y_max > bound.max.y){ pos.y = bound.max.y - y_max; }
-	}	
-	
-	if(myCameraOrbit.activeCam.userData.isCam2D){ pos.z = 0; }	
-	
-	var pos = wall.localToWorld( pos.clone() );
-	
-	var pos2 = new THREE.Vector3().subVectors( pos, wd.position );
-	
-	wd.position.copy( pos );	
-
-	wd.userData.door.h1 += pos2.y;
-	
-	for ( var i = 0; i < infProject.tools.controllWD.length; i++ ) { infProject.tools.controllWD[i].position.add( pos2 ); } 	// меняем расположение контроллеров
-	
-	showRulerWD_2D(wd); 	// перемещаем линейки и лайблы
-	
-	calcSvgFormWD({obj: wd});
-}
-
 
 
 
@@ -389,27 +284,6 @@ function сhangeSizePosWD( wd, pos, x, y )
 
 
 
-// сняли клик с мышки после токо как кликнули на WD
-function clickWDMouseUp(wd)
-{
-	if(param_win.click) { param_win.click = false; return; }
-	
-	MeshBSP( wd, objsBSP );
-	 
-	if(myCameraOrbit.activeCam.userData.isCam2D)
-	{ 
-		wd.material.depthTest = false;  
-		wd.material.opacity = 1.0; 		 	
-	}
-	else
-	{ 		
-		wd.material.depthTest = true;
-		wd.material.transparent = true;
-		wd.material.opacity = 0;					
-	}	
 
-	calcSvgFormWD({obj: wd});
-	//if(comparePos(wd.userData.door.last.pos, wd.position)) { return; }		// не двигали	
-}
 
 

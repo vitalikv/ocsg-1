@@ -9,6 +9,10 @@ class MyHouse
 	myWall;
 	myWallMove;
 	
+	myDoor;
+	myWindow;
+	myWDMove;
+	
 	constructor()
 	{
 		this.myPoint = new MyPoint();
@@ -17,6 +21,10 @@ class MyHouse
 		
 		this.myWall = new MyWall();
 		this.myWallMove = new MyWallMove();
+		
+		this.myDoor = new MyDoor();
+		this.myWindow = new MyWindow()
+		this.myWDMove = new MyWDMove();		
 	}
 	
 	initBtn()
