@@ -171,6 +171,8 @@
 	<script src="<?=$path?>new/house/wd/myWDMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myWDPoints.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myWDPointsMove.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/wd/myWDRulers.js?<?=$vrs?>"></script>
+	
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		

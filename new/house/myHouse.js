@@ -14,6 +14,7 @@ class MyHouse
 	myWDMove;
 	myWDPoints;
 	myWDPointsMove;
+	MyWDRulers;
 	
 	constructor()
 	{
@@ -29,6 +30,7 @@ class MyHouse
 		this.myWDMove = new MyWDMove();
 		this.myWDPoints = new MyWDPoints();
 		this.myWDPointsMove = new MyWDPointsMove();
+		this.myWDRulers = new MyWDRulers();
 	}
 	
 	initBtn()

@@ -45,8 +45,7 @@ class EventMyCamera
 		{		
 			myHouse.myPoint.setScale({value: delta});
 
-			// wd рулетки 
-			for ( let i = 0; i < infProject.scene.size.wd_1.line.length; i++ ){ infProject.scene.size.wd_1.line[i].scale.set(1,1/delta,1/delta); }			
+			myHouse.myWDRulers.setScale({value: delta});						
 		}		
 	}
 	

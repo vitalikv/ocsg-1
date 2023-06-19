@@ -7,7 +7,6 @@ class MyWDPointsMove
 	startPos = new THREE.Vector3();
 	dir = new THREE.Vector3();
 	sObj = null;		// выделенный объект (точка)
-	objsBSP = {};
 	
 	constructor()
 	{
@@ -178,8 +177,6 @@ class MyWDPointsMove
 		MeshBSP( wd, objsBSP );		 
 
 		calcSvgFormWD({obj: wd});
-		
-		this.objsBSP = {};
 	}
 			
 	clear()

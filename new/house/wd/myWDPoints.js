@@ -3,7 +3,6 @@
 class MyWDPoints
 {
 	points = [];
-	objsBSP = {};
 	
 	constructor()
 	{

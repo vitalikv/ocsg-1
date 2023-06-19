@@ -137,17 +137,9 @@ function hideSizeWD( obj = null )
 		}								
 	}
 	
-	myHouse.myWDPoints.hide();
-	
-	for ( let i = 0; i < infProject.scene.size.wd_1.line.length; i++ ) 
-	{ 
-		let line = infProject.scene.size.wd_1.line[i];
-		line.visible = false; 
-		for ( let i2 = 0; i2 < line.userData.rulerwd.cone.length; i2++ )
-		{
-			line.userData.rulerwd.cone[i2].visible = false; 
-		}	
-	}
+	myHouse.myWDPoints.hide();	
+	myHouse.myWDRulers.hide();
+
 	
 	for ( let i = 0; i < infProject.html.wd.length; i++ )
 	{ 

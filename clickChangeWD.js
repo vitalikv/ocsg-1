@@ -73,8 +73,8 @@ function showRulerWD_2D(wd)
 	
 	var wall = wd.userData.door.wall;
 	
-	var line = infProject.scene.size.wd_1.line;	
-	var label_2 = infProject.html.wd;
+	
+	var label_2 = infProject.html.wd; 
 	
 	var p1 = wall.userData.wall.p[0].position;
 	var p2 = wall.userData.wall.p[1].position;
@@ -115,9 +115,8 @@ function showRulerWD_2D(wd)
 	
 	// смщение от центра до краев стены
 	var dirW = wall.getWorldDirection(new THREE.Vector3());
-	var offset_1 = new THREE.Vector3().addScaledVector( dirW, wall.userData.wall.v[0].z ).multiplyScalar( 1.3 );
-	var offset_2 = new THREE.Vector3().addScaledVector( dirW, wall.userData.wall.v[4].z ).multiplyScalar( 1.3 );
-
+	var offset_1 = new THREE.Vector3().addScaledVector( dirW, wall.userData.wall.v[0].z ).add(dirW.clone().multiplyScalar( 0.1 ));
+	var offset_2 = new THREE.Vector3().addScaledVector( dirW, wall.userData.wall.v[4].z ).add(dirW.clone().multiplyScalar( -0.1 ));
 
 	var dir = [];
 	dir[0] = new THREE.Vector3().subVectors( p2, p1 ).normalize();
@@ -133,55 +132,29 @@ function showRulerWD_2D(wd)
 	arrP[5] = {p1: b2[0], p2: b2[1], offset: offset_2, dir: dir[1]};
 	
 	
-	for ( var i = 0; i < arrP.length; i++ )
+	for ( let i = 0; i < arrP.length; i++ )
 	{
-		var d = arrP[i].p1.distanceTo( arrP[i].p2 );	
+		let dist = arrP[i].p1.distanceTo( arrP[i].p2 );			
 		
-		var v = line[i].geometry.vertices;
-		v[0].x = v[1].x = v[6].x = v[7].x = -d/2;
-		v[3].x = v[2].x = v[5].x = v[4].x = d/2;		
-		line[i].geometry.verticesNeedUpdate = true;			
-		
-		var pos = new THREE.Vector3().subVectors( arrP[i].p1, arrP[i].p2 ).divideScalar( 2 ).add(arrP[i].p2);	
+		const posCenter = new THREE.Vector3().subVectors( arrP[i].p1, arrP[i].p2 ).divideScalar( 2 ).add(arrP[i].p2);	
 		
 		// если wd выходит за пределы wall, то ставим отрицательное значение в label
-		if(1==1)
-		{
-			var dir = new THREE.Vector3().subVectors( arrP[i].p1, arrP[i].p2 ).normalize();			
-			d = (dir.dot(arrP[i].dir) < - 0.99) ? -d : d;
-		}
+		const dir = new THREE.Vector3().subVectors( arrP[i].p1, arrP[i].p2 ).normalize();			
+		dist = (dir.dot(arrP[i].dir) < - 0.99) ? -dist : dist;	
 		
-		line[i].position.copy(pos).add(arrP[i].offset);
-		line[i].rotation.copy(wall.rotation);		
-					
-		label_2[i].textContent = Math.round(d * 100) / 100;
-		label_2[i].userData.elem.pos = pos.clone().add(arrP[i].offset.clone().multiplyScalar( 2 ));		
+		const offset2 = arrP[i].offset.clone().normalize();
+		offset2.multiplyScalar( 0.1 );
+		
+		label_2[i].textContent = Math.round(dist * 100) / 100;
+		label_2[i].userData.elem.pos = posCenter.clone().add(arrP[i].offset).add(offset2);		
 		label_2[i].style.transform = 'translate(-50%, -50%) rotate('+THREE.Math.radToDeg(-ang2)+'deg)';
 		label_2[i].style.display = 'block';
 		label_2[i].userData.elem.show = true;
 		
 		upPosLabels_2({elem: label_2[i]});		
-		
-		line[i].visible = true;			
-		line[i].updateMatrixWorld();
-		
-		for ( var i2 = 0; i2 < line[i].userData.rulerwd.cone.length; i2++ )
-		{
-			var cone = line[i].userData.rulerwd.cone[i2];
-			
-			var xp = v[0].x;
-			var zr = -Math.PI/2;
-			
-			if(i2 == 1) { xp = v[3].x; zr = Math.PI/2; }
-			
-			var pos = line[i].localToWorld( new THREE.Vector3(xp, 0, 0) );
-			cone.position.copy(pos);
-			cone.rotation.set(-Math.PI/2, 0, wall.rotation.y-zr);
-			
-			cone.visible = true;
-		}
 	}
-		
+	
+	myHouse.myWDRulers.setPosRot({arrP, wall}); 
 }
 
 

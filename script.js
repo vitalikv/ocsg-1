@@ -77,9 +77,7 @@ infProject.scene.block = { key : { scroll : false } };		// блокировка 
 infProject.scene.block.click = {wall: false, point: false, door: false, window: false, room: false, tube: false, controll_wd: false, obj: false};
 infProject.scene.block.hover = {wall: false, point: false, door: false, window: false, room: false, tube: false, controll_wd: false, obj: false};
 infProject.geometry = { circle : createCircleSpline() };
-infProject.geometry.cone = [createGeometryCone_1({r1: 0.003, r2: 0.03, h: 0.25}), createGeometryCone_1({r1: 0.001, r2: 0.04, h: 0.1})];
-infProject.scene.size = { wd_1: {} };	// wd_1 линейки для окон/мебели
-infProject.scene.size.wd_1.line = createRulerWin({count : 6, color : 0x616161});	
+infProject.geometry.cone = [createGeometryCone_1({r1: 0.003, r2: 0.03, h: 0.25}), createGeometryCone_1({r1: 0.001, r2: 0.04, h: 0.1})];	
 infProject.html = {};
 infProject.html.label = [];	// хранятся все html label
 infProject.html.wd = createHtmlLabelWall({count: 6, display: 'none', tag: 'elem_wd_size'});
@@ -725,49 +723,6 @@ function createGeometryCircle( vertices )
 
 	return geometry;
 }
-
-
-// линейки для окон/мебели (создается при старте)
-// линейки для отображения длины/высоты стены в режиме cameraWall
-function createRulerWin(cdm)
-{
-	var arr = [];
-	
-	if(cdm.material == 'standart') { var mat = { color: cdm.color }; }
-	else { var mat = { color: cdm.color, transparent: true, depthTest : false }; }
-	
-	var material = new THREE.LineBasicMaterial( mat );
-	
-	
-	for ( var i = 0; i < cdm.count; i++ )
-	{
-		arr[i] = new THREE.Mesh( createGeometryCube(1, 0.025, 0.025), material );
-		var v = arr[i].geometry.vertices; 
-		v[0].x = v[1].x = v[6].x = v[7].x = -0.5;
-		v[3].x = v[2].x = v[5].x = v[4].x = 0.5;
-		
-		v[0].y = v[3].y = v[4].y = v[7].y = -0.025/2;
-		v[1].y = v[2].y = v[5].y = v[6].y = 0.025/2;
-		
-		arr[i].geometry.verticesNeedUpdate = true;			
-		arr[i].visible = false;	 
-		arr[i].renderOrder = 1;
-		arr[i].userData = {rulerwd: {cone:[]}};
-		scene.add( arr[i] );
-		
-		for ( var i2 = 0; i2 < cdm.count; i2++ )
-		{
-			var cone = new THREE.Mesh(infProject.geometry.cone[1], material); 
-			cone.visible = false;
-			scene.add( cone );	
-			
-			arr[i].userData.rulerwd.cone[i2] = cone;			
-		}
-	}
-	
-	return arr;
-}
-
 
 
 

@@ -102,17 +102,7 @@ function resetScene()
 	
 	// прячем размеры и линейки
 	myHouse.myWDPoints.hide();
-	
-	var line = infProject.scene.size.wd_1.line;
-	
-	for ( var i = 0; i < line.length; i++ ) 
-	{ 
-		line[i].visible = false; 
-		for ( var i2 = 0; i2 < line[i].userData.rulerwd.cone.length; i2++ )
-		{
-			line[i].userData.rulerwd.cone[i2].visible = false; 
-		}
-	}
+	myHouse.myWDRulers.hide();
 		
 	for ( var i = 0; i < infProject.html.wd.length; i++ ) 
 	{ 
