@@ -103,7 +103,7 @@ function getMinDistanceVertex(v, pos)
 
 var objsBSP = null;
 var wallClone = new THREE.Mesh();
-
+ 
 
 
 // скрываем размеры и котнроллеры у окна/двери
@@ -143,7 +143,7 @@ function hideSizeWD( obj = null )
 	{ 
 		let line = infProject.scene.size.wd_1.line[i];
 		line.visible = false; 
-		for ( leti2 = 0; i2 < line.userData.rulerwd.cone.length; i2++ )
+		for ( let i2 = 0; i2 < line.userData.rulerwd.cone.length; i2++ )
 		{
 			line.userData.rulerwd.cone[i2].visible = false; 
 		}	

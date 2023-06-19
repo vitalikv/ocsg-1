@@ -196,7 +196,7 @@ class MyMouse
 	// если кликнули на объект, то блокируем камеру
 	setMouseStop(value) 
 	{
-		myCameraOrbit.stopMove = value;
+		myCameraOrbit.stopMove = value;		
 	}
 
 	// нажали на кнопку интерфейса, загружаем объект	

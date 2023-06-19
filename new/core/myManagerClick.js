@@ -162,7 +162,7 @@ class MyManagerClick
 			this.consoleInfo( obj );
 		}
 		
-		return flag ? obj : null;
+		return flag ? obj : undefined;
 	}
 
 

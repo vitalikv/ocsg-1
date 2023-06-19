@@ -282,19 +282,9 @@ function deleteWinDoor(cdm)
 			deleteValueFromArrya({arr: wall.userData.wall.arrO, o: wd});
 		}	
 		
-		if(wd.userData.tag == 'window') { myManagerClick.hideMenuUI(wd); }
-		if(wd.userData.tag == 'door') { myManagerClick.hideMenuUI(wd); }
-		
-		clickO = resetPop.clickO();
-		hideSizeWD( wd ); 
+		myManagerClick.hideMenuObjUI_2D(); 
 	}
 	
-	if(wd.userData.cubeCam)
-	{
-		deleteValueFromArrya({arr: infProject.scene.array.cubeCam, o: wd.userData.cubeCam});
-		disposeHierchy({obj: wd.userData.cubeCam});
-		scene.remove( wd.userData.cubeCam );			
-	}
 
 	deleteSvgWD({obj: wd});
 	 
