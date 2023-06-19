@@ -236,6 +236,7 @@ class MyManagerClick
 				else if(tag == 'point' && isCam2D) { this.hideMenuUI(); }
 				else if(tag == 'window' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(); }
 				else if(tag == 'door' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(); }
+				else if(tag == 'controll_wd') { hideSizeWD(obj); this.hideMenuUI(); }
 				else if(tag == 'obj' && isCam2D) { hidePivotGizmo(obj); }
 				else if(tag == 'roof' && isCam2D) { hidePivotGizmo(obj); }
 				else { flag = false; }
@@ -255,8 +256,9 @@ class MyManagerClick
 			{
 				if(tag == 'wall') { this.hideMenuUI(); }
 				else if(tag == 'point') { this.hideMenuUI(); }
-				else if(tag == 'window') { hideSizeWD(obj); this.hideMenuUI(); }
-				else if(tag == 'door') { hideSizeWD(obj); this.hideMenuUI(); }
+				else if(tag == 'window') { hideSizeWD(); this.hideMenuUI(); }
+				else if(tag == 'door') { hideSizeWD(); this.hideMenuUI(); }
+				else if(tag == 'controll_wd') { hideSizeWD(); this.hideMenuUI(); }
 				else if(tag == 'room') { this.hideMenuUI(); }
 				else if(tag == 'obj') { hidePivotGizmo(obj); }
 				else if(tag == 'roof') { hidePivotGizmo(obj); }

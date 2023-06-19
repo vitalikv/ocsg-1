@@ -43,17 +43,15 @@ class MyWDPointsMove
 		if(id === 1) { pos2 = wall.localToWorld( new THREE.Vector3(wd.userData.door.bound.max.x, controll.position.y, z) ); }
 		this.dir = new THREE.Vector3().subVectors( controll.position, pos2 ).normalize();
 		
-		//var ps = [];
-		//var arr = myHouse.myWDPoints.points;
-		//ps[ps.length] = wall.worldToLocal( arr[0].position.clone() );
-		//ps[ps.length] = wall.worldToLocal( arr[1].position.clone() );
-		//ps[ps.length] = wall.worldToLocal( arr[2].position.clone() );
-		//ps[ps.length] = wall.worldToLocal( arr[3].position.clone() );		
-		//wd.userData.door.wall.controll.arrPos = ps;		
 		
+		if(myCameraOrbit.activeCam.userData.isCam2D)
+		{
+			findOnWallWD(wd);			
+			showRulerWD(wd); 	// показываем линейки 							
+		}
 		
-		//myComposerRenderer.outlineAddObj({arr: [obj]});
-		//tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
+		myComposerRenderer.outlineAddObj({arr: [obj]});
+		tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
 
 		this.isDown = true;		
 	}
@@ -62,26 +60,11 @@ class MyWDPointsMove
 	{
 		if (myCameraOrbit.activeCam.userData.isCam3D) { return; }
 		if (!this.isDown) return;
+		this.isMove = true;
 		
 		const controll = this.sObj;
 		const wd = controll.userData.controll_wd.obj;
 		const wall = wd.userData.door.wall;
-		
-		if (!this.isMove) 
-		{
-			this.isMove = true;
-			
-			const wallClone = new THREE.Mesh();
-			wallClone.geometry = clickMoveWD_BSP( wd ).geometry.clone(); 
-			wallClone.position.copy( wall.position ); 
-			wallClone.rotation.copy( wall.rotation );
-			
-			this.objsBSP = { wall : wallClone, wd : createCloneWD_BSP( wd ) };
-			
-			// меняем цвет у wd
-			wd.material.depthTest = false;  
-			wd.material.opacity = 1.0;			
-		}
 		
 		const intersects = rayIntersect(event, planeMath, 'one');
 		if (intersects.length === 0) return;
@@ -187,26 +170,12 @@ class MyWDPointsMove
 		
 		const wd = obj.userData.controll_wd.obj;
 		const wall = wd.userData.door.wall;
-			const wallClone = new THREE.Mesh();
-			wallClone.geometry = clickMoveWD_BSP( wd ).geometry.clone(); 
-			wallClone.position.copy( wall.position ); 
-			wallClone.rotation.copy( wall.rotation );
-			
-			this.objsBSP = { wall : wallClone, wd : createCloneWD_BSP( wd ) };		
-		
-		MeshBSP( wd, this.objsBSP );
-		 
-		if(myCameraOrbit.activeCam.userData.isCam2D)
-		{ 
-			wd.material.depthTest = false;  
-			wd.material.opacity = 1.0; 		 	
-		}
-		else
-		{ 		
-			wd.material.depthTest = true;
-			wd.material.transparent = true;
-			wd.material.opacity = 0;					
-		}	
+		const wallClone = new THREE.Mesh();
+		wallClone.geometry = clickMoveWD_BSP( wd ).geometry.clone(); 
+		wallClone.position.copy( wall.position ); 
+		wallClone.rotation.copy( wall.rotation );		
+		const objsBSP = { wall : wallClone, wd : createCloneWD_BSP( wd ) };				
+		MeshBSP( wd, objsBSP );		 
 
 		calcSvgFormWD({obj: wd});
 		

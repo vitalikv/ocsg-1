@@ -29,9 +29,11 @@ class MyWDMove
 		if (intersects.length === 0) return;
 		this.offset = intersects[0].point;		
 		
-		findOnWallWD(obj);			
-		if(myCameraOrbit.activeCam.userData.isCam2D) showRulerWD( obj ); 	// показываем линейки 		
-		showTableWD( obj );		// UI
+		if(myCameraOrbit.activeCam.userData.isCam2D)
+		{
+			findOnWallWD(obj);			
+			showRulerWD( obj ); 	// показываем линейки 							
+		}
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
 		tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
@@ -43,26 +45,10 @@ class MyWDMove
 	{
 		if (myCameraOrbit.activeCam.userData.isCam3D) { return; }
 		if (!this.isDown) return;
+		this.isMove = true;
 		
-		const wd = this.sObj;
-	
+		const wd = this.sObj;	
 		const wall = wd.userData.door.wall;
-		
-		if (!this.isMove) 
-		{
-			this.isMove = true;
-			
-			const wallClone = new THREE.Mesh();
-			wallClone.geometry = clickMoveWD_BSP( wd ).geometry.clone(); 
-			wallClone.position.copy( wall.position ); 
-			wallClone.rotation.copy( wall.rotation );
-			
-			this.objsBSP = { wall : wallClone, wd : createCloneWD_BSP( wd ) };
-			
-			// меняем цвет у wd
-			wd.material.depthTest = false;  
-			wd.material.opacity = 1.0;			
-		}
 		
 		const intersects = rayIntersect(event, planeMath, 'one');
 		if (intersects.length === 0) return;
@@ -120,24 +106,21 @@ class MyWDMove
 		if (!isDown) return;
 		if (!isMove) return;
 		
-		MeshBSP( obj, this.objsBSP );
-		 
-		if(myCameraOrbit.activeCam.userData.isCam2D)
-		{ 
-			obj.material.depthTest = false;  
-			obj.material.opacity = 1.0; 		 	
-		}
-		else
-		{ 		
-			obj.material.depthTest = true;
-			obj.material.transparent = true;
-			obj.material.opacity = 0;					
-		}	
+		const wd = obj;
+		const wall = wd.userData.door.wall;
+		const wallClone = new THREE.Mesh();
+		wallClone.geometry = clickMoveWD_BSP( wd ).geometry.clone(); 
+		wallClone.position.copy( wall.position ); 
+		wallClone.rotation.copy( wall.rotation );		
+		const objsBSP = { wall : wallClone, wd : createCloneWD_BSP( wd ) };				
+		MeshBSP( wd, objsBSP );	
 
 		calcSvgFormWD({obj});
 		
 		this.objsBSP = {};
 	}
+	
+	
 			
 	clear()
 	{

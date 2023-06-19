@@ -1,7 +1,5 @@
 
 
-var param_win = { click : false };
-
 
 
 
@@ -109,51 +107,49 @@ var wallClone = new THREE.Mesh();
 
 
 // скрываем размеры и котнроллеры у окна/двери
-function hideSizeWD( obj )
-{	
-	
-	if(myMouse.rayhit) 
+function hideSizeWD( obj = null )
+{
+
+	if(obj && obj.userData.tag == 'controll_wd')
 	{
-		if(myMouse.rayhit.object == obj) return;	// кликнули на один и тот же активный объект
-		
-		if(myMouse.rayhit.object.userData.tag == 'controll_wd')
-		{
-			if(myMouse.rayhit.object.userData.controll_wd.obj == obj) { return; }
-		}		
+		obj = obj.userData.controll_wd.obj;
+	}
+	
+	if(obj && myMouse.rayhit) 
+	{
+		if(myMouse.rayhit.object === obj) return;	// кликнули на один и тот же активный объект	
 	}		
 		
 	if(obj && myCameraOrbit.activeCam.userData.isCam2D)
 	{
-		if(obj.userData.tag == 'door' || obj.userData.tag == 'window')
+		for ( let i = 0; i < arrWallFront.wall.length; i++ )
 		{
-			for ( var i = 0; i < arrWallFront.wall.length; i++ )
-			{
-				if(!arrWallFront.wall[i].obj.userData.wall.html.label) continue;
-				
-				arrWallFront.wall[i].obj.userData.wall.html.label[0].style.display = 'block';
-				arrWallFront.wall[i].obj.userData.wall.html.label[1].style.display = 'block';
-				 
-				arrWallFront.wall[i].obj.userData.wall.html.label[0].userData.elem.show = true;
-				arrWallFront.wall[i].obj.userData.wall.html.label[1].userData.elem.show = true;	
+			if(!arrWallFront.wall[i].obj.userData.wall.html.label) continue;
+			
+			arrWallFront.wall[i].obj.userData.wall.html.label[0].style.display = 'block';
+			arrWallFront.wall[i].obj.userData.wall.html.label[1].style.display = 'block';
+			 
+			arrWallFront.wall[i].obj.userData.wall.html.label[0].userData.elem.show = true;
+			arrWallFront.wall[i].obj.userData.wall.html.label[1].userData.elem.show = true;	
 
-				upPosLabels_2({elem: arrWallFront.wall[i].obj.userData.wall.html.label[0]});
-				upPosLabels_2({elem: arrWallFront.wall[i].obj.userData.wall.html.label[1]});
-			}					
-		}			
+			upPosLabels_2({elem: arrWallFront.wall[i].obj.userData.wall.html.label[0]});
+			upPosLabels_2({elem: arrWallFront.wall[i].obj.userData.wall.html.label[1]});
+		}								
 	}
 	
 	myHouse.myWDPoints.hide();
-	for ( var i = 0; i < infProject.scene.size.wd_1.line.length; i++ ) 
+	
+	for ( let i = 0; i < infProject.scene.size.wd_1.line.length; i++ ) 
 	{ 
-		var line = infProject.scene.size.wd_1.line[i];
+		let line = infProject.scene.size.wd_1.line[i];
 		line.visible = false; 
-		for ( var i2 = 0; i2 < line.userData.rulerwd.cone.length; i2++ )
+		for ( leti2 = 0; i2 < line.userData.rulerwd.cone.length; i2++ )
 		{
 			line.userData.rulerwd.cone[i2].visible = false; 
 		}	
 	}
 	
-	for ( var i = 0; i < infProject.html.wd.length; i++ )
+	for ( let i = 0; i < infProject.html.wd.length; i++ )
 	{ 
 		infProject.html.wd[i].style.display = 'none'; 
 		infProject.html.wd[i].userData.elem.show = false;

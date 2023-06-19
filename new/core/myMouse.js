@@ -184,7 +184,6 @@ class MyMouse
 		
 		
 		//if(this.selectedObj === null) this.setMouseStop(false);
-		param_win.click = false;
 		
 		clickO.elem = null;
 		

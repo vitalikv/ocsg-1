@@ -88,13 +88,22 @@ class TabObject
 		else if(obj.userData.tag === 'door')
 		{
 			txtName = obj.userData.door.nameRus;
+			showTableWD( obj );
 			this.divs.wd.style.display = '';
 		}
 		else if(obj.userData.tag === 'window')
 		{
 			txtName = obj.userData.door.nameRus;
+			showTableWD( obj );
 			this.divs.wd.style.display = '';
-		}	
+		}
+		else if(obj.userData.tag === 'controll_wd')
+		{
+			const wd = obj.userData.controll_wd.obj;
+			txtName = wd.userData.door.nameRus;
+			showTableWD( wd );
+			this.divs.wd.style.display = '';
+		}		
 		else if(obj.userData.tag === 'room')
 		{
 			txtName = 'пол';
