@@ -133,8 +133,7 @@ function changeDepthColor()
 	
 	for ( var i = 0; i < door.length; i++ )
 	{  
-		svg[svg.length] = door[i].userData.door.svg.el;
-		
+		if(door[i].userData.door.svg.el) { svg[svg.length] = door[i].userData.door.svg.el; }		
 		if(door[i].userData.door.svg.path) { svg[svg.length] = door[i].userData.door.svg.path; }
 		if(door[i].userData.door.svg.arc) { svg[svg.length] = door[i].userData.door.svg.arc; }
 		
@@ -144,8 +143,7 @@ function changeDepthColor()
 
 	for ( var i = 0; i < window.length; i++ )
 	{ 
-		svg[svg.length] = window[i].userData.door.svg.el;
-		
+		if(window[i].userData.door.svg.el) { svg[svg.length] = window[i].userData.door.svg.el; }
 		if(window[i].userData.door.svg.path) { svg[svg.length] = window[i].userData.door.svg.path; }
 		
 		if(!window[i].userData.door.obj3D) continue;

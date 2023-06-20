@@ -98,7 +98,9 @@ class MyWDRulers
 	{
 		for ( let i = 0; i < this.objRulers.length; i++ )
 		{ 
-			this.objRulers[i].scale.set(1, 1/value, 1/value); 
+			this.objRulers[i].scale.set(1, 1/value, 1/value);
+			this.objRulers[i].userData.cone[0].scale.set(1.3/value, 1.3/value, 1.3/value);
+			this.objRulers[i].userData.cone[1].scale.set(1.3/value, 1.3/value, 1.3/value);
 		}
 	}
 	

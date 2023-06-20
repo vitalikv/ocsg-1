@@ -166,9 +166,10 @@
 	<script src="<?=$path?>new/house/point/myPointAction.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wall/myWall.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wall/myWallMove.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/wd/myWD.js?<?=$vrs?>"></script>	
+	<script src="<?=$path?>new/house/wd/myWDMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myDoor.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myWindow.js?<?=$vrs?>"></script>	
-	<script src="<?=$path?>new/house/wd/myWDMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myWDPoints.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myWDPointsMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myWDRulers.js?<?=$vrs?>"></script>

@@ -232,19 +232,19 @@ class MyMouse
 			}
 			else if(clickO.button == 'create_wd_1')
 			{
-				createEmptyFormWD_1({type:'door', lotid: null});
+				myHouse.myWD.createWD({type:'door', lotid: null});
 			}		
 			else if(clickO.button == 'create_wd_2')
 			{
-				createEmptyFormWD_1({type:'door', lotid: 10});
+				myHouse.myWD.createWD({type:'door', lotid: 10});
 			}
 			else if(clickO.button == 'add_wind')
 			{
-				createEmptyFormWD_1({type:'window', lotid: clickO.options});
+				myHouse.myWD.createWD({type:'window', lotid: clickO.options});
 			}
 			else if(clickO.button == 'create_gate_1')
 			{
-				createEmptyFormWD_1({type:'door', lotid: -2});
+				myHouse.myWD.createWD({type:'door', lotid: -2});
 			}			
 			else if(clickO.button == 'add_roof')
 			{

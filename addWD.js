@@ -106,7 +106,7 @@ function createEmptyFormWD_1(cdm)
 	obj.userData.door.bound = {}; 
 	obj.userData.door.width = 0.2;
 	obj.userData.door.h1 = 0;		// высота над полом
-	obj.userData.door.color = obj.material.color; 
+	//obj.userData.door.color = obj.material.color; 
 	obj.userData.door.wall = null;
 	obj.userData.door.controll = {};
 	obj.userData.door.ruler = {};
@@ -201,7 +201,7 @@ function dragWD_2( event, obj )
 	var wall = null;
 	
 	var pos = new THREE.Vector3();
-	obj.material.color = obj.userData.door.color;
+	//obj.material.color = obj.userData.door.color;
 	
 	for ( var i = 0; i < intersects.length; i++ )
 	{
@@ -426,6 +426,7 @@ function calcSvgFormWD(cdm)
 	obj.updateMatrixWorld();
 	
 	// базовая форма svg
+	if(obj.userData.door.svg.el)
 	{
 		var v = [];
 		var bound = obj.geometry.boundingBox;

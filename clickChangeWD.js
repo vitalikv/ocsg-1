@@ -16,23 +16,15 @@ function showRulerWD(obj)
 	
 	var boundPos = [];
 	
-/* 	if(camera == cameraWall)
-	{
-		var arr = detectDirectionWall_1(wall, arrWallFront.wall[0].index, detectRoomWallSide(wall, (arrWallFront.wall[0].index == 1) ? 1 : 0));
-		boundPos[0] = arr[0].clone();
-		boundPos[1] = arr[2].clone();		
-	} 
-	else*/	
-	{
-		// находим (границы) позиции от выбранного окна/двери до ближайших окон/дверей/края стены
-		var arr = detectDirectionWall_1(wall, 1, detectRoomWallSide(wall, 1));	
-		boundPos[0] = arr[0].clone();
-		boundPos[1] = arr[2].clone();
-		
-		var arr = detectDirectionWall_1(wall, 2, detectRoomWallSide(wall, 0));
-		boundPos[2] = arr[0].clone();
-		boundPos[3] = arr[2].clone();  		
-	}	
+	// находим (границы) позиции от выбранного окна/двери до ближайших окон/дверей/края стены
+	var arr = detectDirectionWall_1(wall, 1, detectRoomWallSide(wall, 1));	
+	boundPos[0] = arr[0].clone();
+	boundPos[1] = arr[2].clone();
+	
+	var arr = detectDirectionWall_1(wall, 2, detectRoomWallSide(wall, 0));
+	boundPos[2] = arr[0].clone();
+	boundPos[3] = arr[2].clone();  		
+	
 	
 	
 	for ( var i = 0; i < arrWallFront.wall.length; i++ )
