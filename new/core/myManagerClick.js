@@ -124,8 +124,7 @@ class MyManagerClick
 		
 		if(type === 'down')
 		{  
-			if(clickToolWD(clickO.move)) { flag = false; }
-			else if( tag == 'pivot' ) { clickPivot( rayhit ); }
+			if( tag == 'pivot' ) { clickPivot( rayhit ); }
 			else if( tag == 'gizmo' ) { clickGizmo( rayhit ); } 
 			else if( tag == 'wall' && isCam2D ) { myHouse.myWallMove.mousedown({event, obj}); }
 			else if( tag == 'point' ) { myHouse.myMovePoint.mousedown({event, obj}); }

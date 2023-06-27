@@ -109,12 +109,8 @@ class MyWD
 			changeWidthWD(obj, cdm.wall);		// выставляем ширину окна/двери равную ширине стены
 			addWD({ obj: obj });
 		}
-		else
-		{
-			clickO.move = obj; 
-			clickO.last_obj = obj;		
-		}
 
+		return obj;
 	}		
 
 	

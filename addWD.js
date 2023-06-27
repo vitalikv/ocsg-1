@@ -245,26 +245,6 @@ function dragWD_2( event, obj )
 }
 
 
-// кликнули на стену или окно/дверь, когда к мышки привязана вставляемая дверь 
-function clickToolWD(obj)
-{ 
-	  
-	if(obj)
-	{    
-		// кликнули на стену, когда добавляем окно
-		if(obj.userData.tag == 'free_dw') 
-		{ 
-			if(!obj.userData.door.wall) { return true; }
-			
-			clickO.last_obj = null;
-			addWD({ obj : obj });  
-			return true; 
-		}
-	}
-
-	return false;
-}
-
 
 
 // добавляем на выбранную стену окно/дверь (вырезаем форму в стене)

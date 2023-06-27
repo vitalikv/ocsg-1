@@ -93,13 +93,28 @@ class MyMouse
 		infProject.tools.axis[0].visible = false;
 		infProject.tools.axis[1].visible = false;
 		
-
+		
+		// к курсору приклеина toolPoint
 		if(myHouse.myMovePoint.isTypeToolPoint) 
-		{ 
-			// к курсору приклеина toolPoint
+		{ 			
 			myHouse.myMovePoint.mousedown({event, toolPoint: true, btn})
 			return;
 		}
+		
+		// кликнули на стену или окно/дверь, когда к мышки привязана вставляемая дверь 
+		if(this.selectedObj && this.selectedObj.userData.tag === 'free_dw')
+		{
+			if(this.selectedObj.userData.door.wall)
+			{
+				addWD({ obj: this.selectedObj });
+				
+				this.clearClick();
+				this.setMouseStop(false);				
+			}
+			
+			return;
+		}		
+		
 		
 		if (btn === 'right') { this.mouseDownRight( event ); return; } 
 		
@@ -217,34 +232,35 @@ class MyMouse
 		
 		if(myCameraOrbit.activeCam.userData.isCam2D)
 		{ 
+			let obj = null;
+			
 			if(clickO.button == 'create_wall')
 			{
 				clickO.last_obj = null;
 				
 				
-				const point = myHouse.myPoint.createPoint( intersects[0].point, 0 );
-				point.position.y = 0;
-				point.userData.point.type = clickO.button; 
-				this.selectedObj = point;
+				obj = myHouse.myPoint.createPoint( intersects[0].point, 0 );
+				obj.position.y = 0;
+				obj.userData.point.type = clickO.button; 				
 				
 				// кликнули в интерфейсе на создание стены
-				myHouse.myMovePoint.mousedown({event, obj: point, toolPoint: true})
+				myHouse.myMovePoint.mousedown({event, obj, toolPoint: true})
 			}
 			else if(clickO.button == 'create_wd_1')
 			{
-				myHouse.myWD.createWD({type:'door', lotid: null});
+				obj = myHouse.myWD.createWD({type:'door', lotid: null});
 			}		
 			else if(clickO.button == 'create_wd_2')
 			{
-				myHouse.myWD.createWD({type:'door', lotid: 10});
+				obj = myHouse.myWD.createWD({type:'door', lotid: 10});
 			}
 			else if(clickO.button == 'add_wind')
 			{
-				myHouse.myWD.createWD({type:'window', lotid: clickO.options});
+				obj = myHouse.myWD.createWD({type:'window', lotid: clickO.options});
 			}
 			else if(clickO.button == 'create_gate_1')
 			{
-				myHouse.myWD.createWD({type:'door', lotid: -2});
+				obj = myHouse.myWD.createWD({type:'door', lotid: -2});
 			}			
 			else if(clickO.button == 'add_roof')
 			{
@@ -253,7 +269,13 @@ class MyMouse
 			else if(clickO.button == 'add_lotid')
 			{
 				loadObjServer({lotid: clickO.options, cursor: true});
-			}		
+			}
+
+			if(obj) 
+			{
+				this.selectedObj = obj;
+				this.setMouseStop(true);				
+			}
 		}
 		else if(myCameraOrbit.activeCam.userData.isCam3D)
 		{
