@@ -6,10 +6,7 @@ $('[ui_1=""]').on('mousedown wheel DOMMouseScroll mousewheel mousemove touchstar
 $('[data-action="top_panel_1"]').mousedown(function () { clickInterface(); });
 $('[data-action="left_panel_1"]').mousedown(function () { clickInterface(); });
 
-
-
-$('[nameId="sw_dw_1"]').mousedown(function () { swSetDW_1({obj: clickO.last_obj, type: 'r-l'}); }); 
-$('[nameId="sw_dw_2"]').mousedown(function () { swSetDW_1({obj: clickO.last_obj, type: 't-b'}); });	
+	
 
 $('[nameId="obj_rotate_reset"]').mousedown(function () { objRotateReset(); });	
 $('[nameId="button_copy_obj"]').mousedown(function () { copyObj(); });

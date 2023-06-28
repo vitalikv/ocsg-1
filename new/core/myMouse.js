@@ -106,7 +106,7 @@ class MyMouse
 		{
 			if(this.selectedObj.userData.door.wall)
 			{
-				addWD({ obj: this.selectedObj });
+				myHouse.myWD.addWD({ obj: this.selectedObj });
 				
 				this.clearClick();
 				this.setMouseStop(false);				
@@ -299,6 +299,11 @@ class MyMouse
 		this.rayhit = null;		
 	}
 	
+	
+	getSelectedObj()
+	{
+		return this.selectedObj;
+	}
 	
 	render()
 	{

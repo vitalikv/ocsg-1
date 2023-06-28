@@ -1,187 +1,7 @@
 
 
-// создаем форму окна/двери/балкона (free_dw)
-function createEmptyFormWD_1(cdm)
-{
-	if(!cdm) { cdm = {} };
-	
-	var type = (cdm.type) ? cdm.type : 'door';
-	
-	var color = infProject.listColor.door2D;
-	
-	if(type == 'window'){ color = infProject.listColor.window2D; }
-	else if(type == 'door'){ color = infProject.listColor.door2D; }
-	
-	var material = new THREE.MeshStandardMaterial({ color: color, transparent: true, opacity: 1.0, depthTest: false });
-	
-	
-	if(myCameraOrbit.activeCam.userData.isCam2D)
-	{ 
-		material.depthTest = false;		
-		material.opacity = 1.0; 	
-	}
-	else if(1 == 2)
-	{ 		
-		material.depthTest = true;
-		material.opacity = 0;					
-	}	
-	
-	var spline = [];			
-	
-	if(cdm.size)
-	{
-		var x = cdm.size.x/2;
-		var y = cdm.size.y/2;
-		
-		spline[0] = new THREE.Vector2( -x, -y );	
-		spline[1] = new THREE.Vector2( x, -y );
-		spline[2] = new THREE.Vector2( x, y );
-		spline[3] = new THREE.Vector2( -x, y );			
-	}
-	else if(type == 'window')
-	{
-		var x = infProject.settings.wind.width / 2;
-		var y = infProject.settings.wind.height / 2;
-		
-		spline[0] = new THREE.Vector2( -x, -y );	
-		spline[1] = new THREE.Vector2( x, -y );
-		spline[2] = new THREE.Vector2( x, y );
-		spline[3] = new THREE.Vector2( -x, y );		
-	}
-	else if(type == 'door')
-	{  
-		var x = infProject.settings.door.width / 2;
-		var y = infProject.settings.door.height / 2;
-		
-		if(cdm.lotid === -2)
-		{
-			x = infProject.settings.gate.width / 2;
-			y = infProject.settings.gate.height / 2;			
-		}
-		
-		spline[0] = new THREE.Vector2( -x, -y );	
-		spline[1] = new THREE.Vector2( x, -y );
-		spline[2] = new THREE.Vector2( x, y );
-		spline[3] = new THREE.Vector2( -x, y );		
-	}
-	else
-	{
-		return;
-	}
-	
-	var shape = new THREE.Shape( spline );
-	var obj = new THREE.Mesh( new THREE.ExtrudeGeometry( shape, { bevelEnabled: false, depth: 0.2 } ), material );	
-	
-	var v = obj.geometry.vertices;
-	
-	var minX = [], maxX = [], minY = [], maxY = [], minZ = [], maxZ = [];
-	
-	for ( var i = 0; i < v.length; i++ )
-	{
-		v[i].z = Math.round(v[i].z * 100) / 100;
-		if(v[i].z == 0) { minZ[minZ.length] = i; v[i].z = -0.1; }
-		if(v[i].z == 0.2) { maxZ[maxZ.length] = i; v[i].z = 0.1; } 
-	}
-	
-	obj.geometry.computeBoundingBox();	
-	
-	for ( var i = 0; i < v.length; i++ )
-	{
-		if(obj.geometry.boundingBox.min.x + 0.05 > v[i].x) { minX[minX.length] = i; }
-		if(obj.geometry.boundingBox.max.x - 0.05 < v[i].x) { maxX[maxX.length] = i; }
-		if(obj.geometry.boundingBox.min.y + 0.05 > v[i].y) { minY[minY.length] = i; }
-		if(obj.geometry.boundingBox.max.y - 0.05 < v[i].y) { maxY[maxY.length] = i; }
-	}
-	
-	
-	var arr = { minX : minX, maxX : maxX, minY : minY, maxY : maxY, minZ : minZ, maxZ : maxZ };
-	
-	var form = { type : '' , v : arr };	
-	
-	obj.userData.tag = 'free_dw';
-	obj.userData.door = {};
-	obj.userData.door.type = type;
-	obj.userData.door.size = new THREE.Vector3();
-	obj.userData.door.form = form;
-	obj.userData.door.bound = {}; 
-	obj.userData.door.width = 0.2;
-	obj.userData.door.h1 = 0;		// высота над полом
-	//obj.userData.door.color = obj.material.color; 
-	obj.userData.door.wall = null;
-	obj.userData.door.controll = {};
-	obj.userData.door.ruler = {};
-	obj.userData.door.last = { pos : new THREE.Vector3(), rot : new THREE.Vector3(), x : 0, y : 0 };
-	obj.userData.door.topMenu = true;
-	obj.userData.door.lotid = (cdm.lotid)? cdm.lotid : null;
-	obj.userData.door.obj3D = null;
-	obj.userData.door.openId = (cdm.openId !== undefined) ? cdm.openId : 0;
-	obj.userData.door.svg = {};
-	obj.userData.door.svg.el = createSvgPath({count: 1, color: infProject.settings.svg.scaleBox.color, fill: '#ffffff', stroke_width: "1px"})[0];
-	obj.userData.door.nameRus = (type === 'door') ? 'дверь' : 'окно';
-	
-	var fillColor = (type == 'door') ? '#e0e0e0' : '#ffffff';	
-	if(cdm.lotid > 0) obj.userData.door.svg.path = createSvgPath({count: 1, color: infProject.settings.svg.scaleBox.color, fill: fillColor, stroke_width: "1px"})[0];
-	
-	if(type == 'door' && cdm.lotid > 0)
-	{
-		obj.userData.door.svg.arc = createSvgArc({count: 1, color: infProject.settings.svg.scaleBox.color})[0];
-	}
-	
-	//obj.userData.door.active = { click: true, hover: true };
-	
-	
-	//обновляем svg форму
-	calcSvgFormWD({obj: obj});
-	
-	
-	//default размеры
-	if(1==1)
-	{
-		obj.geometry.computeBoundingBox();		
-		var dX = obj.geometry.boundingBox.max.x - obj.geometry.boundingBox.min.x;
-		var dY = obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y;			
-		
-		obj.userData.door.form.size = new THREE.Vector3(dX, dY, 1);
-		
-		var h1 = (type == 'window') ? infProject.settings.wind.h1 : 0;
-		 
-		obj.userData.door.h1 = h1 - obj.geometry.boundingBox.min.y; 
 
-		//if(cdm.pos) { obj.userData.door.h1 = cdm.pos.y - obj.geometry.boundingBox.min.y; }
-	}
-		
-	//default vertices
-	if(1==1)
-	{
-		var v2 = [];
-		var v = obj.geometry.vertices;
-		for ( var i = 0; i < v.length; i++ ) { v2[i] = v[i].clone(); }
-		obj.userData.door.form.v2 = v2;		
-	}
-	
-	upUvs_4( obj );
-	
-	scene.add( obj );
-	
-	
-	if(cdm.status)
-	{
-		obj.userData.id = cdm.id;
-		obj.position.copy(cdm.pos);
-		
-		obj.position.y += (obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y) / 2; 	
-		
-		changeWidthWD(obj, cdm.wall);		// выставляем ширину окна/двери равную ширине стены
-		addWD({ obj: obj });
-	}
-	else
-	{
-		clickO.move = obj; 
-		clickO.last_obj = obj;		
-	}
-}
-
-
+ 
 // перетаскиваем free_dw
 function dragWD_2( event, obj ) 
 { 
@@ -247,163 +67,20 @@ function dragWD_2( event, obj )
 
 
 
-// добавляем на выбранную стену окно/дверь (вырезаем форму в стене)
-// obj 		готовая дверь/окно
-// wall		стену на которую кликнули
-async function addWD({ obj })
-{	
-	var wall = obj.userData.door.wall;
-	var pos = obj.position;
-	obj.userData.tag = obj.userData.door.type;
-	
-	//pos.y -= 0.001;		// делаем чуть ниже уровня пола
-	obj.position.copy( pos );
-	obj.rotation.copy( wall.rotation ); 
-	obj.material.transparent = false;
-	
-	
-	if(myCameraOrbit.activeCam.userData.isCam2D)
-	{ 
-		obj.material.depthTest = false;
-		obj.material.transparent = true;
-		obj.material.opacity = 1.0; 		 	
-	}
-	else
-	{ 		
-		obj.material.depthTest = true;
-		obj.material.transparent = true;
-		obj.material.opacity = 0;					
-	}	
-	
-	//changeWidthWD(obj, wall);		// выставляем ширину окна/двери равную ширине стены
-	
-	// обновляем(пересчитываем) размеры двери/окна/двери (если измениалась ширина)
-	obj.geometry.computeBoundingBox(); 	
-	obj.geometry.computeBoundingSphere();
-  
-	
-	if(!obj.userData.id) { obj.userData.id = countId; countId++; }  
-	
-	if(obj.userData.tag == 'window') { infProject.scene.array.window[infProject.scene.array.window.length] = obj; }
-	else if(obj.userData.tag == 'door') { infProject.scene.array.door[infProject.scene.array.door.length] = obj; }
-
-	
-	//--------
-	
-	obj.updateMatrixWorld();
-	
-	wall.userData.wall.arrO[wall.userData.wall.arrO.length] = obj;
-	
-	obj.geometry.computeBoundingBox();
-	obj.geometry.computeBoundingSphere();
-	
-	
-	if(obj.userData.door.lotid > 0)
-	{
-		await loadObjServer({type: 'wd', wd: obj, lotid: obj.userData.door.lotid});
-	}
-	else if(obj.userData.door.lotid === -2)
-	{
-		obj.userData.door.nameRus = 'гаражные ворота';
-		let mat2 = new THREE.MeshStandardMaterial({ color: 0x000000, lightMap : lightMap_1 });
-		let obj2 = new THREE.Mesh( obj.geometry.clone(), mat2 );
-		
-		for ( let i = 0; i < obj2.geometry.vertices.length; i++ )
-		{
-			let z = obj2.geometry.vertices[i].z;
-			obj2.geometry.vertices[i].z = (z < 0) ? -0.01 : 0.01;
-		}
-		obj2.geometry.verticesNeedUpdate = true;
-		setTexture({obj: obj2, material: { img: "img/load/proflist_1.jpg" } });
-		
-		setObjInWD({obj: obj2}, {wd: obj});
-		mat2.visible = true;	// не прячем текстуру ,т.к. это самопальный объект и в нем нету пустого box(обертки), поэтому его не прячем		
-	}
-	else
-	{
-		obj.userData.door.nameRus = 'проем';
-	}
-	
-	//обновляем svg форму
-	calcSvgFormWD({obj: obj});	
- 	
-	clickO.last_obj = null;
-	clickO.move = null;
-	
-	
-	// создаем клон двери/окна, чтобы вырезать в стене нужную форму
-	if(1==1)
-	{  
-		let objsBSP = { wall: wall, wd: createCloneWD_BSP( obj ) };		
-		MeshBSP( obj, objsBSP ); 
-	}	
-	
-	renderCamera();
-}
-
-
-
-// переключаем положение(вращаем) wd 
-function swSetDW_1(cdm)
-{
-	var obj = cdm.obj;
-	var type = cdm.type;
-	
-	if(!obj.userData.door) return;
-	
-	if(type == 'r-l')
-	{		
-		if(obj.userData.door.openId == 0 || obj.userData.door.openId == 1)
-		{
-			obj.userData.door.openId = (obj.userData.door.openId == 0) ? 1 : 0;
-		}
-		else if(obj.userData.door.openId == 2 || obj.userData.door.openId == 3)
-		{
-			obj.userData.door.openId = (obj.userData.door.openId == 3) ? 2 : 3;
-		}		
-	}
-	else if(type == 't-b')
-	{
-		if(obj.userData.door.openId == 2 || obj.userData.door.openId == 3)
-		{
-			obj.userData.door.openId = (obj.userData.door.openId == 2) ? 0 : 1;
-		}
-		else if(obj.userData.door.openId == 0 || obj.userData.door.openId == 1)
-		{
-			obj.userData.door.openId = (obj.userData.door.openId == 0) ? 2 : 3;
-		}		
-	}
-	
-	calcSvgFormWD({obj: obj});
-	setPosWD_Obj3D({wd: obj});
-	
-	// парметрическое окно
-	if(obj.children.length > 0 && obj.children[0].userData.contour && obj.children[0].userData.contour.length > 0)
-	{	
-		const wallClone = new THREE.Mesh();
-		wallClone.geometry = clickMoveWD_BSP( obj ).geometry.clone(); 
-		wallClone.position.copy( obj.userData.door.wall.position ); 
-		wallClone.rotation.copy( obj.userData.door.wall.rotation );
-
-		const objsBSP = { wall: wallClone, wd: createCloneWD_BSP( obj ) };		
-		MeshBSP( obj, objsBSP ); 
-	}
-	
-	renderCamera();
-}
-
 
 
 
 //обновляем форму и положение wd svg
 function calcSvgFormWD(cdm)
 {
-	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
+	//if(!myCameraOrbit.activeCam.userData.isCam2D) return; в 3D тоже нужно, когда меняем размер через input
 	
 	var obj = cdm.obj;
 	var openId = obj.userData.door.openId;	// положение открытие wd (в какую сторону повернут obj3D)
 	
 	obj.updateMatrixWorld();
+	
+	const force = (myCameraOrbit.activeCam.userData.isCam3D) ? true : false;
 	
 	// базовая форма svg
 	if(obj.userData.door.svg.el)
@@ -416,8 +93,8 @@ function calcSvgFormWD(cdm)
 		v[2] = obj.localToWorld( new THREE.Vector3(bound.min.x, 0, bound.min.z) );	
 		v[3] = obj.localToWorld( new THREE.Vector3(bound.max.x, 0, bound.min.z) );	
 		 
-		showElementSvg([obj.userData.door.svg.el]);	
-		updateSvgPath({el: obj.userData.door.svg.el, arrP: [v[0], v[1], v[3], v[2], v[0]]}); 
+		if(myCameraOrbit.activeCam.userData.isCam2D) showElementSvg([obj.userData.door.svg.el]);	
+		updateSvgPath({el: obj.userData.door.svg.el, arrP: [v[0], v[1], v[3], v[2], v[0]]}, force); 
 	}
 
 	// центр открытия двери 
@@ -482,8 +159,8 @@ function calcSvgFormWD(cdm)
 			v[i] = obj.localToWorld( v[i].clone() );
 		}				
 		
-		showElementSvg([obj.userData.door.svg.path]); 		
-		updateSvgPath({el: obj.userData.door.svg.path, arrP: [v[0], v[1], v[3], v[2], v[0]]});
+		if(myCameraOrbit.activeCam.userData.isCam2D) showElementSvg([obj.userData.door.svg.path]); 		
+		updateSvgPath({el: obj.userData.door.svg.path, arrP: [v[0], v[1], v[3], v[2], v[0]]}, force);
 		
 		
 		var posArcEnd = v[2].clone();
@@ -502,8 +179,8 @@ function calcSvgFormWD(cdm)
 		if(openId == 0 || openId == 3) { var param = {p2: posArcEnd, p1: posArcStart}; }
 		else if(openId == 1 || openId == 2) { var param = {p2: posArcStart, p1: posArcEnd}; }
 		
-		showElementSvg([obj.userData.door.svg.arc]);
-		updateSvgArc({el: obj.userData.door.svg.arc, param: param});
+		if(myCameraOrbit.activeCam.userData.isCam2D) showElementSvg([obj.userData.door.svg.arc]);
+		updateSvgArc({el: obj.userData.door.svg.arc, param: param}, force);
 	}
 	
 	

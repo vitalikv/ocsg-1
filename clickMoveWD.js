@@ -169,57 +169,6 @@ function showTableWD(wd)
 
 
 
-// измененяем ширину и высоту окна/двери, высоту над полом
-function inputWidthHeightWD(wd)
-{  
-	if(!wd) return;
-	if(wd.userData.tag == 'window' || wd.userData.tag == 'door'){}
-	else { return; }
-	
-	var wall = wd.userData.door.wall;
-	
-	var x = $('[nameId="size-wd-length"]').val();		// ширина окна	
-	var y = $('[nameId="size-wd-height"]').val();		// высота окна
-	var h = $('[nameId="rp_wd_h1"]').val();				// высота над полом	
-	
-	
-	
-	wd.geometry.computeBoundingBox();
-	var x2 = (Math.abs(wd.geometry.boundingBox.max.x) + Math.abs(wd.geometry.boundingBox.min.x));
-	var y2 = (Math.abs(wd.geometry.boundingBox.max.y) + Math.abs(wd.geometry.boundingBox.min.y));
-	var h2 = wd.userData.door.h1 + wd.geometry.boundingBox.min.y;	
-		
-	var resX = checkNumberInput({ value: x, unit: 1, limit: {min: 0.1, max: 5} });
-	var resY = checkNumberInput({ value: y, unit: 1, limit: {min: 0.1, max: 5} });
-	var resH = checkNumberInput({ value: h, unit: 1, limit: {min: 0, max: 5} });
-	
-	x = (!resX) ? x2 : resX.num;
-	y = (!resY) ? y2 : resY.num;	 
-	h = (!resH) ? h2 : resH.num;
-	
-	
-	wd.userData.door.h1 = h - wd.geometry.boundingBox.min.y - (y2 - y)/2;    // вычитаем изменение высоты окна/двери  
-	
-	var pos = wd.position.clone(); 
-	pos.y = wd.userData.door.h1; 
-	
-	сhangeSizePosWD( wd, pos, x, y );	// изменяем размер окна/двери, а также перемещаем
-	
-	wallClone.geometry = clickMoveWD_BSP( wd ).geometry.clone(); 
-	wallClone.position.copy( wd.userData.door.wall.position ); 
-	wallClone.rotation.copy( wd.userData.door.wall.rotation );	 	
-
-	MeshBSP( wd, { wall : wallClone, wd : createCloneWD_BSP( wd ) } ); 	
-	
-	wd.updateMatrixWorld();
-	
-	showRulerWD(wd);	// показываем линейки и контроллеры для окна/двери	
-	showTableWD(wd);	// обновляем меню
-	
-	calcSvgFormWD({obj: wd});
-	
-	renderCamera();
-}
 
 
 

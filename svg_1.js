@@ -299,11 +299,11 @@ function updateSvgCircle(cdm)
 
 
 // обновляем положение svg на экране (конвертируем из 3D в screen)
-function updateSvgPath(cdm)
+function updateSvgPath(cdm, force = false)
 {
 	var el = cdm.el;
 	
-	if(el.getAttribute("display") == 'none') return;
+	if(el.getAttribute("display") == 'none' && !force) return;
 	
 	if(cdm.arrP)
 	{

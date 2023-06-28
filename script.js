@@ -1189,9 +1189,9 @@ document.addEventListener("keydown", function (e)
 			
 			if(infProject.activeInput == 'input-height') { changeHeightWall(); } 
 			if(infProject.activeInput == 'wall_1') { inputChangeWall_1({}); }	 		
-			if(infProject.activeInput == 'size-wd-length') { inputWidthHeightWD(clickO.last_obj); }
-			if(infProject.activeInput == 'size-wd-height') { inputWidthHeightWD(clickO.last_obj); }
-			if(infProject.activeInput == 'rp_wd_h1') { inputWidthHeightWD(clickO.last_obj); }
+			if(infProject.activeInput == 'size-wd-length') { myHouse.myWD.inputWidthHeightWD(); }
+			if(infProject.activeInput == 'size-wd-height') { myHouse.myWD.inputWidthHeightWD(); }
+			if(infProject.activeInput == 'rp_wd_h1') { myHouse.myWD.inputWidthHeightWD(); }
 			if(infProject.activeInput == 'size_wall_width_1') 
 			{ 
 				var width = $('[nameid="size_wall_width_1"]').val();
