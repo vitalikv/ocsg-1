@@ -199,7 +199,9 @@ async function loadObjServer(cdm)
 		addObjInBase(inf, obj);		
 	}	
 	
-	addObjInScene(inf, cdm);
+	obj = addObjInScene(inf, cdm);
+	
+	return obj;
 }
 
 
@@ -231,38 +233,6 @@ function addObjInBase(inf, obj)
 }
 
 
-
-
-// удаление пятно объекта
-function deleteSpotObj(cdm)
-{ 
-	var obj = null;	
-	
-	if(cdm.obj)
-	{ 
-		obj = cdm.obj; 
-	}
-	else if(cdm.id)
-	{
-		var arr = infProject.scene.array.objSpot;
-		
-		for ( var i = 0; i < arr.length; i++ )
-		{
-			if(arr[i].userData.objSpot.id == cdm.id)
-			{
-				obj = arr[i];
-				break;
-			}
-		}
-	}
-	
-	if(!obj) return;
-	if(obj.userData.tag != 'obj_spot') return;
-	
-	deleteValueFromArrya({arr: infProject.scene.array.objSpot, o: obj});
-	disposeNode(obj);
-	scene.remove(obj); 
-}
 
 
 
@@ -349,10 +319,7 @@ function addObjInScene(inf, cdm)
 	}
 	
 	obj.material.visible = false;
-
-	
-	// CubeCamera
-	//checkReflectionMaterial({obj: obj});			
+		
 	
 	infProject.scene.array.obj[infProject.scene.array.obj.length] = obj;
 
@@ -360,15 +327,12 @@ function addObjInScene(inf, cdm)
 	
 	if(cdm.cursor) 	// объект был добавлен в сцену из каталога
 	{ 
-		deleteSpotObj({obj: clickO.move});
 		clickO.move = obj; 
 	} 
-	else	// объект был добавлен в сцену из сохраннего файла
-	{
-		deleteSpotObj({id: obj.userData.id});
-	}
 	
 	renderCamera();
+	
+	return obj;
 }
 
 
@@ -391,91 +355,6 @@ function upDateTextureObj3D({obj, force = false})
 
 
 
-
-// определяем нужно ли для объекта устанавливать отражение, если да, то ставим CubeCamera
-function checkReflectionMaterial(cdm)
-{
-	var obj = cdm.obj;
-	var arrCubeO = [];
-	
-	obj.traverse(function(child) 
-	{
-		if(child.isMesh && child.material) 
-		{ 
-			if(new RegExp('mirror','i').test( child.material.name )) 
-			{  								
-				child.material.userData.type = 'mirror';			
-				arrCubeO[arrCubeO.length] = child;		 									
-			}
-			else if(new RegExp('glass','i').test( child.material.name )) 
-			{  								
-				child.material.userData.type = 'glass';			
-				child.material.opacity = 0.1;	
-				child.material.transparent = true;
-				child.material.side = THREE.DoubleSide;	
-			}			
-		}
-	});
-
-	//if(arrCubeO.length > 0) createCubeCam({obj: obj, arrO: arrCubeO});		
-	
-}
-
-
-function createCubeCam(cdm)
-{
-	var obj = cdm.obj;
-	var arrO = cdm.arrO;
-	
-	var cubeCam = new THREE.CubeCamera(0.1, 100, 1024);					
-	scene.add(cubeCam); 
-
-	infProject.scene.array.cubeCam[infProject.scene.array.cubeCam.length] = obj;
-	obj.userData.cubeCam = cubeCam;
-
-	 
-	obj.traverse(function(child) 
-	{
-		if(child.isMesh) 
-		{ 
-			if(child.material)
-			{
-				if(child.material.userData.type == 'mirror')
-				{
-					child.material.envMap = cubeCam.renderTarget.texture;
-					//child.material.specular = new THREE.Color(0xffffff);
-					//child.material.shininess = 100;
-					//child.material.envMapIntensity = 2;
-					//child.material.color = new THREE.Color(0xffffff);
-					child.material.metalness = 1;
-					child.material.roughness = 0;
-					//child.material.reflectivity = 1;
-				}								
-			}				
-		}
-	});	
-	
-	updateCubeCam({obj: obj});
-}
-
-
-function updateCubeCam(cdm)
-{
-	var obj = cdm.obj;
-	if(!obj) return;
-	if(!obj.userData.cubeCam) return;
-	
-	var cubeCam = obj.userData.cubeCam;					
-				
-	obj.updateMatrixWorld();
-	obj.geometry.computeBoundingSphere();
-	var pos = obj.localToWorld( obj.geometry.boundingSphere.center.clone() );	
-	cubeCam.position.copy(pos);
-	
-	obj.visible = false;
-	cubeCam.update( renderer, scene );			
-	obj.visible = true;
-}
 
 
 
@@ -589,8 +468,6 @@ function setParamObj(cdm)
 	infProject.scene.array.obj[infProject.scene.array.obj.length] = obj;
 
 	scene.add( obj );	
-	
-	clickO.move = obj;
 	
 	renderCamera();	
 }

@@ -233,9 +233,6 @@ function setObjInWD(inf, cdm)
 	
 	wd.add( obj3D );
 	
-	// CubeCamera
-	checkReflectionMaterial({obj: wd});	
-	
 	wd.userData.door.obj3D = obj3D;
 	
 	wd.updateMatrixWorld();

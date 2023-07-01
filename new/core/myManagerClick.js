@@ -179,7 +179,6 @@ class MyManagerClick
 		else if ( tag == 'room' ) {  }		
 		else if ( tag == 'free_dw' ) { dragWD_2( event, obj ); }
 		else if ( tag == 'obj' ) { moveObjectPop( event ); }
-		else if ( tag == 'obj_spot' ) { moveObjectPop( event ); }
 		else if ( tag == 'roof' ) { clRoof.moveRoof( event ); }		
 	}
 

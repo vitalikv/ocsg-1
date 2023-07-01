@@ -36,15 +36,19 @@ class MyMouse
 	{		
 		clickO.button = null; 
 		
-		var obj = this.selectedObj;
+		const obj = this.selectedObj;
 		
 		if(obj)
-		{
-			if(obj.userData.tag == 'free_dw') 
+		{			
+			if(obj.userData.tag === 'point') 
+			{ 
+				myHouse.myMovePoint.clickRight({obj}); 
+			}			
+			else if(obj.userData.tag === 'free_dw') 
 			{ 
 				deleteWinDoor({wd: obj, upWall: false}); 
 			}
-			else if(obj.userData.tag == 'obj')
+			else if(obj.userData.tag === 'obj')
 			{
 				deleteObjectPop({obj: obj, undoRedo: false}); 
 			}		
@@ -52,7 +56,8 @@ class MyMouse
 			clickO = resetPop.clickO();
 		}	
 		
-		this.selectedObj = null;	
+		this.clearClick();
+		this.setMouseStop(false);	
 	}
 
 	
@@ -94,14 +99,24 @@ class MyMouse
 		infProject.tools.axis[1].visible = false;
 		
 		
+		if (btn === 'right') { this.mouseDownRight( event ); return; } 
+		
+		
 		// к курсору приклеина toolPoint
-		if(myHouse.myMovePoint.isTypeToolPoint) 
+		if(this.selectedObj && this.selectedObj.userData.tag === 'point' && myHouse.myMovePoint.isTypeToolPoint) 
 		{ 			
-			myHouse.myMovePoint.mousedown({event, toolPoint: true, btn})
+			this.selectedObj = myHouse.myMovePoint.mousedown({event, obj: this.selectedObj, toolPoint: true, btn});
+			
+			if(!this.selectedObj)
+			{
+				this.clearClick();
+				this.setMouseStop(false);				
+			}
+			
 			return;
 		}
 		
-		// кликнули на стену или окно/дверь, когда к мышки привязана вставляемая дверь 
+		// к курсору приклеина free_dw (кликнули на стену или окно/дверь, когда к мышки привязана вставляемая дверь)
 		if(this.selectedObj && this.selectedObj.userData.tag === 'free_dw')
 		{
 			if(this.selectedObj.userData.door.wall)
@@ -116,7 +131,7 @@ class MyMouse
 		}		
 		
 		
-		if (btn === 'right') { this.mouseDownRight( event ); return; } 
+		
 		
 		this.isMove = false;
 		 				
@@ -215,7 +230,7 @@ class MyMouse
 	}
 
 	// нажали на кнопку интерфейса, загружаем объект	
-	clickButton( event )
+	async clickButton( event )
 	{
 		if(!clickO.button) return;	
 		
@@ -268,7 +283,7 @@ class MyMouse
 			}		
 			else if(clickO.button == 'add_lotid')
 			{
-				loadObjServer({lotid: clickO.options, cursor: true});
+				obj = await loadObjServer({lotid: clickO.options, cursor: true});
 			}
 
 			if(obj) 
@@ -279,10 +294,18 @@ class MyMouse
 		}
 		else if(myCameraOrbit.activeCam.userData.isCam3D)
 		{
-			if(clickO.button == 'add_lotid')
+			let obj = null;
+			
+			if(clickO.button === 'add_lotid')
 			{
-				loadObjServer({lotid: clickO.options, cursor: true});
-			}		
+				obj = await loadObjServer({lotid: clickO.options, cursor: true});
+			}
+
+			if(obj) 
+			{
+				this.selectedObj = obj;
+				this.setMouseStop(true);				
+			}			
 		}
 		
 		

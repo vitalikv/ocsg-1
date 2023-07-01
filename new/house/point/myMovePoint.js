@@ -17,18 +17,24 @@ class MyMovePoint
 	{
 		if(!this.isTypeToolPoint) return;
 		
+		obj = this.sObj
+		
 		if(obj.w.length == 0){ deleteOnePoint(obj); }  
 		else 
 		{ 
+			let point = null;
 			if(obj.userData.point.type == 'continue_create_wall')
 			{
-				var point = obj.p[0]; 
+				point = obj.p[0]; 
 				deleteWall_3({wall: obj.w[0]}); 
 				//upLabelPlan_1([point.w[0]]);					
-			}
-			
-			if(point.userData.point.last.cdm == 'new_point_1') { deletePoint( point ).wall.userData.id = point.userData.point.last.cross.walls.old; }
-		}		
+			} 
+
+			if(point && point.userData.point.last.cdm == 'new_point_1') { deletePoint( point ).wall.userData.id = point.userData.point.last.cross.walls.old; }
+		}
+
+		this.isTypeToolPoint = false;
+		this.clearPoint();		
 	}
 	
 	mousedown = ({event, obj, toolPoint, btn} = {event, obj: undefined, toolPoint: undefined, btn: undefined}) =>
@@ -38,16 +44,6 @@ class MyMovePoint
 		
 		if(this.isTypeToolPoint) 
 		{
-			obj = this.sObj;
-			
-			if(btn && btn === 'right')
-			{
-				this.clickRight({obj});
-				this.isTypeToolPoint = false;
-				this.clearPoint();
-				return;				
-			}
-			
 			// определяем с чем точка пересеклась и дальнейшие действия
 			obj = myHouse.myPointAction.clickCreateWall( obj );
 			
@@ -95,7 +91,9 @@ class MyMovePoint
 		myComposerRenderer.outlineAddObj({arr: [obj]});
 		tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
 
-		this.isDown = true;		
+		this.isDown = true;
+
+		return this.sObj;
 	}
 	
 	mousemove = (event) =>
