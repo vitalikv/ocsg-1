@@ -125,12 +125,10 @@ function getInfoObj_UndoRedo(cdm)
 
 
 // перемещение по 2D плоскости 
-function moveObjectPop( event )
+function moveObjectPop( event, obj )
 {	
 	var intersects = rayIntersect( event, planeMath, 'one' ); 	
-	if(intersects.length === 0) return;
-	
-	var obj = clickO.move;		
+	if(intersects.length === 0) return;		
 	
 	var pos = new THREE.Vector3().addVectors( intersects[ 0 ].point, clickO.offset );	
 	

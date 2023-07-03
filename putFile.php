@@ -50,6 +50,7 @@ new/ui/right-panel/tabPlan.js
 new/ui/right-panel/tabObject.js
 new/tools/myToolPG.js
 new/tools/myPivot.js
+new/tools/myGizmo.js
 new/myCamera.js
 new/myCameraPerspective.js
 new/camera/cameraMoveKey.js
@@ -71,6 +72,7 @@ new/house/wd/myWindow.js
 new/house/wd/myWDPoints.js
 new/house/wd/myWDPointsMove.js
 new/house/wd/myWDRulers.js
+new/house/obj/myObjMove.js
 ';
 
 $arrF = array();

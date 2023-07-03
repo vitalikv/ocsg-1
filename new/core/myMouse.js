@@ -284,6 +284,8 @@ class MyMouse
 			else if(clickO.button == 'add_lotid')
 			{
 				obj = await loadObjServer({lotid: clickO.options, cursor: true});
+				obj.position.copy(intersects[0].point); 
+				myHouse.myObjMove.mousedown({event, obj});
 			}
 
 			if(obj) 

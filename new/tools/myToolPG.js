@@ -3,8 +3,11 @@
 
 class MyToolPG 
 {
+	myPivot = null;
+	myGizmo = null;		
 	pivot = null;
 	gizmo = null;
+	isDown = false;
 	type = 'pivot';
 	obj = null;
 	arrO = [];
@@ -26,8 +29,11 @@ class MyToolPG
 		//crPivot({container: container});
 		//crGizmo({container: container});	
 
-		this.pivot = new MyPivot();
-		//this.gizmo = infProject.tools.gizmo;		
+		this.myPivot = new MyPivot();
+		this.myGizmo = new MyGizmo();	
+	
+		this.pivot = this.myPivot.obj;
+		this.gizmo = this.myGizmo.obj;		
 		
 		//this.type = type;
 		//this.initButton();
@@ -78,7 +84,6 @@ class MyToolPG
 		else if(obj.userData.tag == 'joinPoint')		// разъем
 		{ 
 			pos = obj.getWorldPosition(new THREE.Vector3());  
-			console.trace(7777)
 		}		
 		else if(obj.userData.tag == 'wtGrid')		// сетка теплого пола
 		{ 
@@ -93,7 +98,7 @@ class MyToolPG
 		let obj = params.obj;
 		let qt = new THREE.Quaternion();
 		
-		if(camOrbit.activeCam.userData.isCam2D)	
+		if(myCameraOrbit.activeCam.userData.isCam2D)	
 		{		
 			if(!obj.geometry.boundingBox) obj.geometry.computeBoundingBox();
 			let bound = obj.geometry.boundingBox;
@@ -108,7 +113,7 @@ class MyToolPG
 			qt = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), rotY - Math.PI/2);
 		}
 		
-		if(camOrbit.activeCam.userData.isCam3D) qt = obj.getWorldQuaternion(new THREE.Quaternion());	
+		if(myCameraOrbit.activeCam.userData.isCam3D) qt = obj.getWorldQuaternion(new THREE.Quaternion());	
 
 		return qt;
 	}
@@ -123,7 +128,8 @@ class MyToolPG
 		this.hide();
 		
 		this.obj = obj;
-		this.arrO = (arrO) ? arrO : ddGetGroup({obj, tubePoint: true});
+		//this.arrO = (arrO) ? arrO : ddGetGroup({obj, tubePoint: true});
+		this.arrO = [];
 		
 		this.pos = (pos) ? pos : this.calcPos({obj: obj});		
 		this.qt = this.calcRot({obj: obj});
@@ -131,16 +137,42 @@ class MyToolPG
 		
 		this.setPosUI();
 		this.setRotUI();
-		this.displayMenuUI({visible: ''});
+		//this.displayMenuUI({visible: ''});
 		
 
 		if(this.type == 'pivot') this.pivot.userData.propPivot({type: 'setPivot', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});		
 		if(this.type == 'gizmo') this.gizmo.userData.propGizmo({type: 'setGizmo', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});
 
-		setClickLastObj({obj});
+		//setClickLastObj({obj});
 		
 		this.render();	
 	}
+	
+	
+	mousedown = ({event, rayhit}) => 
+	{
+		this.isDown = true;
+		
+		if(this.type === 'pivot') this.myPivot.mousedown({event, rayhit});
+		if(this.type === 'gizmo') this.myGizmo.mousedown({event, rayhit});
+	}
+	
+	mousemove = (event) => 
+	{
+		if(!this.isDown) return;
+		
+		if(this.type === 'pivot') this.myPivot.mousemove(event);
+		if(this.type === 'gizmo') this.myGizmo.mousemove(event);			
+	}
+
+	mouseup = (event) => 
+	{	
+		if(this.type === 'pivot') this.myPivot.mouseup();
+		if(this.type === 'gizmo') this.myGizmo.mouseup();
+		
+		this.isDown = false;
+	}	
+	
 	
 	// переключаем Pivot/Gizmo
 	toggleTool({type})
@@ -264,6 +296,7 @@ class MyToolPG
 	// вставляем в input position
 	setPosUI()
 	{
+		return
 		let pos = this.pos;
 		
 		this.ui.pos.x.value = Math.round(pos.x * 100) / 100;
@@ -274,6 +307,7 @@ class MyToolPG
 	// вставляем в input rotation
 	setRotUI()
 	{
+		return
 		let qt = this.qt;
 		let rot = new THREE.Euler().setFromQuaternion(qt);
 		
@@ -325,13 +359,14 @@ class MyToolPG
 		
 		this.displayMenuUI({visible: 'none'});
 		
-		resetClickLastObj({});
+		//resetClickLastObj({});
 		
 		this.render();		
 	}
 	
 	displayMenuUI(params)
 	{
+		return
 		let visible = params.visible;
 		
 		this.ui.menu.style.display = visible;
@@ -339,7 +374,8 @@ class MyToolPG
 	
 	render()
 	{
-		camOrbit.render();
+		//camOrbit.render();
+		renderCamera();
 	}
 }
 

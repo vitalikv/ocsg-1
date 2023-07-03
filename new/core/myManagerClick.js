@@ -10,16 +10,16 @@ class MyManagerClick
 		var rayhit = null;	
 					
 		
-		if(infProject.tools.pivot.visible)
+		if(myToolPG.pivot.visible)
 		{
-			var ray = rayIntersect( event, infProject.tools.pivot.children, 'arr' );
+			var ray = rayIntersect( event, myToolPG.pivot.children, 'arr' );
 			if(ray.length > 0) { rayhit = ray[0]; return rayhit; }		
 		}
 		
-		if(infProject.tools.gizmo.visible)
+		if(myToolPG.gizmo.visible)
 		{
 			var arr = [];
-			for ( var i = 0; i < infProject.tools.gizmo.children.length; i++ ){ arr[i] = infProject.tools.gizmo.children[i]; }
+			for ( var i = 0; i < myToolPG.gizmo.children.length; i++ ){ arr[i] = myToolPG.gizmo.children[i]; }
 			
 			var ray = rayIntersect( event, arr, 'arr' );
 			if(ray.length > 0) { rayhit = ray[0]; return rayhit; }		
@@ -124,14 +124,14 @@ class MyManagerClick
 		
 		if(type === 'down')
 		{  
-			if( tag == 'pivot' ) { clickPivot( rayhit ); }
-			else if( tag == 'gizmo' ) { clickGizmo( rayhit ); } 
+			if( tag == 'pivot' ) { myToolPG.mousedown({event, rayhit}); /*clickPivot( rayhit );*/ }
+			else if( tag == 'gizmo' ) { myToolPG.mousedown({event, rayhit}); /*clickGizmo( rayhit );*/ } 
 			else if( tag == 'wall' && isCam2D ) { myHouse.myWallMove.mousedown({event, obj}); }
 			else if( tag == 'point' ) { myHouse.myMovePoint.mousedown({event, obj}); }
 			else if( tag == 'window' && isCam2D ) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if( tag == 'door' && isCam2D ) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if( tag == 'controll_wd' ) { myHouse.myWDPointsMove.mousedown({event, obj}); }
-			else if( tag == 'obj' && isCam2D ) { clickObject3D({obj, rayhit}); }
+			else if( tag == 'obj' && isCam2D ) { myHouse.myObjMove.mousedown({event, obj}); /*clickObject3D({obj, rayhit});*/ }
 			else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clickObject3D({obj, rayhit}); }
 			else if( tag == 'roof' && isCam2D ) { clRoof.clickRoof({obj, rayhit}); }
 			else if( tag == 'roof' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clRoof.clickRoof({obj, rayhit}); }		
@@ -152,8 +152,8 @@ class MyManagerClick
 		
 		if(flag) 
 		{			
-			if(tag == 'pivot') { obj = infProject.tools.pivot.userData.pivot.obj; }
-			else if(tag == 'gizmo') { obj = infProject.tools.gizmo.userData.gizmo.obj; }		
+			//if(tag == 'pivot') { obj = infProject.tools.pivot.userData.pivot.obj; }
+			//else if(tag == 'gizmo') { obj = infProject.tools.gizmo.userData.gizmo.obj; }		
 			
 			clickO.move = obj;
 			clickO.last_obj = obj;
@@ -169,8 +169,8 @@ class MyManagerClick
 	{
 		const tag = obj.userData.tag;
 			
-		if ( tag == 'pivot' ) { movePivot( event ); }
-		else if ( tag == 'gizmo' ) { moveGizmo( event ); }
+		if ( tag == 'pivot' ) { myToolPG.mousemove(event); /*movePivot( event );*/ }
+		else if ( tag == 'gizmo' ) { myToolPG.mousemove(event); /*moveGizmo( event );*/ }
 		else if ( tag == 'wall' ) { myHouse.myWallMove.mousemove(event); }
 		else if ( tag == 'window' ) { myHouse.myWDMove.mousemove(event); }
 		else if ( tag == 'door' ) { myHouse.myWDMove.mousemove(event); }
@@ -178,7 +178,7 @@ class MyManagerClick
 		else if ( tag == 'point' ) { myHouse.myMovePoint.mousemove( event ); }
 		else if ( tag == 'room' ) {  }		
 		else if ( tag == 'free_dw' ) { dragWD_2( event, obj ); }
-		else if ( tag == 'obj' ) { moveObjectPop( event ); }
+		else if ( tag == 'obj' ) { myHouse.myObjMove.mousemove(event); /*moveObjectPop( event, obj );*/ }
 		else if ( tag == 'roof' ) { clRoof.moveRoof( event ); }		
 	}
 
@@ -187,25 +187,14 @@ class MyManagerClick
 	{
 		var tag = obj.userData.tag;
 		
-		if(tag == 'point') 
-		{  		
-			myHouse.myMovePoint.mouseup({event, obj}); 									
-		}
+		if(tag == 'point') { myHouse.myMovePoint.mouseup({event, obj}); }
 		else if(tag == 'wall') { myHouse.myWallMove.mouseup(); }
 		else if(tag == 'window' || obj.userData.tag == 'door') { myHouse.myWDMove.mouseup(); }	
 		else if(tag == 'controll_wd') { myHouse.myWDPointsMove.mouseup(); } 
-		else if(tag == 'obj' && this.isMove) { clickMouseUpObject(obj); }
-		else if(tag == 'pivot' && this.isMove) { clickMouseUpPivot(); }
-		else if(tag == 'gizmo' && this.isMove) { clickMouseUpGizmo(); }
-		else if ( tag == 'roof' && this.isMove) { clRoof.moveRoof( event ); clRoof.clickUpRoof(obj); }
-		
-		if(tag == 'free_dw') {  }
-		else if (tag == 'point') 
-		{
-			if(obj.userData.point.type) {  } 
-			else { clickO.move = null; }
-		}		
-		else { clickO.move = null; }		
+		else if(tag == 'obj') { myHouse.myObjMove.mouseup(); /*clickMouseUpObject(obj);*/ }
+		else if(tag == 'pivot') { myToolPG.mouseup(); /*clickMouseUpPivot();*/ }
+		else if(tag == 'gizmo') { myToolPG.mouseup(); /*clickMouseUpGizmo();*/ }
+		else if(tag == 'roof') { clRoof.moveRoof( event ); clRoof.clickUpRoof(obj); }		
 	}
 
 	
