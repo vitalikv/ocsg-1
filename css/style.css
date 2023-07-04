@@ -1226,6 +1226,47 @@ canvas
 /*  <--- right_panel  */
 
 
+/*  pivot_gizmo --->  */
+.input_rotate input
+{
+	display: block;
+	margin: auto 4px;
+	width: 90px;
+		
+	font-size: 14px;
+	text-align: center;
+	color: #666;
+	
+	text-decoration: none;
+	line-height: 2em;
+	padding: 0;
+	
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	box-sizing: border-box;
+	
+	background-color:#fff;	
+}
+
+.block_pos
+{
+	position: absolute;
+	left: 10px;
+	bottom: 20px;
+	z-index: 1;
+	user-select: none;
+}
+
+.block_pos .button1
+{
+	padding:4px 4px;
+	font:15px Arial, Helvetica, sans-serif;
+	font-weight:normal;
+}
+
+/*  <--- pivot_gizmo  */
+
+
 @media screen and (max-width:850px), screen and (max-device-width:850px) 
 {
 	.modal_name

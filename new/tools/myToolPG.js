@@ -20,11 +20,11 @@ class MyToolPG
 	
 	
 
-	constructor({type = 'pivot', nameAttr}={}) 
+	constructor({type = 'pivot'}={}) 
 	{
-		//let container = document.querySelector(nameAttr);
+		let container = document.querySelector('#canvasFrame');
 		
-		//this.ui_menu = new UI_menuPivotGizmo({container: container});
+		this.ui_menu = new UI_menuPivotGizmo({container: container});
 		
 		//crPivot({container: container});
 		//crGizmo({container: container});	
@@ -35,9 +35,10 @@ class MyToolPG
 		this.pivot = this.myPivot.obj;
 		this.gizmo = this.myGizmo.obj;		
 		
-		//this.type = type;
-		//this.initButton();
-		//this.getPosRotUI();		
+		this.type = type;
+		this.initButton();
+		this.getPosRotUI();
+		this.initInput();
 	}
 	
 	// кнопки переключения Pivot/Gizmo
@@ -61,14 +62,43 @@ class MyToolPG
 		this.ui.menu = document.querySelector('[nameId="block_pos"]');
 		
 		this.ui.pos = {};
-		this.ui.pos.x = document.querySelector('[nameId="object_pos_X"]');
-		this.ui.pos.y = document.querySelector('[nameId="object_pos_Y"]');
-		this.ui.pos.z = document.querySelector('[nameId="object_pos_Z"]');
+		this.ui.pos.x = this.ui.menu.querySelector('[nameId="object_pos_X"]');
+		this.ui.pos.y = this.ui.menu.querySelector('[nameId="object_pos_Y"]');
+		this.ui.pos.z = this.ui.menu.querySelector('[nameId="object_pos_Z"]');
 		
 		this.ui.rot = {};
-		this.ui.rot.x = document.querySelector('[nameId="object_rotate_X"]');
-		this.ui.rot.y = document.querySelector('[nameId="object_rotate_Y"]');
-		this.ui.rot.z = document.querySelector('[nameId="object_rotate_Z"]');		
+		this.ui.rot.x = this.ui.menu.querySelector('[nameId="object_rotate_X"]');
+		this.ui.rot.y = this.ui.menu.querySelector('[nameId="object_rotate_Y"]');
+		this.ui.rot.z = this.ui.menu.querySelector('[nameId="object_rotate_Z"]');		
+	}
+	
+	initInput()
+	{
+		const arrPos = [this.ui.pos.x, this.ui.pos.y, this.ui.pos.z];
+		
+		arrPos.forEach((input) => 
+		{
+			input.onfocus = (e) => 
+			{
+				e.preventDefault();
+				e.stopPropagation();
+
+				input.onkeydown = (e2) => { if (e2.code === 'Enter') this.applyPosUI(); }
+			}					
+		});	
+
+		const arrRot = [this.ui.rot.x, this.ui.rot.y, this.ui.rot.z];
+		
+		arrRot.forEach((input) => 
+		{
+			input.onfocus = (e) => 
+			{
+				e.preventDefault();
+				e.stopPropagation();
+
+				input.onkeydown = (e2) => { if (e2.code === 'Enter') this.applyRotUI(); }
+			}					
+		});		
 	}
 
 	calcPos(params) 
@@ -137,7 +167,7 @@ class MyToolPG
 		
 		this.setPosUI();
 		this.setRotUI();
-		//this.displayMenuUI({visible: ''});
+		this.displayMenuUI({visible: ''});
 		
 
 		if(this.type == 'pivot') this.pivot.userData.propPivot({type: 'setPivot', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});		
@@ -272,7 +302,7 @@ class MyToolPG
 		
 		if(x.num == 180 && z.num == 180) { x.num = 0; z.num = 0; console.log(180); }
 		if(x.num == -180 && z.num == -180) { x.num = 0; z.num = 0; console.log(-180); }
-		console.log('vv', x.num, z.num);
+		
 		x = THREE.Math.degToRad(x.num);
 		y = THREE.Math.degToRad(y.num);
 		z = THREE.Math.degToRad(z.num);		
@@ -283,7 +313,7 @@ class MyToolPG
 				
 		this.pivot.userData.propPivot({type: 'setRotPivot', qt: q_New});
 		this.gizmo.userData.propGizmo({type: 'setRotGizmo', qt: q_New});
-		this.gizmo.userData.propGizmo({type: 'rotObjs', pos: this.pos, arrO: this.arrO, q_Offset: q_Offset});	
+		this.gizmo.userData.propGizmo({type: 'rotObjs', pos: this.pos, arrO: [this.obj], q_Offset: q_Offset});	
 		
 		this.qt = q_New;
 
@@ -296,7 +326,6 @@ class MyToolPG
 	// вставляем в input position
 	setPosUI()
 	{
-		return
 		let pos = this.pos;
 		
 		this.ui.pos.x.value = Math.round(pos.x * 100) / 100;
@@ -307,7 +336,6 @@ class MyToolPG
 	// вставляем в input rotation
 	setRotUI()
 	{
-		return
 		let qt = this.qt;
 		let rot = new THREE.Euler().setFromQuaternion(qt);
 		
@@ -364,11 +392,8 @@ class MyToolPG
 		this.render();		
 	}
 	
-	displayMenuUI(params)
+	displayMenuUI({visible})
 	{
-		return
-		let visible = params.visible;
-		
 		this.ui.menu.style.display = visible;
 	}
 	
@@ -380,7 +405,99 @@ class MyToolPG
 }
 
 
+class UI_menuPivotGizmo 
+{
+	
+	
+	constructor({container})
+	{
+		this.el = null;	
+		this.init({container});
+	}
+	
+	init({container})
+	{
+		let div = document.createElement('div');			
+		div.innerHTML = this.html();
+		this.el = div.children[0];
+		
+		container.append(this.el);
+		
+		this.initEvent();			
+	}
+	
+	initEvent()
+	{
+		//this.el.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+		//this.el.addEventListener('mousemove', function(e) { e.stopPropagation(); });
+		//this.el.addEventListener('mouseup', function(e) { e.stopPropagation(); });	
+	}
+	
+	html()
+	{
+		const css1 = `position: absolute; left: 10px; bottom: 0; height: 80px;`;
+		
+		let str = 
+		`<div nameId="block_pos" class="block_pos" ui_1="">
+			<div style="display: flex;">
+				<div style="display: flex; align-items: center;">
+					<div class="button1 button_gradient_1" nameId="select_pivot">
+						<img src="${infProject.path}/img/move_1.png">
+					</div>	
+					
+					<div class="flex_1 input_rotate">
+						<input type="text" nameId="object_pos_X" value="0">
+						<input type="text" nameId="object_pos_Y" value="0">
+						<input type="text" nameId="object_pos_Z" value="0">
+					</div>	
+				</div>
+				
+				<div style="display: flex; align-items: center; margin-left: 40px;">
+					<div class="button1 button_gradient_1" nameId="select_gizmo">
+						<img src="${infProject.path}/img/rotate_1.png">	
+					</div>	
 
+					<div class="flex_1 input_rotate">
+						<div class="flex_1" style="position: relative; margin: 0 5px;">
+							<div class="button1 button_gradient_1" nameId="obj_rotate_X_90m" style="position: absolute; left: 0; width: 10px;">-</div>
+							<input type="text" nameId="object_rotate_X" value="0">
+							<div class="button1 button_gradient_1" nameId="obj_rotate_X_90" style="position: absolute; right: 0; width: 10px;">+</div>
+						</div>
+						
+						<div class="flex_1" style="position: relative; margin: 0 5px;">
+							<div class="button1 button_gradient_1" nameId="obj_rotate_Y_90m" style="position: absolute; left: 0; width: 10px;">-</div>
+							<input type="text" nameId="object_rotate_Y" value="0">
+							<div class="button1 button_gradient_1" nameId="obj_rotate_Y_90" style="position: absolute; right: 0; width: 10px;">+</div>
+						</div>
+
+						<div class="flex_1" style="position: relative; margin: 0 5px;">
+							<div class="button1 button_gradient_1" nameId="obj_rotate_Z_90m" style="position: absolute; left: 0; width: 10px;">-</div>
+							<input type="text" nameId="object_rotate_Z" value="0">
+							<div class="button1 button_gradient_1" nameId="obj_rotate_Z_90" style="position: absolute; right: 0; width: 10px;">+</div>
+						</div>									
+						
+					</div>	
+
+					<div class="flex_1">
+						<div style="width: 20px; height: 2px; background: rgb(247, 72, 72);"></div>
+						<div style="width: 20px; height: 2px; background: rgb(17, 255, 0);"></div>
+						<div style="width: 20px; height: 2px; background: rgb(72, 116, 247);"></div>
+					</div>
+										
+				
+					<div class="button1 button_gradient_1" nameId="obj_rotate_reset">
+						сбросить	
+					</div>											
+				</div>
+				
+			</div>
+		</div>`;					
+		
+		return str;
+	}
+
+
+}
 
 
 

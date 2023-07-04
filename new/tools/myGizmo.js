@@ -86,6 +86,55 @@ class MyGizmo
 	}
 	
 
+	mousedown = ({event, rayhit}) => 
+	{
+		const obj = rayhit.object;  									
+		const gizmo = this.obj;
+		
+		planeMath.quaternion.copy( obj.getWorldQuaternion(new THREE.Quaternion()) );
+		planeMath.quaternion.multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI/2, 0, 0)));			
+		planeMath.position.copy( gizmo.position );
+		
+		planeMath.updateMatrixWorld();			
+		const dir = planeMath.worldToLocal(rayhit.point.clone());
+		gizmo.userData.rotY = Math.atan2(dir.x, dir.y);			
+		gizmo.userData.dir = new THREE.Vector3().subVectors(planeMath.localToWorld( new THREE.Vector3( 0, 0, -1 ) ), planeMath.position).normalize();		
+		
+		this.render();
+	}
+	
+	mousemove = (event) => 
+	{
+		let rayhit = rayIntersect( event, planeMath, 'one' ); 			
+		if(rayhit.length == 0) return;
+		
+		const gizmo = this.obj;
+		
+		const q_Old = gizmo.quaternion.clone();
+		const rotY_Old = gizmo.userData.rotY;
+		
+		const dir = planeMath.worldToLocal(rayhit[0].point.clone());
+		const rotY = Math.atan2(dir.x, dir.y);	
+		
+		//gizmo.rotateOnWorldAxis(gizmo.userData.dir, rotY - gizmo.userData.rotY);
+		const q = new THREE.Quaternion().setFromAxisAngle(gizmo.userData.dir, rotY - gizmo.userData.rotY);
+		gizmo.quaternion.copy(q.clone().multiply(gizmo.quaternion));
+		gizmo.userData.rotY = rotY;
+		
+									
+		gizmo.userData.propGizmo({type: 'rotObjs', pos: gizmo.position, arrO: [myToolPG.obj], rotY_Old});
+
+		myToolPG.setRotPivotGizmo({qt: gizmo.quaternion});	
+		
+		this.render();
+	}
+
+	mouseup = (e) => 
+	{		
+		this.render();
+	}
+	
+	
 	// ф-ция со всеми действиями Pivot
 	propGizmo = (params) =>
 	{
@@ -95,7 +144,6 @@ class MyGizmo
 		
 		if(type == 'clippingGizmo') { clippingGizmo(); }		
 		if(type == 'setGizmo') { setGizmo({obj: params.obj, arrO: params.arrO, pos: params.pos, qt: params.qt}); }
-		if(type == 'addEvent') { addEvent({rayhit: params.rayhit}); }
 		if(type == 'rotObjs') { rotObjs({pos: params.pos, arrO: params.arrO, q_Offset: params.q_Offset, rotY_Old: params.rotY_Old}); }
 		if(type == 'setPosGizmo') { setPosGizmo({pos: params.pos}); }
 		if(type == 'setRotGizmo') { setRotGizmo({qt: params.qt}); }
@@ -110,19 +158,19 @@ class MyGizmo
 			if (!gizmo.visible) return;
 			
 			
-			if(camOrbit.activeCam.userData.isCam2D)
+			if(myCameraOrbit.activeCam.userData.isCam2D)
 			{
 				let plane = new THREE.Plane(new THREE.Vector3(0,1,0), 100);
 				gizmo.children[0].children[0].material.clippingPlanes[0].copy(plane);		
 			}
 			
-			if(camOrbit.activeCam.userData.isCam3D)
+			if(myCameraOrbit.activeCam.userData.isCam3D)
 			{
 				let obj = new THREE.Object3D();
 				
 				obj.position.copy(gizmo.position);
 				
-				obj.lookAt(camOrbit.activeCam.position);
+				obj.lookAt(myCameraOrbit.activeCam.position);
 				obj.rotateOnAxis(new THREE.Vector3(0,1,0), -Math.PI / 2);
 				obj.updateMatrixWorld();
 	
@@ -149,7 +197,7 @@ class MyGizmo
 			gizmo.position.copy(pos);
 			gizmo.quaternion.copy(qt);
 			
-			let visible = (camOrbit.activeCam.userData.isCam2D) ? false : true;			
+			let visible = (myCameraOrbit.activeCam.userData.isCam2D) ? false : true;			
 			gizmo.children[1].visible = visible;
 			gizmo.children[2].visible = visible;				
 				
@@ -159,76 +207,6 @@ class MyGizmo
 		}
 
 
-		function addEvent(params)
-		{
-			startGizmo(params);
-			
-			camOrbit.stopMove = true;
-			setMouseStop(true);
-			
-			container.onmousemove = (e) => 
-			{
-				moveGizmo({event: e});		
-				
-				camOrbit.render();
-			};
-
-			container.onmouseup = (e) => 
-			{
-				container.onmousemove = null;
-				container.onmouseup = null;
-				
-				camOrbit.stopMove = false;
-				setMouseStop(false);
-
-				camOrbit.render();
-			};			
-		}
-
-
-		// кликнули на gizmo
-		function startGizmo(params)
-		{
-			let rayhit = params.rayhit;
-			
-			let obj = rayhit.object;  									
-			
-			planeMath.quaternion.copy( obj.getWorldQuaternion(new THREE.Quaternion()) );
-			planeMath.quaternion.multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI/2, 0, 0)));			
-			planeMath.position.copy( gizmo.position );
-			
-			planeMath.updateMatrixWorld();			
-			let dir = planeMath.worldToLocal(rayhit.point.clone());
-			gizmo.userData.rotY = Math.atan2(dir.x, dir.y);			
-			gizmo.userData.dir = new THREE.Vector3().subVectors(planeMath.localToWorld( new THREE.Vector3( 0, 0, -1 ) ), planeMath.position).normalize();
-		} 
-
-
-		// вращение gizmo
-		function moveGizmo(params)
-		{
-			let event = params.event;
-			
-			let rayhit = rayIntersect( event, planeMath, 'one' ); 			
-			if(rayhit.length == 0) return;
-			
-			let q_Old = gizmo.quaternion.clone();
-			let rotY_Old = gizmo.userData.rotY;
-			
-			let dir = planeMath.worldToLocal(rayhit[0].point.clone());
-			let rotY = Math.atan2(dir.x, dir.y);	
-			
-			//gizmo.rotateOnWorldAxis(gizmo.userData.dir, rotY - gizmo.userData.rotY);
-			let q = new THREE.Quaternion().setFromAxisAngle(gizmo.userData.dir, rotY - gizmo.userData.rotY);
-			gizmo.quaternion.copy(q.clone().multiply(gizmo.quaternion));
-			gizmo.userData.rotY = rotY;
-			
-										
-			gizmo.userData.propGizmo({type: 'rotObjs', pos: gizmo.position, arrO: infProject.tools.pg.arrO, rotY_Old: rotY_Old});
-
-			infProject.tools.pg.setRotPivotGizmo({qt: gizmo.quaternion});
-		}
-		
 		
 		// вращаем объекты
 		function rotObjs(params)
@@ -268,12 +246,6 @@ class MyGizmo
 		}		
 		
 
-		// прекращаем действия с gizmo
-		function endGizmo(params)
-		{
-			
-		}
-		
 		
 		// установить position Gizmo, когда меняем через input
 		function setPosGizmo(params)
@@ -305,8 +277,8 @@ class MyGizmo
 			
 			let scale = 1;
 			
-			if(camOrbit.activeCam.userData.isCam2D) { scale = 1 / camOrbit.activeCam.zoom; }
-			if(camOrbit.activeCam.userData.isCam3D) { scale = camOrbit.activeCam.position.distanceTo(gizmo.position) / 6; }			
+			if(myCameraOrbit.activeCam.userData.isCam2D) { scale = 1 / myCameraOrbit.activeCam.zoom; }
+			if(myCameraOrbit.activeCam.userData.isCam3D) { scale = myCameraOrbit.activeCam.position.distanceTo(gizmo.position) / 6; }			
 			
 			gizmo.scale.set(scale, scale, scale);
 		}
@@ -315,11 +287,13 @@ class MyGizmo
 		function hide() 
 		{
 			gizmo.visible = false;
-		}		
-					
-		
+		}				
 	}
 
+	render()
+	{
+		renderCamera();
+	}	
 }
 
 
