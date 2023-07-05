@@ -1398,6 +1398,7 @@ let myCameraMoveKey;
 let myComposerRenderer;
 let myLevels;
 let myToolPG;
+let myToolPG_UI;
 let myHouse;
 let startProject;
 
@@ -1426,6 +1427,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	
 	myToolPG = new MyToolPG();
+	myToolPG_UI = new MyToolPG_UI({container: containerF});
 	
 	myHouse = new MyHouse();
 	
