@@ -46,8 +46,15 @@ class EventMyCamera
 			myHouse.myPoint.setScale({value: delta});
 
 			myHouse.myWDRulers.setScale({value: delta});						
-		}		
+		}
+
+		myToolPG.setZoom()
 	}
+	
+	cameraZoom3D()
+	{
+		myToolPG.setZoom()
+	}	
 	
 	camFit()
 	{

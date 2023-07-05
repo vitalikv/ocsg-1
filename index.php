@@ -129,14 +129,15 @@
 	<script src="<?=$path?>uiInterface.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>uiInterface_catalog.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>eventClick.js?<?=$vrs?>"></script>
-		
-	<script src="<?=$path?>new/event/eventMyCamera.js?<?=$vrs?>"></script>
+			
 	
-	<script src="<?=$path?>new/myCamera.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/myCameraPerspective.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/camera/myCamera.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/camera/myCameraPerspective.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/camera/cameraMoveKey.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/camera/eventMyCamera.js?<?=$vrs?>"></script>
 	
 	<script src="<?=$path?>new/tools/myToolPG.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/tools/myToolPG_UI.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myPivot.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myGizmo.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/switchCamera.js?<?=$vrs?>"></script>

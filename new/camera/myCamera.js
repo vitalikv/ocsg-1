@@ -512,7 +512,9 @@ class MyCameraOrbit
 			return offset;
 		}	
 
-		camera3D.position.add( offset );			
+		camera3D.position.add( offset );
+
+		this.api.cameraZoom3D();
 	}
 
 

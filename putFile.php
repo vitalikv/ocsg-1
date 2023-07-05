@@ -49,12 +49,13 @@ new/ui/right-panel/divLevelVisible.js
 new/ui/right-panel/tabPlan.js
 new/ui/right-panel/tabObject.js
 new/tools/myToolPG.js
+new/tools/myToolPG_UI.js
 new/tools/myPivot.js
 new/tools/myGizmo.js
-new/myCamera.js
-new/myCameraPerspective.js
+new/camera/myCamera.js
+new/camera/myCameraPerspective.js
 new/camera/cameraMoveKey.js
-new/event/eventMyCamera.js
+new/camera/eventMyCamera.js
 new/core/composerRender.js
 new/core/myMouse.js
 new/core/myManagerClick.js
