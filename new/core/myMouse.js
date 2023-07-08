@@ -251,9 +251,6 @@ class MyMouse
 			
 			if(clickO.button == 'create_wall')
 			{
-				clickO.last_obj = null;
-				
-				
 				obj = myHouse.myPoint.createPoint( intersects[0].point, 0 );
 				obj.position.y = 0;
 				obj.userData.point.type = clickO.button; 				

@@ -156,7 +156,7 @@ class MyManagerClick
 			//else if(tag == 'gizmo') { obj = infProject.tools.gizmo.userData.gizmo.obj; }		
 			
 			clickO.move = obj;
-			clickO.last_obj = obj;
+			//clickO.last_obj = obj;
 			
 			this.consoleInfo( obj );
 		}
@@ -212,14 +212,11 @@ class MyManagerClick
 
 		if(obj)
 		{ 
-			objDeActiveColor_2D(); 
-			console.log(obj.userData.tag);
-
 			const tag = obj.userData.tag;
 			
 			if(type === 'down')
 			{
-				if(tag == 'wall' && isCam2D) { this.hideMenuUI(); }
+				if(tag == 'wall' && isCam2D) { getCalcWall({wall: obj}); this.hideMenuUI(); }
 				else if(tag == 'point' && isCam2D) { this.hideMenuUI(); }
 				else if(tag == 'window' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(); }
 				else if(tag == 'door' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(); }
@@ -241,7 +238,7 @@ class MyManagerClick
 			}
 			else
 			{
-				if(tag == 'wall') { this.hideMenuUI(); }
+				if(tag == 'wall') { getCalcWall({wall: obj}); this.hideMenuUI(); }
 				else if(tag == 'point') { this.hideMenuUI(); }
 				else if(tag == 'window') { hideSizeWD(); this.hideMenuUI(); }
 				else if(tag == 'door') { hideSizeWD(); this.hideMenuUI(); }
@@ -255,7 +252,7 @@ class MyManagerClick
 		
 		if(flag) 
 		{		
-			clickO.last_obj = null;
+			//clickO.last_obj = null;
 			
 		}
 	}

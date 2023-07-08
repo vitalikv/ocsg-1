@@ -240,7 +240,7 @@ function moveElementBoxScale2D(e)
 		var x = B.distanceTo( C );
 		
 		
-		var obj = clickO.last_obj;
+		var obj = myComposerRenderer.getOutlineObj();
 		if(obj.userData.tag === 'obj') box = obj.userData.obj3D.box;
 		if(obj.userData.tag === 'roof') box = obj.userData.roof.box;
 		
@@ -276,7 +276,7 @@ function moveElementBoxScale2D(e)
 // сняли клик после того, как меняли масштаб у svg box
 function clickUpElementBoxScale() 
 {
-	var obj = clickO.last_obj;
+	var obj = myComposerRenderer.getOutlineObj();
 	
 	if(!obj) return;
 	

@@ -61,13 +61,8 @@ function activeHover2D( event )
 	if (!myCameraOrbit.activeCam.userData.isCam2D) { return; }
 	//if (isMouseDown1) { return; }
 
-	if ( clickO.move ) 
-	{
-		var tag = clickO.move.userData.tag;
-		
-		if (tag == 'free_dw') { return; }
-		if (tag == 'point') { if (clickO.move.userData.point.type) return; }		
-	}
+	
+	//if (myMouse.getSelectedObj()) return;
 	
 	let rayhit = null;
 
@@ -80,11 +75,10 @@ function activeHover2D( event )
 
 	if(rayhit) 
 	{
-		var object = rayhit.object;
-		var tag = object.userData.tag; 				
+		const object = rayhit.object;
+		const tag = object.userData.tag; 				
 
-		if ( clickO.hover == object ) { return; }				// объект уже подсвечен
-
+		if ( clickO.hover === object ) { return; }				// объект уже подсвечен
 
 		if ( tag == 'point' ) 
 		{ 
@@ -92,60 +86,25 @@ function activeHover2D( event )
 			containerF.style.cursor = 'move';
 		}
 
-		
-		activeHover2D_2();
-
 		clickO.hover = object;
 	}
-	else
+	else if(clickO.hover)
 	{
-		activeHover2D_2();
+		const object = clickO.hover;
+		const tag = object.userData.tag;  	
+		
+		if( tag === 'point' ) 
+		{ 
+			object.material.opacity = 0.75;
+			containerF.style.cursor = 'default';
+		}
+		
+		clickO.hover = null;
 	}
 }
 
 
 
-// возращаем стандартный цвет
-function activeHover2D_2()
-{
-	if ( !clickO.hover ) { return; }
-
-	var object = clickO.hover;
-	var tag = object.userData.tag;  	
-	
-	if( tag == 'point' ) 
-	{ 
-		object.material.opacity = 0.75;
-		containerF.style.cursor = 'default';
-	}
-	
-	clickO.hover = null;
-}
-
-
-
-// возращаем стандартный цвет объекта
-function objDeActiveColor_2D() 
-{	
-	if(!myCameraOrbit.activeCam.userData.isCam2D) return;
-	if(!clickO.last_obj){ return; }
-	if(myMouse.rayhit && clickO.last_obj === myMouse.rayhit.object){ return; }
-	
-	
-	var o = clickO.last_obj;	
-
-	if(myMouse.rayhit)
-	{    
-		if(myMouse.rayhit.object.userData.tag == 'controll_wd'){ if(myMouse.rayhit.object.userData.controll_wd.obj === o) { return; } }      		
-	}
-	 
-	if(o.userData.tag == 'wall'){ myComposerRenderer.outlineRemoveObj(); getCalcWall({wall: o}); }	
-	else if(o.userData.tag == 'point'){ myComposerRenderer.outlineRemoveObj(); }	
-	else if(o.userData.tag == 'window'){ myComposerRenderer.outlineRemoveObj(); }
-	else if(o.userData.tag == 'door'){ myComposerRenderer.outlineRemoveObj(); }	
-	
-	if(clickO.hover == clickO.last_obj) { clickO.hover = null; }
-}
 
 
 function clickInterface(cdm)

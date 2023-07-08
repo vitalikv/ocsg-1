@@ -117,7 +117,7 @@ class MyObj
 	// выбрали текстуру из меню 
 	clickBtnChangeTextureObj3D({url})
 	{	
-		const obj = clickO.last_obj;
+		const obj = myComposerRenderer.getOutlineObj();
 		
 		if(!obj) return;
 		if(obj.userData.tag !== 'obj') return;	

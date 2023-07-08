@@ -71,7 +71,7 @@ function deleteWall_3(cdm)
 {
 	var wall = cdm.wall;
 	
-	objDeActiveColor_2D();	
+	myManagerClick.hideMenuObjUI_2D();	
 	
 	var delWD = true;	
 	if(cdm.delWD !== undefined) { delWD = cdm.delWD; }	

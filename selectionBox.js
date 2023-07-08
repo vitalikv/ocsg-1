@@ -85,7 +85,6 @@ function selectionBoxUp(event)
 	infProject.tools.selectionBox.mEnd.y = - ( ( event.clientY - containerF.offsetTop ) / containerF.clientHeight ) * 2 + 1;	
 
 	getBoundSelectionBox();
-	//objDeActiveColor_2D();
 	
 	renderCamera();
 	
