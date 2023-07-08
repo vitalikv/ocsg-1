@@ -73,6 +73,7 @@ new/house/wd/myWindow.js
 new/house/wd/myWDPoints.js
 new/house/wd/myWDPointsMove.js
 new/house/wd/myWDRulers.js
+new/house/roof/myRoofMove.js
 new/house/obj/myObjMove.js
 ';
 

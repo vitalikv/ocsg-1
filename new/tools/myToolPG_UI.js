@@ -29,57 +29,60 @@ class MyToolPG_UI
 	html()
 	{
 		const css1 = `position: absolute; left: 10px; bottom: 0; height: 80px;`;
-		
+
 		let str = 
 		`<div nameId="block_pos" class="block_pos" ui_1="">
-			<div style="display: flex;">
+			<div style="padding: 2px;">
 				<div style="display: flex; align-items: center;">
-					<div class="button1 button_gradient_1" nameId="select_pivot">
+					<div nameId="select_pivot" class="button1 button_gradient_1" style="width: 20px; margin: 0;">
 						<img src="${infProject.path}/img/move_1.png">
 					</div>	
 					
 					<div class="flex_1 input_rotate">
-						<input type="text" nameId="object_pos_X" value="0">
-						<input type="text" nameId="object_pos_Y" value="0">
-						<input type="text" nameId="object_pos_Z" value="0">
+						<input type="text" nameId="object_pos_X" value="0" style="width: 100px;">
+						<input type="text" nameId="object_pos_Y" value="0" style="width: 100px;">
+						<input type="text" nameId="object_pos_Z" value="0" style="width: 100px;">
 					</div>	
 				</div>
 				
-				<div style="display: flex; align-items: center; margin-left: 40px;">
-					<div class="button1 button_gradient_1" nameId="select_gizmo">
+				<div style="display: flex; margin-top: 10px;">
+					<div nameId="select_gizmo" class="button1 button_gradient_1" style="width: 20px; margin: 0;">
 						<img src="${infProject.path}/img/rotate_1.png">	
 					</div>	
 
 					<div class="flex_1 input_rotate">
-						<div class="flex_1" style="position: relative; margin: 0 5px;">
-							<div class="button1 button_gradient_1" nameId="obj_rotate_X_90m" style="position: absolute; left: 0; width: 10px;">-</div>
-							<input type="text" nameId="object_rotate_X" value="0">
-							<div class="button1 button_gradient_1" nameId="obj_rotate_X_90" style="position: absolute; right: 0; width: 10px;">+</div>
+						<div style="margin: 0 5px; display: flex; flex-direction: column;">
+							<div style="position: relative;">
+								<div class="button1 button_gradient_1" nameId="obj_rotate_X_90m" style="position: absolute; top: 0; left: 0; width: 10px;">-</div>
+								<input type="text" nameId="object_rotate_X" value="0">
+								<div class="button1 button_gradient_1" nameId="obj_rotate_X_90" style="position: absolute; top: 0; right: 0; width: 10px;">+</div>
+							</div>
+							<div style="width: auto; height: 2px; background: rgb(247, 72, 72);"></div>
 						</div>
 						
-						<div class="flex_1" style="position: relative; margin: 0 5px;">
-							<div class="button1 button_gradient_1" nameId="obj_rotate_Y_90m" style="position: absolute; left: 0; width: 10px;">-</div>
-							<input type="text" nameId="object_rotate_Y" value="0">
-							<div class="button1 button_gradient_1" nameId="obj_rotate_Y_90" style="position: absolute; right: 0; width: 10px;">+</div>
+						<div style="margin: 0 5px; display: flex; flex-direction: column;">
+							<div style="position: relative;">
+								<div class="button1 button_gradient_1" nameId="obj_rotate_Y_90m" style="position: absolute; top: 0; left: 0; width: 10px;">-</div>
+								<input type="text" nameId="object_rotate_Y" value="0">
+								<div class="button1 button_gradient_1" nameId="obj_rotate_Y_90" style="position: absolute; top: 0; right: 0; width: 10px;">+</div>
+							</div>						
+							<div style="width: auto; height: 2px; background: rgb(17, 255, 0);"></div>
 						</div>
 
-						<div class="flex_1" style="position: relative; margin: 0 5px;">
-							<div class="button1 button_gradient_1" nameId="obj_rotate_Z_90m" style="position: absolute; left: 0; width: 10px;">-</div>
-							<input type="text" nameId="object_rotate_Z" value="0">
-							<div class="button1 button_gradient_1" nameId="obj_rotate_Z_90" style="position: absolute; right: 0; width: 10px;">+</div>
+						<div style="margin: 0 5px; display: flex; flex-direction: column;">
+							<div style="position: relative;">
+								<div class="button1 button_gradient_1" nameId="obj_rotate_Z_90m" style="position: absolute; top: 0; left: 0; width: 10px;">-</div>
+								<input type="text" nameId="object_rotate_Z" value="0">
+								<div class="button1 button_gradient_1" nameId="obj_rotate_Z_90" style="position: absolute; top: 0; right: 0; width: 10px;">+</div>
+							</div>
+							<div style="width: auto; height: 2px; background: rgb(72, 116, 247);"></div>
 						</div>									
 						
-					</div>	
-
-					<div class="flex_1">
-						<div style="width: 20px; height: 2px; background: rgb(247, 72, 72);"></div>
-						<div style="width: 20px; height: 2px; background: rgb(17, 255, 0);"></div>
-						<div style="width: 20px; height: 2px; background: rgb(72, 116, 247);"></div>
 					</div>
 										
 				
-					<div class="button1 button_gradient_1" nameId="obj_rotate_reset">
-						сбросить	
+					<div nameId="obj_rotate_reset" class="button1 button_gradient_1" style="width: 20px; margin: 0;">
+						0	
 					</div>											
 				</div>
 				
@@ -91,8 +94,8 @@ class MyToolPG_UI
 	
 	initEventButton()
 	{
-		this.el.querySelector('[nameId="select_pivot"]').onmousedown = (e) => { this.toggleTool({type:'pivot'}); e.stopPropagation(); };
-		this.el.querySelector('[nameId="select_gizmo"]').onmousedown = (e) => { this.toggleTool({type:'gizmo'}); e.stopPropagation(); };
+		this.el.querySelector('[nameId="select_pivot"]').onmousedown = (e) => { myToolPG.toggleTool({type:'pivot'}); e.stopPropagation(); };
+		this.el.querySelector('[nameId="select_gizmo"]').onmousedown = (e) => { myToolPG.toggleTool({type:'gizmo'}); e.stopPropagation(); };
 
 		this.el.querySelector('[nameId="obj_rotate_X_90"]').onmousedown = (e) => { this.setAngleRotUI({axis: 'x', angle: -45}); e.stopPropagation(); };
 		this.el.querySelector('[nameId="obj_rotate_X_90m"]').onmousedown = (e) => { this.setAngleRotUI({axis: 'x', angle: 45}); e.stopPropagation(); };

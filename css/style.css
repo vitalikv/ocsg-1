@@ -1252,9 +1252,12 @@ canvas
 {
 	position: absolute;
 	left: 10px;
-	bottom: 20px;
+	bottom: 10px;
 	z-index: 1;
 	user-select: none;
+	border: 1px solid #b3b3b3;
+	background-color: rgb(213, 213, 213);
+	border-radius: 4px;	
 }
 
 .block_pos .button1

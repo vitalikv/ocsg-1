@@ -108,9 +108,11 @@ class Roof
 		});			
 		setTexture({obj: obj.children[0], material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: matClone.color });
 		
-		if(cdm.cursor) clickO.move = obj; 	// объект был добавлен в сцену из каталога
+		//if(cdm.cursor) clickO.move = obj; 	// объект был добавлен в сцену из каталога
 		
-		renderCamera();		
+		renderCamera();	
+
+		return obj;
 	}
 
 	// активируем объект, ставим pivot/gizmo

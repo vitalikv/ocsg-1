@@ -279,7 +279,9 @@ class MyMouse
 			}			
 			else if(clickO.button == 'add_roof')
 			{
-				loadObjServer({lotid: clickO.options, roof: true, cursor: true});
+				obj = await loadObjServer({lotid: clickO.options, roof: true, cursor: true});
+				obj.position.copy(intersects[0].point);
+				myHouse.myRoofMove.mousedown({event, obj});
 			}		
 			else if(clickO.button == 'add_lotid')
 			{

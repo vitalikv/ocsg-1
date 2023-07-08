@@ -36,6 +36,8 @@ class MyHouse
 		this.myWDPointsMove = new MyWDPointsMove();
 		this.myWDRulers = new MyWDRulers();
 		
+		this.myRoofMove = new MyRoofMove();
+		
 		this.myObjMove = new MyObjMove();
 	}
 	

@@ -254,9 +254,7 @@ function addObjInScene(inf, cdm)
 	
 	if(cdm.roof)
 	{
-		clRoof.initRoof(inf, cdm);
-		
-		return;
+		return clRoof.initRoof(inf, cdm);
 	}
 	
 	var obj = inf.obj;
@@ -324,11 +322,6 @@ function addObjInScene(inf, cdm)
 	infProject.scene.array.obj[infProject.scene.array.obj.length] = obj;
 
 	scene.add( obj );		
-	
-	if(cdm.cursor) 	// объект был добавлен в сцену из каталога
-	{ 
-		clickO.move = obj; 
-	} 
 	
 	renderCamera();
 	

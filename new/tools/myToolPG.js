@@ -32,7 +32,7 @@ class MyToolPG
 		let obj = params.obj;
 		let pos = new THREE.Vector3();
 		
-		if(obj.userData.tag == 'obj')		// группа или объект
+		if(obj.userData.tag === 'obj' || obj.userData.tag === 'roof')		// группа или объект
 		{ 
 			obj.updateMatrixWorld();
 			pos = obj.localToWorld( obj.geometry.boundingSphere.center.clone() );	
