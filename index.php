@@ -150,8 +150,7 @@
 	<script src="<?=$path?>new/level.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ghostLevel.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/roof.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/myRoof.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/myObj.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/myRoof.js?<?=$vrs?>"></script>	
 	<script src="<?=$path?>new/startProject.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/csgBox.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/test.js?<?=$vrs?>"></script>
@@ -176,6 +175,9 @@
 	<script src="<?=$path?>new/house/wd/myWDPointsMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myWDRulers.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/roof/myRoofMove.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/obj/myObjUI.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/obj/myObjAction.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/obj/myObjPrimitives.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/obj/myObjMove.js?<?=$vrs?>"></script>
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 

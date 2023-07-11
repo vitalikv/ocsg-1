@@ -274,7 +274,7 @@ class Roof
 	
 	setColor({obj, color})
 	{
-		if(!obj) obj = clickO.last_obj;
+		if(!obj) obj = myComposerRenderer.getOutlineObj();
 		if(obj.userData.tag !== 'roof') return;
 		
 		for(let i = 0; i < obj.children.length; i++)

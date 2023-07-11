@@ -74,21 +74,21 @@ async function getObjFromBase({lotid})
 	if(lotid === 1)
 	{
 		inf.name = 'куб';
-		inf.obj = myObj.crBox();
+		inf.obj = myHouse.myObjPrimitives.crBox();
 		inf.planeMath = 0.5;
 	}
 	
 	if(lotid === 2)
 	{
 		inf.name = 'сфера';
-		inf.obj = myObj.crSphere();
+		inf.obj = myHouse.myObjPrimitives.crSphere();
 		inf.planeMath = 0.5;
 	}
 
 	if(lotid === 3)
 	{
 		inf.name = 'цилиндр';
-		inf.obj = myObj.crCylinder();
+		inf.obj = myHouse.myObjPrimitives.crCylinder();
 		inf.planeMath = 0.5;
 	}
 

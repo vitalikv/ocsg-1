@@ -54,7 +54,7 @@ function addTextureInCatalogUI_3()
 		let elem = div.children[0];
 		container.append(elem);	
 		
-		elem.onmousedown = () => { myObj.clickBtnChangeTextureObj3D({url: arr[i].url}) }
+		elem.onmousedown = () => { myHouse.myObjPrimitives.clickBtnChangeTextureObj3D({url: arr[i].url}) }
 	}		
 }
 
@@ -167,7 +167,7 @@ function assignRoomType(cdm)
 	var id = cdm.id;
 	var obj = null;
 	
-	if(cdm.button) { obj = clickO.last_obj; }
+	if(cdm.button) { obj = myComposerRenderer.getOutlineObj(); }
 	if(cdm.obj) { obj = cdm.obj; }
 	
 	var elem = obj.userData.room.html.label;

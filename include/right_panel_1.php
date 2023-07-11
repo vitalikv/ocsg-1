@@ -465,11 +465,7 @@
 							</div>
 						</div>						
 					</div>						
-					
-				
-					<div class="button1 button_gradient_1" nameId="obj_rotate_reset" style="display: none;">
-						reset	
-					</div>
+								
 					
 					<div class="button1 button_gradient_1" nameId="button_copy_obj">
 						копировать	

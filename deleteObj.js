@@ -7,12 +7,12 @@ function detectDeleteObj()
 		deleteObjectPop(); 
 	}
 	
-	var obj = clickO.last_obj;
+	const obj = myComposerRenderer.getOutlineObj();
 	
 	if(!obj) return;
 	if(!obj.userData.tag) return;
 	
-	var tag = obj.userData.tag;
+	const tag = obj.userData.tag;
 	
 	if(myCameraOrbit.activeCam.userData.isCam3D)
 	{

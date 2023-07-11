@@ -1196,14 +1196,12 @@ document.addEventListener("keydown", function (e)
 			{ 
 				var width = $('[nameid="size_wall_width_1"]').val();
 				
-				inputWidthOneWall({wall:clickO.last_obj, width:{value: width}, offset:'wallRedBlueArrow'}); 
+				inputWidthOneWall({wall: myComposerRenderer.getOutlineObj(), width:{value: width}, offset:'wallRedBlueArrow'}); 
 			}
-			if(infProject.activeInput == 'size-obj-length') { inputScaleObjPop({obj: clickO.last_obj}); }
-			if(infProject.activeInput == 'size-obj-height') { inputScaleObjPop({obj: clickO.last_obj}); }
-			if(infProject.activeInput == 'size-obj-width') { inputScaleObjPop({obj: clickO.last_obj}); }
-			if(infProject.activeInput == 'size-roof-length') { inputScaleObjPop({obj: clickO.last_obj}); }
-			if(infProject.activeInput == 'size-roof-height') { inputScaleObjPop({obj: clickO.last_obj}); }
-			if(infProject.activeInput == 'size-roof-width') { inputScaleObjPop({obj: clickO.last_obj}); }			
+
+			if(infProject.activeInput == 'size-roof-length') { inputScaleObjPop({obj: myComposerRenderer.getOutlineObj()}); }
+			if(infProject.activeInput == 'size-roof-height') { inputScaleObjPop({obj: myComposerRenderer.getOutlineObj()}); }
+			if(infProject.activeInput == 'size-roof-width') { inputScaleObjPop({obj: myComposerRenderer.getOutlineObj()}); }			
 		}		
 		 
 		return; 

@@ -40,7 +40,6 @@ new/ghostLevel.js
 new/roof.js
 new/myRoof.js
 new/startProject.js
-new/myObj.js
 new/csgBox.js
 new/ui/switchCamera.js
 new/ui/right-panel/tabs.js
@@ -74,6 +73,9 @@ new/house/wd/myWDPoints.js
 new/house/wd/myWDPointsMove.js
 new/house/wd/myWDRulers.js
 new/house/roof/myRoofMove.js
+new/house/obj/myObjUI.js
+new/house/obj/myObjAction.js
+new/house/obj/myObjPrimitives.js
 new/house/obj/myObjMove.js
 ';
 

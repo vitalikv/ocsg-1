@@ -8,9 +8,6 @@ $('[data-action="left_panel_1"]').mousedown(function () { clickInterface(); });
 
 	
 
-$('[nameId="obj_rotate_reset"]').mousedown(function () { objRotateReset(); });	
-$('[nameId="button_copy_obj"]').mousedown(function () { copyObj(); });
-
 
 $('[data-action="wall"]').mousedown(function () { clickInterface({button:'point_1'}); });
 $('[data-action="create_gate_1"]').mousedown(function () { clickInterface({button:'create_gate_1'}); });
@@ -115,12 +112,12 @@ $('[nameId="but_back_catalog_texture_1"]').mousedown(function ()
 
 $('[add_texture]').mousedown(function () 
 { 
-	var inf = {obj: clickO.last_obj, material: {img: this.attributes.add_texture.value, index: clickO.click.side_wall}, ui: true};
+	var inf = {obj: myComposerRenderer.getOutlineObj(), material: {img: this.attributes.add_texture.value, index: clickO.click.side_wall}, ui: true};
 	if(myCameraOrbit.activeCam.userData.isCam3D)
 	{ 
 		if(clickO.index) 
 		{ 
-			inf.obj = clickO.last_obj;
+			inf.obj = myComposerRenderer.getOutlineObj();
 			inf.material.index = clickO.index; 
 		};
 	}

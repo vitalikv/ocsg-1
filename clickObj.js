@@ -235,9 +235,11 @@ function deleteObjectPop(cdm)
 	
 	var arr = [];
 	
-	if(cdm.obj && cdm.obj.userData.tag === 'roof' || clickO.last_obj && clickO.last_obj.userData.tag === 'roof')
+	const obj = myComposerRenderer.getOutlineObj();
+	
+	if(cdm.obj && cdm.obj.userData.tag === 'roof' || obj && obj.userData.tag === 'roof')
 	{
-		let o2 = (cdm.obj) ? cdm.obj : clickO.last_obj;
+		let o2 = (cdm.obj) ? cdm.obj : obj;
 		clRoof.deleteRoof(o2);
 		return;
 	}
@@ -259,7 +261,7 @@ function deleteObjectPop(cdm)
 		}
 		else
 		{
-			if(clickO.last_obj.userData.tag == 'obj') { arr[0] = clickO.last_obj; }
+			if(obj.userData.tag == 'obj') { arr[0] = obj; }
 		}
 	}	
 	
@@ -361,43 +363,6 @@ function getObjFromPivotGizmo(cdm)
 
 
 
-// копируем объект или группу
-function copyObj(cdm) 
-{
-	var obj = getObjFromPivotGizmo();
-	
-	if(!obj) return;	
-	
-	if(obj.userData.tag == 'roof') 
-	{
-		clRoof.copyRoof();
-		return;
-	}
-		
-	var cubeCam = null;
-	if(obj.userData.cubeCam) 
-	{ 
-		cubeCam = obj.userData.cubeCam;
-		obj.userData.cubeCam = null;
-	}
-	
-	var clone = obj.clone();
-	
-	if(cubeCam)
-	{
-		obj.userData.cubeCam = cubeCam;
-	}
-
-	clone.userData.id = countId; countId++;
-	//clone.position.add(pos);		// смещение к нулю
-	infProject.scene.array.obj[infProject.scene.array.obj.length] = clone; 
-	scene.add( clone );	
-	 
-	
-	//hidePivotGizmo(obj);
-	//clickObject3D({obj: clone, rayhit: {point: clone.position}});	
-	//clickO.last_obj = clone;
-}
 
 
 

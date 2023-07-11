@@ -1,6 +1,6 @@
 
 
-class MyObj 
+class MyObjPrimitives 
 {
 	crBox()
 	{
@@ -126,7 +126,7 @@ class MyObj
 	}
 }
 
-let myObj = new MyObj();
+
 
 
 

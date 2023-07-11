@@ -119,6 +119,8 @@ class TabObject
 			txtName = obj.userData.obj3D.nameRus;		
 			this.divs.obj.style.display = '';
 			
+			myHouse.myObjUI.showInputsSizeUI({obj})
+			
 			if( isCheckExsistFunction(window['getInfObjFromBD']) ) { getInfObjFromBD({obj: obj}); };
 		}
 
