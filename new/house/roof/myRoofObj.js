@@ -1,6 +1,6 @@
 
 
-class MyRoof 
+class MyRoofObj 
 {	
 	getGeometry({x, y, z, h, x2, z2})
 	{
@@ -172,21 +172,7 @@ class MyRoof
 		geometry.elementsNeedUpdate = true;	
 	}
 
-	// пересчет корректных uvs координат
-	upDateTextureRoof({obj})
-	{
-		if(obj.userData.tag !== 'roof') return;
-		
-		const scaW = obj.getWorldScale(new THREE.Vector3());
-		
-		obj.children[0].traverse(function(child) 
-		{
-			if(child.isMesh && child.material.map) 
-			{ 
-				boxUnwrapUVs(child.geometry, obj.scale)				
-			}
-		});		
-	}
+
 	
 	// получаем габариты объекта и строим box-форму
 	getBoxRoof(arr)
@@ -263,7 +249,7 @@ class MyRoof
 
 }
 
-let myRoof = new MyRoof();
+
 
 
 

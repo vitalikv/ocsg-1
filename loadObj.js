@@ -131,20 +131,20 @@ async function getObjFromBase({lotid})
 	if(lotid === 17)	// крыша 1
 	{
 		inf.name = 'крыша односкатная';
-		inf.obj = myRoof.initRoof_1();
+		inf.obj = myHouse.myRoofObj.initRoof_1();
 	}
 
 	if(lotid === 18)	// крыша 2
 	{
 		inf.name = 'крыша двухскатная';
-		inf.obj = myRoof.initRoof_2();
+		inf.obj = myHouse.myRoofObj.initRoof_2();
 	}
 	
 	if(lotid === 19)	// крыша 1
 	{
 		inf.id = lotid;			// не используется, lotid берется в loadObjServer(cdm) cdm.lotid
 		inf.name = 'крыша четырехскатная';
-		inf.obj = myRoof.initRoof_3();
+		inf.obj = myHouse.myRoofObj.initRoof_3();
 		inf.model = null;		// в этом случаи не нужно, нужно только при загрузки из бд
 		inf.preview = null;		// не используется
 		inf.planeMath = 0.0;	// высота над полом

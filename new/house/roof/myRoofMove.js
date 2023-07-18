@@ -12,6 +12,34 @@ class MyRoofMove
 		
 	}
 	
+
+	// при клике на объект определяем объект уже был выбран или еще нет
+	// если не выбран, то только ставим pivot
+	// если выбран, то можем перемещать объект
+	click({event, obj})
+	{
+		// let selectedObj = myMouse.getSelectedObj(); 
+		// if(obj !== selectedObj) this.selectObj({obj})
+		// else this.mousedown({event, obj})
+	
+		this.selectObj({obj})
+	}
+	
+	// выбираем объект
+	selectObj({obj})
+	{
+		if(myCameraOrbit.activeCam.userData.isCam2D)
+		{
+			//findOnWallWD(obj);			
+			//showRulerWD( obj ); 	// показываем линейки 							
+		}
+
+		myComposerRenderer.outlineAddObj({arr: [obj]});
+		tabObject.activeObjRightPanelUI_1({obj}); 	// UI
+		
+		myToolPG.activeTool({obj});		
+	}
+
 	
 	mousedown = ({event, obj}) =>
 	{

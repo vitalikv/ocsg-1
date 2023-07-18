@@ -131,8 +131,7 @@ class MyManagerClick
 			else if( tag == 'window' && isCam2D ) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if( tag == 'door' && isCam2D ) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if( tag == 'controll_wd' ) { myHouse.myWDPointsMove.mousedown({event, obj}); }						
-			else if( tag == 'roof' && isCam2D ) { myHouse.myRoofMove.mousedown({event, obj}); /*clRoof.clickRoof({obj, rayhit});*/ }
-			else if( tag == 'roof' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clRoof.clickRoof({obj, rayhit}); }	
+			else if( tag == 'roof' && isCam2D ) { myHouse.myRoofMove.click({event, obj}); /*clRoof.clickRoof({obj, rayhit});*/ }				
 			else if( tag == 'obj' && isCam2D ) { myHouse.myObjMove.click({event, obj}); /*clickObject3D({obj, rayhit});*/ }
 			else { flag = false; }
 		}
@@ -143,6 +142,7 @@ class MyManagerClick
 			else if( tag == 'room' && isCam3D ) { clickFloor({obj}); }
 			else if( tag == 'window' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if( tag == 'door' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }
+			else if( tag == 'roof' && isCam3D) { myHouse.myRoofMove.click({event, obj}); }
 			else if( tag == 'obj' && isCam3D) { myHouse.myObjMove.click({event, obj}); }
 			else { flag = false; }
 		}	
@@ -173,8 +173,8 @@ class MyManagerClick
 		else if ( tag == 'point' ) { myHouse.myMovePoint.mousemove( event ); }
 		else if ( tag == 'room' ) {  }		
 		else if ( tag == 'free_dw' ) { dragWD_2( event, obj ); }
-		else if ( tag == 'obj' ) { myHouse.myObjMove.mousemove(event); /*moveObjectPop( event, obj );*/ }
-		else if ( tag == 'roof' ) { myHouse.myRoofMove.mousemove(event); /*clRoof.moveRoof( event );*/ }		
+		else if ( tag == 'roof' ) { myHouse.myRoofMove.mousemove(event); /*clRoof.moveRoof( event );*/ }
+		else if ( tag == 'obj' ) { myHouse.myObjMove.mousemove(event); /*moveObjectPop( event, obj );*/ }				
 	}
 
 
@@ -185,11 +185,11 @@ class MyManagerClick
 		if(tag == 'point') { myHouse.myMovePoint.mouseup({event, obj}); }
 		else if(tag == 'wall') { myHouse.myWallMove.mouseup(); }
 		else if(tag == 'window' || obj.userData.tag == 'door') { myHouse.myWDMove.mouseup(); }	
-		else if(tag == 'controll_wd') { myHouse.myWDPointsMove.mouseup(); } 
-		else if(tag == 'obj') { myHouse.myObjMove.mouseup(); /*clickMouseUpObject(obj);*/ }
+		else if(tag == 'controll_wd') { myHouse.myWDPointsMove.mouseup(); } 		
 		else if(tag == 'pivot') { myToolPG.mouseup(); /*clickMouseUpPivot();*/ }
 		else if(tag == 'gizmo') { myToolPG.mouseup(); /*clickMouseUpGizmo();*/ }
-		else if(tag == 'roof') { myHouse.myRoofMove.mouseup(); /*clRoof.moveRoof( event ); clRoof.clickUpRoof(obj);*/ }		
+		else if(tag == 'roof') { myHouse.myRoofMove.mouseup(); /*clRoof.moveRoof( event ); clRoof.clickUpRoof(obj);*/ }
+		else if(tag == 'obj') { myHouse.myObjMove.mouseup(); /*clickMouseUpObject(obj);*/ }
 	}
 
 	

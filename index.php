@@ -148,9 +148,7 @@
 	<script src="<?=$path?>new/ui/right-panel/tabObject.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/btnDropList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/level.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ghostLevel.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/roof.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/myRoof.js?<?=$vrs?>"></script>	
+	<script src="<?=$path?>new/ghostLevel.js?<?=$vrs?>"></script>	
 	<script src="<?=$path?>new/startProject.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/csgBox.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/test.js?<?=$vrs?>"></script>
@@ -174,6 +172,10 @@
 	<script src="<?=$path?>new/house/wd/myWDPoints.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myWDPointsMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myWDRulers.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/roof/roof.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/roof/myRoofUI.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/roof/myRoofAction.js?<?=$vrs?>"></script>	
+	<script src="<?=$path?>new/house/roof/myRoofObj.js?<?=$vrs?>"></script>	
 	<script src="<?=$path?>new/house/roof/myRoofMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/obj/myObjUI.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/obj/myObjAction.js?<?=$vrs?>"></script>

@@ -145,8 +145,7 @@ class Roof
 		tabObject.activeObjRightPanelUI_1({obj: obj});	// показываем меню UI
 
 		showSvgSizeObj({obj: obj, boxCircle: true, getObjRoom: true, resetPos: true});
-		
-		uiInfoObj({obj});
+
 	}
 
 	// перемещение крыши по мыши
@@ -332,27 +331,7 @@ class Roof
 		return rayhit;
 	}
 	
-	// при клике на объект обновляем input-ы
-	upInputUI({obj})
-	{			
-		obj.geometry.computeBoundingBox();
-		
-		let minX = obj.geometry.boundingBox.min.x;
-		let maxX = obj.geometry.boundingBox.max.x;
-		let minY = obj.geometry.boundingBox.min.y;
-		let maxY = obj.geometry.boundingBox.max.y;	
-		let minZ = obj.geometry.boundingBox.min.z;
-		let maxZ = obj.geometry.boundingBox.max.z;
 
-		let x = Math.abs( (maxX - minX) * obj.scale.x );
-		let y = Math.abs( (maxY - minY) * obj.scale.y );
-		let z = Math.abs( (maxZ - minZ) * obj.scale.z );			
-		
-		$('[nameId="size-roof-length"]').val(Math.round(x * 100) / 100);
-		$('[nameId="size-roof-height"]').val(Math.round(y * 100) / 100);
-		$('[nameId="size-roof-width"]').val(Math.round(z * 100) / 100);	
-	}	
-	
 	
 	// обновление обрезаных стен
 	updateCgsRoof()

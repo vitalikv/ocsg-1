@@ -522,6 +522,10 @@
 						</div>						
 					</div>	
 
+					<div class="button1 button_gradient_1" nameId="btn_copy_roof">
+						копировать крышу	
+					</div>
+					
 					<div>
 						<div class="rp_1_1_list">
 							<div class="rp_1_2_list" nameId="color_roof_1">

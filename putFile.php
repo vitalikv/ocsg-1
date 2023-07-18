@@ -37,8 +37,6 @@ getScreenshot.js
 new/btnDropList.js
 new/level.js
 new/ghostLevel.js
-new/roof.js
-new/myRoof.js
 new/startProject.js
 new/csgBox.js
 new/ui/switchCamera.js
@@ -72,7 +70,11 @@ new/house/wd/myWindow.js
 new/house/wd/myWDPoints.js
 new/house/wd/myWDPointsMove.js
 new/house/wd/myWDRulers.js
+new/house/roof/myRoofUI.js
+new/house/roof/myRoofAction.js
 new/house/roof/myRoofMove.js
+new/house/roof/roof.js
+new/house/roof/myRoofObj.js
 new/house/obj/myObjUI.js
 new/house/obj/myObjAction.js
 new/house/obj/myObjPrimitives.js

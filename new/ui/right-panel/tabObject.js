@@ -113,12 +113,12 @@ class TabObject
 		{		
 			txtName = obj.userData.roof.nameRus;		
 			this.divs.roof.style.display = '';
+			myHouse.myRoofUI.showInputsSizeUI({obj})
 		}		
 		else if(obj.userData.tag === 'obj')
 		{			
 			txtName = obj.userData.obj3D.nameRus;		
-			this.divs.obj.style.display = '';
-			
+			this.divs.obj.style.display = '';			
 			myHouse.myObjUI.showInputsSizeUI({obj})
 			
 			if( isCheckExsistFunction(window['getInfObjFromBD']) ) { getInfObjFromBD({obj: obj}); };

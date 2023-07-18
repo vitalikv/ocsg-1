@@ -1,6 +1,6 @@
 
 
-class MyObjUI 
+class MyRoofUI 
 {
 	container;
 	inputLength;
@@ -10,19 +10,19 @@ class MyObjUI
 	
 	constructor()
 	{
-		this.container = document.querySelector('[nameId="bl_object_3d"]');
-		this.inputLength = this.container.querySelector('[nameId="size-obj-length"]');
-		this.inputHeight = this.container.querySelector('[nameId="size-obj-height"]');
-		this.inputWidth = this.container.querySelector('[nameId="size-obj-width"]');
+		this.container = document.querySelector('[nameId="bl_roof_3d"]');
+		this.inputLength = this.container.querySelector('[nameId="size-roof-length"]');
+		this.inputHeight = this.container.querySelector('[nameId="size-roof-height"]');
+		this.inputWidth = this.container.querySelector('[nameId="size-roof-width"]');
 
-		this.btnCopy = this.container.querySelector('[nameId="button_copy_obj"]');
+		this.btnCopy = this.container.querySelector('[nameId="btn_copy_roof"]');
 
 		this.initEvent();
 	}
 	
 	initEvent()
 	{
-		this.btnCopy.onmousedown = () => { myHouse.myObjAction.copyObj(); }
+		this.btnCopy.onmousedown = () => { myHouse.myRoofAction.copyRoof(); }
 		
 		const inputs = [this.inputLength, this.inputHeight, this.inputWidth];		
 		inputs.forEach((input) => 
@@ -41,7 +41,7 @@ class MyObjUI
 	// при выборе объекта показываем размер объекта
 	showInputsSizeUI({obj})
 	{	
-		const size = myHouse.myObjAction.getObjSize({obj});			
+		const size = myHouse.myRoofAction.getObjSize({obj});			
 		
 		this.setSizeInput({size});
 	}
@@ -51,7 +51,7 @@ class MyObjUI
 	{
 		if(!obj) return; 		
 		
-		const size = myHouse.myObjAction.getObjSize({obj});	
+		const size = myHouse.myRoofAction.getObjSize({obj});	
 		let x = size.x;
 		let y = size.y;
 		let z = size.z; 
@@ -83,9 +83,12 @@ class MyObjUI
 		this.setSizeInput({size: new THREE.Vector3(x2, y2, z2)}) 
 		
 		
-		myHouse.myObjAction.setObjSize({obj, size: new THREE.Vector3(x2, y2, z2)});
-		upDateTextureObj3D({obj})		
-		
+		myHouse.myRoofAction.setObjSize({obj, size: new THREE.Vector3(x2, y2, z2)});
+		clRoof.updateCgsRoof();
+		myHouse.myRoofAction.upDateTextureRoof({obj})	
+
+		//if(myCameraOrbit.activeCam.userData.isCam2D) showSvgSizeObj({obj: obj, boxCircle: true, getObjRoom: true, resetPos: true});
+	
 		this.render();		
 	}
 	

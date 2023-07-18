@@ -1,6 +1,6 @@
 
 
-class MyObjAction
+class MyRoofAction
 {
 
 	constructor()
@@ -30,15 +30,32 @@ class MyObjAction
 	// устанавливаем размер объекта
 	setObjSize({obj, size})
 	{	
-		const box = obj.userData.obj3D.box;
+		const box = obj.userData.roof.box;
 		
 		obj.scale.set(size.x/box.x, size.y/box.y, size.z/box.z);	
 		obj.updateMatrixWorld();	
 	}
 	
+
+	// пересчет корректных uvs координат
+	upDateTextureRoof({obj})
+	{
+		if(obj.userData.tag !== 'roof') return;
+		
+		const scaW = obj.getWorldScale(new THREE.Vector3());
+		
+		obj.children[0].traverse(function(child) 
+		{
+			if(child.isMesh && child.material.map) 
+			{ 
+				boxUnwrapUVs(child.geometry, obj.scale)				
+			}
+		});		
+	}
+
 	
-	// копируем объект или группу
-	copyObj() 
+	// копируем объект
+	copyRoof() 
 	{
 		const obj = myComposerRenderer.getOutlineObj();		
 		if(!obj) return;	
@@ -46,7 +63,7 @@ class MyObjAction
 		const clone = obj.clone();
 		clone.userData.id = countId; countId++;
 		
-		infProject.scene.array.obj.push(clone); 
+		infProject.scene.array.roof.push(clone); 
 		scene.add( clone );	
 	}
 	

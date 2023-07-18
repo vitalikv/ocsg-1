@@ -1004,7 +1004,7 @@ function setTexture(cdm)
 		
 		if(cdm.obj.parent.userData.tag === "roof")
 		{ 			
-			myRoof.upDateTextureRoof({obj: cdm.obj.parent})
+			myHouse.myRoofAction.upDateTextureRoof({obj: cdm.obj.parent})
 		}
 		//material.map.image.onload = () => { material.needsUpdate = true; renderCamera();};
 		
@@ -1197,11 +1197,7 @@ document.addEventListener("keydown", function (e)
 				var width = $('[nameid="size_wall_width_1"]').val();
 				
 				inputWidthOneWall({wall: myComposerRenderer.getOutlineObj(), width:{value: width}, offset:'wallRedBlueArrow'}); 
-			}
-
-			if(infProject.activeInput == 'size-roof-length') { inputScaleObjPop({obj: myComposerRenderer.getOutlineObj()}); }
-			if(infProject.activeInput == 'size-roof-height') { inputScaleObjPop({obj: myComposerRenderer.getOutlineObj()}); }
-			if(infProject.activeInput == 'size-roof-width') { inputScaleObjPop({obj: myComposerRenderer.getOutlineObj()}); }			
+			}			
 		}		
 		 
 		return; 
