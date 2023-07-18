@@ -28,6 +28,7 @@ class EventMyCamera
 	moveCamFly3D()
 	{
 		if(divLevelVisible.wallTransparent) wallAfterRender_2();
+		myToolPG.setScale();
 	}
 	
 	cameraZoom2D()
@@ -48,12 +49,12 @@ class EventMyCamera
 			myHouse.myWDRulers.setScale({value: delta});						
 		}
 
-		myToolPG.setZoom()
+		myToolPG.setScale();
 	}
 	
 	cameraZoom3D()
 	{
-		myToolPG.setZoom()
+		myToolPG.setScale();
 	}	
 	
 	camFit()

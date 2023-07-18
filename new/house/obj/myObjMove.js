@@ -5,13 +5,39 @@ class MyObjMove
 	isDown = false;
 	isMove = false;
 	offset = new THREE.Vector3();
-	sObj = null;		// выделенный объект (точка)
+	sObj = null;		// выделенный объект
 	
 	constructor()
 	{
 		
 	}
 	
+	// при клике на объект определяем объект уже был выбран или еще нет
+	// если не выбран, то только ставим pivot
+	// если выбран, то можем перемещать объект
+	click({event, obj})
+	{
+		// let selectedObj = myMouse.getSelectedObj(); 
+		// if(obj !== selectedObj) this.selectObj({obj})
+		// else this.mousedown({event, obj})
+	
+		this.selectObj({obj})
+	}
+	
+	// выбираем объект
+	selectObj({obj})
+	{
+		if(myCameraOrbit.activeCam.userData.isCam2D)
+		{
+			//findOnWallWD(obj);			
+			//showRulerWD( obj ); 	// показываем линейки 							
+		}
+
+		myComposerRenderer.outlineAddObj({arr: [obj]});
+		tabObject.activeObjRightPanelUI_1({obj}); 	// UI
+		
+		myToolPG.activeTool({obj});		
+	}
 	
 	mousedown = ({event, obj}) =>
 	{
@@ -28,23 +54,13 @@ class MyObjMove
 		if (intersects.length === 0) return;
 		this.offset = intersects[0].point;		
 		
-		if(myCameraOrbit.activeCam.userData.isCam2D)
-		{
-			//findOnWallWD(obj);			
-			//showRulerWD( obj ); 	// показываем линейки 							
-		}
-
-		myComposerRenderer.outlineAddObj({arr: [obj]});
-		tabObject.activeObjRightPanelUI_1({obj}); 	// UI
-		
-		myToolPG.activeTool({obj});
+		this.selectObj({obj})
 
 		this.isDown = true;		
 	}
 	
 	mousemove = (event) =>
 	{
-		if (myCameraOrbit.activeCam.userData.isCam3D) { return; }
 		if (!this.isDown) return;
 		this.isMove = true;	
 		

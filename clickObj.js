@@ -6,7 +6,7 @@
 function clickObject3D(cdm)
 {
 	var obj = cdm.obj;
-	var rayhit = cdm.rayhit;
+	var rayhit = cdm.rayhit; 
 	
 	if(clickWall_2D_selectBox( rayhit )) { return; }
 	
@@ -274,7 +274,7 @@ function deleteObjectPop(cdm)
 	
 	clickO = resetPop.clickO(); 
 	
-	hidePivotGizmo(arr[0]);
+	myToolPG.hide();
 	
 	for(var i = 0; i < arr.length; i++)
 	{	

@@ -39,8 +39,10 @@ class MyMouse
 		const obj = this.selectedObj;
 		
 		if(obj)
-		{			
-			if(obj.userData.tag === 'point') 
+		{
+			let done = true;
+			
+			if(obj.userData.tag === 'point' && myHouse.myMovePoint.isTypeToolPoint) 
 			{ 
 				myHouse.myMovePoint.clickRight({obj}); 
 			}			
@@ -48,16 +50,24 @@ class MyMouse
 			{ 
 				deleteWinDoor({wd: obj, upWall: false}); 
 			}
-			else if(obj.userData.tag === 'obj')
+			else if(obj.userData.tag === 'obj' && obj === myHouse.myObjMove.sObj)
 			{
 				deleteObjectPop({obj: obj, undoRedo: false}); 
-			}		
+			}
+			else
+			{
+				done = false;
+			}
 
-			clickO = resetPop.clickO();
-		}	
-		
-		this.clearClick();
-		this.setMouseStop(false);	
+			if(done)
+			{
+				clickO = resetPop.clickO();
+				
+				this.clearClick();											
+			}
+		}
+
+		this.setMouseStop(false);
 	}
 
 	
@@ -323,6 +333,11 @@ class MyMouse
 		this.rayhit = null;		
 	}
 	
+
+	getRayhitObj()
+	{
+		return this.rayhit ? this.rayhit.object : null;
+	}
 	
 	getSelectedObj()
 	{

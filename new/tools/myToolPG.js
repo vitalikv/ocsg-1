@@ -104,6 +104,11 @@ class MyToolPG
 		this.render();	
 	}
 	
+	// получаем объект на котором стоит pivot/gizmo
+	getActObj()
+	{
+		return this.obj;
+	}
 	
 	mousedown = ({event, rayhit}) => 
 	{
@@ -174,10 +179,10 @@ class MyToolPG
 	}
 		
 	
-	setZoom()
+	setScale()
 	{
 		if(this.type === 'pivot') this.pivot.userData.propPivot({type: 'updateScale'});
-		if(this.type === 'gizmo') this.gizmo.userData.propPivot({type: 'updateScale'});		
+		if(this.type === 'gizmo') this.gizmo.userData.propGizmo({type: 'updateScale'});		
 	}
 	
 

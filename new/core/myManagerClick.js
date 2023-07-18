@@ -130,31 +130,26 @@ class MyManagerClick
 			else if( tag == 'point' ) { myHouse.myMovePoint.mousedown({event, obj}); }
 			else if( tag == 'window' && isCam2D ) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if( tag == 'door' && isCam2D ) { myHouse.myWDMove.mousedown({event, obj}); }
-			else if( tag == 'controll_wd' ) { myHouse.myWDPointsMove.mousedown({event, obj}); }
-			else if( tag == 'obj' && isCam2D ) { myHouse.myObjMove.mousedown({event, obj}); /*clickObject3D({obj, rayhit});*/ }
-			else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clickObject3D({obj, rayhit}); }
+			else if( tag == 'controll_wd' ) { myHouse.myWDPointsMove.mousedown({event, obj}); }						
 			else if( tag == 'roof' && isCam2D ) { myHouse.myRoofMove.mousedown({event, obj}); /*clRoof.clickRoof({obj, rayhit});*/ }
-			else if( tag == 'roof' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clRoof.clickRoof({obj, rayhit}); }		
+			else if( tag == 'roof' && isCam3D && infProject.tools.pivot.userData.pivot.obj == obj) { clRoof.clickRoof({obj, rayhit}); }	
+			else if( tag == 'obj' && isCam2D ) { myHouse.myObjMove.click({event, obj}); /*clickObject3D({obj, rayhit});*/ }
 			else { flag = false; }
 		}
 		else if(type === 'up')
 		{	
 			if( tag == 'wall' && isCam3D ) { myHouse.myWallMove.click3D({obj, rayhit}); }
-			else if( tag == 'obj' && isCam3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clickObject3D({obj, rayhit}); }
 			else if( tag == 'room' && isCam3D ) { clickFloor({obj}); }
 			else if( tag == 'room' && isCam3D ) { clickFloor({obj}); }
-			else if( tag == 'roof' && isCam3D && infProject.tools.pivot.userData.pivot.obj !== obj ) { clRoof.clickRoof({obj, rayhit}); }
 			else if( tag == 'window' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }
-			else if( tag == 'door' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }		
+			else if( tag == 'door' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }
+			else if( tag == 'obj' && isCam3D) { myHouse.myObjMove.click({event, obj}); }
 			else { flag = false; }
 		}	
 
 		
 		if(flag) 
 		{			
-			//if(tag == 'pivot') { obj = infProject.tools.pivot.userData.pivot.obj; }
-			//else if(tag == 'gizmo') { obj = infProject.tools.gizmo.userData.gizmo.obj; }		
-			
 			clickO.move = obj;
 			//clickO.last_obj = obj;
 			
@@ -220,9 +215,20 @@ class MyManagerClick
 				else if(tag == 'point' && isCam2D) { this.hideMenuUI(); }
 				else if(tag == 'window' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(); }
 				else if(tag == 'door' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(); }
-				else if(tag == 'controll_wd') { hideSizeWD(obj); this.hideMenuUI(); }
-				else if(tag == 'obj' && isCam2D) { hidePivotGizmo(obj); }
+				else if(tag == 'controll_wd') { hideSizeWD(obj); this.hideMenuUI(); }				
 				else if(tag == 'roof' && isCam2D) { hidePivotGizmo(obj); }
+				else if(tag == 'obj' && isCam2D) 
+				{ 
+					let hide = true;
+					const rayObj = myMouse.getRayhitObj();
+					if(rayObj && (rayObj.userData.tag === 'pivot' || rayObj.userData.tag === 'gizmo')) hide = false;
+					
+					if(hide)
+					{
+						myToolPG.hide(); 
+						this.hideMenuUI();
+					}					 
+				}
 				else { flag = false; }
 			}
 			else if(type === 'up')
@@ -230,10 +236,10 @@ class MyManagerClick
 				if(tag == 'wall' && isCam3D) { this.hideMenuUI();  }
 				else if(tag == 'room' && isCam2D) { this.hideMenuUI(); }
 				else if(tag == 'room' && isCam3D) { this.hideMenuUI(); }
-				else if(tag == 'obj' && isCam3D) { hidePivotGizmo(obj); }
-				else if(tag == 'roof' && isCam3D) { hidePivotGizmo(obj); }
 				else if(tag == 'window' && isCam3D) { hidePivotGizmo(obj); }
 				else if(tag == 'door' && isCam3D) { hidePivotGizmo(obj); }
+				else if(tag == 'roof' && isCam3D) { hidePivotGizmo(obj); }
+				else if(tag == 'obj' && isCam3D) { myToolPG.hide(); this.hideMenuUI(); }
 				else { flag = false; }
 			}
 			else
@@ -244,7 +250,7 @@ class MyManagerClick
 				else if(tag == 'door') { hideSizeWD(); this.hideMenuUI(); }
 				else if(tag == 'controll_wd') { hideSizeWD(); this.hideMenuUI(); }
 				else if(tag == 'room') { this.hideMenuUI(); }
-				else if(tag == 'obj') { hidePivotGizmo(obj); }
+				else if(tag == 'obj') { myToolPG.hide(); this.hideMenuUI(); }
 				else if(tag == 'roof') { hidePivotGizmo(obj); }
 				else { flag = false; }
 			}
