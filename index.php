@@ -175,7 +175,8 @@
 	<script src="<?=$path?>new/house/roof/roof.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/roof/myRoofUI.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/roof/myRoofAction.js?<?=$vrs?>"></script>	
-	<script src="<?=$path?>new/house/roof/myRoofObj.js?<?=$vrs?>"></script>	
+	<script src="<?=$path?>new/house/roof/myRoofObj.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/roof/myRoofCSG.js?<?=$vrs?>"></script>	
 	<script src="<?=$path?>new/house/roof/myRoofMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/obj/myObjUI.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/obj/myObjAction.js?<?=$vrs?>"></script>

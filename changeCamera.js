@@ -17,7 +17,7 @@ function changeCamera()
 
 		showAllWallRender();	// показываем стены, которые были спрятаны
 		
-		clRoof.resetWall();
+		myHouse.myRoofCSG.resetWall();
 	}
 	else if(myCameraOrbit.activeCam.userData.isCam3D)
 	{	
@@ -30,7 +30,7 @@ function changeCamera()
 		if(divLevelVisible.wallTransparent && myCameraOrbit.cam3D.userData.type === 'fly') wallAfterRender_2();	
 		else showAllWallRender();
 		
-		clRoof.cgs();
+		myHouse.myRoofCSG.cgs();
 	}
 	
 	clRoof.changeMaterialTransparent();

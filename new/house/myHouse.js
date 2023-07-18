@@ -38,7 +38,8 @@ class MyHouse
 			
 		this.myRoofUI = new MyRoofUI();
 		this.myRoofAction = new MyRoofAction();
-		this.myRoofObj = new MyRoofObj();		
+		this.myRoofObj = new MyRoofObj();
+		this.myRoofCSG = new MyRoofCSG();
 		this.myRoofMove = new MyRoofMove();
 		
 		this.myObjUI = new MyObjUI();

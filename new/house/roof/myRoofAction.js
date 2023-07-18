@@ -7,6 +7,36 @@ class MyRoofAction
 	{
 		
 	}
+
+
+	// при клике, определяем попали в крышу или нет
+	getRayIntersect()
+	{
+		let ray = rayIntersect( event, infProject.scene.array.roof, 'arr', true );	
+
+		let rayhit = null;
+		
+		if(ray.length > 0)
+		{   	
+			for (let i = 0; i < ray.length; i++)
+			{
+				if(ray[i].object.userData.roof) continue;
+				
+				rayhit = ray[i];
+				break;
+			}
+			
+			let object = null; 
+			
+			if(rayhit) { object = getParentObj({obj: rayhit.object}); }
+			
+			if(!object) { rayhit = null; }
+			else { rayhit.object = object;  }
+		}
+
+		return rayhit;
+	}
+
 	
 	// получаем размер объекта BoundingBox
 	getObjSize({obj})

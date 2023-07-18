@@ -27,7 +27,7 @@ class MyManagerClick
 
 		if(!rayhit && myCameraOrbit.activeCam.userData.isCam3D)
 		{
-			rayhit = clRoof.getRayIntersect();		
+			rayhit = myHouse.myRoofAction.getRayIntersect();		
 		}	
 
 		if(!infProject.scene.block.click.controll_wd)
@@ -95,7 +95,7 @@ class MyManagerClick
 
 		if(!rayhit && myCameraOrbit.activeCam.userData.isCam2D)
 		{
-			rayhit = clRoof.getRayIntersect();		
+			rayhit = myHouse.myRoofAction.getRayIntersect();		
 		}
 		
 		if(!rayhit)
@@ -216,7 +216,18 @@ class MyManagerClick
 				else if(tag == 'window' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(); }
 				else if(tag == 'door' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(); }
 				else if(tag == 'controll_wd') { hideSizeWD(obj); this.hideMenuUI(); }				
-				else if(tag == 'roof' && isCam2D) { hidePivotGizmo(obj); }
+				else if(tag == 'roof' && isCam2D) 
+				{ 
+					let hide = true;
+					const rayObj = myMouse.getRayhitObj();
+					if(rayObj && (rayObj.userData.tag === 'pivot' || rayObj.userData.tag === 'gizmo')) hide = false;
+					
+					if(hide)
+					{
+						myToolPG.hide(); 
+						this.hideMenuUI();
+					}					 
+				}
 				else if(tag == 'obj' && isCam2D) 
 				{ 
 					let hide = true;
@@ -238,7 +249,7 @@ class MyManagerClick
 				else if(tag == 'room' && isCam3D) { this.hideMenuUI(); }
 				else if(tag == 'window' && isCam3D) { hidePivotGizmo(obj); }
 				else if(tag == 'door' && isCam3D) { hidePivotGizmo(obj); }
-				else if(tag == 'roof' && isCam3D) { hidePivotGizmo(obj); }
+				else if(tag == 'roof' && isCam3D) { myToolPG.hide(); this.hideMenuUI(); }
 				else if(tag == 'obj' && isCam3D) { myToolPG.hide(); this.hideMenuUI(); }
 				else { flag = false; }
 			}
@@ -251,7 +262,7 @@ class MyManagerClick
 				else if(tag == 'controll_wd') { hideSizeWD(); this.hideMenuUI(); }
 				else if(tag == 'room') { this.hideMenuUI(); }
 				else if(tag == 'obj') { myToolPG.hide(); this.hideMenuUI(); }
-				else if(tag == 'roof') { hidePivotGizmo(obj); }
+				else if(tag == 'roof') { myToolPG.hide(); this.hideMenuUI(); }
 				else { flag = false; }
 			}
 		}

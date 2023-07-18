@@ -197,7 +197,7 @@ function clickMouseUpGizmo(cdm)
 
 	if(infProject.tools.pivot.userData.pivot.obj.userData.tag === 'roof')
 	{
-		clRoof.updateCgsRoof();
+		myHouse.myRoofCSG.updateCgsRoof();
 	}	
 }
 

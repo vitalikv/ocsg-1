@@ -1029,7 +1029,7 @@ function inputScaleObjPop(cdm)
 	
 	if(obj.userData.tag === 'roof')
 	{
-		clRoof.updateCgsRoof();
+		myHouse.myRoofCSG.updateCgsRoof();
 		myHouse.myRoofAction.upDateTextureRoof({obj})
 	}
 

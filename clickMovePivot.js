@@ -232,7 +232,7 @@ function clickMouseUpPivot(cdm)
 	if(infProject.tools.pivot.userData.pivot.obj.userData.tag === 'roof')
 	{
 		console.log(9999999)
-		clRoof.updateCgsRoof();
+		myHouse.myRoofCSG.updateCgsRoof();
 	}
 }
 

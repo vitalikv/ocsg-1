@@ -131,6 +131,10 @@ class MyToolPG
 		if(this.type === 'pivot') this.myPivot.mouseup();
 		if(this.type === 'gizmo') this.myGizmo.mouseup();
 		
+		const obj = this.getActObj();
+		
+		if(obj && obj.userData.tag === 'roof') myHouse.myRoofCSG.updateCgsRoof();		
+		
 		this.isDown = false;
 	}	
 	
