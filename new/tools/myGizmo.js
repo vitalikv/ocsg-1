@@ -53,7 +53,7 @@ class MyGizmo
 		}
 		
 		
-		//gizmo.visible = false;
+		gizmo.visible = false;
 		scene.add( gizmo );
 
 		return gizmo;

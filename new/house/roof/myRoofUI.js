@@ -86,7 +86,7 @@ class MyRoofUI
 		myHouse.myRoofAction.setObjSize({obj, size: new THREE.Vector3(x2, y2, z2)});
 		myHouse.myRoofCSG.updateCgsRoof();
 		myHouse.myRoofAction.upDateTextureRoof({obj})	
-
+		myToolPG.activeTool({obj});
 		//if(myCameraOrbit.activeCam.userData.isCam2D) showSvgSizeObj({obj: obj, boxCircle: true, getObjRoom: true, resetPos: true});
 	
 		this.render();		

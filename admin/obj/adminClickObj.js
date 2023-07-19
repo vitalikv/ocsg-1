@@ -177,8 +177,6 @@ function saveAsImagePreview()
 			arrObj[i].visible = false;
 		}		
 		
-		infProject.tools.pivot.visible = false;
-		infProject.tools.gizmo.visible = false;
 		infProject.scene.grid.visible = false;
 		infProject.settings.shader.fxaaPass.enabled = true;
 		renderer.render( scene, camera );
@@ -195,8 +193,6 @@ function saveAsImagePreview()
 			arrObj[i].visible = true;
 		}
 		
-		infProject.tools.pivot.visible = true;
-		infProject.tools.gizmo.visible = true;
 		infProject.scene.grid.visible = true;
 		infProject.settings.shader.fxaaPass.enabled = false;
 		renderer.render( scene, camera );

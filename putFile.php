@@ -23,9 +23,7 @@ detectZone.js
 saveLoad.js
 script.js
 eventClick.js
-clickMovePivot.js
 clickObj.js
-clickMoveGizmo.js
 loadObj.js
 hideWall.js
 substrate.js

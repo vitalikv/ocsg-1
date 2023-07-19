@@ -87,7 +87,7 @@ class MyPivot
 		}
 		
 		//infProject.tools.pivot = pivot;
-		//pivot.visible = false;
+		pivot.visible = false;
 		scene.add( pivot );
 
 

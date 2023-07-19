@@ -3,17 +3,6 @@
 class MyRoofCSG 
 {
 
-
-	clickUpRoof(obj)
-	{ 
-		if(myCameraOrbit.activeCam.userData.isCam3D) 
-		{
-			this.updateCgsRoof();			
-		}				
-	}
-	
-
-
 	// получаем модифицированную клон-крышу, с высокими откасами, чтобы резать стены
 	crRoofMod( obj )
 	{ 		

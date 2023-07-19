@@ -101,8 +101,6 @@
     <script src="<?=$path?>calculationArea.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>boxScale2D.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>clickObj.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>clickMoveGizmo.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>clickMovePivot.js?<?=$vrs?>"></script>
     <script src="<?=$path?>crossWall.js?<?=$vrs?>"></script>
     <script src="<?=$path?>addPoint.js?<?=$vrs?>"></script>
     <script src="<?=$path?>addWD.js?<?=$vrs?>"></script>

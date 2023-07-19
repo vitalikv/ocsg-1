@@ -260,12 +260,10 @@ function moveElementBoxScale2D(e)
 	
 	
 	var pos = obj.localToWorld( obj.geometry.boundingSphere.center.clone() );
-	infProject.tools.pivot.position.copy(pos);
-	infProject.tools.gizmo.position.copy(pos);
+	//infProject.tools.pivot.position.copy(pos);
+	//infProject.tools.gizmo.position.copy(pos);
 	
-	showSvgSizeObj({obj: obj});
-	
-	uiInfoObj({obj: obj});
+	showSvgSizeObj({obj: obj});	
 	
 	e.stopPropagation();	
 }
@@ -800,20 +798,6 @@ function showSvgSizeObj(cdm)
 					}
 				}
 				
-				// смещение 3D объекта
-				{
-					//console.log(posCenter);
-					
-					obj.position.x += pos3.x;
-					obj.position.z += pos3.z;
-		
-
-					infProject.tools.pivot.position.x += pos3.x;
-					infProject.tools.pivot.position.z += pos3.z;					
-					infProject.tools.gizmo.position.x += pos3.x;
-					infProject.tools.gizmo.position.z += pos3.z;
-				}
-				
 			}							
 		}
 		else
@@ -1042,8 +1026,7 @@ function inputScaleObjPop(cdm)
 	{
 		showSvgSizeObj({obj: obj, boxCircle: true, getObjRoom: true, resetPos: true});
 	}
-	
-	uiInfoObj({obj: obj});
+
 	
 	renderCamera();
 }

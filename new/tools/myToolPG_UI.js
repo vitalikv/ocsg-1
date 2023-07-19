@@ -31,7 +31,7 @@ class MyToolPG_UI
 		const css1 = `position: absolute; left: 10px; bottom: 0; height: 80px;`;
 
 		let str = 
-		`<div nameId="block_pos" class="block_pos" ui_1="">
+		`<div nameId="block_pos" class="block_pos" ui_1="" style="display: none;">
 			<div style="padding: 2px;">
 				<div style="display: flex; align-items: center;">
 					<div nameId="select_pivot" class="button1 button_gradient_1" style="width: 20px; margin: 0;">

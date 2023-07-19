@@ -63,7 +63,7 @@ var lightMap_1 = null;
 var clickO = resetPop.clickO();
 infProject.project = null;
 
-infProject.settings.active = { pg: 'pivot' };
+
 infProject.settings.door = { width: 0.85, height: 2.1 };
 infProject.settings.wind = { width: 1.5, height: 1.5, h1: 0.8 };
 infProject.settings.gate = { width: 2.5, height: 2.1 };
@@ -99,7 +99,7 @@ infProject.svg.furn.boxCircle.elem = createSvgCircle({count: 8, color: infProjec
 infProject.svg.furn.boxCircle.show = infProject.settings.obj.cam2D.show.scale; 
 
 // controllWD контроллеры для изменения ширины/длины wd
-infProject.tools = { pivot: createPivot_2(), gizmo: createGizmo360_2(), cutWall: [], axis: createLineAxis() }; 
+infProject.tools = { cutWall: [], axis: createLineAxis() }; 
 infProject.tools.floorPl = createPlaneOutlineFloor();
 infProject.catalog = { texture: infoListTexture() }; 
 infProject.listColor = resetPop.listColor(); 
