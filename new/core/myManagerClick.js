@@ -247,8 +247,8 @@ class MyManagerClick
 				if(tag == 'wall' && isCam3D) { this.hideMenuUI();  }
 				else if(tag == 'room' && isCam2D) { this.hideMenuUI(); }
 				else if(tag == 'room' && isCam3D) { this.hideMenuUI(); }
-				else if(tag == 'window' && isCam3D) { /*hidePivotGizmo(obj);*/ }
-				else if(tag == 'door' && isCam3D) { /*hidePivotGizmo(obj);*/ }
+				else if(tag == 'window' && isCam3D) { hideSizeWD(); this.hideMenuUI(); }
+				else if(tag == 'door' && isCam3D) { hideSizeWD(); this.hideMenuUI(); }
 				else if(tag == 'roof' && isCam3D) { myToolPG.hide(); this.hideMenuUI(); }
 				else if(tag == 'obj' && isCam3D) { myToolPG.hide(); this.hideMenuUI(); }
 				else { flag = false; }

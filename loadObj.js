@@ -260,7 +260,7 @@ function addObjInScene(inf, cdm)
 	var obj = inf.obj;
 	
 	if(cdm.pos){ obj.position.copy(cdm.pos); }
-	else if(inf.planeMath)
+	else if(inf.planeMath)	// объект по кнопки из каталога
 	{ 
 		obj.position.y = inf.planeMath;
 		planeMath.position.y = inf.planeMath; 

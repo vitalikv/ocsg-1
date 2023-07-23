@@ -252,7 +252,7 @@ class MyMouse
 		
 		planeMath.updateMatrixWorld();
 
-		const intersects = rayIntersect( event, planeMath, 'one' );		
+		let intersects = rayIntersect( event, planeMath, 'one' );		
 		if(intersects.length === 0) return;	
 		
 		if(myCameraOrbit.activeCam.userData.isCam2D)
@@ -293,7 +293,7 @@ class MyMouse
 			else if(clickO.button == 'add_lotid')
 			{
 				obj = await loadObjServer({lotid: clickO.options, cursor: true});
-				obj.position.copy(intersects[0].point); 
+				obj.position.copy(intersects[0].point);				
 				myHouse.myObjMove.mousedown({event, obj});
 			}
 
@@ -310,6 +310,11 @@ class MyMouse
 			if(clickO.button === 'add_lotid')
 			{
 				obj = await loadObjServer({lotid: clickO.options, cursor: true});
+				intersects = rayIntersect( event, planeMath, 'one' );		
+				if(intersects.length === 0) return;					
+				
+				obj.position.copy(intersects[0].point);				
+				myHouse.myObjMove.mousedown({event, obj});				
 			}
 
 			if(obj) 
