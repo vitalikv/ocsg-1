@@ -138,6 +138,9 @@
 	<script src="<?=$path?>new/tools/myToolPG_UI.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myPivot.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myGizmo.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/contour/windUI.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/contour/tabs.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/contour/blockUser.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/switchCamera.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabLevel.js?<?=$vrs?>"></script>

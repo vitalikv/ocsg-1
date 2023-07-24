@@ -38,6 +38,9 @@ new/ghostLevel.js
 new/startProject.js
 new/csgBox.js
 new/ui/switchCamera.js
+new/ui/contour/windUI.js
+new/ui/contour/tabs.js
+new/ui/contour/blockUser.js
 new/ui/right-panel/tabs.js
 new/ui/right-panel/tabLevel.js
 new/ui/right-panel/divLevelVisible.js

@@ -171,23 +171,7 @@ $('[nameId="checkbox_fxaaPass"]').change(function() { switchFxaaPass({visible: t
 //  <--- window_main_sett
 
 
-//  modal_wind_3 --->
 
-$('[nameId="background_main_menu"]').mousedown(function () 
-{	 
-	$('[nameId="background_main_menu"]').css({"display":"none"}); 
-});
-
-			
-$('[nameId="button_close_main_menu"]').mousedown(function () 
-{  
-	$('[nameId="background_main_menu"]').css({"display":"none"}); 
-});
-
-$('[nameId="window_main_menu"]').mousedown(function (e) { e.stopPropagation(); });
-	
-
-//  <--- modal_wind_3 
 
 
 

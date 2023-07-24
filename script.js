@@ -1378,6 +1378,7 @@ function isCheckExsistFunction(functionToCheck)
 
 
 let docReady = false;
+let windUI;
 let tabs;
 let tabLevel;
 let divLevelVisible;
@@ -1400,7 +1401,9 @@ let startProject;
 
 document.addEventListener("DOMContentLoaded", ()=>
 {
-	docReady = true; 	
+	docReady = true;
+
+	windUI = new WindUI();
 	
 	myManagerClick = new MyManagerClick();
 	myMouse = new MyMouse({container: containerF, scene});
