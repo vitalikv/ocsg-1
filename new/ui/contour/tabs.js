@@ -40,12 +40,11 @@ class WindTabs
 		const html = 
 		`<div style='${wrapTabs}'>
 			<div nameId="button_main_menu_reg_1" style='${btnLink}'>Учетная запись</div>
-			<a href="/" style='${btnLink}'>Главная страница</a>
-			<div nameId="reset_scene_1" style='${btnLink}'>Пустой проект</div>
 			<div nameId="button_load_1" style='${btnLink}'>Загрузить</div>
 			<div nameId="button_save_1" style='${btnLink}'>Сохранить</div>
-			<div nameId="button_help" style='${btnLink}'>Видеоинструкция</div>
-			<div nameId="button_contact" style='${btnLink}'>Контакты</div>
+			
+			<div nameId="reset_scene_1" style='${btnLink} margin-top: 30px;'>Пустой проект</div>
+			<a href="/" style='${btnLink}'>На главную</a>
 		</div>`;
 
 		return html;

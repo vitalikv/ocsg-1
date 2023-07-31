@@ -2,25 +2,26 @@
 // основное окно
 class WindBlockUser
 {
-	elDiv;
+	container;
 	elTitleReg;
 	elReg;
-	
-	
+	elResetPass;
 	
 	constructor()
 	{
-		this.elDiv = this.crBlock();
-		this.elTitleReg = this.elDiv.querySelector('[nameId="titleReg"]');
-		this.elReg = this.crWindReg();
+		this.container = this.crContainer();
+		this.elTitleReg = this.container.querySelector('[nameId="titleReg"]');
 		
-		this.elTitleReg.textContent = 'Войдите или зарегистрируйтесь';
+		this.elReg = this.crWindReg();
+		this.elResetPass = this.crWindResetPass();		
 		
 		this.addElemes();
 		this.initEventElem();
+		
+		this.changeMainMenuRegistMenuUI({type: 'reg_1'})
 	}
 	
-	crBlock()
+	crContainer()
 	{
 		const div = document.createElement('div');
 		div.innerHTML = this.html();
@@ -33,20 +34,35 @@ class WindBlockUser
 		div.innerHTML = this.htmlReg1();
 		return div.children[0];
 	}
+	
+	crWindResetPass()
+	{
+		const div = document.createElement('div');
+		div.innerHTML = this.htmlResetPass();
+		return div.children[0];
+	}	
 
 	addElemes()
 	{
-		const div = this.elDiv.querySelector('[nameId="blockReg"]');
+		const div = this.container.querySelector('[nameId="contentReg"]');
 		div.append(this.elReg);
+		div.append(this.elResetPass);
+		
+		console.log(this.container, this.elReg, this.elResetPass);
 	}
 	
 	initEventElem()
 	{
-		const btn1 = this.elReg.querySelector('[nameId="button_check_reg_1"]');
-		const btn2 = this.elReg.querySelector('[nameId="button_check_reg_2"]');
+		const btn1 = this.elReg.querySelector('[nameId="button_check_reg_1"]');	// авторизация
+		const btn2 = this.elReg.querySelector('[nameId="button_check_reg_2"]');	// регистрация нового пользователя
+		const btnResPass = this.elReg.querySelector('[nameId="btnResPass"]');
+		const btnSend = this.elReg.querySelector('[nameId="act_reg_1"]');	// кнопка войти/регистрация
+		
 		
 		btn1.onmousedown = () => { this.changeMainMenuRegistMenuUI({type: 'reg_1'}); }
 		btn2.onmousedown = () => { this.changeMainMenuRegistMenuUI({type: 'reg_2'}); }
+		
+		btnResPass.onmousedown = () => { this.switchRegPass({type: 'resetPass'}); }
 	}
 
 	html()
@@ -59,7 +75,7 @@ class WindBlockUser
 		const html = 
 		`<div nameId="reg_content_2" style="display: block;">
 			<div nameId="titleReg" class="window_main_menu_content_1_h1"></div>
-			<div nameId="blockReg" class="window_main_menu_form_reg"></div>		
+			<div nameId="contentReg" class="window_main_menu_form_reg"></div>		
 		</div>`;																								
 								
 
@@ -70,7 +86,7 @@ class WindBlockUser
 	htmlReg1()
 	{
 		const html =		
-		`<div class="window_main_menu_form_reg_block_1">
+		`<div nameId="divReg" class="window_main_menu_form_reg_block_1">
 			<div class="window_main_menu_form_reg_top_1">
 				<div class="window_main_menu_form_reg_top_1_block" nameId="button_check_reg_1">
 					<div class="window_main_menu_form_reg_top_1_block_text">
@@ -108,11 +124,11 @@ class WindBlockUser
 				</div>
 			</div>
 
-			<div class="button_reset_pass_1" nameId="button_reset_pass_1">
+			<div nameId="btnResPass" class="button_reset_pass_1">
 				забыли пароль ?
 			</div>
 			
-			<div class="window_main_menu_button_reg_1 button_gradient_1" b_type="reg_1" nameId="act_reg_1">
+			<div nameId="act_reg_1" class="window_main_menu_button_reg_1 button_gradient_1" b_type="reg_1">
 				Войти
 			</div>
 		</div>`;
@@ -121,6 +137,36 @@ class WindBlockUser
 		return html;
 	}
 
+
+	htmlResetPass()
+	{
+		const html = `
+		<div nameId="divResetPass" class="window_main_menu_form_reg" style="display: none;">
+			<div class="window_main_menu_form_reg_block_1">
+				
+				<div class="window_main_menu_form_reg_block_1_1">
+					<div class="window_main_menu_form_reg_block_1_label">
+						почта
+					</div>											
+					<input class="input_form_reg" type="text" nameId="input_reset_pass" value="">
+				</div>	
+
+				<div class="window_main_menu_form_reg_block_1_1">
+					<div nameId="info_reset_pass_1" class="wm_reg_12 wm_reg_border_1 wm_reg_text_1" style="display: none;">
+						<div nameId="info_reset_pass_1_1" style="display: none;">
+							Почта указана
+						</div>												
+					</div>
+				</div>												
+				
+				<div class="window_main_menu_button_reg_1 button_gradient_1" nameId="act_reset_pass">
+					Восстановить
+				</div>
+			</div>																					
+		</div>`;
+
+		return html;
+	}
 
 	// переключаем в главном меню в форме регистрация кнопки: вход/регистрация
 	changeMainMenuRegistMenuUI({type})
@@ -139,12 +185,32 @@ class WindBlockUser
 		{
 			el.innerText = 'Войти';
 			el.setAttribute("b_type", "reg_1"); 
+			
+			this.elTitleReg.textContent = 'Авторизация';		
 		}
 		if(type === "reg_2") 
 		{
 			el.innerText = 'Зарегистрироваться';
 			el.setAttribute("b_type", "reg_2");
+			
+			this.elTitleReg.textContent = 'Регистрация';
 		}	
+	}
+	
+	switchRegPass({type})
+	{
+		if(type === 'reg')
+		{
+			this.changeMainMenuRegistMenuUI({type: 'reg_1'});
+			this.elReg.style.display = '';
+			this.elResetPass.style.display = 'none';				
+		}
+		if(type === 'resetPass')
+		{
+			this.elTitleReg.textContent = 'Восстановление пароля';
+			this.elReg.style.display = 'none';
+			this.elResetPass.style.display = '';			
+		}
 	}
 }
 

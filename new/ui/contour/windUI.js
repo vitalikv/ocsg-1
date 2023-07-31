@@ -13,17 +13,27 @@ class WindUI
 		document.body.prepend(this.elMain);
 		
 		this.init();
+		this.initEvent();
 	}
 	
 	init()
 	{
-		const elBody = document.querySelector('[nameId="body"]');
+		const elBody = this.elMain.querySelector('[nameId="body"]');
 		
 		const windTabs = new WindTabs();
 		const windBlockUser = new WindBlockUser();
 
 		elBody.children[0].append(windTabs.elTabs);
-		elBody.children[1].append(windBlockUser.elDiv);
+		elBody.children[1].append(windBlockUser.container);
+	}
+	
+	initEvent()
+	{
+		const btnMenu = document.querySelector('[nameId="btn_menu"]');
+		btnMenu.onmousedown = () => { this.elMain.style.display = 'flex'; }
+		
+		const btnClose = this.elMain.querySelector('[nameId="button_close_main_menu"]');
+		btnClose.onmousedown = () => { this.elMain.style.display = 'none'; }
 	}
 	
 	css()
@@ -385,7 +395,7 @@ class WindUI
 	html()
 	{
 		const wrapWind = `
-		display: flex;
+		display: none;
 		position: fixed;
 		left: 0;
 		right: 0;

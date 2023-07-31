@@ -4,11 +4,11 @@
 
 <div class="flex_1 top_panel_2">	
 	
-	<a href="/" class="button1-wrap-1" nameId='btn_menu' style="margin-left: 15px;">
+	<div class="button1-wrap-1" nameId="btn_menu" style="margin-left: 15px;">
 		<div class="button1 button_gradient_1"> 
 			меню
 		</div>	
-	</a>
+	</div>
 	
 	<div class="toolbar" data-action ='top_panel_1'>
 		
