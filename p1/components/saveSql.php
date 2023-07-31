@@ -1,12 +1,16 @@
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT']."/include/bd_1.php");
+require_once ("../include/bd_1.php");
 
 
 $id = trim($_POST['id']);
 $user_id = trim($_POST['user_id']);
+//$pass = trim($_POST['pass']);
 $name = 'Проект ('.date("G:i").' '.date("d-m-Y").')';
-$json = $_POST['json'];  
+$json = $_POST['json']; 
+$preview = trim($_POST['preview']); 
 //$date = date("Y-m-d-G-i");
+
+$time = time();
 
 
 
@@ -24,12 +28,15 @@ $inf['user_id'] = $user_id;
 
 if($id == 0)
 {
-	$sql = "INSERT INTO project (user_id, name, json) VALUES (:user_id, :name, :json)";
+	$sql = "INSERT INTO project (user_id, name, json, preview, date_cr, date_up) VALUES (:user_id, :name, :json, :preview, :date_cr, :date_up)";
 
 	$r = $db->prepare($sql);
 	$r->bindValue(':user_id', $user_id);
 	$r->bindValue(':name', $name);
 	$r->bindValue(':json', $json);
+	$r->bindValue(':preview', $preview);
+	$r->bindValue(':date_cr', $time);
+	$r->bindValue(':date_up', $time);
 	$r->execute();
 
 
@@ -49,11 +56,13 @@ if($id == 0)
 }
 else
 {
-	$sql = "UPDATE project SET json = :json, name = :name WHERE id = :id";
+	$sql = "UPDATE project SET json = :json, preview = :preview, name = :name, date_up = :date_up WHERE id = :id";
 	$r = $db->prepare($sql);
 	$r->bindValue(':id', $id);
 	$r->bindValue(':name', $name);
 	$r->bindValue(':json', $json);
+	$r->bindValue(':preview', $preview);
+	$r->bindValue(':date_up', $time);
 	$r->execute();
 }
 

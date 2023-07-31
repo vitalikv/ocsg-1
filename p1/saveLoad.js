@@ -524,12 +524,9 @@ async function loadFilePL(json)
 {
 	resetScene();
 	
-	let inf = await getObjFromBase({lotid: 10});
+	// получаем объект из бд (т.к. все объекты параметрические)
+	let inf = await getObjFromBase({lotid: 10});	// дверь
 	if(inf.model) addObjInBase(inf, new THREE.ObjectLoader().parse( inf.model ));
-	inf = await getObjFromBase({lotid: 11});
-	if(inf.model) addObjInBase(inf, new THREE.ObjectLoader().parse( inf.model ));
-	//inf = await getObjFromBase({lotid: 19});
-	//if(inf.model) addObjInBase(inf, new THREE.ObjectLoader().parse( inf.model ));	
 	
 
 	//await getListRoomTypesApi();	// получаем типы помещений из api, добавляем в меню

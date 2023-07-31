@@ -13,7 +13,7 @@ $token = addslashes($url);
 
 
 // находим e-mail, Имя, codepro
-$sql = "SELECT * FROM user WHERE token = :token LIMIT 1";
+$sql = "SELECT * FROM user WHERE token = :token AND active = 1 LIMIT 1";
 $r = $db->prepare($sql);
 $r->bindValue(':token', $token, PDO::PARAM_STR);
 $r->execute();
@@ -23,16 +23,16 @@ $mess = "";
 
 if($res['id'])
 {
-	//echo $res['mail'].' '.$token;
+	$pass = rand(100000, 999999);
 	
-	$sql = "UPDATE user SET active = :active WHERE id = :id";
+	$sql = "UPDATE user SET pass = :pass WHERE id = :id";
 	$r = $db->prepare($sql);
 	$r->bindValue(':id', $res['id']);
 	//$r->bindValue(':token', NULL);
-	$r->bindValue(':active', true);
+	$r->bindValue(':pass', $pass);
 	$r->execute();
 
-	$mess = "Вы успешно зарегистрировались";
+	$mess = "Ваш новый пароль: ".$pass;
 }
 else
 {

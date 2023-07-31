@@ -63,6 +63,8 @@ class WindBlockUser
 		btn2.onmousedown = () => { this.changeMainMenuRegistMenuUI({type: 'reg_2'}); }
 		
 		btnResPass.onmousedown = () => { this.switchRegPass({type: 'resetPass'}); }
+		
+		btnSend.onmousedown = () => { this.checkRegDataIU(); }		
 	}
 
 	html()
@@ -212,6 +214,155 @@ class WindBlockUser
 			this.elResetPass.style.display = '';			
 		}
 	}
+
+
+	
+
+	// вход/регистрация пользователя (проверка правильности ввода данных почта/пароль)
+	async checkRegDataIU()
+	{
+		var pattern_1 = /^[a-z0-9_-]+@[a-z0-9-]+\.([a-z]{1,6}\.)?[a-z]{2,6}$/i;
+		var pattern_2 = /^[a-z0-9]{4,20}$/i;
+		var mail = document.querySelector('[nameId="input_reg_mail"]');
+		var pass = document.querySelector('[nameId="input_reg_pass"]');
+		
+		var inf_block = document.querySelector('[nameId="info_reg_1"]');
+		var inf_str_1 = document.querySelector('[nameId="info_reg_1_1"]');
+		var inf_str_2 = document.querySelector('[nameId="info_reg_1_2"]');
+		
+		inf_block.style.display = 'none';
+		inf_str_1.style.display = 'none';
+		inf_str_2.style.display = 'none';
+		
+		var flag_1 = false;
+		var flag_2 = false;
+		
+		mail.value = mail.value.trim();	// удаляем пробелы  
+		pass.value = pass.value.trim();	// удаляем пробелы 
+		
+		// проверка почты
+		if(mail.value != '')
+		{
+			if(pattern_1.test(mail.value))
+			{
+				flag_1 = true;
+			}
+			else
+			{
+				inf_str_1.style.display = 'block';
+				inf_str_1.innerText = 'Не верно указанна почта';			
+			}
+		}
+		else
+		{		
+			inf_str_1.style.display = 'block';
+			inf_str_1.innerText = 'Укажите e-mail';
+		}
+		
+		
+		// проверка пароля
+		if(pass.value != '')
+		{
+			if(pattern_2.test(pass.value))
+			{
+				flag_2 = true;
+			}
+			else
+			{
+				inf_str_2.style.display = 'block';
+				inf_str_2.innerHTML = 'Не верно указан пароль<br>(Только цифры и латинские буквы от 4 до 20 знаков)';			
+			}
+		}		
+		else
+		{		
+			inf_str_2.style.display = 'block';
+			inf_str_2.innerText = 'Укажите пароль';
+		}
+		
+		
+		// данные введены верно
+		if(flag_1 && flag_2)
+		{ 
+			inf_block.style.display = 'none';
+			
+			//console.log();
+			var type = document.querySelector('[nameId="act_reg_1"]').getAttribute("b_type");
+			
+		
+			var url = infProject.path+'components/regUser.php';					
+			var response = await fetch(url, 
+			{
+				method: 'POST',
+				body: 'type='+type+'&mail='+mail.value+'&pass='+pass.value,
+				headers: 
+				{	
+					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' 
+				},				
+			});	
+			if(!response.ok) return;
+			var data = await response.json();
+		
+		
+			if(type=='reg_1')	// авторизация пользователя
+			{
+				if(data.success)
+				{
+					infProject.user.id = data.info.id;
+					infProject.user.mail = data.info.mail;
+					infProject.user.pass = data.info.pass;
+					infProject.user.status = data.info.status;
+					
+					document.querySelector('[nameId="reg_content_1"]').style.display = 'block';
+					document.querySelector('[nameId="reg_content_2"]').style.display = 'none';
+
+					getListProject({id: infProject.user.id});
+				}
+				else
+				{
+					if(data.err.desc)
+					{
+						console.log(data.err.desc);
+						inf_str_1.innerHTML = data.err.desc;
+						
+						inf_block.style.display = 'block';
+						inf_str_1.style.display = 'block';
+						inf_str_2.style.display = 'none';													
+					}
+				}
+			}
+			else if(type=='reg_2')	// регистрация нового пользователя
+			{
+				if(data.success)
+				{
+					inf_str_1.innerHTML = "на вашу почту отправлено письмо<br>зайдите в вашу почту и подтвердите регистрацию<br>(если письмо не пришло посмотрите в папке спам)";
+					//inf_str_1.innerHTML = "Вы успешно зарегистрировались";						
+					
+					inf_block.style.display = 'block';
+					inf_str_1.style.display = 'block';
+					inf_str_2.style.display = 'none';												
+				}
+				else
+				{						
+					if(data.err.desc)
+					{
+						console.log(data.err.desc);
+						inf_str_1.innerHTML = data.err.desc;
+						
+						inf_block.style.display = 'block';
+						inf_str_1.style.display = 'block';
+						inf_str_2.style.display = 'none';													
+					}						
+				}
+			}				
+		
+		}
+		else	// данные введены НЕ верно
+		{  
+			inf_block.style.display = 'block';
+		}
+	};
+
+
 }
 
 
