@@ -1,0 +1,27 @@
+ErrorDocument 404 /include/404.php
+
+AddDefaultCharset utf-8
+DirectoryIndex index.php
+Options -Indexes
+
+RewriteEngine On
+  
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+
+RewriteRule ^index\.php$ / [R=301,L]
+RewriteRule ^review$ review.php
+RewriteRule ^documentation$ documentation.php
+RewriteRule ^buy$ buy.php
+RewriteRule ^contact$ contact.php
+RewriteRule ^get_pay$ components/get_pay.php
+
+RewriteRule ^download$ download.php
+RewriteRule ^dw/program.zip$ dw/download_1.php
+RewriteRule ^plan$ three/index.php
+
+RewriteRule ^construction$ p1/index.php
+
+
+

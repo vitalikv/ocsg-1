@@ -6,7 +6,7 @@ require_once ("bd_1.php");
 
 $url = $_SERVER['REQUEST_URI'];
 
-$path = "";
+$path = "/p1/";
 if($_SERVER['SERVER_NAME']=='engineering-plan.ru' || $_SERVER['SERVER_NAME']=='engineering-plan-new') $path = '/p1/';
 
 $title = 'Планировщик загородного дома онлайн 3D';
