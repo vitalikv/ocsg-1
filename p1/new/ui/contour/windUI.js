@@ -3,6 +3,10 @@
 class WindUI 
 {
 	elMain;
+	windTabs;
+	windDivAccount;
+	windDivProjectSave;
+	windDivProjectLoad;
 	
 	constructor()
 	{
@@ -20,11 +24,17 @@ class WindUI
 	{
 		const elBody = this.elMain.querySelector('[nameId="body"]');
 		
-		const windTabs = new WindTabs();
-		const windBlockUser = new WindBlockUser();
-
-		elBody.children[0].append(windTabs.elTabs);
-		elBody.children[1].append(windBlockUser.container);
+		this.windTabs = new WindTabs();
+		elBody.children[0].append(this.windTabs.container);
+		
+		
+		this.windDivAccount = new WindDivAccount();
+		this.windDivProjectSave = new WindDivProjectSave();
+		this.windDivProjectLoad = new WindDivProjectLoad();
+		
+		elBody.children[1].append(this.windDivAccount.container);
+		elBody.children[1].append(this.windDivProjectSave.container);
+		elBody.children[1].append(this.windDivProjectLoad.container);
 	}
 	
 	initEvent()
@@ -34,6 +44,37 @@ class WindUI
 		
 		const btnClose = this.elMain.querySelector('[nameId="button_close_main_menu"]');
 		btnClose.onmousedown = () => { this.elMain.style.display = 'none'; }
+		
+		this.windTabs.btnAccount.onmousedown = () => 
+		{ 
+			this.hideContainers();
+			this.windDivAccount.switchRegPass({type: 'reg'});			
+			this.windDivAccount.container.style.display = '';			
+		}
+		this.windTabs.btnSave.onmousedown = () => { this.hideContainers(); this.windDivProjectSave.container.style.display = ''; }
+		this.windTabs.btnLoad.onmousedown = () => { this.hideContainers(); this.windDivProjectLoad.container.style.display = ''; }
+		
+		this.windDivProjectSave.btnAccount.onmousedown = () => 
+		{ 
+			this.hideContainers();
+			this.windDivAccount.switchRegPass({type: 'reg'});			
+			this.windDivAccount.container.style.display = '';			
+		}
+		
+		this.windDivProjectLoad.btnAccount.onmousedown = () => 
+		{ 
+			this.hideContainers();
+			this.windDivAccount.switchRegPass({type: 'reg'});			
+			this.windDivAccount.container.style.display = '';			
+		}		
+	}
+	
+	// скрываем все блоки к контентом
+	hideContainers()
+	{
+		this.windDivAccount.container.style.display = 'none';
+		this.windDivProjectSave.container.style.display = 'none';
+		this.windDivProjectLoad.container.style.display = 'none';
 	}
 	
 	css()
@@ -395,7 +436,7 @@ class WindUI
 	html()
 	{
 		const wrapWind = `
-		display: none;
+		display: flex;
 		position: fixed;
 		left: 0;
 		right: 0;

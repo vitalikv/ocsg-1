@@ -2,18 +2,29 @@
 // основное окно
 class WindTabs 
 {
-	elTabs;
+	container;
+	btnLoad;
+	btnSave;
+	
 	
 	constructor()
 	{
 		this.crTabs();
+		this.getBtn();
 	}
 	
 	crTabs()
 	{
 		const div = document.createElement('div');
 		div.innerHTML = this.html();
-		this.elTabs = div.children[0];
+		this.container = div.children[0];
+	}
+	
+	getBtn()
+	{
+		this.btnAccount = this.container.querySelector('[nameId="btnAccount"]');
+		this.btnLoad = this.container.querySelector('[nameId="btnLoad"]');
+		this.btnSave = this.container.querySelector('[nameId="btnSave"]');
 	}
 
 	html()
@@ -39,9 +50,9 @@ class WindTabs
 		
 		const html = 
 		`<div style='${wrapTabs}'>
-			<div nameId="button_main_menu_reg_1" style='${btnLink}'>Учетная запись</div>
-			<div nameId="button_load_1" style='${btnLink}'>Загрузить</div>
-			<div nameId="button_save_1" style='${btnLink}'>Сохранить</div>
+			<div nameId="btnAccount" style='${btnLink}'>Учетная запись</div>
+			<div nameId="btnLoad" style='${btnLink}'>Загрузить</div>
+			<div nameId="btnSave" style='${btnLink}'>Сохранить</div>
 			
 			<div nameId="reset_scene_1" style='${btnLink} margin-top: 30px;'>Пустой проект</div>
 			<a href="/" style='${btnLink}'>На главную</a>

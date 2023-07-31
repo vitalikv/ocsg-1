@@ -1,6 +1,6 @@
 
 // основное окно
-class WindBlockUser
+class WindDivAccount
 {
 	container;
 	elTitleReg;
@@ -77,7 +77,7 @@ class WindBlockUser
 		const html = 
 		`<div nameId="reg_content_2" style="display: block;">
 			<div nameId="titleReg" class="window_main_menu_content_1_h1"></div>
-			<div nameId="contentReg" class="window_main_menu_form_reg"></div>		
+			<div nameId="contentReg"></div>		
 		</div>`;																								
 								
 
