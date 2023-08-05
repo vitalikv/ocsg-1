@@ -19,7 +19,10 @@ class MyManagerClick
 		if(myToolPG.gizmo.visible)
 		{
 			var arr = [];
-			for ( var i = 0; i < myToolPG.gizmo.children.length; i++ ){ arr[i] = myToolPG.gizmo.children[i]; }
+			for ( var i = 0; i < myToolPG.gizmo.children.length; i++ )
+			{ 
+				if(myToolPG.gizmo.children[i].visible) arr.push(myToolPG.gizmo.children[i]); 
+			}
 			
 			var ray = rayIntersect( event, arr, 'arr' );
 			if(ray.length > 0) { rayhit = ray[0]; return rayhit; }		

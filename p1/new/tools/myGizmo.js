@@ -94,9 +94,13 @@ class MyGizmo
 		planeMath.quaternion.copy( obj.getWorldQuaternion(new THREE.Quaternion()) );
 		planeMath.quaternion.multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI/2, 0, 0)));			
 		planeMath.position.copy( gizmo.position );
+		planeMath.updateMatrixWorld();
 		
-		planeMath.updateMatrixWorld();			
-		const dir = planeMath.worldToLocal(rayhit.point.clone());
+		rayhit = rayIntersect( event, planeMath, 'one' ); 			
+		if(rayhit.length === 0) return;		
+		rayhit = rayhit[0];
+		
+		const dir = planeMath.worldToLocal(rayhit.point.clone());		
 		gizmo.userData.rotY = Math.atan2(dir.x, dir.y);			
 		gizmo.userData.dir = new THREE.Vector3().subVectors(planeMath.localToWorld( new THREE.Vector3( 0, 0, -1 ) ), planeMath.position).normalize();		
 		

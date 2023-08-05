@@ -376,6 +376,8 @@ class MyCameraOrbit
 			camera3D.position.add( offset );
 			camera3D.userData.targetO.position.add( offset );			
 		}		
+	
+		this.api.moveCamFirst3D()
 	}	
 	
 	rayIntersect( event, obj, t ) 

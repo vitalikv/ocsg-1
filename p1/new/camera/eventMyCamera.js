@@ -29,7 +29,14 @@ class EventMyCamera
 	{
 		if(divLevelVisible.wallTransparent) wallAfterRender_2();
 		myToolPG.setScale();
+		myToolPG.setGizmoClipping();		
 	}
+	
+	moveCamFirst3D()
+	{
+		myToolPG.setScale();
+		myToolPG.setGizmoClipping();		
+	}	
 	
 	cameraZoom2D()
 	{

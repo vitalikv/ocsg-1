@@ -190,6 +190,10 @@ class MyToolPG
 	}
 	
 
+	setGizmoClipping()
+	{
+		this.gizmo.userData.propGizmo({type: 'clippingGizmo'});
+	}
 
 
 	// скрываем/показываем Pivot/Gizmo (только визуально)
