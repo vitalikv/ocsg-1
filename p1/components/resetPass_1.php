@@ -42,7 +42,10 @@ if($type == 'reset_1')
 		{
 			$inf['success'] = false;
 			$inf['err']['code'] = 2;
-			$inf['err']['desc'] = 'регистрация не завершена<br><br>на вашу почту было отправлено письмо<br>зайдите в вашу почту и подтвердите регистрацию<br>(если письмо не пришло посмотрите в папке спам)';						
+			$inf['err']['desc'] = 'регистрация не завершена<br><br>на вашу почту было отправлено письмо<br>зайдите в вашу почту и подтвердите регистрацию<br>(если письмо не пришло посмотрите в папке спам)';
+			//$cdm['mail'] = $mail;
+			//$cdm['token'] = $res['token'];			
+			//sendMess($cdm);
 		}
 	}
 	else
@@ -66,13 +69,13 @@ function sendMess($inf)
 	//$mail_form = "Content-type:text/html; Charset=utf-8\r\nFrom:mail@xn------6cdcklga3agac0adveeerahel6btn3c.xn--p1ai";
 	$mail_form = "Content-type:text/html; Charset=utf-8\r\nFrom:mail@".$_SERVER['HTTP_HOST'];
 	
-	$arrayTo = array($inf['mail'].', otoplenie-doma-2@mail.ru');
+	$arrayTo = array($inf['mail'].', engineering-plan@mail.ru');
 	$email = implode(",", $arrayTo);
 	
 	$url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
 	
-	$tema = "Программа отопление 3D «обновление пароля»";
-	$mess = 'Здравствуйте, вы забыли пароль на сайте '.$url.' (отопление 3D). Чтобы обновить пароль, пройдите по <a href="'.$url.'/reset_pass_2/'.$inf['token'].'">ссылке</a>.<br><br>';
+	$tema = "Конструктор дома 3D «обновление пароля»";
+	$mess = 'Здравствуйте, вы забыли пароль на сайте '.$url.' (Конструктор дома 3D). Чтобы обновить пароль, пройдите по <a href="'.$url.'/reset_pass_2/'.$inf['token'].'">ссылке</a>.<br><br>';
 	
 	mail($email, $tema, $mess, $mail_form);	
 }

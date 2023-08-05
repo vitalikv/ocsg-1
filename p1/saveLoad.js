@@ -414,7 +414,7 @@ function getJsonProject()
 
 
 
-function saveFile(cdm) 
+async function saveFile(cdm) 
 { 
 	
 	var json = JSON.stringify( compileJsonFile() );
@@ -439,20 +439,25 @@ function saveFile(cdm)
 	
 	if(cdm.id)
 	{
-		
 		// сохраняем в бд
-		$.ajax
-		({
-			url: infProject.path+'components/saveSql.php',
-			type: 'POST',
-			data: {json: json, id: cdm.id, user_id: infProject.user.id},
-			dataType: 'json',
-			success: function(json)
-			{ 			
-				console.log(json);
-			},
-			error: function(json){ console.log(json); }
-		});			
+		var url = infProject.path+'components/saveSql.php';			
+		 
+		var response = await fetch(url, 
+		{
+			method: 'POST',
+			body: 'id='+cdm.id+'&user_id='+infProject.user.id+'&preview='+null+'&json='+encodeURIComponent(json),
+			headers: 
+			{	
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' 
+			},				
+		});
+		var json = await response.json();
+		
+		console.log(json);
+		
+		//if(cdm.upUI) { getListProject({id: infProject.user.id}); }		// обновляем меню сохрание проектов		
+		
+		return true;	
 	}
 	
 	if(cdm.txt)

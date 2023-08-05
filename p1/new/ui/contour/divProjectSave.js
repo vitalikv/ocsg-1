@@ -3,11 +3,14 @@
 class WindDivProjectSave
 {
 	container;
+	elInfoReg;
 	btnAccount;
 	
 	constructor()
 	{
 		this.container = this.createDiv();
+		this.elInfoReg = this.container.querySelector('[nameId="infoReg"]');
+		
 		this.getBtn();
 	}
 	
@@ -30,7 +33,7 @@ class WindDivProjectSave
 			<div class="window_main_menu_content_1_h1">
 				Сохранить
 			</div>
-			<div nameId="wm_list_load">
+			<div nameId="infoReg">
 				<div class="wm_reg_13 wm_reg_border_1 wm_reg_text_1">
 					Чтобы  сохранить или загрузить проект, вам нужно авторизоваться. 
 				
@@ -45,6 +48,16 @@ class WindDivProjectSave
 
 		return html;
 	}
+	
+	// кликнули на кнопку сохранить проекта
+	async clickButtonSaveProjectUI(el)
+	{
+		var result = await saveFile({id: el.attributes.projectid.value, upUI: true}); 
+		
+		if(!result) return;
+		
+		//infProject.elem.mainMenu.g.style.display = 'none';
+	}	
 }
 
 

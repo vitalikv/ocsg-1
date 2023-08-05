@@ -128,13 +128,13 @@ function sendMess($inf)
 	//$mail_form = "Content-type:text/html; Charset=utf-8\r\nFrom:mail@xn------6cdcklga3agac0adveeerahel6btn3c.xn--p1ai";
 	$mail_form = "Content-type:text/html; Charset=utf-8\r\nFrom:mail@".$_SERVER['HTTP_HOST'];
 	
-	$arrayTo = array($inf['mail'].', otoplenie-doma-2@mail.ru');
+	$arrayTo = array($inf['mail'].', engineering-plan@mail.ru');
 	$email = implode(",", $arrayTo);
 	
 	$url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
 	
-	$tema = "Программа отопление 3D «активация почты»";
-	$mess = 'Здравствуйте, вы зарегистрировались на сайте '.$url.' (отопление 3D). Чтобы закончить регистрацию, пройдите по <a href="'.$url.'/active_2/'.$inf['token'].'">ссылке</a>.<br><br>';
+	$tema = "Конструктор дома 3D «активация почты»";
+	$mess = 'Здравствуйте, вы зарегистрировались на сайте '.$url.' (Конструктор дома 3D). Чтобы закончить регистрацию, пройдите по <a href="'.$url.'/active_2/'.$inf['token'].'">ссылке</a>.<br><br>';
 	
 	mail($email, $tema, $mess, $mail_form);	
 }

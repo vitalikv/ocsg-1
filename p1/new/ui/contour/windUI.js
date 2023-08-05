@@ -77,6 +77,20 @@ class WindUI
 		this.windDivProjectLoad.container.style.display = 'none';
 	}
 	
+	
+	// user авторизовался, скрываем лишние блоки и показываем проекты
+	enterUser({id})
+	{
+		this.windDivAccount.elReg.style.display = 'none';
+		this.windDivAccount.elUser.style.display = '';
+		this.windDivAccount.elTitleReg.textContent = 'Вход выполнен';
+
+		this.windDivProjectSave.elInfoReg.innerHTML = '';
+		this.windDivProjectLoad.elInfoReg.innerHTML = '';
+		
+		this.getListProject({id});
+	}
+	
 	css()
 	{
 		var styles = `
@@ -436,7 +450,7 @@ class WindUI
 	html()
 	{
 		const wrapWind = `
-		display: flex;
+		display: none;
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -537,257 +551,92 @@ class WindUI
 		return html;
 	}
 
-	
-	html2()
-	{
-		let html = 
-		`<div class="background_main_menu" nameId="background_main_menu" ui_1="">
-			<div class="modal_wrap">
-				<div class="window_main_menu" nameId="window_main_menu">
-					<div class="modal_window_close" nameId="button_close_main_menu">
-						+
-					</div>
-					<div class="modal_header">
-						<div class="modal_title">
-							<div class="modal_name">
-								<div modal_title='form'>
-									Меню 
-								</div>
-							</div>
-						</div>					
-					</div>
-					<div class='modal_body'>
-						<div class='modal_body_content'>
-							<div class="window_main_menu_content_1">					
-								<div class="window_main_menu_content_1_row">
-									<div class="window_main_menu_content_1_column">
-										<div class="window_main_menu_content_1_item" nameId="button_main_menu_reg_1">Учетная запись</div>
-										<a href="/" class="window_main_menu_content_1_item">Главная страница</a>
-										<div class="window_main_menu_content_1_item" nameId="reset_scene_1">Пустой проект</div>
-										<div class="window_main_menu_content_1_item" nameId="button_load_1">Загрузить</div>
-										<div class="window_main_menu_content_1_item" nameId="button_save_1">Сохранить</div>
-										<div class="window_main_menu_content_1_item" nameId="button_help">Видеоинструкция</div>
-										<div class="window_main_menu_content_1_item" nameId="button_contact">Контакты</div>
-									</div>
-									<div class="window_main_menu_content_1_column" style="position: relative;">
-										
-										<div wwm_1="button_load_1" style="display: none;"> 
-											<div class="window_main_menu_content_1_h1">
-												Загрузить
-											</div>
-											<div class="window_main_menu_content_1_wrap_1" nameId="wm_list_load">
-												<div class="wm_reg_13 wm_reg_border_1 wm_reg_text_1">
-													Чтобы  сохранить или загрузить проект, вам нужно авторизоваться. 
-												
-													<div style="max-width: 350px; margin: auto;">
-														<div nameId="bl_inf_regin_l" class="window_main_menu_button_reg_1 button_gradient_1">
-															Авторизоваться
-														</div>	
-													</div>	
-												</div>										
-											</div>
-										</div>
-										
-										<div wwm_1="button_save_1" style="display: none;">
-											<div class="window_main_menu_content_1_h1">
-												Сохранить
-											</div>
-											<div nameId="wm_list_save">
-												<div class="wm_reg_13 wm_reg_border_1 wm_reg_text_1">
-													Чтобы  сохранить или загрузить проект, вам нужно авторизоваться.
-
-													<div style="max-width: 350px; margin: auto;">
-														<div nameId="bl_inf_regin_s" class="window_main_menu_button_reg_1 button_gradient_1">
-															Авторизоваться
-														</div>	
-													</div>											
-												</div>										
-											</div>
-											
-											<div class="wm_save_inf_project" nameId="wm_save_inf_project" style="display: none;">
-												<div style="margin-bottom: 10px;">В вашем проекте:</div>
-												<div nameId="wm_save_inf_project_b1"></div>
-												<div nameId="wm_save_inf_project_b2"></div>
-												<div nameId="wm_save_inf_project_err" style="margin-top: 20px;"></div>
-											</div>
-										</div>
-										
-										<div wwm_1="button_main_menu_reg_1" style="display: block;">
-										
-											<div nameId="reg_content_1" style="display: none;">
-											
-												<div class="window_main_menu_content_1_h1">
-													Вход выполнен
-												</div>									
-											
-												<div class="wm_reg_13 wm_reg_border_1 wm_reg_text_1">
-													Вы авторизовались.<br><br>Теперь вам доступно сохранение и загрузка проектов. 
-												</div>									
-											
-											</div>
-										
-											<div nameId="reg_content_2" style="display: block;">
-											
-												<div class="window_main_menu_content_1_h1">
-													Войдите или зарегистрируйтесь
-												</div>
-												<div class="window_main_menu_form_reg">
-													<div class="window_main_menu_form_reg_block_1">
-													
-													
-														<div class="window_main_menu_form_reg_top_1">
-															<div class="window_main_menu_form_reg_top_1_block" nameId="button_check_reg_1">
-																<div class="window_main_menu_form_reg_top_1_block_text">
-																	вход
-																</div>	
-															</div>
-															<div class="window_main_menu_form_reg_top_1_block" nameId="button_check_reg_2">
-																<div class="window_main_menu_form_reg_top_1_block_text">
-																	регистрация
-																</div>	
-															</div>			
-														</div>	
-														
-														<div class="window_main_menu_form_reg_block_1_1">
-															<div class="window_main_menu_form_reg_block_1_label">
-																почта
-															</div>											
-															<input class="input_form_reg" type="text" nameId="input_reg_mail" value="">
-														</div>
-														<div class="window_main_menu_form_reg_block_1_1">
-															<div class="window_main_menu_form_reg_block_1_label">
-																пароль
-															</div>											
-															<input class="input_form_reg" type="text" nameId="input_reg_pass" value="">
-														</div>
-														
-														<div class="window_main_menu_form_reg_block_1_1">
-															<div nameId="info_reg_1" class="wm_reg_12 wm_reg_border_1 wm_reg_text_1" style="display: none;">
-																<div nameId="info_reg_1_1" style="display: none;">
-																	Почта указана
-																</div>
-																<div nameId="info_reg_1_2" style="display: none;">
-																	Пароль указан
-																</div>													
-															</div>
-														</div>
-
-														<div class="button_reset_pass_1" nameId="button_reset_pass_1">
-															забыли пароль ?
-														</div>
-														
-														<div class="window_main_menu_button_reg_1 button_gradient_1" b_type="reg_1" nameId="act_reg_1">
-															Войти
-														</div>
-													</div>																					
-												</div>
-												
-											</div>																								
-										</div>	
 
 
+	// получаем с сервера список проектов принадлежащих пользователю
+	async getListProject({id})
+	{ 
+
+		const url = infProject.path+'components/loadListProject.php';			
+		
+		const response = await fetch(url, 
+		{
+			method: 'POST',
+			body: 'id='+id,
+			headers: 
+			{	
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' 
+			},				
+		});	
+
+		if(!response.ok) return;
+		const json = await response.json();
+		
+		
+		let html_load = '';
+		let html_save = '';
+		
+		const arr = [];
+		let count = 1;
+		
+		if(infProject.user.status){ if(infProject.user.status == 'admin'){ count = 5; } }
+		
+		for(let i = 0; i < count; i++)
+		{
+			if(json[i]) { arr[arr.length] = json[i]; }
+			else { arr[arr.length] = {id: 0, name: 'Пустой проект'}; }	
+		}
+		
+		for(let i = 0; i < arr.length; i++)
+		{
+			let src_1 = `<div><div>${arr[i].name}</div><div style='margin-top: 10px;'>сохранить</div></div>`;
+			let src_2 = `<div><div>${arr[i].name}</div><div style='margin-top: 10px;'>загрузить</div></div>`;
+			
+			if(arr[i].preview) 
+			{
+				src_1 = `			 
+				<div style='margin: auto;'>${arr[i].name}</div>
+				<img src="${arr[i].preview}" style="display: block; width: 100%; margin: auto; -o-object-fit: contain; object-fit: contain;">
+				<div style='margin: auto;'>сохранить</div>
+				`;
+				
+				src_2 = `
+				<div style='margin: auto;'>${arr[i].name}</div>
+				<img src="${arr[i].preview}" style="display: block; width: 100%; margin: auto; -o-object-fit: contain; object-fit: contain;"> 			
+				<div style='margin: auto;'>загрузить</div>
+				`;			
+			}
 
 
+			html_save += `<div class="window_main_menu_content_block_1" style='background: #f0ebd1;' projectId="${arr[i].id}" nameId="save_pr_1">${src_1}</div>`;	
+			html_load += `<div class="window_main_menu_content_block_1" style='background: #d1d9f0;' projectId="${arr[i].id}" nameId="load_pr_1">${src_2}</div>`;
+		}		
+		
+		this.windDivProjectLoad.elInfoReg.innerHTML = html_load;
+		this.windDivProjectSave.elInfoReg.innerHTML = html_save;
 
-										<div wwm_1="button_reset_pass_1" style="display: none;">								
-										
-											<div nameId="reset_pass_content_2" style="display: block;">
-											
-												<div class="window_main_menu_content_1_h1">
-													Восстановление пароля
-												</div>
-												<div class="window_main_menu_form_reg">
-													<div class="window_main_menu_form_reg_block_1">
-														
-														<div style="height: 30px;"></div>
-														
-														<div class="window_main_menu_form_reg_block_1_1">
-															<div class="window_main_menu_form_reg_block_1_label">
-																почта
-															</div>											
-															<input class="input_form_reg" type="text" nameId="input_reset_pass" value="">
-														</div>	
+		const arrLoadEl = this.windDivProjectLoad.elInfoReg.querySelectorAll('[nameId="load_pr_1"]');
+		const arrSaveEl = this.windDivProjectSave.elInfoReg.querySelectorAll('[nameId="save_pr_1"]');
 
-														<div class="window_main_menu_form_reg_block_1_1">
-															<div nameId="info_reset_pass_1" class="wm_reg_12 wm_reg_border_1 wm_reg_text_1" style="display: none;">
-																<div nameId="info_reset_pass_1_1" style="display: none;">
-																	Почта указана
-																</div>												
-															</div>
-														</div>												
-														
-														<div class="window_main_menu_button_reg_1 button_gradient_1" nameId="act_reset_pass">
-															Восстановить
-														</div>
-													</div>																					
-												</div>
-												
-											</div>	
-											
-										</div>
+		arrLoadEl.forEach((el)=> 
+		{
+			el.onmousedown = () => 
+			{
+				this.windDivProjectLoad.clickButtonLoadProjectUI(el);
+				this.elMain.style.display = 'none';
+			}
+		});	
 
-
-										
-										
-										<div wwm_1="button_help" style="display: none;">
-											<div class="window_main_menu_content_1_h1">
-												Полезная информация
-											</div>								
-											<div class="modal_wind_2" style="margin: 30px;">
-												Приветствуем.<br> 
-												Здесь вы сможете спроектировать систему отопления в 3D. Для большего представлении о возможности программы, предлагаем ознакомится с видео. 
-											</div>
-											<div class="modal_wind_2" style="margin: 70px 30px 30px 30px;">
-												<div style="text-align:center;">Посмотрите видео, как пользоваться программой:</div>
-
-												<div class="flex_1">
-													<a href="https://youtu.be/kFdMB4p7gbU" class="window_main_menu_content_block_2" target="_blank">
-														<img src="<?=$path?>/img/you_1.jpg" style="width: 100%;">
-														<div style="position: absolute;">
-															<img src="<?=$path?>/img/button_youtube.png" class="inf_butt_youtube_1">
-														</div>
-													</a>					
-													<a href="https://youtu.be/Sg86NEGOj7I" class="window_main_menu_content_block_2" target="_blank">
-														<img src="<?=$path?>/img/you_2.jpg" style="width: 100%;">
-														<div style="position: absolute;">
-															<img src="<?=$path?>/img/button_youtube.png" class="inf_butt_youtube_1">
-														</div>												
-													</a>											
-												</div>					
-											</div>		
-										</div>
-
-										<div wwm_1="button_contact" style="display: none;">
-											<div class="window_main_menu_content_1_h1">
-												Контакты
-											</div>								
-											<div class="inf_contact button_gradient_1">
-												<div class="inf_contact_text">
-													otoplenie-doma-2@mail.ru
-												</div>
-											</div>		
-										</div>								
-										
-									</div>							
-								</div>
-								<div class="window_main_menu_content_1_row">
-								
-								</div>						
-							</div>
-							
-							<div class="window_main_menu_content_1">
-							
-							</div>
-						</div>			
-					</div>
-					<div class='modal_footer'>
-					</div>
-				</div>			
-			</div>	
-		</div>`;
-
-		return html;
+		arrSaveEl.forEach((el)=> 
+		{
+			el.onmousedown = () => 
+			{
+				this.windDivProjectSave.clickButtonSaveProjectUI(el);
+				this.elMain.style.display = 'none';
+			}
+		});	
 	}
+
 
 }
 
