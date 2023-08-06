@@ -17,8 +17,8 @@ class MyGizmo
 		
 		
 		let arr = [];
-		arr[0] = {axis: 'x', rot: new THREE.Vector3(0, 0, 0), color: 'rgb(17, 255, 0)'};
-		arr[1] = {axis: 'y', rot: new THREE.Vector3(0, 0, Math.PI/2), color: 'rgb(247, 72, 72)'};
+		arr[0] = {axis: 'y', rot: new THREE.Vector3(0, 0, 0), color: 'rgb(17, 255, 0)'};
+		arr[1] = {axis: 'x', rot: new THREE.Vector3(0, 0, Math.PI/2), color: 'rgb(247, 72, 72)'};
 		arr[2] = {axis: 'z', rot: new THREE.Vector3(Math.PI/2, 0, 0), color: 'rgb(72, 116, 247)'};	
 		
 		let geom1 = this.crGeom({size: 0.03});
@@ -132,6 +132,66 @@ class MyGizmo
 		
 		this.render();
 	}
+	
+	// метод который фиксирует поворот объекта на 90 градусов , метод не доконца работает , оставил, чтобы был как пример и не было мучительно долго вспоминать
+	mousemove2222 = (event) => 
+	{
+		let rayhit = rayIntersect( event, planeMath, 'one' ); 			
+		if(rayhit.length == 0) return;
+		
+		const gizmo = this.obj;
+		
+		const q_Old = gizmo.quaternion.clone();
+		const rotY_Old = gizmo.userData.rotY;
+		
+		const dir = planeMath.worldToLocal(rayhit[0].point.clone());
+		const rotY = Math.atan2(dir.x, dir.y);	
+		
+		//gizmo.rotateOnWorldAxis(gizmo.userData.dir, rotY - gizmo.userData.rotY);
+		const q = new THREE.Quaternion().setFromAxisAngle(gizmo.userData.dir, rotY - gizmo.userData.rotY);
+		
+		const rotation = new THREE.Euler().setFromQuaternion(q.clone().multiply(gizmo.quaternion));
+		//gizmo.quaternion.copy(q.clone().multiply(gizmo.quaternion));
+		
+
+		let x = rotation.x;
+		let y = rotation.y;
+		let z = rotation.z;
+		
+		x = Math.round(THREE.Math.radToDeg(x));
+		y = Math.round(THREE.Math.radToDeg(y));
+		z = Math.round(THREE.Math.radToDeg(z));
+
+
+		const snapX = (Math.round(x % 360 / 10) * 10);
+		const snapY = (Math.round(y % 360 / 10) * 10);
+		const snapZ = (Math.round(z % 360 / 10) * 10);
+		
+		let done = false;
+		if(gizmo.userData.axisSelected === 'y' && (Math.abs(snapX) === 0 || Math.abs(snapX) === 90)) { x = snapX; done = true; }
+		if(gizmo.userData.axisSelected === 'x' && (Math.abs(snapY) === 0 || Math.abs(snapY) === 90)) { y = snapY; done = true; }
+		if(gizmo.userData.axisSelected === 'z' && (Math.abs(snapZ) === 0 || Math.abs(snapZ) === 90)) { z = snapZ; done = true; }
+		
+		if(!done) gizmo.userData.rotY = rotY;
+		
+		x = THREE.Math.degToRad(x);
+		y = THREE.Math.degToRad(y);
+		z = THREE.Math.degToRad(z);
+		
+		
+		
+		let q_New = new THREE.Quaternion().setFromEuler(new THREE.Euler().set(x, y, z))
+		let q_Offset = q_New.clone().multiply(myToolPG.qt.clone().inverse());
+										
+										
+		gizmo.quaternion.copy(q_New);
+		
+		gizmo.userData.propGizmo({type: 'rotObjs', pos: gizmo.position, arrO: [myToolPG.obj], q_Offset});
+
+		myToolPG.setRotPivotGizmo({qt: gizmo.quaternion});	
+		
+		this.render();
+	}	
 
 	mouseup = (e) => 
 	{		
