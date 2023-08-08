@@ -9,11 +9,17 @@ $url = $_SERVER['REQUEST_URI'];
 $path = "/p1/";
 if($_SERVER['SERVER_NAME']=='engineering-plan.ru' || $_SERVER['SERVER_NAME']=='engineering-plan-new') $path = '/p1/';
 
-$title = 'Планировщик загородного дома онлайн 3D';
-$h1 = '----';
+$title = 'Инженерный план онлайн 3D';
+$h1 = '';
 $description = '';
 $nameId = '';
 
+if($url == '/construction')	
+{ 
+	$title = 'Планировщик загородного дома онлайн 3D';
+	$h1 = 'Конструктор дома';
+	$description = 'Онлайн программа для проектирование домов и коттеджей в 3D.';	
+}
 
 
 $infProject = array('url' => $url, 'title' => $title, 'nameId' => $nameId, 'path' => $path, 'load' => [ img => [] ]);
