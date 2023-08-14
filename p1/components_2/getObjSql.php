@@ -42,31 +42,12 @@ if($res)
 	{
 		$data['name'] = json_decode($res['name']);	
 	}
-
-	if($res['type'])
+	
+	if($res['path'])
 	{
-		$data['type'] = json_decode($res['type']);	
+		$data['model'] = json_decode(file_get_contents('../objs/'.json_decode($res['path']).'model.json'));		
 	}
 	
-	if($res['size'])
-	{
-		$data['size'] = json_decode($res['size']);	
-	}
-	
-	if($res['model'])
-	{
-		$data['model'] = json_decode($res['model']);	
-	}
-
-	if($res['properties'])
-	{
-		$data['properties'] = json_decode($res['properties']);	
-	}
-
-	if($res['preview'])
-	{
-		$data['preview'] = $res['preview'];	
-	}	
 }
 
 

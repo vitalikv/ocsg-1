@@ -835,7 +835,7 @@ async function loadObjInBase(cdm)
 	var response = await fetch(url, 
 	{
 		method: 'POST',
-		body: 'select_list=id, name, size'+strId ,
+		body: 'select_list=id, name'+strId ,
 		headers: 
 		{
 			'Content-Type': 'application/x-www-form-urlencoded'
