@@ -39,15 +39,18 @@ class MyManagerClick
 			if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
 		}
 		
-		if(!infProject.scene.block.click.door)
+		if(!rayhit)
 		{
-			var ray = rayIntersect( event, infProject.scene.array.door, 'arr' );
-			if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
-		}
-		
-		if(!infProject.scene.block.click.window)
-		{
-			var ray = rayIntersect( event, infProject.scene.array.window, 'arr' );
+			var arr = [];
+			var objs = [...infProject.scene.array.door, ...infProject.scene.array.window];
+			
+			for ( var i = 0; i < objs.length; i++ )
+			{ 
+				if(!objs[i].visible) continue;
+				arr.push(objs[i]); 
+			}	
+			
+			var ray = rayIntersect( event, arr, 'arr' );
 			if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
 		}
 		
@@ -130,6 +133,7 @@ class MyManagerClick
 			if( tag == 'pivot' ) { myToolPG.mousedown({event, rayhit});  }
 			else if( tag == 'gizmo' ) { myToolPG.mousedown({event, rayhit}); } 
 			else if( tag == 'wall' && isCam2D ) { myHouse.myWallMove.mousedown({event, obj}); }
+			else if( tag == 'room' && isCam2D ) { clickFloor({obj}); }
 			else if( tag == 'point' ) { myHouse.myMovePoint.mousedown({event, obj}); }
 			else if( tag == 'window' && isCam2D ) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if( tag == 'door' && isCam2D ) { myHouse.myWDMove.mousedown({event, obj}); }
@@ -141,7 +145,6 @@ class MyManagerClick
 		else if(type === 'up')
 		{	
 			if( tag == 'wall' && isCam3D ) { myHouse.myWallMove.click3D({obj, rayhit}); }
-			else if( tag == 'room' && isCam3D ) { clickFloor({obj}); }
 			else if( tag == 'room' && isCam3D ) { clickFloor({obj}); }
 			else if( tag == 'window' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if( tag == 'door' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }
