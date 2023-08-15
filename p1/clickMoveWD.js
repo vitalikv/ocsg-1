@@ -164,7 +164,13 @@ function showTableWD(wd)
 	
 	$('[nameId="size-wd-length"]').val(Math.round(d1 * 100) / 100);
 	$('[nameId="size-wd-height"]').val(Math.round(d2 * 100) / 100);
-	$('[nameId="rp_wd_h1"]').val(Math.round((wd.userData.door.h1 + minY) * 100) / 100);
+	
+	const wall = wd.userData.door.wall;
+	wall.updateMatrixWorld();
+	wd.updateMatrixWorld();			
+	const h1 = wall.worldToLocal( wd.localToWorld(new THREE.Vector3(0, wd.geometry.boundingBox.min.y, 0)) ).y;		
+	
+	$('[nameId="rp_wd_h1"]').val(Math.round(h1 * 100) / 100);
 }
 
 
