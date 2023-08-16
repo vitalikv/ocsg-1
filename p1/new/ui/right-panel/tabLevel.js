@@ -39,7 +39,7 @@ class TabLevel
 	{
 		for ( let i = 0; i < this.itemsLevel.length; i++ )
 		{
-			this.itemsLevel[i].btn.onmousedown = () => { myLevels.switchLevel(i); }
+			this.itemsLevel[i].btn.onmousedown = () => { myMouse.clearClick(); myLevels.switchLevel(i); }
 			this.itemsLevel[i].input.onkeyup = (event) => this.changeInputHeight(event, i);
 		}		
 	}

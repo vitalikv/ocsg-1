@@ -176,7 +176,8 @@ function clickPointUP_BSP( arrW )
 			MeshBSP( wd, objsBSP );			
 		}
 		
-		upUvs_1( wall ); 
+		upUvs_1( wall );
+		boxUnwrapUVs(wall.geometry);		
 	}
 } 
 

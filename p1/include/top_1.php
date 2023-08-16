@@ -24,20 +24,19 @@
 			<h1 style="font: 18px Arial, Helvetica, sans-serif;"><?=$h1?><h1>
 		</div>
 		
-		<div class="button1-wrap-1" nameId='butt_cam_walk' style="display: none;">
-			<div class="button1 button_gradient_1" style="padding: 7px; font-weight: normal; border-radius: 0;"> 
-				<img src="<?=$path?>img/walk_2.png">
-			</div>	
-		</div>		
-
 		<div class="button1-wrap-1">
 			<div nameId='screenshot' class="button1 button_gradient_1" style="padding: 7px; font-weight: normal; border-radius: 0;"><img src="<?=$path?>img/screenshot.png"></div>
 		</div>		
 	</div> 
 	
 	
-	<div class="tp_right_1" style="display: flex;">
+	<div class="button1-wrap-1" nameId='butt_cam_walk' style="display: none;">
+		<div class="button1 button_gradient_1" style="padding: 7px; font-weight: normal; border-radius: 0;"> 
+			<img src="<?=$path?>img/walk_2.png">
+		</div>	
+	</div>		
 	
+	<div class="tp_right_1" style="display: flex;">	
 		<div class="button1-wrap-1" nameId='butt_camera_2D' style="display: none;">
 			<div class="button1 button_gradient_1" style="width: 39px; padding: 7px; font-weight: normal; border-radius: 0;"> 
 				2D
