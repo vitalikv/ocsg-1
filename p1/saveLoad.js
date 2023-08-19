@@ -82,7 +82,7 @@ function resetScene()
 	myMouse.clearClick();
 	//hideMenuUI(clickO.last_obj);		
 	
-	myLevels.deleteOneLevel(myLevels.activeId);		
+	//myLevels.deleteOneLevel(myLevels.activeId);		
 	
 	obj_point = [];
 	room = [];
@@ -90,7 +90,7 @@ function resetScene()
 	arrWallFront = [];
 	
 
-	countId = 2;
+	
 	
 	// прячем размеры и линейки
 	myHouse.myWDPoints.hide();
@@ -109,6 +109,9 @@ function resetScene()
 	infProject.scene.array = resetPop.infProjectSceneArray();
 	
 	myLevels.deleteAllLevels();
+	ghostLevel.deleteLevel();
+	
+	countId = 2;
 	
 	//getConsoleRendererInfo();
 	//console.log('infProject.scene.array');
