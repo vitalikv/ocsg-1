@@ -1229,7 +1229,6 @@ document.addEventListener("keydown", function (e)
 	
 	//if(e.keyCode == 56) { showHideLabelSizeWall({switch: true}); }
 	//if(e.keyCode == 66) { switchCamera3D(); } 	// b
-	//if(e.keyCode == 86) { switchLight({switch: true}); } 	// v
 	if(e.keyCode == 89 && !e.ctrlKey) { saveFile({txt: true}); } 			// y
 	//if(e.keyCode == 86) { resetScene(); getAutoBuildingJson(); } // v
 	
@@ -1277,55 +1276,6 @@ function switchFxaaPass(cdm)
 
 	renderCamera();
 }
-
-
-// переключаем глобальное/ламповое освещение 
-function switchLight(cdm)
-{  
-	if(!cdm) return;
-	
-	if(cdm.switch)
-	{
-		var type = infProject.settings.light.type;
-		type = (type == 'global') ? 'lamp' : 'global';
-		infProject.settings.light.type = type;
-	}
-	
-	if(cdm.visible !== undefined)
-	{
-		var type = (cdm.visible) ? 'global' : 'lamp';
-		infProject.settings.light.type = type;
-	}	
-	
-	if(infProject.settings.light.type == 'global')
-	{
-		var global_intensity = 0.93;
-		var global_visible = true;
-		var lamp_visible = false;
-	}
-	else
-	{
-		var global_intensity = 0.5;
-		var global_visible = false;
-		var lamp_visible = true;			
-	}
-	
-	for ( var i = 0; i < infProject.scene.light.lamp.length; i++ )
-	{
-		infProject.scene.light.lamp[i].visible = lamp_visible;
-	}
-	
-	for ( var i = 0; i < infProject.scene.light.global.point.length; i++ )
-	{
-		infProject.scene.light.global.point[i].visible = global_visible;
-	}		
-	
-	infProject.scene.light.global.ambient.intensity = global_intensity;
-	
-	renderCamera();
-}
-
-
 
 
 

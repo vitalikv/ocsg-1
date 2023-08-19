@@ -43,7 +43,7 @@ class WindUI
 		btnMenu.onmousedown = () => { this.elMain.style.display = 'flex'; }
 		
 		const btnClose = this.elMain.querySelector('[nameId="button_close_main_menu"]');
-		btnClose.onmousedown = () => { this.elMain.style.display = 'none'; }
+		btnClose.onmousedown = () => { this.closeWin(); }
 		
 		this.windTabs.btnAccount.onmousedown = () => 
 		{ 
@@ -89,6 +89,11 @@ class WindUI
 		this.windDivProjectLoad.elInfoReg.innerHTML = '';
 		
 		this.getListProject({id});
+	}
+	
+	closeWin()
+	{
+		this.elMain.style.display = 'none';
 	}
 	
 	css()
@@ -623,7 +628,7 @@ class WindUI
 			el.onmousedown = () => 
 			{
 				this.windDivProjectLoad.clickButtonLoadProjectUI(el);
-				this.elMain.style.display = 'none';
+				this.closeWin();
 			}
 		});	
 
@@ -632,7 +637,7 @@ class WindUI
 			el.onmousedown = () => 
 			{
 				this.windDivProjectSave.clickButtonSaveProjectUI(el);
-				this.elMain.style.display = 'none';
+				this.closeWin();
 			}
 		});	
 	}

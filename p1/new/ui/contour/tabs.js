@@ -3,14 +3,17 @@
 class WindTabs 
 {
 	container;
+	btnAccount;
 	btnLoad;
 	btnSave;
+	btnReset;
 	
 	
 	constructor()
 	{
 		this.crTabs();
 		this.getBtn();
+		this.initEvent();
 	}
 	
 	crTabs()
@@ -25,6 +28,12 @@ class WindTabs
 		this.btnAccount = this.container.querySelector('[nameId="btnAccount"]');
 		this.btnLoad = this.container.querySelector('[nameId="btnLoad"]');
 		this.btnSave = this.container.querySelector('[nameId="btnSave"]');
+		this.btnReset = this.container.querySelector('[nameId="btnReset"]');
+	}
+	
+	initEvent()
+	{
+		this.btnReset.onmousedown = () => { resetScene(); windUI.closeWin(); }
 	}
 
 	html()
@@ -54,7 +63,7 @@ class WindTabs
 			<div nameId="btnLoad" style='${btnLink}'>Загрузить</div>
 			<div nameId="btnSave" style='${btnLink}'>Сохранить</div>
 			
-			<div nameId="reset_scene_1" style='${btnLink} margin-top: 30px;'>Пустой проект</div>
+			<div nameId="btnReset" style='${btnLink} margin-top: 30px;'>Пустой проект</div>
 			<a href="/" style='${btnLink}'>На главную</a>
 		</div>`;
 

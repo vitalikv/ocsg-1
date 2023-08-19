@@ -166,7 +166,7 @@ $('[nameId="button_close_main_sett"]').mousedown(function ()
 	$('[nameId="window_main_sett"]').css({"display":"none"}); 
 });
 
-$('[nameId="checkbox_light_global"]').change(function() { switchLight({visible: this.checked}); });
+
 $('[nameId="checkbox_fxaaPass"]').change(function() { switchFxaaPass({visible: this.checked}); });
 //  <--- window_main_sett
 

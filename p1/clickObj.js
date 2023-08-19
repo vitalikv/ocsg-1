@@ -54,12 +54,6 @@ function deleteObjectPop(cdm)
 	
 	for(var i = 0; i < arr.length; i++)
 	{	
-		if(arr[i].userData.cubeCam)
-		{
-			deleteValueFromArrya({arr : infProject.scene.array.cubeCam, o : arr[i].userData.cubeCam});
-			disposeNode( arr[i].userData.cubeCam );
-			scene.remove( arr[i].userData.cubeCam );
-		}
 		deleteValueFromArrya({arr : infProject.scene.array.obj, o : arr[i]});		
 		disposeHierchy({obj: arr[i]}); 
 		scene.remove(arr[i]); 

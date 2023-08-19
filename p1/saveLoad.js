@@ -82,15 +82,7 @@ function resetScene()
 	myMouse.clearClick();
 	//hideMenuUI(clickO.last_obj);		
 	
-	myLevels.deleteOneLevel(myLevels.activeId);
-	
-	var cubeCam = infProject.scene.array.cubeCam;
-	
-	for ( var i = 0; i < cubeCam.length; i++ )
-	{
-		disposeHierchy({obj: cubeCam[i]});
-		scene.remove( cubeCam[i] );		
-	}		
+	myLevels.deleteOneLevel(myLevels.activeId);		
 	
 	obj_point = [];
 	room = [];
@@ -115,7 +107,6 @@ function resetScene()
 	clickO = resetPop.clickO();
 	infProject.project = null;
 	infProject.scene.array = resetPop.infProjectSceneArray();
-	infProject.scene.light.lamp = [];
 	
 	myLevels.deleteAllLevels();
 	
