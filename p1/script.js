@@ -1207,30 +1207,33 @@ document.addEventListener("keydown", function (e)
 
 	if(e.keyCode == 46) { detectDeleteObj(); }
 	
-	if(e.keyCode == 90 && e.ctrlKey || e.keyCode == 90 && e.keyCode == 91) { setInfoEvent1( 'undo' ); }	// ctrl + z
-	if(e.keyCode == 89 && e.ctrlKey || e.keyCode == 89 && e.keyCode == 91) { setInfoEvent1( 'redo' ); }	// ctrl + y	
-	
-	if(clickO.keys[18] && e.keyCode == 90) { loadFile({json: true}); }		// alt + z
-	if(clickO.keys[18] && e.keyCode == 72) { disposeHierchy({obj: scene}); getConsoleRendererInfo(); }		// alt + h
-	if(clickO.keys[18] && e.keyCode == 77) { loadFile({id: 0}); }				// alt + m
-	if(clickO.keys[18] && e.keyCode == 84) { saveFile({json: true}); }			// alt + t
-	if(clickO.keys[18] && e.keyCode == 86) { console.log(infProject); }
-	if(clickO.keys[18] && e.keyCode == 86) { console.log(clickO); }  		
-	if(clickO.keys[18] && e.keyCode == 86) { console.log(renderer.info.memory); }	// alt + v
-	if(clickO.keys[18] && e.keyCode == 66) 	// alt + b
-	{ 
-		if(infProject.settings.shader.saoPass)
-		{
-			saoPass['params']['output'] = (saoPass['params']['output']==THREE.SAOPass.OUTPUT.Default)? THREE.SAOPass.OUTPUT.Beauty : THREE.SAOPass.OUTPUT.Default;
-			console.log(saoPass['params']['output']);
-			renderCamera();			
-		}
-	}  
-	
-	//if(e.keyCode == 56) { showHideLabelSizeWall({switch: true}); }
-	//if(e.keyCode == 66) { switchCamera3D(); } 	// b
-	if(e.keyCode == 89 && !e.ctrlKey) { saveFile({txt: true}); } 			// y
-	//if(e.keyCode == 86) { resetScene(); getAutoBuildingJson(); } // v
+	if (window.location.hostname === 'ocsg-1')
+	{
+		if(e.keyCode == 90 && e.ctrlKey || e.keyCode == 90 && e.keyCode == 91) { setInfoEvent1( 'undo' ); }	// ctrl + z
+		if(e.keyCode == 89 && e.ctrlKey || e.keyCode == 89 && e.keyCode == 91) { setInfoEvent1( 'redo' ); }	// ctrl + y	
+		
+		if(clickO.keys[18] && e.keyCode == 90) { loadFile({json: true}); }		// alt + z
+		if(clickO.keys[18] && e.keyCode == 72) { disposeHierchy({obj: scene}); getConsoleRendererInfo(); }		// alt + h
+		if(clickO.keys[18] && e.keyCode == 77) { loadFile({id: 0}); }				// alt + m
+		if(clickO.keys[18] && e.keyCode == 84) { saveFile({json: true}); }			// alt + t
+		if(clickO.keys[18] && e.keyCode == 86) { console.log(infProject); }
+		if(clickO.keys[18] && e.keyCode == 86) { console.log(clickO); }  		
+		if(clickO.keys[18] && e.keyCode == 86) { console.log(renderer.info.memory); }	// alt + v
+		if(clickO.keys[18] && e.keyCode == 66) 	// alt + b
+		{ 
+			if(infProject.settings.shader.saoPass)
+			{
+				saoPass['params']['output'] = (saoPass['params']['output']==THREE.SAOPass.OUTPUT.Default)? THREE.SAOPass.OUTPUT.Beauty : THREE.SAOPass.OUTPUT.Default;
+				console.log(saoPass['params']['output']);
+				renderCamera();			
+			}
+		}  
+		
+		//if(e.keyCode == 56) { showHideLabelSizeWall({switch: true}); }
+		//if(e.keyCode == 66) { switchCamera3D(); } 	// b
+		if(e.keyCode == 89 && !e.ctrlKey) { saveFile({txt: true}); } 			// y
+		//if(e.keyCode == 86) { resetScene(); getAutoBuildingJson(); } // v		
+	}
 	
 	if(!infProject.settings.blockKeyCode) clickO.keys[e.keyCode] = true;
 	

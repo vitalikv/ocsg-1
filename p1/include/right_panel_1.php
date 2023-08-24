@@ -467,8 +467,8 @@
 					</div>						
 								
 					
-					<div class="button1 button_gradient_1" nameId="button_copy_obj">
-						копировать	
+					<div class="button1 button_gradient_1" nameId="button_copy_obj" style="font-size: 14px; font-weight: normal; width: 140px; height: auto; padding: 5px; margin: 10px auto;">
+						копировать объект	
 					</div>																
 					
 
@@ -522,7 +522,7 @@
 						</div>						
 					</div>	
 
-					<div class="button1 button_gradient_1" nameId="btn_copy_roof">
+					<div class="button1 button_gradient_1" nameId="btn_copy_roof" style="font-size: 14px; font-weight: normal; width: 140px; height: auto; padding: 5px; margin: 10px auto;">
 						копировать крышу	
 					</div>
 					

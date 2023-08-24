@@ -219,7 +219,13 @@ class MyToolPG_UI
 		
 		myToolPG.qt = q_New;
 
-		this.setRotUI();	
+		this.setRotUI();
+
+		if(myToolPG.obj && myToolPG.obj.userData.tag === 'roof') 
+		{
+			myToolPG.obj.updateMatrixWorld(true);
+			myHouse.myRoofCSG.updateCgsRoof();
+		}
 		
 		this.render();
 	}
