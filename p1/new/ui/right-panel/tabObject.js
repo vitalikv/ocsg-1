@@ -70,7 +70,7 @@ class TabObject
 				
 				showHideMenuTexture_1({type: 1});
 				
-				changeTextureWall_UI_1({obj: obj});			
+				myTexture.changeTextureWall_UI_1({obj: obj});			
 
 				if(obj.userData.wall.html.label)
 				{

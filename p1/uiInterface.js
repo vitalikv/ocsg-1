@@ -3,60 +3,7 @@
 
 
 
-// добавляем текстыры в каталог UI 
-function addTextureInCatalogUI_1(cdm)
-{
-	
-	for(var i = 0; i < infProject.catalog.texture.length; i++)
-	{
-		var o = infProject.catalog.texture[i];
-		o.name = 'img';
-		var str = 
-		'<div class="right_panel_1_1_list_item rp_list_item_texture" add_texture="'+o.url+'">\
-			<img src="'+infProject.path+o.url+'" nameId="">\
-		</div>';
-		 
-		$('[list_ui="catalog_texture_1"]').append(str);
-	}	
-}
-
-function addTextureInCatalogUI_2(cdm)
-{
-	
-	for(var i = 0; i < infProject.catalog.texture.length; i++)
-	{
-		var o = infProject.catalog.texture[i];
-		o.name = 'img';
-		var str = 
-		'<div class="right_panel_1_1_list_item rp_list_item_texture" add_texture="'+o.url+'">\
-			<img src="'+infProject.path+o.url+'" nameId="">\
-		</div>';
-		 
-		$('[list_ui="catalog_texture_2"]').append(str);
-	}	
-}
-
-// текстуры для объектов
-function addTextureInCatalogUI_3()
-{
-	let html = '';
-	let arr = infProject.catalog.texture;
-	
-	let container = document.querySelector('[nameId="catalog_texture_obj"]');
-	
-	for(let i = 0; i < arr.length; i++)
-	{
-		let div = document.createElement('div');
-		div.innerHTML = 
-		`<div class="right_panel_1_1_list_item rp_list_item_texture">
-			<img src="${infProject.path+arr[i].url}">
-		</div>`;
-		let elem = div.children[0];
-		container.append(elem);	
-		
-		elem.onmousedown = () => { myHouse.myObjPrimitives.clickBtnChangeTextureObj3D({url: arr[i].url}) }
-	}		
-}
+ 
 
 // показываем/скрываем кнопки/список текстур для стен
 function showHideMenuTexture_1(cdm)
@@ -72,14 +19,6 @@ function showHideMenuTexture_1(cdm)
 		$('[nameId="rp_block_wall_texture_1"]').hide(); 		
 	}
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -115,17 +54,6 @@ function upRightPlaneInput_1(cdm)
 	
 	inf.json[inf.name] = res.num; 
 }
-
-
-
-// показываем текстыру у стены в правой панели
-function changeTextureWall_UI_1(cdm) 
-{
-	$('[nameId="wall_texture_1img"]').attr('src', infProject.path+cdm.obj.userData.material[1].img);  
-	$('[nameId="wall_texture_2img"]').attr('src', infProject.path+cdm.obj.userData.material[2].img);
-}
-
-
 
 
 

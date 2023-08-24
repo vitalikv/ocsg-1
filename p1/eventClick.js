@@ -122,7 +122,7 @@ $('[add_texture]').mousedown(function ()
 		};
 	}
 	
-	setTexture(inf); 
+	myTexture.setImage(inf); 
 }); 
 // texture UI
 

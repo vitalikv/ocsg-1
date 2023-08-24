@@ -91,7 +91,7 @@ class Roof
 				child.material = matClone; 
 			}
 		});			
-		setTexture({obj: obj.children[0], material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: matClone.color });
+		myTexture.setImage({obj: obj.children[0], material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: matClone.color });
 		
 		renderCamera();
 

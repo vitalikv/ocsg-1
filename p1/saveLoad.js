@@ -782,21 +782,21 @@ function loadTextureInBase(cdm)
 		{
 			if(cdm.arr[i].objId == wall[i2].userData.id)
 			{ 
-				setTexture({obj: wall[i2], material: cdm.arr[i]});
+				myTexture.setImage({obj: wall[i2], material: cdm.arr[i]});
 			}			
 		}
 		for ( var i2 = 0; i2 < room.length; i2++ )
 		{
 			if(cdm.arr[i].objId == room[i2].userData.id && cdm.arr[i].tag == 'room')
 			{ 
-				setTexture({obj: room[i2], material: cdm.arr[i]});
+				myTexture.setImage({obj: room[i2], material: cdm.arr[i]});
 			}			
 		}	
 		for ( var i2 = 0; i2 < ceiling.length; i2++ )
 		{
 			if(cdm.arr[i].objId == ceiling[i2].userData.id && cdm.arr[i].tag == 'ceiling')
 			{ 
-				setTexture({obj: ceiling[i2], material: cdm.arr[i]});
+				myTexture.setImage({obj: ceiling[i2], material: cdm.arr[i]});
 			}			
 		}			
 	}

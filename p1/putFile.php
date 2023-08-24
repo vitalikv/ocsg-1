@@ -37,6 +37,7 @@ new/level.js
 new/ghostLevel.js
 new/startProject.js
 new/csgBox.js
+new/myTexture.js
 new/ui/switchCamera.js
 new/ui/contour/windUI.js
 new/ui/contour/tabs.js

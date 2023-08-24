@@ -154,7 +154,7 @@ class MyWindow
 				//o.geometry.computeFaceNormals();
 				//o.geometry.computeVertexNormals();
 				//upUvs_3( o );			
-				//setTexture({obj:o});
+				//myTexture.setImage({obj:o});
 			}		
 		}
 	
@@ -265,7 +265,7 @@ class MyWindow
 				o.geometry.computeFaceNormals();
 				o.geometry.computeVertexNormals();
 				//upUvs_3( o );			
-				//setTexture({obj:o});
+				//myTexture.setImage({obj:o});
 			}		
 		}
 		
@@ -345,7 +345,7 @@ class MyWindow
 			o.geometry.mergeVertices();
 			upUvs_3( o );	*/
 			
-			//setTexture({obj:o});
+			//myTexture.setImage({obj:o});
 		}
 
 		scene.add(group);

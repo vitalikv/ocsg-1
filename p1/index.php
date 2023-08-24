@@ -155,6 +155,7 @@
 	<script src="<?=$path?>new/ghostLevel.js?<?=$vrs?>"></script>	
 	<script src="<?=$path?>new/startProject.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/csgBox.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/myTexture.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/test.js?<?=$vrs?>"></script>
 	
 	

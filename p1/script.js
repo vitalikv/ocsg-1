@@ -162,10 +162,6 @@ var offset = new THREE.Vector3();
 // cdm
 {	
 	//await addObjInCatalogUI_1();			// наполняем каталог объектов UI
-	addTextureInCatalogUI_1();		// наполняем каталог текстур UI
-	addTextureInCatalogUI_2();
-	addTextureInCatalogUI_3();		// наполняем каталог текстур UI для obj
-	
 	//getAutoBuildingJson();
 	
 	assignEventSvgScaleSizeObj({el: infProject.svg.furn.boxCircle.elem}); 
@@ -236,16 +232,34 @@ function createCenterCamObj()
 		n++;		
 	}	
 	
-	var material = new THREE.MeshPhongMaterial({ color: 0xcccccc, transparent: true, opacity: 1, depthTest: false });
-	var obj_2 = new THREE.Mesh( createGeometryCircle(v2), material );
+	var mat2 = new THREE.MeshPhongMaterial({ color: 0xcccccc, transparent: true, opacity: 1, depthTest: false });
+	var obj_2 = new THREE.Mesh( createGeometryCircle(v2), mat2 );
 	obj_2.renderOrder = 2;
 	
 	obj.add( obj_2 );
 	scene.add( obj );
 	
 	upUvs_4( obj );
-	
-	setTexture({obj: obj, material: { img: "img/walk_1.png" }, repeat: {x: 1.9, y: 1.9}, offset: {x: 0.5, y: 0.5} });	
+
+	new THREE.TextureLoader().load(infProject.path+'img/walk_1.png', ( texture ) =>  
+	{
+		material.color = new THREE.Color( 0xffffff );			
+		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+		texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+		
+		texture.repeat.x = 1.9;
+		texture.repeat.y = 1.9;
+		
+		texture.offset.x = 0.5;
+		texture.offset.y = 0.5;				
+		
+		texture.needsUpdate = true;
+		
+		material.map = texture; 
+		material.needsUpdate = true; 
+		
+		renderCamera();
+	});	
 	
 	return obj;
 }
@@ -928,99 +942,6 @@ function rayIntersect( event, obj, t, recursive )
 
 
 
-
-// устанавливаем текстуру
-function setTexture(cdm)
-{
-	//if(!cdm.img) return;
-	
-	var img = cdm.material.img;
-	
-	if(!img) return;
-	
-	var material = (cdm.obj.userData.tag == "wall") ? cdm.obj.material[cdm.material.index] : cdm.obj.material;
-	
-	new THREE.TextureLoader().load(infProject.path+img, function ( image )  
-	{
-		material.color = new THREE.Color( 0xffffff );
-		var texture = image;			
-		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-		texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-		
-		if(cdm.repeat)
-		{
-			texture.repeat.x = cdm.repeat.x;
-			texture.repeat.y = cdm.repeat.y;			
-		}
-		else
-		{
-			texture.repeat.x = 1.0;
-			texture.repeat.y = 1.0;	
-		}
-		
-		if(cdm.offset)
-		{
-			texture.offset.x = cdm.offset.x;
-			texture.offset.y = cdm.offset.y;				
-		}
-		
-		if(cdm.rotation)
-		{
-			texture.rotation = cdm.rotation;				
-		}
-
-		if(cdm.color)
-		{
-			material.color = new THREE.Color( cdm.color );
-		}
-		
-		texture.needsUpdate = true;
-		
-		material.map = texture; 
-		//material.lightMap = null;
-		material.needsUpdate = true; 
-
-
-		if(cdm.obj.userData.tag == "wall")
-		{
-			cdm.obj.userData.material[cdm.material.index].img = img;
-			
-			if(cdm.ui)
-			{
-				changeTextureWall_UI_1({obj: cdm.obj});
-			}
-		}
-		
-		if(cdm.obj.userData.tag === "room" || cdm.obj.userData.tag === "ceiling")
-		{
-			cdm.obj.userData.material.img = img;
-		}		
-
-		if(cdm.obj.parent.userData.tag === "obj")
-		{ 						
-			upDateTextureObj3D({obj: cdm.obj.parent});
-			cdm.obj.parent.userData.material.img = img;
-		}
-		
-		if(cdm.obj.parent.userData.tag === "roof")
-		{ 			
-			myHouse.myRoofAction.upDateTextureRoof({obj: cdm.obj.parent})
-		}
-		//material.map.image.onload = () => { material.needsUpdate = true; renderCamera();};
-		
-		renderCamera();
-	});			
-}
-
-
-
-
-
-
-
-
-
-
 function boxUnwrapUVs(geometry, scale = new THREE.Vector3(1, 1, 1)) {
     for (var i = 0; i < geometry.faces.length; i++) {
         var face = geometry.faces[i];
@@ -1337,6 +1258,8 @@ let tabLevel;
 let divLevelVisible;
 let tabPlan;
 let tabObject;
+
+let myTexture;
 let switchCamera;
 
 let myMouse;
@@ -1357,6 +1280,8 @@ document.addEventListener("DOMContentLoaded", ()=>
 	docReady = true;
 
 	windUI = new WindUI();
+	
+	myTexture = new MyTexture();
 	
 	myManagerClick = new MyManagerClick();
 	myMouse = new MyMouse({container: containerF, scene});

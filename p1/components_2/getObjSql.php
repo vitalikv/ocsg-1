@@ -45,7 +45,7 @@ if($res)
 	
 	if($res['path'])
 	{
-		$data['model'] = json_decode(file_get_contents('../objs/'.json_decode($res['path']).'model.json'));		
+		$data['model'] = json_decode(file_get_contents('../catalog/objs/'.json_decode($res['path']).'model.json'));		
 	}
 	
 }

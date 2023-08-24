@@ -69,7 +69,7 @@ function createFloor(cdm)
 	
 	if(cdm.material)
 	{  
-		setTexture({obj: floor, material: cdm.material});	
+		myTexture.setImage({obj: floor, material: cdm.material});	
 	}
 	
 	if(infProject.settings.floor.o)

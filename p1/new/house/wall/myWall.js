@@ -102,7 +102,7 @@ class MyWall
 		{  
 			for ( var i = 0; i < cdm.material.length; i++ )
 			{			
-				setTexture({obj: wall, material: cdm.material[i]});
+				myTexture.setImage({obj: wall, material: cdm.material[i]});
 			}	
 		}
 		

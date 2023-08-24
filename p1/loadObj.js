@@ -313,7 +313,7 @@ function addObjInScene(inf, cdm)
 	
 	if(cdm.material && cdm.material.img)
 	{
-		setTexture({obj: obj.children[0], material: { img: cdm.material.img } });
+		myTexture.setImage({obj: obj.children[0], material: { img: cdm.material.img } });
 	}
 	
 	obj.material.visible = false;

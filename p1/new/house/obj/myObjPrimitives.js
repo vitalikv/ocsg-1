@@ -8,7 +8,7 @@ class MyObjPrimitives
 		let material = new THREE.MeshStandardMaterial( { color : 0xffffff, lightMap : lightMap_1 } );	//side: THREE.DoubleSide
 		
 		let mesh = new THREE.Mesh( g, this.material2 );
-		setTexture({obj: mesh, material: { img: 'img/load/beton.jpg' } });				
+		myTexture.setImage({obj: mesh, material: { img: 'img/load/beton.jpg' } });				
 		
 		let obj = this.getBox([mesh]);
 		
@@ -21,7 +21,7 @@ class MyObjPrimitives
 		let material = new THREE.MeshStandardMaterial( { color : 0xffffff, lightMap : lightMap_1 } );	
 
 		let mesh = new THREE.Mesh( g, this.material2 );
-		setTexture({obj: mesh, material: { img: 'img/load/beton.jpg' } });				
+		myTexture.setImage({obj: mesh, material: { img: 'img/load/beton.jpg' } });				
 		
 		let obj = this.getBox([mesh]);
 		
@@ -34,7 +34,7 @@ class MyObjPrimitives
 		let material = new THREE.MeshStandardMaterial( { color : 0xffffff, lightMap : lightMap_1 } );	
 
 		let mesh = new THREE.Mesh( g, this.material2 );
-		setTexture({obj: mesh, material: { img: 'img/load/beton.jpg' } });				
+		myTexture.setImage({obj: mesh, material: { img: 'img/load/beton.jpg' } });				
 		
 		let obj = this.getBox([mesh]);
 		
@@ -122,7 +122,7 @@ class MyObjPrimitives
 		if(!obj) return;
 		if(obj.userData.tag !== 'obj') return;	
 		
-		setTexture({obj: obj.children[0], material: { img: url } }); 	
+		myTexture.setImage({obj: obj.children[0], material: { img: url } }); 	
 	}
 }
 

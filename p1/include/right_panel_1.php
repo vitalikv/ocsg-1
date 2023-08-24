@@ -325,11 +325,11 @@
 						<div class="flex_1 texture_wall" nameId="rp_block_wall_texture_1">
 							<div class="button1 button_gradient_1 texture_wall_2" nameId="rp_button_wall_texture_1">
 								<div class="texture_wall_2_text">A</div>							
-								<img src="<?=$path?>img/load/kirpich.jpg" nameId="wall_texture_1img">	
+								<img src="" nameId="wall_texture_1img">	
 							</div>
 							<div class="button1 button_gradient_1 texture_wall_2" nameId="rp_button_wall_texture_2">
 								<div class="texture_wall_2_text">B</div>
-								<img src="<?=$path?>img/load/kirpich.jpg" nameId="wall_texture_2img">	
+								<img src="" nameId="wall_texture_2img">	
 							</div>							
 						</div>
 					</div>

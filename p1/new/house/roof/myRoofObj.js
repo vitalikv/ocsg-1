@@ -61,7 +61,7 @@ class MyRoofObj
 		let material = new THREE.MeshStandardMaterial( { color : 0x736a5a, lightMap : lightMap_1, transparent: true, opacity: 0.3 } );
 		
 		let obj1 = new THREE.Mesh( g, material );		
-		setTexture({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
+		myTexture.setImage({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
 		
 		let roof = this.getBoxRoof([obj1]);
 		
@@ -104,7 +104,7 @@ class MyRoofObj
 		
 		let obj2 = new THREE.Mesh( g, material );
 		obj2.rotation.y = Math.PI;				
-		setTexture({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
+		myTexture.setImage({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
 		
 		let roof = this.getBoxRoof([obj1, obj2]);
 		
@@ -135,7 +135,7 @@ class MyRoofObj
 		obj4.rotation.y = -Math.PI/2;
 		boxUnwrapUVs(g2);
 		
-		setTexture({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
+		myTexture.setImage({obj: obj1, material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: 0x3f7337 });
 		
 		const roof = this.getBoxRoof([obj1, obj2, obj3, obj4]);
 		
