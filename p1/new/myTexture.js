@@ -10,58 +10,73 @@ class MyTexture
 		this.addTextureInCatalogUI_3();
 	}
 	
-	// добавляем текстыры в каталог UI 
+	// текстуры для стен 
 	addTextureInCatalogUI_1()
 	{
+		const container = document.querySelector('[list_ui="catalog_texture_1"]');
+		const count = 23;
 		
-		for(var i = 0; i < infProject.catalog.texture.length; i++)
-		{
-			var o = infProject.catalog.texture[i];
-			o.name = 'img';
-			var str = 
-			'<div class="right_panel_1_1_list_item rp_list_item_texture" add_texture="'+o.url+'">\
-				<img src="'+infProject.path + 'catalog/' + o.url+'" nameId="">\
+		for(let i = 0; i < count; i++)
+		{			
+			const html = 
+			'<div class="right_panel_1_1_list_item rp_list_item_texture" add_texture="img/wall/w' + (i+1)+'.jpg">\
+				<img src="'+infProject.path + 'catalog/img/wall/w' + (i+1)+'-m.jpg" nameId="">\
 			</div>';
-			 
-			$('[list_ui="catalog_texture_1"]').append(str);
-		}	
+			
+			const div = document.createElement('div');
+			div.innerHTML = html;
+			const elem = div.children[0];
+			container.append(elem);
+		}
 	}
 
+	// текстуры для пола
 	addTextureInCatalogUI_2()
 	{
+		const container = document.querySelector('[list_ui="catalog_texture_2"]');
+		const count = 19;
 		
-		for(var i = 0; i < infProject.catalog.texture.length; i++)
-		{
-			var o = infProject.catalog.texture[i];
-			o.name = 'img';
-			var str = 
-			'<div class="right_panel_1_1_list_item rp_list_item_texture" add_texture="'+o.url+'">\
-				<img src="'+infProject.path + 'catalog/' + o.url+'" nameId="">\
+		for(let i = 0; i < count; i++)
+		{			
+			const html = 
+			'<div class="right_panel_1_1_list_item rp_list_item_texture" add_texture="img/floor/f' + (i+1)+'.jpg">\
+				<img src="'+infProject.path + 'catalog/img/floor/f' + (i+1)+'-m.jpg" nameId="">\
 			</div>';
-			 
-			$('[list_ui="catalog_texture_2"]').append(str);
+			
+			const div = document.createElement('div');
+			div.innerHTML = html;
+			const elem = div.children[0];
+			container.append(elem);
 		}	
 	}
 
 	// текстуры для объектов
 	addTextureInCatalogUI_3()
 	{
-		let html = '';
-		let arr = infProject.catalog.texture;
+		const arr = [];
 		
-		let container = document.querySelector('[nameId="catalog_texture_obj"]');
+		const container = document.querySelector('[nameId="catalog_texture_obj"]');
+
+		// текстуры пола
+		let count = 19;		
+		for(let i = 0; i < count; i++) arr.push({min: 'img/floor/f' + (i+1)+'-m.jpg', max: 'img/floor/f' + (i+1)+'.jpg'});	
+
+		// текстуры стен
+		count = 21;		
+		for(let i = 0; i < count; i++) arr.push({min: 'img/wall/w' + (i+1)+'-m.jpg', max: 'img/wall/w' + (i+1)+'.jpg'});		
+		
 		
 		for(let i = 0; i < arr.length; i++)
 		{
-			let div = document.createElement('div');
+			const div = document.createElement('div');
 			div.innerHTML = 
 			`<div class="right_panel_1_1_list_item rp_list_item_texture">
-				<img src="${infProject.path+'catalog/'+arr[i].url}">
+				<img src="${infProject.path+'catalog/'+arr[i].min}">
 			</div>`;
-			let elem = div.children[0];
+			const elem = div.children[0];
 			container.append(elem);	
 			
-			elem.onmousedown = () => { myHouse.myObjPrimitives.clickBtnChangeTextureObj3D({url: arr[i].url}) }
+			elem.onmousedown = () => { myHouse.myObjPrimitives.clickBtnChangeTextureObj3D({url: arr[i].max}) }
 		}		
 	}
 

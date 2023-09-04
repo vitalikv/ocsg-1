@@ -100,8 +100,7 @@ infProject.svg.furn.boxCircle.show = infProject.settings.obj.cam2D.show.scale;
 
 // controllWD контроллеры для изменения ширины/длины wd
 infProject.tools = { cutWall: [], axis: createLineAxis() }; 
-infProject.tools.floorPl = createPlaneOutlineFloor();
-infProject.catalog = { texture: infoListTexture() }; 
+infProject.tools.floorPl = createPlaneOutlineFloor(); 
 infProject.listColor = resetPop.listColor(); 
 infProject.start = true; 
 
