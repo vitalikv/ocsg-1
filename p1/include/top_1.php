@@ -21,7 +21,9 @@
 		<?}?>
 
 		<div class="button1-wrap-1" style="color: #737373; align-items: center; padding: 0 10px;">
-			<h1 style="font: 18px Arial, Helvetica, sans-serif;"><?=$h1?><h1>
+			<?if($h1 !== ''){?>
+				<h1 style="font: 18px Arial, Helvetica, sans-serif;"><?=$h1?><h1>
+			<?}?>
 		</div>
 		
 		<div class="button1-wrap-1">

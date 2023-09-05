@@ -335,7 +335,7 @@
 					</div>
 
 					<div style="display: none;" nameId="rp_catalog_texture_1">
-						<div class="button1 button_gradient_1" style="margin-top: 20px;" nameId="but_back_catalog_texture_1" style="display: none;">Закрыть</div>
+						<div class="button1 button_gradient_1" style="margin-top: 20px; padding: 5px; font-size: 14px;" nameId="but_back_catalog_texture_1" style="display: none;">Закрыть</div>
 						<div class="rp_1_1_list">
 							<div class="rp_1_2_list" list_ui="catalog_texture_1">
 								
@@ -473,7 +473,7 @@
 					
 
 					<div>
-						<div class="rp_1_1_list">
+						<div class="rp_1_1_list" style="max-height: 550px;">
 							<div class="rp_1_2_list" nameId="catalog_texture_obj">
 
 							</div>				 							

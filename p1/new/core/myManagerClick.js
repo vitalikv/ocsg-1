@@ -9,6 +9,8 @@ class MyManagerClick
 	{ 
 		var rayhit = null;	
 					
+		const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
+		const isCam3D = myCameraOrbit.activeCam.userData.isCam3D;
 		
 		if(myToolPG.pivot.visible)
 		{
@@ -28,88 +30,146 @@ class MyManagerClick
 			if(ray.length > 0) { rayhit = ray[0]; return rayhit; }		
 		}
 
-		if(!rayhit && myCameraOrbit.activeCam.userData.isCam3D)
+		if(isCam2D && !rayhit)
 		{
-			rayhit = myHouse.myRoofAction.getRayIntersect();		
-		}	
+			if(!infProject.scene.block.click.controll_wd)
+			{
+				var ray = rayIntersect( event, [myHouse.myWDPoints.points[0], myHouse.myWDPoints.points[1]], 'arr' );
+				if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
+			}
+			
+			if(!rayhit)
+			{
+				var arr = [];
+				var objs = [...infProject.scene.array.door, ...infProject.scene.array.window];
+				
+				for ( var i = 0; i < objs.length; i++ )
+				{ 
+					if(!objs[i].visible) continue;
+					arr.push(objs[i]); 
+				}	
+				
+				var ray = rayIntersect( event, arr, 'arr' );
+				if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
+			}
+			
+			if(!infProject.scene.block.click.point)
+			{
+				var ray = rayIntersect( event, infProject.scene.array.point, 'arr' );
+				if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
+			}
 
-		if(!infProject.scene.block.click.controll_wd)
-		{
-			var ray = rayIntersect( event, [myHouse.myWDPoints.points[0], myHouse.myWDPoints.points[1]], 'arr' );
-			if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
+			if(!infProject.scene.block.click.wall)
+			{
+				var arr = [];
+				for ( var i = 0; i < infProject.scene.array.wall.length; i++ )
+				{ 
+					if(!infProject.scene.array.wall[i].userData.wall.show) continue;
+					arr[arr.length] = infProject.scene.array.wall[i]; 
+				}		
+				
+				var ray = rayIntersect( event, arr, 'arr' );
+				if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
+			}
+
+			
+			if(!infProject.scene.block.click.obj)
+			{
+				var ray = rayIntersect( event, infProject.scene.array.obj, 'arr', true );
+				
+				if(ray.length > 0)
+				{   	
+					rayhit = null;
+					
+					for (var i = 0; i < ray.length; i++)
+					{
+						if(ray[i].object.userData.obj3D) continue;
+						
+						rayhit = ray[i]; console.log(i, rayhit );
+						break;
+					}
+					
+					var object = null; 
+					
+					if(rayhit) { object = getParentObj({obj: rayhit.object}); }
+					
+					if(!object) { rayhit = null; }
+					else { rayhit.object = object; }
+				}			
+			}
+
+			if(!rayhit && myCameraOrbit.activeCam.userData.isCam2D)
+			{
+				rayhit = myHouse.myRoofAction.getRayIntersect();		
+			}
+			
+			if(!rayhit)
+			{
+				var ray = rayIntersect( event, infProject.scene.array.floor, 'arr' );
+				if(ray.length > 0) { rayhit = ray[0]; }			
+			}	
+			
 		}
 		
-		if(!rayhit)
+		if(isCam3D && !rayhit)
 		{
-			var arr = [];
-			var objs = [...infProject.scene.array.door, ...infProject.scene.array.window];
+			var ray = rayIntersect( event, infProject.scene.array.obj, 'arr', true );
+			
+			let rayhitObj = null;
+			
+			if(ray.length > 0)
+			{   						
+				for (var i = 0; i < ray.length; i++)
+				{
+					if(ray[i].object.userData.obj3D) continue;
+					
+					rayhitObj = ray[i];
+					break;
+				}
+				
+				let object = null; 
+				
+				if(rayhitObj) { object = getParentObj({obj: rayhitObj.object}); }
+				
+				if(object) { rayhitObj.object = object; }
+			}			
+			
+			let rayhitRoof = myHouse.myRoofAction.getRayIntersect();
+			
+			let arr = [];
+			let objs = [...infProject.scene.array.door, ...infProject.scene.array.window];
 			
 			for ( var i = 0; i < objs.length; i++ )
 			{ 
 				if(!objs[i].visible) continue;
 				arr.push(objs[i]); 
-			}	
-			
-			var ray = rayIntersect( event, arr, 'arr' );
-			if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
-		}
-		
-		if(!infProject.scene.block.click.point)
-		{
-			var ray = rayIntersect( event, infProject.scene.array.point, 'arr' );
-			if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
-		}
+			}
 
-		if(!infProject.scene.block.click.wall)
-		{
-			var arr = [];
 			for ( var i = 0; i < infProject.scene.array.wall.length; i++ )
 			{ 
 				if(!infProject.scene.array.wall[i].userData.wall.show) continue;
-				arr[arr.length] = infProject.scene.array.wall[i]; 
-			}		
-			
-			var ray = rayIntersect( event, arr, 'arr' );
-			if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
-		}
+				arr.push(infProject.scene.array.wall[i]); 
+			}
 
-		
-		if(!infProject.scene.block.click.obj)
-		{
-			var ray = rayIntersect( event, infProject.scene.array.obj, 'arr', true );
+			arr.push(...infProject.scene.array.floor);
 			
-			if(ray.length > 0)
-			{   	
-				rayhit = null;
-				
-				for (var i = 0; i < ray.length; i++)
-				{
-					if(ray[i].object.userData.obj3D) continue;
-					
-					rayhit = ray[i]; console.log(i, rayhit );
-					break;
-				}
-				
-				var object = null; 
-				
-				if(rayhit) { object = getParentObj({obj: rayhit.object}); }
-				
-				if(!object) { rayhit = null; }
-				else { rayhit.object = object; }
+			
+			
+			var ray = rayIntersect( event, arr, 'arr' );			
+			if(ray.length > 0) { rayhit = ray[0]; }	
+
+			if(rayhitObj)
+			{
+				if(!rayhit) rayhit = rayhitObj;
+				else if(rayhitObj.distance < rayhit.distance) rayhit = rayhitObj;
+			}
+
+			if(rayhitRoof)
+			{
+				if(!rayhit) rayhit = rayhitRoof;
+				else if(rayhitRoof.distance < rayhit.distance) rayhit = rayhitRoof;
 			}			
 		}
-
-		if(!rayhit && myCameraOrbit.activeCam.userData.isCam2D)
-		{
-			rayhit = myHouse.myRoofAction.getRayIntersect();		
-		}
-		
-		if(!rayhit)
-		{
-			var ray = rayIntersect( event, infProject.scene.array.floor, 'arr' );
-			if(ray.length > 0) { rayhit = ray[0]; }			
-		}	
-		
 		
 		return rayhit;
 	}
