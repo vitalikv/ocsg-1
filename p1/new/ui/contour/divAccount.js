@@ -121,13 +121,13 @@ class WindDivAccount
 				<div class="window_main_menu_form_reg_block_1_label">
 					почта
 				</div>											
-				<input class="input_form_reg" type="text" nameId="input_reg_mail" value="1111@mail.ru" placeholder="почта">
+				<input class="input_form_reg" type="text" nameId="input_reg_mail" value="" placeholder="почта">
 			</div>
 			<div class="window_main_menu_form_reg_block_1_1">
 				<div class="window_main_menu_form_reg_block_1_label">
 					пароль
 				</div>											
-				<input class="input_form_reg" type="password" nameId="input_reg_pass" value="1111" placeholder="пароль">
+				<input class="input_form_reg" type="password" nameId="input_reg_pass" value="" placeholder="пароль">
 			</div>
 			
 			<div class="window_main_menu_form_reg_block_1_1">

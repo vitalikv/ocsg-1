@@ -637,6 +637,7 @@ class WindUI
 			el.onmousedown = () => 
 			{
 				this.windDivProjectSave.clickButtonSaveProjectUI(el);
+				this.getListProject({id: infProject.user.id});  // обновляем меню сохрание проектов
 				this.closeWin();
 			}
 		});	

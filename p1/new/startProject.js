@@ -3,7 +3,7 @@
 
 class StartProject
 {
-	name = 'new2';
+	name = 'new';
 	
 	constructor()
 	{

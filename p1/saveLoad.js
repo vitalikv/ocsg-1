@@ -435,11 +435,12 @@ async function saveFile(cdm)
 	{
 		// сохраняем в бд
 		var url = infProject.path+'components/saveSql.php';			
-		 
+		
+		// preview= пустое, чтобы не сохранять изображение
 		var response = await fetch(url, 
 		{
 			method: 'POST',
-			body: 'id='+cdm.id+'&user_id='+infProject.user.id+'&preview='+null+'&json='+encodeURIComponent(json),
+			body: 'id='+cdm.id+'&user_id='+infProject.user.id+'&preview=&json='+encodeURIComponent(json),
 			headers: 
 			{	
 				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' 
