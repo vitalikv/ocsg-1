@@ -429,43 +429,7 @@
 				
 				
 	
-				<div nameId="bl_object_3d" style="display: none;">  				
-					
-					<div class="flex_column_1" nameId="rp_bl_set_obj_xyz" style="display: block; margin-bottom: 40px;">
-						<div class="flex_1">
-							<div class="flex_1 align_items">
-								<div class="rp_label_plane">
-									длина
-								</div>
-							</div>
-							<div class="flex_1 align_items" style="width: auto;">
-								<input type="text" style="width: 90%; margin:5px 5px;" nameId="size-obj-length" value="0">
-							</div>
-						</div>
-						
-						<div class="flex_1">
-							<div class="flex_1 align_items">
-								<div class="rp_label_plane">
-									ширина
-								</div>
-							</div>
-							<div class="flex_1 align_items" style="width: auto;">
-								<input type="text" style="width: 90%; margin:5px 5px;" nameId="size-obj-width" value="0">
-							</div>
-						</div>
-
-						<div class="flex_1">
-							<div class="flex_1 align_items">
-								<div class="rp_label_plane">
-									высота
-								</div>
-							</div>
-							<div class="flex_1 align_items" style="width: auto;">
-								<input type="text" style="width: 90%; margin:5px 5px;" nameId="size-obj-height" value="0">
-							</div>
-						</div>						
-					</div>						
-								
+				<div nameId="bl_object_3d" style="display: none;">							
 					
 					<div class="button1 button_gradient_1" nameId="button_copy_obj" style="font-size: 14px; font-weight: normal; width: 140px; height: auto; padding: 5px; margin: 10px auto;">
 						копировать объект	
@@ -487,41 +451,6 @@
 			
 				<div nameId="bl_roof_3d" style="display: none;">  
 					
-					<div class="flex_column_1" style="display: block; margin-bottom: 40px;">
-						<div class="flex_1">
-							<div class="flex_1 align_items">
-								<div class="rp_label_plane">
-									длина
-								</div>
-							</div>
-							<div class="flex_1 align_items" style="width: auto;">
-								<input type="text" style="width: 90%; margin:5px 5px;" nameId="size-roof-length" value="0">
-							</div>
-						</div>
-						
-						<div class="flex_1">
-							<div class="flex_1 align_items">
-								<div class="rp_label_plane">
-									ширина
-								</div>
-							</div>
-							<div class="flex_1 align_items" style="width: auto;">
-								<input type="text" style="width: 90%; margin:5px 5px;" nameId="size-roof-width" value="0">
-							</div>
-						</div>
-
-						<div class="flex_1">
-							<div class="flex_1 align_items">
-								<div class="rp_label_plane">
-									высота
-								</div>
-							</div>
-							<div class="flex_1 align_items" style="width: auto;">
-								<input type="text" style="width: 90%; margin:5px 5px;" nameId="size-roof-height" value="0">
-							</div>
-						</div>						
-					</div>	
-
 					<div class="button1 button_gradient_1" nameId="btn_copy_roof" style="font-size: 14px; font-weight: normal; width: 140px; height: auto; padding: 5px; margin: 10px auto;">
 						копировать крышу	
 					</div>

@@ -90,11 +90,16 @@ class MyRoofAction
 		const obj = myComposerRenderer.getOutlineObj();		
 		if(!obj) return;	
 		
-		const clone = obj.clone();
-		clone.userData.id = countId; countId++;
+		const objClone = obj.clone();
 		
-		infProject.scene.array.roof.push(clone); 
-		scene.add( clone );	
+		objClone.children.forEach((child) => {
+			child.material = child.material.clone()			
+		});		
+		
+		objClone.userData.id = countId; countId++;
+		
+		infProject.scene.array.roof.push(objClone); 
+		scene.add(objClone);	
 	}
 	
 	

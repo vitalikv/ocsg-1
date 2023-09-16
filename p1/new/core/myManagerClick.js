@@ -29,6 +29,12 @@ class MyManagerClick
 			var ray = rayIntersect( event, arr, 'arr' );
 			if(ray.length > 0) { rayhit = ray[0]; return rayhit; }		
 		}
+		
+		if(myToolPG.scale.visible)
+		{
+			var ray = rayIntersect( event, myToolPG.scale.children, 'arr' );
+			if(ray.length > 0) { rayhit = ray[0]; return rayhit; }		
+		}		
 
 		if(isCam2D && !rayhit)
 		{
@@ -191,7 +197,8 @@ class MyManagerClick
 		if(type === 'down')
 		{  
 			if( tag == 'pivot' ) { myToolPG.mousedown({event, rayhit});  }
-			else if( tag == 'gizmo' ) { myToolPG.mousedown({event, rayhit}); } 
+			else if( tag == 'gizmo' ) { myToolPG.mousedown({event, rayhit}); }
+			else if( tag == 'scale' ) { myToolPG.mousedown({event, rayhit}); }
 			else if( tag == 'wall' && isCam2D ) { myHouse.myWallMove.mousedown({event, obj}); }
 			else if( tag == 'room' && isCam2D ) { clickFloor({obj}); }
 			else if( tag == 'point' ) { myHouse.myMovePoint.mousedown({event, obj}); }
@@ -232,6 +239,7 @@ class MyManagerClick
 			
 		if ( tag == 'pivot' ) { myToolPG.mousemove(event); }
 		else if ( tag == 'gizmo' ) { myToolPG.mousemove(event); }
+		else if ( tag == 'scale' ) { myToolPG.mousemove(event); }
 		else if ( tag == 'wall' ) { myHouse.myWallMove.mousemove(event); }
 		else if ( tag == 'window' ) { myHouse.myWDMove.mousemove(event); }
 		else if ( tag == 'door' ) { myHouse.myWDMove.mousemove(event); }
@@ -254,6 +262,7 @@ class MyManagerClick
 		else if(tag == 'controll_wd') { myHouse.myWDPointsMove.mouseup(); } 		
 		else if(tag == 'pivot') { myToolPG.mouseup(); }
 		else if(tag == 'gizmo') { myToolPG.mouseup(); }
+		else if(tag == 'scale') { myToolPG.mouseup(); }
 		else if(tag == 'roof') { myHouse.myRoofMove.mouseup(); }
 		else if(tag == 'obj') { myHouse.myObjMove.mouseup(); }
 	}
@@ -286,7 +295,7 @@ class MyManagerClick
 				{ 
 					let hide = true;
 					const rayObj = myMouse.getRayhitObj();
-					if(rayObj && (rayObj.userData.tag === 'pivot' || rayObj.userData.tag === 'gizmo')) hide = false;
+					if(rayObj && (rayObj.userData.tag === 'pivot' || rayObj.userData.tag === 'gizmo' || rayObj.userData.tag === 'scale')) hide = false;
 					
 					if(hide)
 					{
@@ -298,7 +307,7 @@ class MyManagerClick
 				{ 
 					let hide = true;
 					const rayObj = myMouse.getRayhitObj();
-					if(rayObj && (rayObj.userData.tag === 'pivot' || rayObj.userData.tag === 'gizmo')) hide = false;
+					if(rayObj && (rayObj.userData.tag === 'pivot' || rayObj.userData.tag === 'gizmo' || rayObj.userData.tag === 'scale')) hide = false;
 					
 					if(hide)
 					{

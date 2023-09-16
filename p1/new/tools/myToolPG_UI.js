@@ -34,8 +34,8 @@ class MyToolPG_UI
 		`<div nameId="block_pos" class="block_pos" ui_1="" style="display: none;">
 			<div style="padding: 2px;">
 				<div style="display: flex; align-items: center;">
-					<div nameId="select_pivot" class="button1 button_gradient_1" style="width: 20px; margin: 0;">
-						<img src="${infProject.path}/img/move_1.png">
+					<div nameId="btn_pivot" class="button1 button_gradient_1" style="width: 20px; margin: 0;">
+						<img src="${infProject.path}img/icon/tools/pivot.svg">
 					</div>	
 					
 					<div class="flex_1 input_rotate">
@@ -46,8 +46,8 @@ class MyToolPG_UI
 				</div>
 				
 				<div style="display: flex; margin-top: 10px;">
-					<div nameId="select_gizmo" class="button1 button_gradient_1" style="width: 20px; margin: 0;">
-						<img src="${infProject.path}/img/rotate_1.png">	
+					<div nameId="btn_gizmo" class="button1 button_gradient_1" style="width: 20px; margin: 0;">
+						<img src="${infProject.path}img/icon/tools/gizmo.svg">	
 					</div>	
 
 					<div class="flex_1 input_rotate">
@@ -85,7 +85,30 @@ class MyToolPG_UI
 						0	
 					</div>											
 				</div>
-				
+
+				<div style="display: flex; margin-top: 10px;">
+					<div nameId="btn_scale" class="button1 button_gradient_1" style="width: 20px; margin: 0;">
+						<img src="${infProject.path}img/icon/tools/scale.svg">	
+					</div>	
+
+					<div class="flex_1 input_rotate">
+						<div style="display: flex; flex-direction: column;">
+							<input type="text" nameId="scaleX" value="0" style="width: 100px;">
+							<div style="width: 100px; height: 2px; margin: auto; background: rgb(247, 72, 72);"></div>
+						</div>
+						
+						<div style="display: flex; flex-direction: column;">
+							<input type="text" nameId="scaleY" value="0" style="width: 100px;">						
+							<div style="width: 100px; height: 2px; margin: auto; background: rgb(17, 255, 0);"></div>
+						</div>
+
+						<div style="display: flex; flex-direction: column;">
+							<input type="text" nameId="scaleZ" value="0" style="width: 100px;">
+							<div style="width: 100px; height: 2px; margin: auto; background: rgb(72, 116, 247);"></div>
+						</div>									
+						
+					</div>											
+				</div>				
 			</div>
 		</div>`;					
 		
@@ -94,9 +117,10 @@ class MyToolPG_UI
 	
 	initEventButton()
 	{
-		this.el.querySelector('[nameId="select_pivot"]').onmousedown = (e) => { myToolPG.toggleTool({type:'pivot'}); e.stopPropagation(); };
-		this.el.querySelector('[nameId="select_gizmo"]').onmousedown = (e) => { myToolPG.toggleTool({type:'gizmo'}); e.stopPropagation(); };
-
+		this.el.querySelector('[nameId="btn_pivot"]').onmousedown = (e) => { myToolPG.toggleTool({type:'pivot'}); e.stopPropagation(); };
+		this.el.querySelector('[nameId="btn_gizmo"]').onmousedown = (e) => { myToolPG.toggleTool({type:'gizmo'}); e.stopPropagation(); };
+		this.el.querySelector('[nameId="btn_scale"]').onmousedown = (e) => { myToolPG.toggleTool({type:'scale'}); e.stopPropagation(); };
+		
 		this.el.querySelector('[nameId="obj_rotate_X_90"]').onmousedown = (e) => { this.setAngleRotUI({axis: 'x', angle: -45}); e.stopPropagation(); };
 		this.el.querySelector('[nameId="obj_rotate_X_90m"]').onmousedown = (e) => { this.setAngleRotUI({axis: 'x', angle: 45}); e.stopPropagation(); };
 		this.el.querySelector('[nameId="obj_rotate_Y_90"]').onmousedown = (e) => { this.setAngleRotUI({axis: 'y', angle: -45}); e.stopPropagation(); };
@@ -117,7 +141,12 @@ class MyToolPG_UI
 		this.ui.rot = {};
 		this.ui.rot.x = this.el.querySelector('[nameId="object_rotate_X"]');
 		this.ui.rot.y = this.el.querySelector('[nameId="object_rotate_Y"]');
-		this.ui.rot.z = this.el.querySelector('[nameId="object_rotate_Z"]');		
+		this.ui.rot.z = this.el.querySelector('[nameId="object_rotate_Z"]');
+
+		this.ui.scl = {};
+		this.ui.scl.x = this.el.querySelector('[nameId="scaleX"]');
+		this.ui.scl.y = this.el.querySelector('[nameId="scaleY"]');
+		this.ui.scl.z = this.el.querySelector('[nameId="scaleZ"]');		
 	}
 	
 	// события для ввода Input
@@ -147,6 +176,19 @@ class MyToolPG_UI
 
 				input.onkeydown = (e2) => { if (e2.code === 'Enter') this.applyRotUI(); }
 			}					
+		});
+
+		const arrScl = [this.ui.scl.x, this.ui.scl.y, this.ui.scl.z];
+		
+		arrScl.forEach((input) => 
+		{
+			input.onfocus = (e) => 
+			{
+				e.preventDefault();
+				e.stopPropagation();
+
+				input.onkeydown = (e2) => { if (e2.code === 'Enter') this.applySclUI(); }
+			}					
 		});		
 	}	
 
@@ -174,7 +216,8 @@ class MyToolPG_UI
 		
 		myToolPG.pivot.userData.propPivot({type: 'setPosPivot', pos: pos});
 		myToolPG.gizmo.userData.propGizmo({type: 'setPosGizmo', pos: pos});
-		myToolPG.pivot.userData.propPivot({type: 'moveObjs', obj: myToolPG.obj, arrO: myToolPG.arrO, offset: offset});		
+		myToolPG.scale.userData.propScale({type: 'setPosScale', pos: pos});
+		myToolPG.pivot.userData.propPivot({type: 'moveObjs', obj: myToolPG.obj, arrO: myToolPG.arrO, offset: offset});				
 		
 		myToolPG.pos = pos;		
 		
@@ -216,6 +259,7 @@ class MyToolPG_UI
 		myToolPG.pivot.userData.propPivot({type: 'setRotPivot', qt: q_New});
 		myToolPG.gizmo.userData.propGizmo({type: 'setRotGizmo', qt: q_New});
 		myToolPG.gizmo.userData.propGizmo({type: 'rotObjs', pos: myToolPG.pos, arrO: [myToolPG.obj], q_Offset: q_Offset});	
+		myToolPG.scale.userData.propScale({type: 'setRotScale', qt: q_New});
 		
 		myToolPG.qt = q_New;
 
@@ -228,6 +272,73 @@ class MyToolPG_UI
 		}
 		
 		this.render();
+	}
+	
+	
+	// вставили в input значения scale и нажали Enter
+	applySclUI()
+	{
+		const obj = myComposerRenderer.getOutlineObj();
+		if(!obj) return; 		
+		
+		let size = new THREE.Vector3();
+		
+		if(obj.userData.tag === 'obj')
+		{
+			size = myHouse.myObjAction.getObjSize({obj});
+		}
+
+		if(obj.userData.tag === 'roof')
+		{
+			size = myHouse.myRoofAction.getObjSize({obj});
+		}		
+
+		let x = size.x;
+		let y = size.y;
+		let z = size.z; 
+		
+		let x2 = this.ui.scl.x.value;
+		let y2 = this.ui.scl.y.value;
+		let z2 = this.ui.scl.z.value; 
+
+		x2 = x2.replace(",", ".");
+		y2 = y2.replace(",", ".");
+		z2 = z2.replace(",", ".");	
+		
+		x2 = (!isNumeric(x2)) ? x : Number(x2);
+		y2 = (!isNumeric(y2)) ? y : Number(y2);
+		z2 = (!isNumeric(z2)) ? z : Number(z2);		
+
+		
+		const limit = { x_min : 0.01, x_max : 30, y_min : 0.01, y_max : 30, z_min : 0.01, z_max : 30 };
+		
+		if(x2 < limit.x_min) { x2 = limit.x_min; }
+		else if(x2 > limit.x_max) { x2 = limit.x_max; }
+		
+		if(y2 < limit.y_min) { y2 = limit.y_min; }
+		else if(y2 > limit.y_max) { y2 = limit.y_max; }
+
+		if(z2 < limit.z_min) { z2 = limit.z_min; }
+		else if(z2 > limit.z_max) { z2 = limit.z_max; }			
+		
+		this.setSizeInput({size: new THREE.Vector3(x2, y2, z2)}) 
+		
+
+		if(obj.userData.tag === 'obj')
+		{
+			myHouse.myObjAction.setObjSize({obj, size: new THREE.Vector3(x2, y2, z2)});
+			upDateTextureObj3D({obj})
+		}
+
+		if(obj.userData.tag === 'roof')
+		{
+			myHouse.myRoofAction.setObjSize({obj, size: new THREE.Vector3(x2, y2, z2)});
+			myHouse.myRoofCSG.updateCgsRoof();
+			myHouse.myRoofAction.upDateTextureRoof({obj})	
+			myToolPG.activeTool({obj});		
+		}			
+		
+		this.render();		
 	}
 	
 	
@@ -251,6 +362,35 @@ class MyToolPG_UI
 		this.ui.rot.y.value = Math.round(THREE.Math.radToDeg(rot.y));
 		this.ui.rot.z.value = Math.round(THREE.Math.radToDeg(rot.z));		
 	}
+
+	// при выборе объекта показываем размер объекта
+	setSclUI()
+	{
+		const obj = myToolPG.obj;	
+		if(!obj) return;
+
+		let size = new THREE.Vector3();
+		
+		if(obj.userData.tag === 'obj')
+		{
+			size = myHouse.myObjAction.getObjSize({obj})
+		}
+
+		if(obj.userData.tag === 'roof')
+		{
+			size = myHouse.myRoofAction.getObjSize({obj});		
+		}		
+		
+		this.setSizeInput({size});
+	}
+	
+	// устанавливаем scale значения в inputs
+	setSizeInput({size})
+	{
+		this.ui.scl.x.value = Math.round(size.x * 100) / 100;
+		this.ui.scl.y.value = Math.round(size.y * 100) / 100;
+		this.ui.scl.z.value = Math.round(size.z * 100) / 100;		
+	}	
 	
 	
 	// поворот на заданный угол по одной из оси

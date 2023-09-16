@@ -53,6 +53,7 @@ new/tools/myToolPG.js
 new/tools/myToolPG_UI.js
 new/tools/myPivot.js
 new/tools/myGizmo.js
+new/tools/myScale.js
 new/camera/myCamera.js
 new/camera/myCameraPerspective.js
 new/camera/cameraMoveKey.js

@@ -43,11 +43,13 @@ class MyObjAction
 		const obj = myComposerRenderer.getOutlineObj();		
 		if(!obj) return;	
 		
-		const clone = obj.clone();
-		clone.userData.id = countId; countId++;
+		const objClone = obj.clone();
+		objClone.children[0].material = obj.children[0].material.clone()
 		
-		infProject.scene.array.obj.push(clone); 
-		scene.add( clone );	
+		objClone.userData.id = countId; countId++;
+		
+		infProject.scene.array.obj.push(objClone); 
+		scene.add(objClone);	
 	}
 	
 	

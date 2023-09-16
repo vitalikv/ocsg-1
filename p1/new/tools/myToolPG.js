@@ -4,9 +4,11 @@
 class MyToolPG 
 {
 	myPivot = null;
-	myGizmo = null;		
+	myGizmo = null;
+	myScale = null;	
 	pivot = null;
 	gizmo = null;
+	scale = null;
 	isDown = false;
 	type = 'pivot';
 	obj = null;
@@ -15,13 +17,15 @@ class MyToolPG
 	qt = new THREE.Quaternion();
 	
 
-	constructor({type = 'pivot'}={}) 
+	constructor({type = 'scale'}={}) 
 	{
 		this.myPivot = new MyPivot();
 		this.myGizmo = new MyGizmo();	
-	
+		this.myScale = new MyScale();
+		
 		this.pivot = this.myPivot.obj;
 		this.gizmo = this.myGizmo.obj;		
+		this.scale = this.myScale.obj;
 		
 		this.type = type;
 	}
@@ -93,12 +97,14 @@ class MyToolPG
 		
 		myToolPG_UI.setPosUI();
 		myToolPG_UI.setRotUI();
+		myToolPG_UI.setSclUI();
 		this.displayMenuUI({visible: ''});
 		
 
 		if(this.type == 'pivot') this.pivot.userData.propPivot({type: 'setPivot', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});		
 		if(this.type == 'gizmo') this.gizmo.userData.propGizmo({type: 'setGizmo', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});
-
+		if(this.type == 'scale') this.scale.userData.propScale({type: 'setScale', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});
+		
 		//setClickLastObj({obj});
 		
 		this.render();	
@@ -116,6 +122,7 @@ class MyToolPG
 		
 		if(this.type === 'pivot') this.myPivot.mousedown({event, rayhit});
 		if(this.type === 'gizmo') this.myGizmo.mousedown({event, rayhit});
+		if(this.type === 'scale') this.myScale.mousedown({event, rayhit});
 	}
 	
 	mousemove = (event) => 
@@ -123,13 +130,15 @@ class MyToolPG
 		if(!this.isDown) return;
 		
 		if(this.type === 'pivot') this.myPivot.mousemove(event);
-		if(this.type === 'gizmo') this.myGizmo.mousemove(event);			
+		if(this.type === 'gizmo') this.myGizmo.mousemove(event);
+		if(this.type === 'scale') this.myScale.mousemove(event);
 	}
 
 	mouseup = (event) => 
 	{	
 		if(this.type === 'pivot') this.myPivot.mouseup();
 		if(this.type === 'gizmo') this.myGizmo.mouseup();
+		if(this.type === 'scale') this.myScale.mouseup();
 		
 		const obj = this.getActObj();
 		
@@ -156,6 +165,7 @@ class MyToolPG
 		
 		if(this.type == 'pivot') this.pivot.userData.propPivot({type: 'setPivot', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});		
 		if(this.type == 'gizmo') this.gizmo.userData.propGizmo({type: 'setGizmo', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});
+		if(this.type == 'scale') this.scale.userData.propScale({type: 'setScale', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});
 		
 		this.displayMenuUI({visible: ''});
 		
@@ -170,6 +180,7 @@ class MyToolPG
 		myToolPG_UI.setPosUI();
 		this.pivot.position.copy(pos);
 		this.gizmo.position.copy(pos);
+		this.scale.position.copy(pos);
 	}
 	
 	
@@ -180,13 +191,15 @@ class MyToolPG
 		myToolPG_UI.setRotUI();
 		this.pivot.quaternion.copy(qt);
 		this.gizmo.quaternion.copy(qt);
+		this.scale.quaternion.copy(qt);
 	}
 		
 	
 	setScale()
 	{
 		if(this.type === 'pivot') this.pivot.userData.propPivot({type: 'updateScale'});
-		if(this.type === 'gizmo') this.gizmo.userData.propGizmo({type: 'updateScale'});		
+		if(this.type === 'gizmo') this.gizmo.userData.propGizmo({type: 'updateScale'});
+		if(this.type === 'scale') this.scale.userData.propScale({type: 'updateScale'});
 	}
 	
 
@@ -202,6 +215,7 @@ class MyToolPG
 		let obj = null;
 		if(this.type == 'pivot') obj = this.pivot;
 		if(this.type == 'gizmo') obj = this.gizmo;
+		if(this.type == 'scale') obj = this.scale;
 		
 		obj.visible = value;
 	}
@@ -214,6 +228,7 @@ class MyToolPG
 		this.arrO = [];
 		this.pivot.userData.propPivot({type: 'hide'});
 		this.gizmo.userData.propGizmo({type: 'hide'});
+		this.scale.userData.propScale({type: 'hide'});
 		
 		this.displayMenuUI({visible: 'none'});
 		
