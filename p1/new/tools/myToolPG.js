@@ -53,46 +53,50 @@ class MyToolPG
 		return pos;
 	}
 	
-	calcRot(params) 
+	calcRot({obj, mode = ''}) 
 	{
-		let obj = params.obj;
-		let qt = new THREE.Quaternion();
+		let qt = new THREE.Quaternion();		
 		
-		if(myCameraOrbit.activeCam.userData.isCam2D)	
+		if(mode != '') {}
+		else if(myCameraOrbit.activeCam.userData.isCam2D) { mode = '2d'; }
+		else if(myCameraOrbit.activeCam.userData.isCam3D) { mode = '3d'; }
+		
+		if(mode === '2d')	
 		{		
 			if(!obj.geometry.boundingBox) obj.geometry.computeBoundingBox();
-			let bound = obj.geometry.boundingBox;
+			const bound = obj.geometry.boundingBox;
 			
 			obj.updateMatrixWorld();
-			let v1 = new THREE.Vector3(bound.min.x, 0, 0).applyMatrix4( obj.matrixWorld );
-			let v2 = new THREE.Vector3(bound.max.x, 0, 0).applyMatrix4( obj.matrixWorld );
+			const v1 = new THREE.Vector3(bound.min.x, 0, 0).applyMatrix4( obj.matrixWorld );
+			const v2 = new THREE.Vector3(bound.max.x, 0, 0).applyMatrix4( obj.matrixWorld );
 			
-			let dir = v2.clone().sub(v1).normalize();
-			let rotY = Math.atan2(dir.x, dir.z);
+			const dir = v2.clone().sub(v1).normalize();
+			const rotY = Math.atan2(dir.x, dir.z);
 			
 			qt = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), rotY - Math.PI/2);
 		}
 		
-		if(myCameraOrbit.activeCam.userData.isCam3D) qt = obj.getWorldQuaternion(new THREE.Quaternion());	
+		if(mode === '3d') qt = obj.getWorldQuaternion(new THREE.Quaternion());	
 
 		return qt;
 	}
 
 	// показываем Pivot/Gizmo
-	activeTool(params)
+	activeTool({type = null, obj = null, arrO = [], pos = null})
 	{
-		let obj = params.obj;
-		let arrO = params.arrO;
-		let pos = params.pos;
+		if(type) obj = this.obj;	// если есть type, то это переключение инструмента
 		
 		this.hide();
 		
-		this.obj = obj;
+		if(type) this.type = type;		
+		if(obj) this.obj = obj;
 		//this.arrO = (arrO) ? arrO : ddGetGroup({obj, tubePoint: true});
-		this.arrO = [];
+		this.arrO = arrO;
 		
-		this.pos = (pos) ? pos : this.calcPos({obj: obj});		
-		this.qt = this.calcRot({obj: obj});
+		const mode = (this.type === 'scale') ? '3d' : '';
+			
+		this.pos = (pos) ? pos : this.calcPos({obj: this.obj});		
+		this.qt = this.calcRot({obj: this.obj, mode});
 		
 		
 		myToolPG_UI.setPosUI();
@@ -101,9 +105,9 @@ class MyToolPG
 		this.displayMenuUI({visible: ''});
 		
 
-		if(this.type == 'pivot') this.pivot.userData.propPivot({type: 'setPivot', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});		
-		if(this.type == 'gizmo') this.gizmo.userData.propGizmo({type: 'setGizmo', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});
-		if(this.type == 'scale') this.scale.userData.propScale({type: 'setScale', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});
+		if(this.type == 'pivot') this.pivot.userData.propPivot({type: 'setPivot', obj: this.obj, arrO: this.arrO, pos: this.pos, qt: this.qt});		
+		if(this.type == 'gizmo') this.gizmo.userData.propGizmo({type: 'setGizmo', obj: this.obj, arrO: this.arrO, pos: this.pos, qt: this.qt});
+		if(this.type == 'scale') this.myScale.actScale({obj: this.obj, pos: this.pos, qt: this.qt});
 		
 		//setClickLastObj({obj});
 		
@@ -147,31 +151,6 @@ class MyToolPG
 		this.isDown = false;
 	}	
 	
-	
-	// переключаем Pivot/Gizmo
-	toggleTool({type})
-	{
-		let obj = this.obj;
-		let arrO = this.arrO;
-		
-		if(!obj) return;
-		
-		this.hide();
-				
-		this.type = type;	
-		this.obj = obj;
-		this.arrO = arrO;
-		
-		
-		if(this.type == 'pivot') this.pivot.userData.propPivot({type: 'setPivot', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});		
-		if(this.type == 'gizmo') this.gizmo.userData.propGizmo({type: 'setGizmo', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});
-		if(this.type == 'scale') this.scale.userData.propScale({type: 'setScale', obj: obj, arrO: this.arrO, pos: this.pos, qt: this.qt});
-		
-		this.displayMenuUI({visible: ''});
-		
-		this.render();
-	}
-	
 
 	// назначаем pos после измениния/перемещения 
 	setPosPivotGizmo({pos})
@@ -199,7 +178,7 @@ class MyToolPG
 	{
 		if(this.type === 'pivot') this.pivot.userData.propPivot({type: 'updateScale'});
 		if(this.type === 'gizmo') this.gizmo.userData.propGizmo({type: 'updateScale'});
-		if(this.type === 'scale') this.scale.userData.propScale({type: 'updateScale'});
+		if(this.type === 'scale') this.myScale.updateScale();
 	}
 	
 
@@ -224,12 +203,12 @@ class MyToolPG
 	// скрываем Pivot/Gizmo
 	hide()
 	{
-		this.obj = null;
-		this.arrO = [];
 		this.pivot.userData.propPivot({type: 'hide'});
 		this.gizmo.userData.propGizmo({type: 'hide'});
-		this.scale.userData.propScale({type: 'hide'});
-		
+		this.myScale.hide();
+
+		this.obj = null;
+		this.arrO = [];		
 		this.displayMenuUI({visible: 'none'});
 		
 		//resetClickLastObj({});

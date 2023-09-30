@@ -117,9 +117,9 @@ class MyToolPG_UI
 	
 	initEventButton()
 	{
-		this.el.querySelector('[nameId="btn_pivot"]').onmousedown = (e) => { myToolPG.toggleTool({type:'pivot'}); e.stopPropagation(); };
-		this.el.querySelector('[nameId="btn_gizmo"]').onmousedown = (e) => { myToolPG.toggleTool({type:'gizmo'}); e.stopPropagation(); };
-		this.el.querySelector('[nameId="btn_scale"]').onmousedown = (e) => { myToolPG.toggleTool({type:'scale'}); e.stopPropagation(); };
+		this.el.querySelector('[nameId="btn_pivot"]').onmousedown = (e) => { myToolPG.activeTool({type:'pivot'}); e.stopPropagation(); };
+		this.el.querySelector('[nameId="btn_gizmo"]').onmousedown = (e) => { myToolPG.activeTool({type:'gizmo'}); e.stopPropagation(); };
+		this.el.querySelector('[nameId="btn_scale"]').onmousedown = (e) => { myToolPG.activeTool({type:'scale'}); e.stopPropagation(); };
 		
 		this.el.querySelector('[nameId="obj_rotate_X_90"]').onmousedown = (e) => { this.setAngleRotUI({axis: 'x', angle: -45}); e.stopPropagation(); };
 		this.el.querySelector('[nameId="obj_rotate_X_90m"]').onmousedown = (e) => { this.setAngleRotUI({axis: 'x', angle: 45}); e.stopPropagation(); };
@@ -245,23 +245,22 @@ class MyToolPG_UI
 			return;
 		}
 		
-		if(x.num == 180 && z.num == 180) { x.num = 0; z.num = 0; console.log(180); }
-		if(x.num == -180 && z.num == -180) { x.num = 0; z.num = 0; console.log(-180); }
+		//if(x.num == 180 && z.num == 180) { x.num = 0; z.num = 0; console.log(180); }
+		//if(x.num == -180 && z.num == -180) { x.num = 0; z.num = 0; console.log(-180); }
 		
 		x = THREE.Math.degToRad(x.num);
 		y = THREE.Math.degToRad(y.num);
 		z = THREE.Math.degToRad(z.num);		
 		
-		console.log(Math.round(THREE.Math.radToDeg(x)), Math.round(THREE.Math.radToDeg(y)), Math.round(THREE.Math.radToDeg(z)));
+		const qt = myToolPG.obj.quaternion.clone();
 		let q_New = new THREE.Quaternion().setFromEuler(new THREE.Euler().set(x, y, z))
-		let q_Offset = q_New.clone().multiply(myToolPG.qt.clone().inverse());		
+		let q_Offset = q_New.clone().multiply(qt.clone().inverse());		
 				
-		myToolPG.pivot.userData.propPivot({type: 'setRotPivot', qt: q_New});
-		myToolPG.gizmo.userData.propGizmo({type: 'setRotGizmo', qt: q_New});
-		myToolPG.gizmo.userData.propGizmo({type: 'rotObjs', pos: myToolPG.pos, arrO: [myToolPG.obj], q_Offset: q_Offset});	
-		myToolPG.scale.userData.propScale({type: 'setRotScale', qt: q_New});
 		
-		myToolPG.qt = q_New;
+		myToolPG.gizmo.userData.propGizmo({type: 'setRotGizmo', qt: q_New});
+		myToolPG.gizmo.userData.propGizmo({type: 'rotObjs', pos: myToolPG.pos, arrO: [myToolPG.obj], q_Offset});
+		myToolPG.pivot.userData.propPivot({type: 'setRotPivot', qt: q_New});
+		myToolPG.scale.userData.propScale({type: 'setRotScale', qt: q_New});
 
 		this.setRotUI();
 
@@ -355,7 +354,9 @@ class MyToolPG_UI
 	// вставляем в input rotation
 	setRotUI()
 	{
-		let qt = myToolPG.qt;
+		if(!myToolPG.obj) return;
+		
+		const qt = myToolPG.obj.quaternion.clone();
 		let rot = new THREE.Euler().setFromQuaternion(qt);
 		
 		this.ui.rot.x.value = Math.round(THREE.Math.radToDeg(rot.x));
@@ -393,13 +394,26 @@ class MyToolPG_UI
 	}	
 	
 	
-	// поворот на заданный угол по одной из оси
-	setAngleRotUI(params)
-	{
-		let angle = params.angle;
-		let axis = params.axis;
+	// поворот на заданный угол по одной из оси через btn
+	setAngleRotUI({axis, angle})
+	{	
+		if(!myToolPG.obj) return;
 		
-		this.ui.rot[axis].value = Number(this.ui.rot[axis].value) + angle;		
+		const rad = THREE.Math.degToRad(angle);
+		let vec3 = new THREE.Vector3();
+		
+		if(axis === 'x') vec3 = new THREE.Vector3(1, 0, 0);
+		if(axis === 'y') vec3 = new THREE.Vector3(0, 1, 0);
+		if(axis === 'z') vec3 = new THREE.Vector3(0, 0, 1);
+		
+		const q1 = myToolPG.obj.quaternion.clone();
+		const q2 = new THREE.Quaternion().setFromAxisAngle( vec3, rad );
+		q1.multiply( q2 );
+		const rot = new THREE.Euler().setFromQuaternion(q1);
+		
+		this.ui.rot.x.value = THREE.Math.radToDeg(rot.x);
+		this.ui.rot.y.value = THREE.Math.radToDeg(rot.y);
+		this.ui.rot.z.value = THREE.Math.radToDeg(rot.z);
 		
 		this.applyRotUI();
 	}

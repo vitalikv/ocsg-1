@@ -408,12 +408,13 @@ class MyPivot
 			pivot.userData.propPivot({type: 'updateScale'});
 		}
 		
-		// установить rotation Pivot, когда меняем через input
+		// установить rotation Pivot, когда меняем rot через input
 		function setRotPivot(params)
 		{
 			if (!pivot.visible) return;
 			
-			let qt = params.qt;
+			const obj = myToolPG.obj;
+			const qt = myToolPG.calcRot({obj});
 			
 			pivot.quaternion.copy(qt);			
 		}

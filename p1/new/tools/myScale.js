@@ -14,82 +14,46 @@ class MyScale
 	{
 		const scaleObj = new THREE.Group();
 		scaleObj.userData = {};
-		scaleObj.userData.startPos = new THREE.Vector3();
+		scaleObj.userData.startOffset = new THREE.Vector3();
+		scaleObj.userData.limitPos = new THREE.Vector3();
 		scaleObj.userData.dir = new THREE.Vector3();	
 		scaleObj.userData.propScale = this.propScale;
+	
 		
+		const geomBox = this.crGeomBox({x: 0.1, y: 0.1, z: 0.1});
 		
 		const arr = [];
-		arr[0] = {axis: 'x', size: {x: 0.6, y: 0.1, z: 0.1}, pos: {x: 0.6, y: 0, z: 0}, clone: true, rot: {x: 0, y: Math.PI, z: 0}, color: 'rgb(247, 72, 72)', opacity: 0};
-		arr[1] = {axis: 'y', size: {x: 0.6, y: 0.1, z: 0.1}, pos: {x: 0, y: 0.6, z: 0}, clone: true, rot: {x: 0, y: 0, z: -Math.PI/2}, color: 'rgb(17, 255, 0)', opacity: 0};
-		arr[2] = {axis: 'z', size: {x: 0.6, y: 0.1, z: 0.1}, pos: {x: 0, y: 0, z: -0.6}, clone: true, rot: {x: 0, y: -Math.PI/2, z: 0}, color: 'rgb(72, 116, 247)', opacity: 0};
-
-
-		const geometry = this.crGeomBox({x: 1, y: 1, z: 1});
-		
-		
+		const dl = 0.6;
+		arr.push({axis: 'x', pos: new THREE.Vector3(dl,0,0), rot: new THREE.Vector3(0,0,0), color: 0xff0000});
+		arr.push({axis: 'x', pos: new THREE.Vector3(-dl,0,0), rot: new THREE.Vector3(0,Math.PI,0), color: 0xff0000});
+		arr.push({axis: 'y', pos: new THREE.Vector3(0,dl,0), rot: new THREE.Vector3(-Math.PI/2,-Math.PI/2,0), color: 0x00ff00});
+		arr.push({axis: 'y', pos: new THREE.Vector3(0,-dl,0), rot: new THREE.Vector3(-Math.PI/2,Math.PI/2,0), color: 0x00ff00});
+		arr.push({axis: 'z', pos: new THREE.Vector3(0,0,dl), rot: new THREE.Vector3(-Math.PI,Math.PI/2,0), color: 0x0000ff});	
+		arr.push({axis: 'z', pos: new THREE.Vector3(0,0,-dl), rot: new THREE.Vector3(Math.PI,-Math.PI/2,0), color: 0x0000ff});
 		
 		for ( let i = 0; i < arr.length; i++ )
 		{
-			const material = new THREE.MeshStandardMaterial({ color: arr[i].color, transparent: true, opacity: arr[i].opacity, depthTest: false, lightMap: lightMap_1 });
-			if(material.opacity == 0) material.visible = false;
-			
-			const obj = new THREE.Mesh( geometry, material );
-			obj.scale.set(arr[i].size.x, arr[i].size.y, arr[i].size.z);
-			obj.userData.tag = 'scale';
-			obj.userData.axis = arr[i].axis;	
-			obj.renderOrder = 2;
-			
-			if(arr[i].pos) obj.position.set( arr[i].pos.x, arr[i].pos.y, arr[i].pos.z );
-			if(arr[i].rot) obj.rotation.set( arr[i].rot.x, arr[i].rot.y, arr[i].rot.z );
-			
-			scaleObj.add( obj );
-			
-			if(arr[i].clone)
-			{
-				const material = new THREE.MeshStandardMaterial({ color: arr[i].color, transparent: true, opacity: 1, depthTest: false, lightMap: lightMap_1 });
-				
-				const obj = new THREE.Mesh( geometry, material );
-				obj.scale.set(arr[i].size.x, arr[i].size.y / 5, arr[i].size.z / 5);
-				obj.position.set( arr[i].pos.x, arr[i].pos.y, arr[i].pos.z );				
-				obj.rotation.set( arr[i].rot.x, arr[i].rot.y, arr[i].rot.z );	
-				obj.renderOrder = 2;
-				
-				scaleObj.add( obj );					
-			}
+			createBox({data: arr[i]});
 		}
-			
-		
-		const geomBox = this.crGeomBox({x: 0.1, y: 0.1, z: 0.1});
-		createBox({ind: 'x'});
-		createBox({ind: 'y'});
-		createBox({ind: 'z'});
 		
 		// создаем box для scaleObj
-		function createBox({ind})
+		function createBox({data})
 		{
-			let dl = 0.6 + 0.1/2;
-			dl = 0.6;
-			let arr = [];
-			arr['x'] = {axis: 'x', pos: new THREE.Vector3(dl,0,0), rot: new THREE.Vector3(0,0,0), color: 0xff0000};
-			arr['y'] = {axis: 'y', pos: new THREE.Vector3(0,dl,0), rot: new THREE.Vector3(-Math.PI/2,-Math.PI/2,0), color: 0x00ff00};
-			arr['z'] = {axis: 'z', pos: new THREE.Vector3(0,0,-dl), rot: new THREE.Vector3(Math.PI,-Math.PI/2,0), color: 0x0000ff};			
+			const material = new THREE.MeshStandardMaterial({ color : data.color, depthTest: true, transparent: true, lightMap: lightMap_1, opacity: 1 });
 			
-			let material = new THREE.MeshStandardMaterial({ color : arr[ind].color, depthTest: false, transparent: true, lightMap: lightMap_1, opacity: 1 });
-			
-			let obj = new THREE.Mesh( geomBox, material ); 
+			const obj = new THREE.Mesh( geomBox, material ); 
 			obj.userData.tag = 'scale';
-			obj.userData.axis = arr[ind].axis;
+			obj.userData.axis = data.axis;
 			obj.renderOrder = 2;
-			obj.position.copy(arr[ind].pos);
-			obj.rotation.set(arr[ind].rot.x, arr[ind].rot.y, arr[ind].rot.z);
-			scaleObj.add( obj );
+			obj.position.copy(data.pos);
+			obj.rotation.set(data.rot.x, data.rot.y, data.rot.z);
+			scaleObj.add(obj);
 			
 			return obj;
 		}
 		
 		
-		//scaleObj.visible = false;
+		scaleObj.visible = false;
 		scene.add( scaleObj );
 
 
@@ -153,8 +117,50 @@ class MyScale
 		return geometry;		
 	}
 
+	// установить и показать Scale
+	actScale({obj, pos, qt})
+	{	
+		const selectObj = obj;
+		const scaleObj = this.obj;
+		
+		selectObj.material.visible = true;
+		scaleObj.visible = true;	
+		scaleObj.position.copy(pos);
+		scaleObj.quaternion.copy(qt);
 
+		this.setAxes(selectObj);
+	}
 
+	// устанавливаем контроллеры
+	setAxes(selectObj)
+	{
+		const scaleObj = this.obj;
+		let size = new THREE.Vector3();
+
+		if(selectObj.userData.tag === 'obj') size = myHouse.myObjAction.getObjSize({obj: selectObj});
+		if(selectObj.userData.tag === 'roof') size = myHouse.myRoofAction.getObjSize({obj: selectObj});
+		
+		for ( let i = 0; i < scaleObj.children.length; i++ )
+		{
+			const axisObj = scaleObj.children[i];
+			const dir = axisObj.position.clone().normalize();
+			const d = dir.dot(new THREE.Vector3());
+
+			let value = 1;
+			
+			if(axisObj.userData.axis === 'x') value = (dir.x > 0) ? size.x/2 : -size.x/2;
+			if(axisObj.userData.axis === 'y') value = (dir.y > 0) ? size.y/2 : -size.y/2;
+			if(axisObj.userData.axis === 'z') value = (dir.z > 0) ? size.z/2 : -size.z/2;
+			
+			if(axisObj.userData.axis === 'x') axisObj.position.copy(new THREE.Vector3(value, 0, 0));
+			if(axisObj.userData.axis === 'y') axisObj.position.copy(new THREE.Vector3(0, value, 0));
+			if(axisObj.userData.axis === 'z') axisObj.position.copy(new THREE.Vector3(0, 0, value));
+		}
+
+		this.updateScale();
+	}
+	
+	
 	mousedown = ({event, rayhit}) => 
 	{
 		const axisObj = rayhit.object;  					
@@ -162,8 +168,11 @@ class MyScale
 		
 		const scaleObj = this.obj;
 		//scaleObj.updateMatrixWorld();
-		scaleObj.userData.startPos = scaleObj.position.clone();
-		scaleObj.userData.dir = new THREE.Vector3().subVectors(axisObj.getWorldPosition(new THREE.Vector3()), scaleObj.position).normalize();
+		
+		const posAxisW = axisObj.getWorldPosition(new THREE.Vector3());
+		scaleObj.userData.startOffset = new THREE.Vector3().subVectors( posAxisW, rayhit.point );
+		scaleObj.userData.limitPos = scaleObj.position.clone().sub(posAxisW).add(scaleObj.position);	// противоположное position Axis
+		scaleObj.userData.dir = new THREE.Vector3().subVectors(posAxisW, scaleObj.position).normalize();		
 		
 		planeMath.quaternion.copy( quaternionDirection( scaleObj.userData.dir ) ); 
 		planeMath.quaternion.multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI/2, 0, 0)));		
@@ -179,15 +188,14 @@ class MyScale
 		if(rayhit.length === 0) return;
 		
 		const scaleObj = this.obj;
-		let pos = rayhit[0].point;					
+		let pos = rayhit[0].point.clone();					
 		
-		let dist = scaleObj.userData.dir.dot(new THREE.Vector3().subVectors(pos, scaleObj.userData.startPos));
-		pos = scaleObj.userData.startPos.clone().add(new THREE.Vector3().addScaledVector(scaleObj.userData.dir, dist));
+		pos.add(scaleObj.userData.startOffset);		
+		
+		const dist = scaleObj.userData.dir.dot(new THREE.Vector3().subVectors(pos, scaleObj.userData.limitPos));
+		pos = scaleObj.userData.limitPos.clone().add(new THREE.Vector3().addScaledVector(scaleObj.userData.dir, dist));
 			
-		const offset = new THREE.Vector3().subVectors( pos, scaleObj.userData.startPos );
-		
-		
-		console.log(dist, this.actAxis);
+		const limitOffset = new THREE.Vector3().subVectors( pos, scaleObj.userData.limitPos );
 					
 		const selectObj = myToolPG.obj;
 		
@@ -196,28 +204,21 @@ class MyScale
 			const axis = this.actAxis;
 			let size = new THREE.Vector3();
 
-			if(selectObj.userData.tag === 'obj')
-			{
-				size = myHouse.myObjAction.getObjSize({obj: selectObj});
-			}
-
-			if(selectObj.userData.tag === 'roof')
-			{
-				size = myHouse.myRoofAction.getObjSize({obj: selectObj});
-			}			
+			if(selectObj.userData.tag === 'obj') size = myHouse.myObjAction.getObjSize({obj: selectObj});
+			if(selectObj.userData.tag === 'roof') size = myHouse.myRoofAction.getObjSize({obj: selectObj});		
 			
-			size[axis] = dist * 2; 	
+			size[axis] = dist * 1; 	
 
-			const limit = { x_min : 0.01, x_max : 30, y_min : 0.01, y_max : 30, z_min : 0.01, z_max : 30 };
+			const limit = { done: false, x_min : 0.01, x_max : 30, y_min : 0.01, y_max : 30, z_min : 0.01, z_max : 30 };
 			
-			if(size.x < limit.x_min) { size.x = limit.x_min; }
-			else if(size.x > limit.x_max) { size.x = limit.x_max; }
+			if(size.x < limit.x_min) { size.x = limit.x_min; limit.done = true; }
+			else if(size.x > limit.x_max) { size.x = limit.x_max; limit.done = true; }
 			
-			if(size.y < limit.y_min) { size.y = limit.y_min; }
-			else if(size.y > limit.y_max) { size.y = limit.y_max; }
+			if(size.y < limit.y_min) { size.y = limit.y_min; limit.done = true; }
+			else if(size.y > limit.y_max) { size.y = limit.y_max; limit.done = true; }
 
-			if(size.z < limit.z_min) { size.z = limit.z_min; }
-			else if(size.z > limit.z_max) { size.z = limit.z_max; }			
+			if(size.z < limit.z_min) { size.z = limit.z_min; limit.done = true; }
+			else if(size.z > limit.z_max) { size.z = limit.z_max; limit.done = true; }			
 
 			if(selectObj.userData.tag === 'obj')
 			{
@@ -231,13 +232,30 @@ class MyScale
 				//myHouse.myRoofCSG.updateCgsRoof();
 				myHouse.myRoofAction.upDateTextureRoof({obj: selectObj})	
 				//myToolPG.activeTool({obj});		
-			}			
+			}
+
+			
+			
+			// если сработал limit, то объект не смещаем
+			if(!limit.done)
+			{
+				limitOffset.divideScalar( 2 )
+				const pos2 = scaleObj.userData.limitPos.clone().add(limitOffset);
+				const offset2 = pos2.clone().sub(scaleObj.position);
+				
+				const offset3 = scaleObj.position.clone().sub(myToolPG.calcPos({obj: selectObj}));
+				
+				scaleObj.position.add(offset2);
+				selectObj.position.add(offset2);
+				selectObj.position.add(offset3);
+			}
+			
+			myToolPG.setPosPivotGizmo({pos: scaleObj.position});
+			
+			this.setAxes(selectObj);
 		}
 		
-		//scaleObj.userData.propScale({type: 'offsetPivot', offset});			
-		//scaleObj.userData.propScale({type: 'moveObjs', obj: myToolPG.obj, arrO: [], offset});
-		
-		//myToolPG.setPosPivotGizmo({pos: scaleObj.position});	
+		myToolPG_UI.setSclUI();
 		
 		this.render();
 	}
@@ -246,6 +264,40 @@ class MyScale
 	{		
 		this.render();
 	}
+
+	// меняем масштаб axis, при изменении положения камеры
+	updateScale() 
+	{
+		const scaleObj = this.obj;
+		if (!scaleObj.visible) return;
+		
+		let scale = 1;
+		
+		if(myCameraOrbit.activeCam.userData.isCam2D) { scale = 1 / myCameraOrbit.activeCam.zoom; }						
+
+		for ( let i = 0; i < scaleObj.children.length; i++ )
+		{
+			const axisObj = scaleObj.children[i];
+			
+			if(myCameraOrbit.activeCam.userData.isCam3D) 
+			{ 
+				scale = myCameraOrbit.activeCam.position.distanceTo(axisObj.getWorldPosition(new THREE.Vector3())) / 6; 
+			}
+			
+			axisObj.scale.set(scale, scale, scale);
+		}			
+	}
+
+	hide() 
+	{
+		this.obj.visible = false;
+		
+		const selectObj = myToolPG.obj;
+		if(selectObj)
+		{
+			selectObj.material.visible = false;
+		}
+	}	
 			
 	// ф-ция со всеми действиями Pivot
 	propScale = (params) =>
@@ -253,81 +305,9 @@ class MyScale
 		const pivot = this.obj;
 		
 		let type = params.type;			
-		
-		if(type == 'setScale') { setScale({obj: params.obj, arrO: params.arrO, pos: params.pos, qt: params.qt}); }
-		if(type == 'moveObjs') { moveObjs({obj: params.obj, arrO: params.arrO, offset: params.offset}); }		
-		if(type == 'offsetPivot') { offsetPivot({offset: params.offset}); }
+				
 		if(type == 'setPosScale') { setPosScale({pos: params.pos}); }
 		if(type == 'setRotScale') { setRotScale({qt: params.qt}); }
-		if(type == 'updateScale') { updateScale(); }
-		if(type == 'hide') { hide(); }
-		
-
-		// установить и показать Pivot
-		function setScale(params)
-		{
-			let obj = params.obj;
-			let arrO = params.arrO;
-			let pos = params.pos;
-			let qt = params.qt;
-			
-			pivot.visible = true;	
-			pivot.position.copy(pos);
-			pivot.quaternion.copy(qt);
-			
-			pivot.userData.propScale({type: 'updateScale'});
-		}
-
-
-		
-		function offsetPivot(params)
-		{ 
-			let offset = params.offset;
-			pivot.position.add( offset );
-			pivot.userData.startPos.add( offset );
-			
-			pivot.userData.propScale({type: 'updateScale'});
-		}			
-
-
-		// перемещение объектов
-		function moveObjs(params)
-		{
-			let obj = params.obj;
-			let arrO = params.arrO;			
-			let offset = params.offset;
-			
-
-			if(obj && obj.userData.tag == 'new_point')		// точка трубы
-			{
-				obj.movePointTube({offset: offset});	
-			}			 
-			else if(obj && obj.userData.tag == 'wtGrid') 
-			{ 
-				obj.userData.propObj({type: 'moveObj', obj: obj, offset: offset}); 
-			}
-			else 
-			{
-				if(obj && arrO.length === 0)
-				{
-					obj.position.add(offset);
-				}
-				else
-				{
-					for(let i = 0; i < arrO.length; i++)
-					{
-						arrO[i].position.add(offset);		
-					}									
-				}
-			}	
-		}
-
-		
-		// прекращаем действия с pivot
-		function endPivot(params)
-		{
-			
-		}
 
 
 		// установить position Pivot, когда меняем через input
@@ -338,7 +318,7 @@ class MyScale
 			let pos = params.pos;
 			
 			pivot.position.copy(pos);			
-			pivot.userData.propScale({type: 'updateScale'});
+			//pivot.userData.propScale({type: 'updateScale'});
 		}
 		
 		// установить rotation, когда меняем через input
@@ -349,27 +329,7 @@ class MyScale
 			let qt = params.qt;
 			
 			pivot.quaternion.copy(qt);			
-		}
-
-		
-		function updateScale() 
-		{
-			if (!pivot.visible) return;
-			
-			let scale = 1;
-			
-			if(myCameraOrbit.activeCam.userData.isCam2D) { scale = 1 / myCameraOrbit.activeCam.zoom; }
-			if(myCameraOrbit.activeCam.userData.isCam3D) { scale = myCameraOrbit.activeCam.position.distanceTo(pivot.position) / 6; }			
-			
-			pivot.scale.set(scale, scale, scale);
-		}
-
-
-		function hide() 
-		{
-			pivot.visible = false;
-		}
-				
+		}		
 	}
 	
 	render()
