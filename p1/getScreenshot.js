@@ -325,7 +325,7 @@ function assemblyImage()
 		canvas.height = svg.clientHeight;
 		var ctx = canvas.getContext("2d");
 
-		ctx.drawImage(arrImg_1, 0, 0);
+		ctx.drawImage(arrImg_1, 0, 0, canvas.width, canvas.height);
 		ctx.drawImage(arrImg_2, 0, 0);
 
 		var strMime = "image/png";

@@ -17,7 +17,7 @@ class MyToolPG
 	qt = new THREE.Quaternion();
 	
 
-	constructor({type = 'scale'}={}) 
+	constructor({type = 'pivot'}={}) 
 	{
 		this.myPivot = new MyPivot();
 		this.myGizmo = new MyGizmo();	
