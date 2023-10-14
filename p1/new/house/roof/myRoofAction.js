@@ -91,6 +91,7 @@ class MyRoofAction
 		if(!obj) return;	
 		
 		const objClone = obj.clone();
+		objClone.material = obj.material.clone()
 		
 		objClone.children.forEach((child) => {
 			child.material = child.material.clone()			

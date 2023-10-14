@@ -32,7 +32,8 @@ class MyMovePoint
 
 			if(point && point.userData.point.last.cdm == 'new_point_1') { deletePoint( point ).wall.userData.id = point.userData.point.last.cross.walls.old; }
 		}
-
+		
+		setStyleCursor('default');
 		this.isTypeToolPoint = false;
 		this.clearPoint();		
 	}

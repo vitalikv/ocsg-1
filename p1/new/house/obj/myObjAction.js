@@ -44,6 +44,7 @@ class MyObjAction
 		if(!obj) return;	
 		
 		const objClone = obj.clone();
+		objClone.material = obj.material.clone()
 		objClone.children[0].material = obj.children[0].material.clone()
 		
 		objClone.userData.id = countId; countId++;

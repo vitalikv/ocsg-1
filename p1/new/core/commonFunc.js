@@ -83,7 +83,7 @@ function activeHover2D( event )
 		if ( tag == 'point' ) 
 		{ 
 			object.material.opacity = 1;
-			containerF.style.cursor = 'move';
+			setStyleCursor('move');
 		}
 
 		clickO.hover = object;
@@ -96,7 +96,7 @@ function activeHover2D( event )
 		if( tag === 'point' ) 
 		{ 
 			object.material.opacity = 0.75;
-			containerF.style.cursor = 'default';
+			setStyleCursor('default');
 		}
 		
 		clickO.hover = null;
@@ -104,6 +104,10 @@ function activeHover2D( event )
 }
 
 
+function setStyleCursor(cursor)
+{
+	containerF.style.cursor = cursor;
+}
 
 
 
