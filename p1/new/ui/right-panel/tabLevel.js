@@ -82,7 +82,18 @@ class TabLevel
 		
 		event.target.value = value.num; 
 		
-		myLevels.setHeightWallLevel({value: value.num, id});  
+		myLevels.setHeightWallLevel({value: value.num, id}); 
+
+		if(myCameraOrbit.activeCam.userData.isCam3D)
+		{
+			myHouse.myRoofCSG.cgs();
+			this.render();
+		}		
+	}
+
+	render()
+	{
+		renderCamera();
 	}	
 }
 
