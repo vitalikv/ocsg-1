@@ -61,7 +61,12 @@
 				
 				<div style="flex-grow:1; position: relative;">
 					<? require_once("include/top_1.php"); ?>
-					
+
+					<div style="position: absolute; bottom: 0; right: 20px; width: 170px; height: 80px; z-index: 2;">
+						<a href="/documentation" style="font-size: 16px; cursor: pointer; font-weight: normal;" class="button1 button_gradient_1" data-action ='top_panel_1' target="_blank">
+							<div>видеоинструкция</div>
+						</a>	
+					</div>					
 				</div>
 				
 				<? require_once("include/right_panel_1.php"); ?>
