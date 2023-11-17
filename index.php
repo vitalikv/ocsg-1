@@ -30,7 +30,11 @@
 
 		<div style="margin-top: 30px;">
 			5. <a href="/construction?demo=4">тр. дом</a> 
-		</div>			
+		</div>	
+
+		<div style="margin-top: 30px;">
+			- <a href="/loaderObj/src/index.php">загрузчик</a> 
+		</div>		
 	</div>
 
 
