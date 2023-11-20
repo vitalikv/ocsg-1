@@ -231,13 +231,12 @@ function startSettingObj({typeF = '', obj})
 	new RGBELoader().setDataType( THREE.UnsignedByteType ).load( 'textures/studio_small_03_1k.hdr', function ( texture ) 
 	{
 
-			let envMap = Build.pmremGenerator.fromEquirectangular( texture ).texture;
+			//let envMap = Build.pmremGenerator.fromEquirectangular( texture ).texture;
 
-			//scene.background = envMap;
-			Build.scene.environment = envMap;
+			//Build.scene.environment = envMap;
 
-			texture.dispose();
-			Build.pmremGenerator.dispose();
+			//texture.dispose();
+			//Build.pmremGenerator.dispose();
 
 			
 			let arrM = [];
@@ -330,7 +329,7 @@ function startSettingObj({typeF = '', obj})
 			
 			Build.scene.add( obj );			
 
-			getBoundObject_1({obj: obj});
+			getBoundObject_1({obj});
 			fitCameraToObject({obj: Build.infProg.boundBox, start: true});						
 	
 			Build.infProg.class.listMesh.creatList({arr: Build.infProg.meshs});
@@ -469,7 +468,7 @@ export function disposeNode(node)
 
 
 
-export function getBoundObject_1({obj})
+export function getBoundObject_1({obj, createBox = false})
 {
 	if(!obj) return;
 	
@@ -538,12 +537,12 @@ export function getBoundObject_1({obj})
 	
 
 	
-	let centerPos = new THREE.Vector3(((bound.max.x - bound.min.x)/2 + bound.min.x), ((bound.max.y - bound.min.y)/2 + bound.min.y), ((bound.max.z - bound.min.z)/2 + bound.min.z));
+	let centerPos = new THREE.Vector3(((bound.max.x - bound.min.x)/2 + bound.min.x), -bound.min.y, ((bound.max.z - bound.min.z)/2 + bound.min.z));
 	let x = (bound.max.x - bound.min.x);
 	let y = (bound.max.y - bound.min.y);
 	let z = (bound.max.z - bound.min.z);			
 
-	
+	console.log(bound.max.y, bound.min.y, centerPos);
 	let q = new THREE.Quaternion().setFromEuler(rotO);
 	obj.position.sub(centerPos);
 	obj.position.applyQuaternion(q);
@@ -555,9 +554,9 @@ export function getBoundObject_1({obj})
 	if(1==1)
 	{
 		let geometry = new THREE.BoxGeometry(x, y, z);	
-		let material = new THREE.MeshLambertMaterial( {color: 0x00ff00, transparent: true, opacity: 0.5} );
+		let material = new THREE.MeshStandardMaterial( {color: 0x00ff00, transparent: true, opacity: 0.5} );
 		let cube = new THREE.Mesh( geometry, material );
-		//cube.position.copy(centerPos);
+		cube.position.sub(new THREE.Vector3(0, -y/2, 0));
 		cube.rotation.copy(rotO);
 		cube.visible = false;
 		Build.scene.add( cube );

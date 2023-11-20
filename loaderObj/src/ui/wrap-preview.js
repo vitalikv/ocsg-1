@@ -35,7 +35,7 @@ export class UIwrapPreview
 						${infProject.text.pp.prev}
 					</div>
 					
-					<div style="width: 220px; height: 220px; margin: 26px auto 0 auto;">
+					<div style="width: 220px; height: 220px; margin: 26px auto 0 auto; border: 1px solid #269CFF;">
 						<img nameId="screenImg_1" src="" style="display: block; height: 100%; margin: auto; -o-object-fit: contain; object-fit: contain;">
 					</div>
 								

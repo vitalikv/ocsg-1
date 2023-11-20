@@ -128,6 +128,7 @@ export async function init() {
 	infProg.gridHelper = new THREE.GridHelper( 10, 10 );
 	scene.add( infProg.gridHelper );	
 
+	addLights()
 
 	camera = new THREE.PerspectiveCamera( 45, container.clientWidth / container.clientHeight, 0.01, 999999 );
 	camera.position.set( 0, 1, 5 );
@@ -153,17 +154,17 @@ export async function init() {
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( container.clientWidth, container.clientHeight );
 	//renderer.toneMapping = THREE.ACESFilmicToneMapping;
-	renderer.toneMapping = THREE.ReinhardToneMapping;
-	renderer.toneMappingExposure = 1;
+	//renderer.toneMapping = THREE.ReinhardToneMapping;
+	//renderer.toneMappingExposure = 1;
 	renderer.outputEncoding = THREE.sRGBEncoding;
 	
-	renderer.shadowMap.enabled = true;
+	//renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
 	
 	container.appendChild( renderer.domElement );
 	
-	pmremGenerator = new THREE.PMREMGenerator( renderer );
-	pmremGenerator.compileEquirectangularShader();	
+	//pmremGenerator = new THREE.PMREMGenerator( renderer );
+	//pmremGenerator.compileEquirectangularShader();	
 
 	renderer.domElement.style.width = '100%';
 	renderer.domElement.style.height = '100%';
@@ -211,12 +212,35 @@ export async function init() {
 	}	
 }
 
+function addLights()
+{
+	var lights = [];
+	lights[ 0 ] = new THREE.PointLight( 0x222222, 0.7, 0 );
+	lights[ 1 ] = new THREE.PointLight( 0x222222, 0.5, 0 );
+	lights[ 2 ] = new THREE.PointLight( 0x222222, 0.8, 0 );
+	lights[ 3 ] = new THREE.PointLight( 0x222222, 0.2, 0 );
+	
+	lights[ 0 ].position.set( -1000, 200, 1000 );
+	lights[ 1 ].position.set( -1000, 200, -1000 );
+	lights[ 2 ].position.set( 1000, 200, -1000 );
+	lights[ 3 ].position.set( 1000, 200, 1000 );
+	
+	scene.add( lights[ 0 ] );
+	scene.add( lights[ 1 ] );
+	scene.add( lights[ 2 ] );
+	scene.add( lights[ 3 ] );
+	
+
+	var light = new THREE.AmbientLight( 0xffffff, 0.2 );
+	scene.add( light );	
+}
+
 
 
 function initComposerRender() 
 {
 	composer = new EffectComposer(renderer);
-	//composer.renderer.outputEncoding = THREE.sRGBEncoding;
+	composer.renderer.outputEncoding = THREE.sRGBEncoding;
 	//composer.renderer.gammaFactor = 2.2;
 	composer.setSize(container.clientWidth, container.clientHeight);
 	composer.renderTarget1.texture.encoding = THREE.sRGBEncoding;

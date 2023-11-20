@@ -17,7 +17,7 @@ export function saveAsImage(params)
 		let camera3D = Build.infProg.camera3D;
 		let camInf = {pos: camera3D.position.clone(), rot: camera3D.rotation.clone()};
 		
-		let radius = Build.infProg.boxRadius;
+		let radius = Build.infProg.boxRadius * 0.75;
 		camera3D.position.x = radius * Math.sin( -75 * Math.PI / 360 );
 		camera3D.position.y = radius * Math.sin( 45 * Math.PI / 360 );
 		camera3D.position.z = radius * Math.cos( -75 * Math.PI / 360 );			
@@ -46,7 +46,7 @@ export function saveAsImage(params)
 			canvas.height = 300;
 			canvas.width = 300;		
 			
-			context.fillStyle = '#000';
+			context.fillStyle = '#fff';
 			context.fillRect(0, 0, canvas.width, canvas.height);		
 			
 			let sourceX = (img.width - (img.width * (img.height/img.width))) / 2;
