@@ -54,27 +54,33 @@ function crInputLoader()
 
 export class BtnAddTexture
 {
-	constructor({elem, material, clDelT})
+	elWrap;
+	elem;
+	material;
+	clDelT;
+	
+	constructor({elem, material})
 	{
-		this.elem = null;
+		this.elWrap = elem;
 		this.material = material;
-		this.clDelT = clDelT;
-		this.init({elem});
-	}
-	
-	
-	init({elem})
-	{		
+		
 		let div = document.createElement('div');
 		div.innerHTML = this.html();
 		this.elem = div.children[0];			
-		elem.querySelector('[nameId="itemTexture"]').append(this.elem);
+		this.elWrap.querySelector('[nameId="itemTexture"]').append(this.elem);		
+	}
+	
+	
+	init({clDelT})
+	{	
+		this.clDelT = clDelT;
 		
 		this.initEvent();
 		
 		if(this.material.map && this.material.map.image) 
 		{
 			this.addDivImg({src: this.material.map.image.src});
+			this.clDelT.show();
 		}			
 	}
 	

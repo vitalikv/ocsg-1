@@ -5,21 +5,26 @@ import { deleteTexture } from '../../../loaderTexture.js';
 
 export class BtnDelTexture
 {
-	constructor({elem, material, clAddT})
+	elWrap;
+	elem;
+	material;
+	clAddT;
+	
+	constructor({elem, material})
 	{
-		this.elem = null;
+		this.elWrap = elem;
 		this.material = material;
-		this.clAddT = clAddT;
-		this.init({elem});
-	}
-	
-	
-	init({elem})
-	{		
+		
 		let div = document.createElement('div');
 		div.innerHTML = this.html();
 		this.elem = div.children[0];			
-		elem.querySelector('[nameId="itemTexture"]').append(this.elem);
+		this.elWrap.querySelector('[nameId="itemTexture"]').append(this.elem);		
+	}
+	
+	
+	init({clAddT})
+	{	
+		this.clAddT = clAddT;
 		
 		this.initEvent();
 	}

@@ -92,9 +92,11 @@ export class ItemMesh
 		elNameMat.innerText = material.userData.name;
 		
 		
-		let clAddT = new BtnAddTexture({elem: el, material});
-		let clDelT = new BtnDelTexture({elem: el, material, clAddT});
-		clAddT.clDelT = clDelT;
+		const clAddT = new BtnAddTexture({elem: el, material});
+		const clDelT = new BtnDelTexture({elem: el, material});
+		
+		clAddT.init({clDelT});
+		clDelT.init({clAddT});
 		
 		new BtnChildSettingMap({elem: el, material});
 		this.clTrnGeom = new DivChildTrnGeom({elem: el, obj, gclone});

@@ -231,7 +231,7 @@ function addLights()
 	scene.add( lights[ 3 ] );
 	
 
-	var light = new THREE.AmbientLight( 0xffffff, 0.2 );
+	var light = new THREE.AmbientLight( 0xffffff, 0.93 );
 	scene.add( light );	
 }
 
@@ -243,8 +243,8 @@ function initComposerRender()
 	composer.renderer.outputEncoding = THREE.sRGBEncoding;
 	//composer.renderer.gammaFactor = 2.2;
 	composer.setSize(container.clientWidth, container.clientHeight);
-	composer.renderTarget1.texture.encoding = THREE.sRGBEncoding;
-	composer.renderTarget2.texture.encoding = THREE.sRGBEncoding;
+	//composer.renderTarget1.texture.encoding = THREE.sRGBEncoding;		закомитил, чтобы цветовая гамма соответсвовала ocsg
+	//composer.renderTarget2.texture.encoding = THREE.sRGBEncoding;
 
 	renderPass = new RenderPass(scene, camera);
 	composer.addPass(renderPass);
