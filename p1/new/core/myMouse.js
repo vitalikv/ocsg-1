@@ -291,7 +291,7 @@ class MyMouse
 				myHouse.myRoofMove.mousedown({event, obj});
 			}		
 			else if(clickO.button == 'add_lotid')
-			{
+			{clickO.button = null;
 				obj = await loadObjServer({lotid: clickO.options, cursor: true});
 				intersects = rayIntersect( event, planeMath, 'one' );		
 				if(intersects.length === 0) return;					
@@ -311,7 +311,7 @@ class MyMouse
 			let obj = null;
 			
 			if(clickO.button === 'add_lotid')
-			{
+			{clickO.button = null;
 				obj = await loadObjServer({lotid: clickO.options, cursor: true});
 				intersects = rayIntersect( event, planeMath, 'one' );		
 				if(intersects.length === 0) return;					

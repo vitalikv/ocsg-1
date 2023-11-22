@@ -7,6 +7,8 @@ function getMyCatalog()
 	list[0] = {id: 1, name: 'куб'};
 	list[1] = {id: 2, name: 'сфера'};
 	list[2] = {id: 3, name: 'цилиндр'};
+	list[3] = {id: 21, name: 'дерево'};
+	list[4] = {id: 22, name: 'диван 1'};
 	
 	return list;
 }

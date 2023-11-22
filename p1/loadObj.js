@@ -10,7 +10,7 @@ async function getObjFromBase({lotid})
 	
 	for(let i = 0; i < base.length; i++)
 	{
-		if(base[i].id == lotid)
+		if(base[i].id === lotid)
 		{
 			return base[i];		// объект есть в кэше
 		}
@@ -20,23 +20,23 @@ async function getObjFromBase({lotid})
 	
 	if(lotid === 1)
 	{
+		inf.id = lotid;
 		inf.name = 'куб';
 		inf.obj = myHouse.myObjPrimitives.crBox();
-		inf.planeMath = 0.5;
 	}
 	
 	if(lotid === 2)
 	{
+		inf.id = lotid;
 		inf.name = 'сфера';
 		inf.obj = myHouse.myObjPrimitives.crSphere();
-		inf.planeMath = 0.5;
 	}
 
 	if(lotid === 3)
 	{
+		inf.id = lotid;
 		inf.name = 'цилиндр';
 		inf.obj = myHouse.myObjPrimitives.crCylinder();
-		inf.planeMath = 0.5;
 	}
 
 
@@ -44,35 +44,30 @@ async function getObjFromBase({lotid})
 	{
 		inf.name = 'окно глухое';
 		inf.obj = myHouse.myWindow.createWind({id: 1});
-		inf.planeMath = 0.0;
 	}
 
 	if(lotid === 6)
 	{
 		inf.name = 'окно двухстворчатое';
 		inf.obj = myHouse.myWindow.createWind({id: 2});
-		inf.planeMath = 0.0;
 	}
 
 	if(lotid === 7)
 	{
 		inf.name = 'окно трехстворчатое';
 		inf.obj = myHouse.myWindow.createWind({id: 3});
-		inf.planeMath = 0.0;
 	}	
 
 	if(lotid === 8)
 	{
 		inf.name = 'окно треугольное';
 		inf.obj = myHouse.myWindow.createWind({id: 4});
-		inf.planeMath = 0.0;
 	}	
 
 	if(lotid === 9)
 	{
 		inf.name = 'окно треугольное';
 		inf.obj = myHouse.myWindow.createWind({id: 5});
-		inf.planeMath = 0.0;
 	}	
 
 	if(lotid === 17)	// крыша 1
@@ -94,7 +89,6 @@ async function getObjFromBase({lotid})
 		inf.obj = myHouse.myRoofObj.initRoof_3();
 		inf.model = null;		// в этом случаи не нужно, нужно только при загрузки из бд
 		inf.preview = null;		// не используется
-		inf.planeMath = 0.0;	// высота над полом
 		inf.size = new THREE.Vector3();	// не нужно, для объектов считается в самой ф-ции
 	}
 
@@ -114,7 +108,6 @@ async function getObjFromBase({lotid})
 	if(!json.error)
 	{
 		inf = json;
-		inf.planeMath = 0.0;
 		
 		return inf;
 	}	
@@ -161,14 +154,15 @@ async function loadObjServer(cdm)
 // добавляем новый объект в базу/кэш (добавляются только уникальные объекты, которых нет в базе)
 function addObjInBase(inf, obj)
 {
+	
 	obj.geometry.computeBoundingBox();	
 	
 	// накладываем на материал объекта lightMap
 	obj.traverse(function(child) 
 	{
-		if(child.isMesh && child.material.visible) 
+		if(child.isMesh && child.material && child.material.visible) 
 		{ 
-			
+			//if(!child.material.lightMap) console.log(333, child.material.visible, child)
 		}
 	});
 
@@ -176,7 +170,7 @@ function addObjInBase(inf, obj)
 	inf.model = null;
 	inf.obj = obj;	
 	
-	infProject.scene.array.base[infProject.scene.array.base.length] = inf;
+	infProject.scene.array.base.push(inf);
 }
 
 
@@ -187,8 +181,9 @@ function addObjInBase(inf, obj)
 function addObjInScene(inf, cdm)
 {  
 	var obj = inf.obj.clone();
+	obj.material = obj.material.clone();
 	
-	var inf = JSON.parse( JSON.stringify( inf ) );	
+	//var inf = JSON.parse( JSON.stringify( inf ) );	
 	inf.obj = obj;
 	
 	
@@ -207,10 +202,13 @@ function addObjInScene(inf, cdm)
 	var obj = inf.obj;
 	
 	if(cdm.pos){ obj.position.copy(cdm.pos); }
-	else if(inf.planeMath)	// объект по кнопки из каталога
+	else	// объект по кнопки из каталога
 	{ 
-		obj.position.y = inf.planeMath;
-		planeMath.position.y = inf.planeMath; 
+		if(!obj.geometry.boundingBox) obj.geometry.computeBoundingBox();
+		const y = (obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y) / 2;
+		
+		obj.position.y = y;
+		planeMath.position.y = y; 
 		planeMath.rotation.set(-Math.PI/2, 0, 0);
 		planeMath.updateMatrixWorld(); 
 	}

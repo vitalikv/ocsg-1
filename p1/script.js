@@ -941,7 +941,11 @@ function rayIntersect( event, obj, t, recursive )
 
 
 
-function boxUnwrapUVs(geometry, scale = new THREE.Vector3(1, 1, 1)) {
+function boxUnwrapUVs(geometry, scale = new THREE.Vector3(1, 1, 1)) {	
+	//console.log(geometry instanceof THREE.Geometry, geometry instanceof THREE.BufferGeometry)
+	
+	if(geometry instanceof THREE.BufferGeometry) return;
+	
     for (var i = 0; i < geometry.faces.length; i++) {
         var face = geometry.faces[i];
         var faceUVs = geometry.faceVertexUvs[0][i]
