@@ -27,8 +27,10 @@ export function saveAsImage(params)
 		
 		Build.infProg.gridHelper.visible = false;
 		Build.infProg.axesHelper.visible = false;
-		Build.renderer.setSize( 700, 700 * (Build.container.clientHeight/Build.container.clientWidth) );
-		Build.renderer.render( Build.scene, Build.infProg.camera3D );
+		Build.composer.setSize( 700, 700 * (Build.container.clientHeight/Build.container.clientWidth) );
+		Build.composer.render();
+		//Build.renderer.setSize( 700, 700 * (Build.container.clientHeight/Build.container.clientWidth) );
+		//Build.renderer.render( Build.scene, Build.infProg.camera3D );
 		
 		
 		//let strMime = "image/jpeg";
@@ -74,8 +76,10 @@ export function saveAsImage(params)
 		Build.infProg.gridHelper.visible = true;
 		Build.infProg.axesHelper.visible = true;
 		//renderer.antialias = false;
-		Build.renderer.setSize( Build.container.clientWidth, Build.container.clientHeight );
-		Build.renderer.render( Build.scene, Build.infProg.camera3D );				
+		Build.composer.setSize( Build.container.clientWidth, Build.container.clientHeight );
+		Build.composer.render();		
+		//Build.renderer.setSize( Build.container.clientWidth, Build.container.clientHeight );
+		//Build.renderer.render( Build.scene, Build.infProg.camera3D );				
  
 		if(params.open) { openFileImage(imgData.replace(strMime, "image/octet-stream"), "screenshot.jpg"); }
 		if(params.binary) { return atob(imgData.split('base64,')[1]); }		

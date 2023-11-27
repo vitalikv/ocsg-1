@@ -36,11 +36,14 @@ class MyCatalogList
 		list.push({id: 2, name: 'сфера', url: 'primitives/sphere/'});
 		list.push({id: 3, name: 'цилиндр', url: 'primitives/cylinder/'});
 		list.push({id: 21, name: 'дерево', url: 'land/pine/'});
-		list.push({id: 22, name: 'диван 1', url: 'furn/sofa_1/'});
+		list.push({id: 22, name: 'диван', url: 'furn/sofa_1/'});
 		list.push({id: 23, name: 'стол', url: 'furn/table_1/'});
 		list.push({id: 24, name: 'шкаф', url: 'furn/wardrobe/'});
 		list.push({id: 25, name: 'ванна', url: 'santeh/bath/'});
 		list.push({id: 26, name: 'душевая кабина', url: 'santeh/shower_cabin/'});
+		list.push({id: 27, name: 'полки', url: 'furn/shelves_1/'});
+		list.push({id: 28, name: 'стул', url: 'furn/stool_1/'});
+		list.push({id: 29, name: 'туалет', url: 'furn/toilet_1/'});
 		
 		return list;
 	}

@@ -190,7 +190,7 @@ function saveImage()
 	let link = document.createElement('a');
 	
 	document.body.appendChild(link); //Firefox requires the link to be in the body
-	link.download = 'prew.jpg';
+	link.download = 'prev.png';
 	link.href = Build.dataFbx.previewFile;
 	link.click();
 	document.body.removeChild(link); //remove the link when done
