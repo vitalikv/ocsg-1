@@ -39,9 +39,7 @@ class MyToolPG
 		if(obj.userData.tag === 'obj' || obj.userData.tag === 'roof')		// группа или объект
 		{ 
 			obj.updateMatrixWorld();
-			pos = obj.localToWorld( obj.geometry.boundingSphere.center.clone() );
-		
-obj.material.visible = true;	 
+			pos = obj.localToWorld( obj.geometry.boundingSphere.center.clone() );	  
 		}		
 		else if(obj.userData.tag == 'joinPoint')		// разъем
 		{ 

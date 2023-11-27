@@ -1261,6 +1261,7 @@ let tabLevel;
 let divLevelVisible;
 let tabPlan;
 let tabObject;
+let myCatalogList;
 
 let myTexture;
 let switchCamera;
@@ -1301,6 +1302,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	divLevelVisible.init();
 	tabPlan = new TabPlan();
 	tabObject = new TabObject();
+	myCatalogList = new MyCatalogList();
 	switchCamera = new SwitchCamera();
 	
 	

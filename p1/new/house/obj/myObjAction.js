@@ -44,7 +44,9 @@ class MyObjAction
 		if(!obj) return;	
 		
 		const objClone = obj.clone();
-		
+		objClone.material = obj.material.clone();
+
+		// копираем материал, чтобы при можно было менять текстуру, цвета и это не влияло на другой такой же объект
 		objClone.traverse(function(child) 
 		{
 			if(child.isMesh && child.material && child.material.visible) 
@@ -52,6 +54,8 @@ class MyObjAction
 				child.material = child.material.clone();
 			}
 		});
+		
+		objClone.material.visible = false;	// скрываем box для скопировоного объекта (если был включент scale, то он отображается)
 		
 		objClone.userData.id = countId; countId++;
 		

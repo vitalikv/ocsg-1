@@ -530,7 +530,7 @@ async function loadFilePL(json)
 	
 
 	//await getListRoomTypesApi();	// получаем типы помещений из api, добавляем в меню
-	await addObjInCatalogUI_1();		// наполняем каталог объектов UI
+	//await addObjInCatalogUI_1();		// наполняем каталог объектов UI
 	 
 	//if(!arr) return;	
 	for ( var i = 0; i < json.level.length; i++ )

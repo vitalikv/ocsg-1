@@ -117,7 +117,10 @@ class TabObject
 		else if(obj.userData.tag === 'obj')
 		{			
 			txtName = obj.userData.obj3D.nameRus;		
-			this.divs.obj.style.display = '';			
+			this.divs.obj.style.display = '';
+			
+			const display = (obj.userData.obj3D.lotid < 4) ? '' : 'none';
+			this.divs.obj.children[1].style.display = display;
 			
 			if( isCheckExsistFunction(window['getInfObjFromBD']) ) { getInfObjFromBD({obj: obj}); };
 		}

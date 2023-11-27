@@ -199,7 +199,15 @@ function addObjInScene(inf, cdm)
 		return clRoof.initRoof(inf, cdm);
 	}
 	
-	var obj = inf.obj;
+	// копираем материал, чтобы при можно было менять текстуру, цвета и это не влияло на другой такой же объект
+	obj.traverse(function(child) 
+	{
+		if(child.isMesh && child.material && child.material.visible) 
+		{ 
+			child.material = child.material.clone();
+		}
+	});	
+	
 	
 	if(cdm.pos){ obj.position.copy(cdm.pos); }
 	else	// объект по кнопки из каталога
@@ -260,8 +268,14 @@ function addObjInScene(inf, cdm)
 	{
 		myTexture.setImage({obj: obj.children[0], material: { img: cdm.material.img } });
 	}
+	else if(cdm.lotid < 4)	// вот с этим нужно что-то делать, кастыль, который позволяет загрузить примитивы из каталога с нужным материалом
+	{
+		myTexture.setImage({obj: obj.children[0], material: { img: 'img/load/beton.jpg' } });	
+	}
 	
 	obj.material.visible = false;
+
+
 		
 	
 	infProject.scene.array.obj[infProject.scene.array.obj.length] = obj;
