@@ -537,14 +537,15 @@ export function getBoundObject_1({obj, createBox = false})
 	
 
 	
-	let centerPos = new THREE.Vector3(((bound.max.x - bound.min.x)/2 + bound.min.x), -bound.min.y, ((bound.max.z - bound.min.z)/2 + bound.min.z));
+	let centerPos = new THREE.Vector3(((bound.max.x - bound.min.x)/2 + bound.min.x), ((bound.max.y - bound.min.y)/2 + bound.min.y), ((bound.max.z - bound.min.z)/2 + bound.min.z));
 	let x = (bound.max.x - bound.min.x);
 	let y = (bound.max.y - bound.min.y);
 	let z = (bound.max.z - bound.min.z);			
 
-	console.log(bound.max.y, bound.min.y, centerPos);
+	console.log(obj, ((bound.max.y - bound.min.y)/2 + bound.min.y), bound.min.y, centerPos);
 	let q = new THREE.Quaternion().setFromEuler(rotO);
 	obj.position.sub(centerPos);
+	obj.position.sub(new THREE.Vector3(0, -y/2, 0));
 	obj.position.applyQuaternion(q);
 	//obj.position.add(centerPos);
 	obj.quaternion.copy(q);
@@ -554,11 +555,11 @@ export function getBoundObject_1({obj, createBox = false})
 	if(1==1)
 	{
 		let geometry = new THREE.BoxGeometry(x, y, z);	
-		let material = new THREE.MeshStandardMaterial( {color: 0x00ff00, transparent: true, opacity: 0.5} );
+		let material = new THREE.MeshStandardMaterial( {color: 0xcccccc, transparent: true, opacity: 0.7} );
 		let cube = new THREE.Mesh( geometry, material );
 		cube.position.sub(new THREE.Vector3(0, -y/2, 0));
 		cube.rotation.copy(rotO);
-		cube.visible = false;
+		cube.material.visible = false;
 		Build.scene.add( cube );
 
 		Build.infProg.boundBox = cube;

@@ -72,6 +72,38 @@ export function isCheckExsistFunction(functionToCheck)
 function save({obj})
 {
 	if(!obj) return;
+
+	const cube = Build.infProg.boundBox;
+	//cube.material.visible = true;
+	cube.add( obj );
+	
+	cube.geometry.computeBoundingBox();	
+	const bound = cube.geometry.boundingBox;
+	const y = ((bound.max.y - bound.min.y)/2 + bound.min.y);
+	
+	obj.position.sub(new THREE.Vector3(0, (bound.max.y - bound.min.y)/2, 0));
+	
+	
+	Build.render();
+	
+	const str = JSON.stringify(cube.toJSON());
+	const data = 'data:application/csv;charset=utf-8,' + encodeURIComponent(str);		
+	
+	
+	let link = document.createElement('a');
+	link.style.display = 'none';
+	document.body.appendChild(link);
+	link.href = data;
+	link.download = 'model.json';
+	link.click();
+	document.body.removeChild(link);
+}
+
+
+// старый метод
+function save2({obj})
+{
+	if(!obj) return;
 	
 	let rotO = obj.rotation.clone();
 		

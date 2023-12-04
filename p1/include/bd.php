@@ -20,6 +20,26 @@ if($url == '/construction')
 	$h1 = 'Конструктор дома';
 	$description = 'Планировщик домов и коттеджей в 3D. В этой онлайн программе вы сможете спроектировать свою квартиру, дом или здание.';	
 }
+if($url == '/construction?demo=1')	
+{ 
+	$title = 'Проект гаража 3D';
+	$h1 = 'Демо проект';	
+}
+if($url == '/construction?demo=2')	
+{ 
+	$title = 'Проект одноэтажного дома 3D';
+	$h1 = 'Демо проект';	
+}
+if($url == '/construction?demo=3')	
+{ 
+	$title = 'Проект двухэтажного загородного дома 3D';
+	$h1 = 'Демо проект';	
+}
+if($url == '/construction?demo=4')	
+{ 
+	$title = 'Проект коттеджа 3D';
+	$h1 = 'Демо проект';	
+}
 
 
 $infProject = array('url' => $url, 'title' => $title, 'nameId' => $nameId, 'path' => $path, 'load' => [ img => [] ]);
