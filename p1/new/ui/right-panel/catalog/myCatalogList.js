@@ -44,6 +44,12 @@ class MyCatalogList
 		list.push({id: 27, name: 'полки', url: 'furn/shelves_1/'});
 		list.push({id: 28, name: 'стул', url: 'furn/stool_1/'});
 		list.push({id: 29, name: 'туалет', url: 'furn/toilet_1/'});
+		list.push({id: 30, name: 'раковина', url: 'santeh/sink_2/'});
+		list.push({id: 31, name: 'раковина', url: 'santeh/sink_3/'});
+		list.push({id: 32, name: 'комод', url: 'furn/dresser_1/'});
+		list.push({id: 33, name: 'холодильник', url: 'furn/fridge_1/'});
+		list.push({id: 34, name: 'скамейка', url: 'land/bench_1/'});
+		list.push({id: 35, name: 'уличный фонарь', url: 'land/street_light_1/'});
 		
 		return list;
 	}
