@@ -26,7 +26,7 @@ class MyCameraPerspective extends THREE.PerspectiveCamera
 		this.userData.radius = 0;
 		this.userData.clickPos = new THREE.Vector3();
 		//this.userData.targetO = this.targetO();
-		this.userData.targetO = createCenterCamObj();	
+		this.userData.targetO = this.createCenterCamObj();	
 	}
 	
 	// создаем объект, для обозначения куда смотрит камера в 3D режиме
@@ -251,4 +251,94 @@ class MyCameraPerspective extends THREE.PerspectiveCamera
 
 		return path;
 	}	
+
+
+	// создаем круг (объект), для обозначения куда смотрит камера в 3D режиме
+	createCenterCamObj()
+	{
+		let n = 0;
+		const v = [];
+		let circle = infProject.geometry.circle;
+		
+		for ( let i = 0; i < circle.length; i++ )
+		{
+			v[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.0 );
+			v[n].y = 0.01;		
+			n++;		
+			
+			v[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.25 );
+			v[n].y = 0.01;
+			n++;
+			
+			v[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.0 );
+			v[n].y = 0.0;
+			n++;	
+			
+			v[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.25 );
+			v[n].y = 0.0;
+			n++;		
+		}	
+
+
+		
+		const material = new THREE.MeshPhongMaterial({ color: 0xcccccc, transparent: true, opacity: 1, depthTest: false });	
+		const obj = new THREE.Mesh( createGeometryCircle(v), material ); 
+		obj.userData.tag = '';
+		obj.renderOrder = 2;
+		obj.visible = false;
+		
+		n = 0;
+		const v2 = [];
+		
+		for ( let i = 0; i < circle.length; i++ )
+		{
+			v2[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.25 );
+			v2[n].y = 0.01;		
+			n++;		
+			
+			v2[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.26 );
+			v2[n].y = 0.01;
+			n++;
+			
+			v2[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.25 );
+			v2[n].y = 0.0;
+			n++;	
+			
+			v2[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.26 );
+			v2[n].y = 0.0;
+			n++;		
+		}	
+		
+		const mat2 = new THREE.MeshPhongMaterial({ color: 0xcccccc, transparent: true, opacity: 1, depthTest: false });
+		const obj_2 = new THREE.Mesh( createGeometryCircle(v2), mat2 );
+		obj_2.renderOrder = 2;
+		
+		obj.add( obj_2 );
+		scene.add( obj );
+		
+		upUvs_4( obj );
+
+		new THREE.TextureLoader().load(infProject.path+'img/walk_1.png', ( texture ) =>  
+		{
+			material.color = new THREE.Color( 0xffffff );			
+			texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+			texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+			
+			texture.repeat.x = 1.9;
+			texture.repeat.y = 1.9;
+			
+			texture.offset.x = 0.5;
+			texture.offset.y = 0.5;				
+			
+			texture.needsUpdate = true;
+			
+			material.map = texture; 
+			material.needsUpdate = true; 
+			
+			renderCamera();
+		});	
+		
+		return obj;
+	}
+
 }

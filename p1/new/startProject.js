@@ -93,6 +93,20 @@ class StartProject
 			switchCamera.clickOnBtn2D3D('2D');
 		}		
 	}
+	
+	
+	detectShowStartWind()
+	{
+		let show = true;
+		const listPr = ['demo 1', 'demo 2', 'demo 3', 'demo 4'];
+		
+		for(let i = 0; i < listPr.length; i++)
+		{
+			if(this.name === listPr[i]) show = false;
+		}
+		
+		return show;
+	}
 }
 
 

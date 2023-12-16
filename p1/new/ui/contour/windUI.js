@@ -40,7 +40,7 @@ class WindUI
 	initEvent()
 	{
 		const btnMenu = document.querySelector('[nameId="btn_menu"]');
-		btnMenu.onmousedown = () => { this.elMain.style.display = 'flex'; }
+		btnMenu.onmousedown = () => { this.showWin(); }
 		
 		const btnClose = this.elMain.querySelector('[nameId="button_close_main_menu"]');
 		btnClose.onmousedown = () => { this.closeWin(); }
@@ -52,7 +52,7 @@ class WindUI
 			this.windDivAccount.container.style.display = '';			
 		}
 		this.windTabs.btnSave.onmousedown = () => { this.hideContainers(); this.windDivProjectSave.container.style.display = ''; }
-		this.windTabs.btnLoad.onmousedown = () => { this.hideContainers(); this.windDivProjectLoad.container.style.display = ''; }
+		this.windTabs.btnLoad.onmousedown = () => { this.showTabProjectLoad(); }
 		
 		this.windDivProjectSave.btnAccount.onmousedown = () => 
 		{ 
@@ -67,6 +67,12 @@ class WindUI
 			this.windDivAccount.switchRegPass({type: 'reg'});			
 			this.windDivAccount.container.style.display = '';			
 		}		
+	}
+	
+	showTabProjectLoad()
+	{
+		this.hideContainers(); 
+		this.windDivProjectLoad.container.style.display = '';
 	}
 	
 	// скрываем все блоки к контентом
@@ -89,6 +95,11 @@ class WindUI
 		this.windDivProjectLoad.elInfoReg.innerHTML = '';
 		
 		this.getListProject({id});
+	}
+
+	showWin()
+	{
+		this.elMain.style.display = 'flex';
 	}
 	
 	closeWin()

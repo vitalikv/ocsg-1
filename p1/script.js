@@ -172,99 +172,6 @@ var offset = new THREE.Vector3();
 
 
 
-
-
-// создаем круг (объект), для обозначения куда смотрит камера в 3D режиме
-function createCenterCamObj()
-{
-	var n = 0;
-	var v = [];
-	var circle = infProject.geometry.circle;
-	
-	for ( var i = 0; i < circle.length; i++ )
-	{
-		v[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.0 );
-		v[n].y = 0.01;		
-		n++;		
-		
-		v[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.25 );
-		v[n].y = 0.01;
-		n++;
-		
-		v[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.0 );
-		v[n].y = 0.0;
-		n++;	
-		
-		v[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.25 );
-		v[n].y = 0.0;
-		n++;		
-	}	
-
-
-	
-	var material = new THREE.MeshPhongMaterial({ color: 0xcccccc, transparent: true, opacity: 1, depthTest: false });	
-	var obj = new THREE.Mesh( createGeometryCircle(v), material ); 
-	obj.userData.tag = '';
-	obj.renderOrder = 2;
-	obj.visible = false;
-	
-	var n = 0;
-	var v2 = [];
-	var circle = infProject.geometry.circle;
-	
-	for ( var i = 0; i < circle.length; i++ )
-	{
-		v2[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.25 );
-		v2[n].y = 0.01;		
-		n++;		
-		
-		v2[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.26 );
-		v2[n].y = 0.01;
-		n++;
-		
-		v2[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.25 );
-		v2[n].y = 0.0;
-		n++;	
-		
-		v2[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.26 );
-		v2[n].y = 0.0;
-		n++;		
-	}	
-	
-	var mat2 = new THREE.MeshPhongMaterial({ color: 0xcccccc, transparent: true, opacity: 1, depthTest: false });
-	var obj_2 = new THREE.Mesh( createGeometryCircle(v2), mat2 );
-	obj_2.renderOrder = 2;
-	
-	obj.add( obj_2 );
-	scene.add( obj );
-	
-	upUvs_4( obj );
-
-	new THREE.TextureLoader().load(infProject.path+'img/walk_1.png', ( texture ) =>  
-	{
-		material.color = new THREE.Color( 0xffffff );			
-		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-		texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-		
-		texture.repeat.x = 1.9;
-		texture.repeat.y = 1.9;
-		
-		texture.offset.x = 0.5;
-		texture.offset.y = 0.5;				
-		
-		texture.needsUpdate = true;
-		
-		material.map = texture; 
-		material.needsUpdate = true; 
-		
-		renderCamera();
-	});	
-	
-	return obj;
-}
-
-
-
 function upPosLabels_1(cdm)
 {
 	
@@ -1262,6 +1169,7 @@ let divLevelVisible;
 let tabPlan;
 let tabObject;
 let myCatalogList;
+let startWind;
 
 let myTexture;
 let switchCamera;
@@ -1313,6 +1221,8 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	startProject = new StartProject();
 	startProject.init();
+	
+	if(startProject.detectShowStartWind()) startWind = new StartWind();	
 
 	animate();
 	renderCamera();	
