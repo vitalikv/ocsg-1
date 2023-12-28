@@ -32,6 +32,7 @@ html_1.js
 selectionBox.js
 undoRedo.js
 getScreenshot.js
+new/myCookie.js
 new/btnDropList.js
 new/level.js
 new/ghostLevel.js

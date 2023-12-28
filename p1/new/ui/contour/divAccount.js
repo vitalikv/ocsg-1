@@ -8,7 +8,7 @@ class WindDivAccount
 	elResetPass;
 	elUser;
 	
-	constructor()
+	init()
 	{
 		this.container = this.crContainer();
 		this.elTitleReg = this.container.querySelector('[nameId="titleReg"]');
@@ -72,14 +72,16 @@ class WindDivAccount
 		const btnResPass = this.elReg.querySelector('[nameId="btnResPass"]');	// кнопка показать div восстановление пароля
 		const btnSendReg = this.elReg.querySelector('[nameId="act_reg_1"]');	// кнопка формы войти/регистрация
 		const btnSendReset = this.elResetPass.querySelector('[nameId="act_reset_pass"]');		// кнопка формы восстановление пароля
-		
+		const btnUserExit = this.elUser.querySelector('[nameId="btnUserExit"]');		// кнопка дективация авторизации
 		
 		btn1.onmousedown = () => { this.changeMainMenuRegistMenuUI({type: 'reg_1'}); }
 		btn2.onmousedown = () => { this.changeMainMenuRegistMenuUI({type: 'reg_2'}); }		
 		btnResPass.onmousedown = () => { this.switchRegPass({type: 'resetPass'}); }
 		
 		btnSendReg.onmousedown = () => { this.checkRegDataIU(); }
-		btnSendReset.onmousedown = () => { this.resetPassRegIU(); }		
+		btnSendReset.onmousedown = () => { this.resetPassRegIU(); }
+
+		btnUserExit.onmousedown = () => { this.userExit(); }
 	}
 
 	html()
@@ -155,13 +157,32 @@ class WindDivAccount
 	}
 
 
+	// html блок, когда авторизовались
 	htmlReg2()
 	{
+		const btnLink = ` 
+		margin: 5px 20px;
+		padding: 10px 0;
+		width: 250px;
+		font-family: arial,sans-serif;
+		font-size: 18px;
+		color: #666;
+		text-decoration: none;
+		text-align: center;
+		border: 1px solid #b3b3b3;
+		border-radius: 3px;
+		background-color: #f1f1f1;
+		cursor: pointer;`;		
+  
 		const html = `
 		<div nameId="divUser" style="display: none;">												
-			<div class="wm_reg_13 wm_reg_border_1 wm_reg_text_1">
-				Вы авторизовались.<br><br>Теперь вам доступно сохранение и загрузка проектов. 
-			</div>											
+			<div class="wm_reg_13 wm_reg_border_1 wm_reg_text_1" style="display: flex; flex-direction: column; align-items: center;">
+				<div>Вы авторизовались.<br><br>Теперь вам доступно сохранение и загрузка проектов.</div> 
+				
+				<div style="margin-top: 30px;">
+					<div nameId="btnUserExit" style='${btnLink}'>Выйти</div>
+				</div>				
+			</div>
 		</div>`;
 
 		return html;
@@ -342,8 +363,15 @@ class WindDivAccount
 					infProject.user.mail = data.info.mail;
 					infProject.user.pass = data.info.pass;
 					infProject.user.status = data.info.status;
-					
+					const token = data.info.token;
+
+					this.elReg.style.display = 'none';
+					this.elUser.style.display = '';
+					this.elTitleReg.textContent = 'Вход выполнен';
+		
 					windUI.enterUser({id: infProject.user.id});
+					
+					myCookie.setCookie({token});
 				}
 				else
 				{
@@ -362,7 +390,7 @@ class WindDivAccount
 			{
 				if(data.success)
 				{
-					inf_str_1.innerHTML = "на вашу почту отправлено письмо<br>зайдите в вашу почту и подтвердите регистрацию<br>(если письмо не пришло посмотрите в папке спам)";
+					inf_str_1.innerHTML = "на вашу почту отправлено письмо<br>зайдите в вашу почту и подтвердите регистрацию<br>(если письмо не пришло посмотрите в папке спам)";
 					//inf_str_1.innerHTML = "Вы успешно зарегистрировались";						
 					
 					inf_block.style.display = 'block';
@@ -483,6 +511,37 @@ class WindDivAccount
 		);
 	}	
 
+
+	showUser()
+	{
+		this.elUser.style.display = '';
+	}
+	
+	
+	// дективация авторизации
+	userExit()
+	{
+		myCookie.deleteCookie();
+		this.resetInfoUser();
+		
+		this.elUser.style.display = 'none';
+		
+		this.changeMainMenuRegistMenuUI({type: 'reg_1'});
+		this.switchRegPass({type: 'reg'});
+		
+		windDivProjectLoad.showDivStartLoad();
+		windDivProjectSave.showDivStartSave();
+	}
+	
+	
+	// сбрасываем настройки
+	resetInfoUser()
+	{
+		infProject.user.id = null;
+		infProject.user.mail = null;
+		infProject.user.pass = null;
+		infProject.user.status = null;
+	}
 }
 
 

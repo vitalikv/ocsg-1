@@ -4,11 +4,9 @@ class WindUI
 {
 	elMain;
 	windTabs;
-	windDivAccount;
-	windDivProjectSave;
-	windDivProjectLoad;
 	
-	constructor()
+	
+	init()
 	{
 		this.css();
 		let div = document.createElement('div');
@@ -16,25 +14,16 @@ class WindUI
 		this.elMain = div.children[0];
 		document.body.prepend(this.elMain);
 		
-		this.init();
-		this.initEvent();
-	}
-	
-	init()
-	{
 		const elBody = this.elMain.querySelector('[nameId="body"]');
 		
 		this.windTabs = new WindTabs();
-		elBody.children[0].append(this.windTabs.container);
+		elBody.children[0].append(this.windTabs.container);		
 		
+		elBody.children[1].append(windDivAccount.container);
+		elBody.children[1].append(windDivProjectSave.container);
+		elBody.children[1].append(windDivProjectLoad.container);
 		
-		this.windDivAccount = new WindDivAccount();
-		this.windDivProjectSave = new WindDivProjectSave();
-		this.windDivProjectLoad = new WindDivProjectLoad();
-		
-		elBody.children[1].append(this.windDivAccount.container);
-		elBody.children[1].append(this.windDivProjectSave.container);
-		elBody.children[1].append(this.windDivProjectLoad.container);
+		this.initEvent();
 	}
 	
 	initEvent()
@@ -48,54 +37,37 @@ class WindUI
 		this.windTabs.btnAccount.onmousedown = () => 
 		{ 
 			this.hideContainers();
-			this.windDivAccount.switchRegPass({type: 'reg'});			
-			this.windDivAccount.container.style.display = '';			
+			windDivAccount.switchRegPass({type: 'reg'});			
+			windDivAccount.container.style.display = '';			
 		}
-		this.windTabs.btnSave.onmousedown = () => { this.hideContainers(); this.windDivProjectSave.container.style.display = ''; }
-		this.windTabs.btnLoad.onmousedown = () => { this.showTabProjectLoad(); }
-		
-		this.windDivProjectSave.btnAccount.onmousedown = () => 
-		{ 
-			this.hideContainers();
-			this.windDivAccount.switchRegPass({type: 'reg'});			
-			this.windDivAccount.container.style.display = '';			
-		}
-		
-		this.windDivProjectLoad.btnAccount.onmousedown = () => 
-		{ 
-			this.hideContainers();
-			this.windDivAccount.switchRegPass({type: 'reg'});			
-			this.windDivAccount.container.style.display = '';			
-		}		
+		this.windTabs.btnSave.onmousedown = () => { this.hideContainers(); windDivProjectSave.container.style.display = ''; }
+		this.windTabs.btnLoad.onmousedown = () => { this.showTabProjectLoad(); }				
 	}
 	
 	showTabProjectLoad()
 	{
 		this.hideContainers(); 
-		this.windDivProjectLoad.container.style.display = '';
+		windDivProjectLoad.container.style.display = '';
 	}
 	
 	// скрываем все блоки к контентом
 	hideContainers()
 	{
-		this.windDivAccount.container.style.display = 'none';
-		this.windDivProjectSave.container.style.display = 'none';
-		this.windDivProjectLoad.container.style.display = 'none';
+		windDivAccount.container.style.display = 'none';
+		windDivProjectSave.container.style.display = 'none';
+		windDivProjectLoad.container.style.display = 'none';
 	}
 	
 	
 	// user авторизовался, скрываем лишние блоки и показываем проекты
 	enterUser({id})
 	{
-		this.windDivAccount.elReg.style.display = 'none';
-		this.windDivAccount.elUser.style.display = '';
-		this.windDivAccount.elTitleReg.textContent = 'Вход выполнен';
-
-		this.windDivProjectSave.elInfoReg.innerHTML = '';
-		this.windDivProjectLoad.elInfoReg.innerHTML = '';
+		windDivProjectSave.elInfoReg.innerHTML = '';
+		windDivProjectLoad.elInfoReg.innerHTML = '';
 		
 		this.getListProject({id});
 	}
+	
 
 	showWin()
 	{
@@ -628,17 +600,17 @@ class WindUI
 			html_load += `<div class="window_main_menu_content_block_1" style='background: #d1d9f0;' projectId="${arr[i].id}" nameId="load_pr_1">${src_2}</div>`;
 		}		
 		
-		this.windDivProjectLoad.elInfoReg.innerHTML = html_load;
-		this.windDivProjectSave.elInfoReg.innerHTML = html_save;
+		windDivProjectLoad.elInfoReg.innerHTML = html_load;
+		windDivProjectSave.elInfoReg.innerHTML = html_save;
 
-		const arrLoadEl = this.windDivProjectLoad.elInfoReg.querySelectorAll('[nameId="load_pr_1"]');
-		const arrSaveEl = this.windDivProjectSave.elInfoReg.querySelectorAll('[nameId="save_pr_1"]');
+		const arrLoadEl = windDivProjectLoad.elInfoReg.querySelectorAll('[nameId="load_pr_1"]');
+		const arrSaveEl = windDivProjectSave.elInfoReg.querySelectorAll('[nameId="save_pr_1"]');
 
 		arrLoadEl.forEach((el)=> 
 		{
 			el.onmousedown = () => 
 			{
-				this.windDivProjectLoad.clickButtonLoadProjectUI(el);
+				windDivProjectLoad.clickButtonLoadProjectUI(el);
 				this.closeWin();
 			}
 		});	
@@ -647,7 +619,7 @@ class WindUI
 		{
 			el.onmousedown = () => 
 			{
-				this.windDivProjectSave.clickButtonSaveProjectUI(el);
+				windDivProjectSave.clickButtonSaveProjectUI(el);
 				this.getListProject({id: infProject.user.id});  // обновляем меню сохрание проектов
 				this.closeWin();
 			}

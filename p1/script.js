@@ -1163,6 +1163,9 @@ function isCheckExsistFunction(functionToCheck)
 
 let docReady = false;
 let windUI;
+let windDivAccount;
+let windDivProjectLoad;
+let windDivProjectSave;
 let tabs;
 let tabLevel;
 let divLevelVisible;
@@ -1171,6 +1174,7 @@ let tabObject;
 let myCatalogList;
 let startWind;
 
+let myCookie;
 let myTexture;
 let switchCamera;
 
@@ -1192,6 +1196,15 @@ document.addEventListener("DOMContentLoaded", ()=>
 	docReady = true;
 
 	windUI = new WindUI();
+	windDivAccount = new WindDivAccount();
+	windDivProjectLoad = new WindDivProjectLoad();
+	windDivProjectSave = new WindDivProjectSave();
+	windDivAccount.init();
+	windDivProjectLoad.init();
+	windDivProjectSave.init();
+	windUI.init();
+	
+	myCookie = new MyCookie();
 	
 	myTexture = new MyTexture();
 	
