@@ -86,14 +86,19 @@ class WindDivAccount
 
 	html()
 	{
-		const wrapTabs = `
-		display: flex;
-		flex-direction: column;`;
+		const css1 = 
+		`display: flex; 
+		align-items: center;
+		justify-content: center;
+		height: 50px;
+		background-color:#f1f1f1;
+		font-size: 24px;
+		color: #666;`;
 					
 		
 		const html = 
 		`<div nameId="reg_content_2" style="display: block;">
-			<div nameId="titleReg" class="window_main_menu_content_1_h1"></div>
+			<div nameId="titleReg" style="${css1}"></div>
 			<div nameId="contentReg"></div>		
 		</div>`;																								
 								
@@ -104,36 +109,106 @@ class WindDivAccount
 
 	htmlReg1()
 	{
+		const css1 =
+		`display: block;
+		width:80%;
+		margin: auto;		
+		border-radius: 3px;	
+		font-size: 17px;
+		color: #666;		
+		line-height: 2em;
+		padding: 0 10px;`;
+
+		const css2 =
+		`background-color:#ffffff;
+		border:solid 1px #b3b3b3;  
+		border-radius: 3px;`;
+
+		const css3 =
+		`margin: 30px auto 0 auto;
+		padding: 20px;`;		
+					
+		const css4 =
+		`height: 30px;
+		width: auto;	
+		border: 1px solid #ccc;
+		border-bottom: none;
+		background-color:#fff;
+		cursor: pointer;`;
+		
+		const css5 =
+		`margin:0.5em 15px;
+		font-size: 14px;
+		color: #666;
+		text-align:center;`;
+
+		const css6 =
+		`position: relative;
+		display: flex;
+		margin: 10px;
+		margin-bottom: 50px;
+		border-bottom: 1px solid #ccc;`;	
+
+		const css7 =
+		`display: flex; 
+		align-items: center;
+		justify-content: center;
+		width: 100px;
+		font-size: 18px;
+		color: #666;`;
+
+		const css8 =
+		`margin: 35px auto;
+		max-width: 450px;			
+		border: 1px solid #b3b3b3; 
+		border-radius: 10px;
+		background-color:#f1f1f1;`;
+
+		const cssBtn =
+		`width: auto;
+		height: 20px; 
+		margin: 10px;
+		margin-top: 40px;
+		text-decoration:none; 
+		text-align:center; 
+		padding:11px 11px; 
+		border:solid 1px #b3b3b3;  
+		border-radius: 3px; 
+		font-size:18px; 
+		font-weight:bold; 
+		color:#737373; 
+		cursor: pointer;`;
+		
 		const html =		
-		`<div nameId="divReg" class="window_main_menu_form_reg_block_1">
-			<div class="window_main_menu_form_reg_top_1">
-				<div class="window_main_menu_form_reg_top_1_block" nameId="button_check_reg_1">
-					<div class="window_main_menu_form_reg_top_1_block_text">
+		`<div nameId="divReg" style="${css8}">
+			<div style="${css6}">
+				<div nameId="button_check_reg_1" style="${css4}">
+					<div style="${css5}">
 						вход
 					</div>	
 				</div>
-				<div class="window_main_menu_form_reg_top_1_block" nameId="button_check_reg_2">
-					<div class="window_main_menu_form_reg_top_1_block_text">
+				<div nameId="button_check_reg_2" style="${css4}">
+					<div style="${css5}">
 						регистрация
 					</div>	
 				</div>			
 			</div>	
 			
-			<div class="window_main_menu_form_reg_block_1_1">
-				<div class="window_main_menu_form_reg_block_1_label">
+			<div style="display: flex; padding: 10px;">
+				<div style="${css7}">
 					почта
 				</div>											
-				<input class="input_form_reg" type="text" nameId="input_reg_mail" value="" placeholder="почта">
+				<input style="${css1}" type="text" nameId="input_reg_mail" value="" placeholder="почта">
 			</div>
-			<div class="window_main_menu_form_reg_block_1_1">
-				<div class="window_main_menu_form_reg_block_1_label">
+			<div style="display: flex; padding: 10px;">
+				<div style="${css7}">
 					пароль
 				</div>											
-				<input class="input_form_reg" type="password" nameId="input_reg_pass" value="" placeholder="пароль">
+				<input style="${css1}" type="password" nameId="input_reg_pass" value="" placeholder="пароль">
 			</div>
 			
-			<div class="window_main_menu_form_reg_block_1_1">
-				<div nameId="info_reg_1" class="wm_reg_12 wm_reg_border_1 wm_reg_text_1" style="display: none;">
+			<div style="display: flex; padding: 10px;">
+				<div nameId="info_reg_1" style="display: none; ${css1} ${css2} ${css3} font-size: 17px; text-align:center;">
 					<div nameId="info_reg_1_1" style="display: none;">
 						Почта указана
 					</div>
@@ -142,12 +217,12 @@ class WindDivAccount
 					</div>													
 				</div>
 			</div>
-
-			<div nameId="btnResPass" class="button_reset_pass_1">
+			
+			<div nameId="btnResPass" style="margin: auto; width: 200px; text-align: center; font-size: 14px; color: #666; cursor: pointer; text-decoration: underline;">
 				забыли пароль ?
 			</div>
 			
-			<div nameId="act_reg_1" class="window_main_menu_button_reg_1 button_gradient_1" b_type="reg_1">
+			<div nameId="act_reg_1" b_type="reg_1" class="button_gradient_1" style="${cssBtn}">
 				Войти
 			</div>
 		</div>`;
@@ -160,6 +235,17 @@ class WindDivAccount
 	// html блок, когда авторизовались
 	htmlReg2()
 	{
+		const css1 =
+		`background-color:#ffffff;
+		border:solid 1px #b3b3b3;  
+		border-radius: 3px;`;
+		
+		const css2 =
+		`margin: 30px auto 0 auto;
+		width:70%;
+		padding: 40px;
+		font-size: 17px;`;		
+		
 		const btnLink = ` 
 		margin: 5px 20px;
 		padding: 10px 0;
@@ -176,7 +262,7 @@ class WindDivAccount
   
 		const html = `
 		<div nameId="divUser" style="display: none;">												
-			<div class="wm_reg_13 wm_reg_border_1 wm_reg_text_1" style="display: flex; flex-direction: column; align-items: center;">
+			<div style="display: flex; flex-direction: column; align-items: center; ${css1} ${css2} font-size: 17px; text-align:center;">
 				<div>Вы авторизовались.<br><br>Теперь вам доступно сохранение и загрузка проектов.</div> 
 				
 				<div style="margin-top: 30px;">
@@ -190,26 +276,75 @@ class WindDivAccount
 
 	htmlResetPass()
 	{
+		const css1 =
+		`display: block;
+		width:80%;
+		margin: auto;		
+		border-radius: 3px;	
+		font-size: 17px;
+		color: #666;		
+		line-height: 2em;
+		padding: 0 10px;`;
+		
+		const css2 =
+		`background-color:#ffffff;
+		border:solid 1px #b3b3b3;  
+		border-radius: 3px;`;		
+
+		const css3 =
+		`margin: 30px auto 0 auto;
+		padding: 20px;`;
+		
+		const css4 =
+		`display: flex; 
+		align-items: center;
+		justify-content: center;
+		width: 100px;
+		font-size: 18px;
+		color: #666;`;	
+		
+		const css5 =
+		`margin: 35px auto;
+		max-width: 450px;			
+		border: 1px solid #b3b3b3; 
+		border-radius: 10px;
+		background-color:#f1f1f1;`;
+		
+		const cssBtn =
+		`width: auto;
+		height: 20px; 
+		margin: 10px;
+		margin-top: 40px;
+		text-decoration:none; 
+		text-align:center; 
+		padding:11px 11px; 
+		border:solid 1px #b3b3b3;  
+		border-radius: 3px; 
+		font-size:18px; 
+		font-weight:bold; 
+		color:#737373; 
+		cursor: pointer;`;		
+		
 		const html = `
 		<div nameId="divResetPass" class="window_main_menu_form_reg" style="display: none;">
-			<div class="window_main_menu_form_reg_block_1">
+			<div style="${css5}">
 				
-				<div class="window_main_menu_form_reg_block_1_1">
-					<div class="window_main_menu_form_reg_block_1_label">
+				<div style="display: flex; padding: 10px;">
+					<div style="${css4}">
 						почта
 					</div>											
-					<input class="input_form_reg" type="text" nameId="input_reset_pass" value="">
+					<input style="${css1}" type="text" nameId="input_reset_pass" value="">
 				</div>	
 
-				<div class="window_main_menu_form_reg_block_1_1">
-					<div nameId="info_reset_pass_1" class="wm_reg_12 wm_reg_border_1 wm_reg_text_1" style="display: none;">
+				<div style="display: flex; padding: 10px;">
+					<div nameId="info_reset_pass_1" style="display: none; ${css2} ${css3} font-size: 17px; text-align:center;">
 						<div nameId="info_reset_pass_1_1" style="display: none;">
 							Почта указана
 						</div>												
 					</div>
 				</div>												
 				
-				<div class="window_main_menu_button_reg_1 button_gradient_1" nameId="act_reset_pass">
+				<div nameId="act_reset_pass" class="button_gradient_1" style="${cssBtn}">
 					Восстановить
 				</div>
 			</div>																					
