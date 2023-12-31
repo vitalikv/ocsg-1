@@ -9,6 +9,7 @@ class WindDivAccount
 	elUser;
 	divSubsUser;
 	divSubsTariff;
+	divUserExit;
 	
 	init()
 	{
@@ -20,6 +21,7 @@ class WindDivAccount
 		this.elUser = this.crWindUser();
 		this.divSubsUser = this.elUser.querySelector('[nameId="divSubsUser"]');
 		this.divSubsTariff = this.elUser.querySelector('[nameId="divSubsTariff"]');
+		this.divUserExit = this.elUser.querySelector('[nameId="divUserExit"]');
 		
 		this.addElemes();
 		this.initEventElem();
@@ -76,16 +78,13 @@ class WindDivAccount
 		const btnResPass = this.elReg.querySelector('[nameId="btnResPass"]');	// кнопка показать div восстановление пароля
 		const btnSendReg = this.elReg.querySelector('[nameId="act_reg_1"]');	// кнопка формы войти/регистрация
 		const btnSendReset = this.elResetPass.querySelector('[nameId="act_reset_pass"]');		// кнопка формы восстановление пароля
-		const btnUserExit = this.elUser.querySelector('[nameId="btnUserExit"]');		// кнопка дективация авторизации
-		
+
 		btn1.onmousedown = () => { this.changeMainMenuRegistMenuUI({type: 'reg_1'}); }
 		btn2.onmousedown = () => { this.changeMainMenuRegistMenuUI({type: 'reg_2'}); }		
 		btnResPass.onmousedown = () => { this.switchRegPass({type: 'resetPass'}); }
 		
 		btnSendReg.onmousedown = () => { this.checkRegDataIU(); }
 		btnSendReset.onmousedown = () => { this.resetPassRegIU(); }
-
-		btnUserExit.onmousedown = () => { this.userExit(); }
 	}
 
 	html()
@@ -248,21 +247,7 @@ class WindDivAccount
 		`margin: 30px auto 0 auto;
 		width:70%;
 		padding: 40px;
-		font-size: 17px;`;		
-		
-		const btnLink = ` 
-		margin: 5px 20px;
-		padding: 10px 0;
-		width: 250px;
-		font-family: arial,sans-serif;
-		font-size: 18px;
-		color: #666;
-		text-decoration: none;
-		text-align: center;
-		border: 1px solid #b3b3b3;
-		border-radius: 3px;
-		background-color: #f1f1f1;
-		cursor: pointer;`;		
+		font-size: 17px;`;				
   
 		const html = `
 		<div nameId="divUser" style="display: none;">												
@@ -273,9 +258,7 @@ class WindDivAccount
 				
 				<div nameId="divSubsTariff"></div>
 				
-				<div style="margin-top: 30px;">
-					<div nameId="btnUserExit" style='${btnLink}'>Выйти</div>
-				</div>				
+				<div nameId="divUserExit"></div>				
 			</div>
 		</div>`;
 
@@ -515,9 +498,12 @@ class WindDivAccount
 		
 					windUI.enterUser({id: infProject.user.id});
 					
-					//myCookie.setCookie({token});
-					
-					this.crDivSubsUser({subs, token});
+					if(infProject.user.status === 'admin')
+					{
+						//myCookie.setCookie({token});					
+						this.crDivSubsUser({subs, token});
+						this.crBtnUserExit();						
+					}
 				}
 				else
 				{
@@ -666,10 +652,7 @@ class WindDivAccount
 	
 	// если у пользователя была или есть подписка отображаем кол-во дней
 	crDivSubsUser({subs, token})
-	{
-		this.divSubsUser.innerHTML = '';
-		this.divSubsTariff.innerHTML = '';
-		
+	{	
 		if(!subs) return;
 		if(!token) return;
 		
@@ -679,6 +662,36 @@ class WindDivAccount
 		
 		const divTariff = windDivSubs.crDivSubsTariff({token});
 		this.divSubsTariff.append(divTariff); 
+	}
+	
+	
+	// создаем кнопку выхода из авторизации
+	crBtnUserExit()
+	{
+		const btnLink = ` 
+		margin: 5px 20px;
+		padding: 10px 0;
+		width: 250px;
+		font-family: arial,sans-serif;
+		font-size: 18px;
+		color: #666;
+		text-decoration: none;
+		text-align: center;
+		border: 1px solid #b3b3b3;
+		border-radius: 3px;
+		background-color: #f1f1f1;
+		cursor: pointer;`;
+		
+		this.divUserExit.innerHTML = `<div nameId="btnUserExit" class="button_gradient_1" style='${btnLink} margin-top: 30px;'>Выйти</div>`;
+		
+		const btnUserExit = this.divUserExit.querySelector('[nameId="btnUserExit"]');		// кнопка дективация авторизации
+		btnUserExit.onmousedown = () => 
+		{ 
+			this.divSubsUser.innerHTML = '';
+			this.divSubsTariff.innerHTML = '';		
+			this.divUserExit.innerHTML = '';
+			this.userExit(); 
+		}		
 	}
 	
 	

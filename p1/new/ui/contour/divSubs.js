@@ -32,9 +32,9 @@ class WindDivSubs
 	async sendPost({month, token})
 	{
 		let sum = 0;
-		if(month === 1) sum = 500;
-		if(month === 3) sum = 1300;
-		if(month === 6) sum = 2000;		
+		if(month === 1) sum = 20;
+		if(month === 3) sum = 30;
+		if(month === 6) sum = 40;		
 		if(sum === 0) return;
 		
 		const url = infProject.path+'/components/payment.php';					
@@ -105,7 +105,7 @@ class WindDivSubs
 			<input type="hidden" name="receiver" value="41001994824535">
 			<input type="hidden" name="label" value="">
 			<input type="hidden" name="quickpay-form" value="button">
-			<input type="hidden" name="sum" value="20" data-type="number">							
+			<input type="hidden" name="sum" value="0" data-type="number">							
 		</form>`;
 
 		return html;
