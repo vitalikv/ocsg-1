@@ -65,15 +65,15 @@ class WindDivSubs
 	// кнопки для подписки
 	htmlForm()
 	{
-		const css1 = 'display: flex; flex-direction: column; color: #666;';
-		const css2 = 'font-size: 17px;';
-		const cssSubs = 'display: flex; flex-direction: column; align-items: center; justify-content: center; width: 120px; height: 120px; margin: 0 40px; background: #eaffd4; border: solid 1px #b3b3b3;';
-		const cssPrice = 'margin: auto; font-size: 14px; font-weight: bold;';
-		const cssBtn = 'margin: 0 0 20px 0; padding: 10px; cursor: pointer; user-select: none;';
+		const css1 = `display: flex; flex-direction: column; color: #666;`;
+		const css2 = `font-size: 15px;`;
+		const cssSubs = `display: flex; flex-direction: column; align-items: center; justify-content: center; width: 120px; height: 120px; margin: 0 20px; background: #eaffd4; border: solid 1px #b3b3b3;`;
+		const cssPrice = `margin: auto; font-size: 14px; font-weight: bold;`;
+		const cssBtn = `margin: 0 0 20px 0; padding: 10px; border: 1px solid #b3b3b3; cursor: pointer; user-select: none;`;
 		
 		const html =
 		`<div style="${css1}">
-			<div style="font-size: 17px; margin: 40px 0;">Подписка</div>
+			<div style="font-size: 17px; margin: 20px 0;">Подписка</div>
 			
 			<div style="display: flex;">
 				<div style="${cssSubs}">

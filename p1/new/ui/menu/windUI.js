@@ -27,6 +27,8 @@ class WindUI
 	
 	initEvent()
 	{
+		this.elMain.onmousedown = (e) => { this.closeWinOnWrap(e); }
+		
 		const btnMenu = document.querySelector('[nameId="btn_menu"]');
 		btnMenu.onmousedown = () => { this.showWin(); }
 		
@@ -77,7 +79,15 @@ class WindUI
 	{
 		this.elMain.style.display = 'none';
 	}
-	
+
+	// закрываем окно кликнув в пустоту (в серый фон)
+	closeWinOnWrap = (event) =>
+	{ 
+		if (this.elMain === event.target) 
+		{ 			 
+			this.closeWin()
+		}
+	}	
 
 	html()
 	{
@@ -90,29 +100,27 @@ class WindUI
 		bottom: 0;		
 		background-color: rgba(0, 0, 0, 0.5);
 		font-family: arial,sans-serif;
+		color: #666;
 		z-index: 100;`;
 		
 		const divWind = ` 
 		position: relative;
 		margin: auto;
-		width: 95%;
-		height: 95%;			
+		width: 900px;
+		height: 600px;			
 		background: white;
-		border-radius: 8px;
 		box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.5);
-		display: -webkit-box;
 		display: flex;
 		flex-direction: column;`;
 		
 		const btnClose = `
 		position: absolute;
-		width: 40px;
-		height: 40px;
-		top: 15px;
-		right: 20px;
+		width: 20px;
+		height: 20px;
+		top: 10px;
+		right: 10px;
 		transform: rotate(-45deg);
-		font-family: arial,sans-serif;
-		font-size: 70px;
+		font-size: 30px;
 		text-align: center;
 		text-decoration: none;
 		line-height: 0.6em;
@@ -121,10 +129,8 @@ class WindUI
 		
 
 		const header = `
-		height: 70px;
-		min-height: 70px;
+		height: 40px;
 		background: #e8e8e8;
-		border-radius: 8px 8px 0 0;
 		border-bottom: 2px solid #f2f2f2;
 		display: flex;
 		align-items: center;
@@ -138,9 +144,8 @@ class WindUI
 		justify-content: center;
 		height: 29px;
 		margin-top: 0.3em;
-		padding-left: 60px;
-		font-family: arial,sans-serif;
-		font-size: 24px;
+		padding-left: 20px;
+		font-size: 18px;
 		color: #666;`;
 
 		const body = `
@@ -154,7 +159,6 @@ class WindUI
 		height: 10px;
 		min-height: 10px;
 		background: #e8e8e8;
-		border-radius: 0 0 8px 8px;
 		border-top: 2px solid #f2f2f2;
 		display: flex;
 		align-items: center;
@@ -227,16 +231,15 @@ class WindUI
 		flex-direction: column;
 		position: relative;		
 		margin: 35px auto;
-		width: 300px;	
-		height: 280px;
-		font-size: 18px;
+		width: 150px;	
+		height: 150px;
+		font-size: 14px;
 		color: #666;
 		text-decoration: none;
 		text-align:  center;			
 		border: 1px solid #b3b3b3; 
-		border-radius: 6px;
 		box-shadow: 0px 0px 2px #bababa, inset 0px 0px 1px #fff;
-		background-color:#f1f1f1;
+		background:#f1f1f1;
 		cursor: pointer;`;
 
 		

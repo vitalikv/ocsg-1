@@ -75,6 +75,7 @@ class StartWind
 		top: 0;
 		bottom: 0;		
 		background-color: rgba(0, 0, 0, 0.5);
+		font-family: arial,sans-serif;
 		z-index: 100;`;
 		
 		const divWind = ` 
@@ -84,7 +85,6 @@ class StartWind
 		height: 500px;		
 		background: white;
 		box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.5);
-		display: -webkit-box;
 		display: flex;
 		flex-direction: column;`;
 		
@@ -94,8 +94,7 @@ class StartWind
 		height: 20px;
 		top: 10px;
 		right: 10px;
-		transform: rotate(-45deg);
-		font-family: arial,sans-serif;
+		transform: rotate(-45deg);		
 		font-size: 30px;
 		text-align: center;
 		text-decoration: none;
@@ -122,7 +121,6 @@ class StartWind
 		height: 29px;
 		margin-top: 0.3em;
 		padding-left: 20px;
-		font-family: arial,sans-serif;
 		font-size: 18px;
 		color: #666;`;
 
@@ -190,7 +188,6 @@ class StartWind
 		margin: auto 5px;
 		width: 150px;
 		height: 150px;
-		font-family: arial,sans-serif;
 		font-size: 16px;
 		color: #666;
 		text-decoration: none;
@@ -222,7 +219,6 @@ class StartWind
 		margin: auto 5px;
 		width: 150px;
 		height: 150px;
-		font-family: arial,sans-serif;
 		font-size: 16px;
 		color: #666;
 		text-decoration: none;
@@ -261,7 +257,6 @@ class StartWind
 		margin: 0 0 55px 5px;
 		width: 150px;
 		height: 30px;
-		font-family: arial,sans-serif;
 		font-size: 16px;
 		color: #666;
 		text-decoration: none;

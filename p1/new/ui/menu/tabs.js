@@ -44,16 +44,14 @@ class WindTabs
 		
 		const btnLink = ` 
 		margin: 5px 20px;
-		padding: 10px 0;
-		width: 250px;
-		font-family: arial,sans-serif;
-		font-size: 18px;
+		padding: 5px 0;
+		width: 150px;
+		font-size: 15px;
 		color: #666;
 		text-decoration: none;
 		text-align: center;
 		border: 1px solid #b3b3b3;
-		border-radius: 3px;
-		background-color: #f1f1f1;
+		background: #f1f1f1;
 		cursor: pointer;`;		
 		
 		

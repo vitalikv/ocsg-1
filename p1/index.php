@@ -146,12 +146,12 @@
 	<script src="<?=$path?>new/tools/myGizmo.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myScale.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/startWind.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/contour/windUI.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/contour/tabs.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/contour/divAccount.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/contour/divProjectSave.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/contour/divProjectLoad.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/contour/divSubs.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/menu/windUI.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/menu/tabs.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/menu/divAccount.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/menu/divProjectSave.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/menu/divProjectLoad.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/menu/divSubs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/switchCamera.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabLevel.js?<?=$vrs?>"></script>
