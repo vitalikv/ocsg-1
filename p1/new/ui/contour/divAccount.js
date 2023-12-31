@@ -7,6 +7,8 @@ class WindDivAccount
 	elReg;
 	elResetPass;
 	elUser;
+	divSubsUser;
+	divSubsTariff;
 	
 	init()
 	{
@@ -16,6 +18,8 @@ class WindDivAccount
 		this.elReg = this.crWindReg();
 		this.elResetPass = this.crWindResetPass();
 		this.elUser = this.crWindUser();
+		this.divSubsUser = this.elUser.querySelector('[nameId="divSubsUser"]');
+		this.divSubsTariff = this.elUser.querySelector('[nameId="divSubsTariff"]');
 		
 		this.addElemes();
 		this.initEventElem();
@@ -265,6 +269,10 @@ class WindDivAccount
 			<div style="display: flex; flex-direction: column; align-items: center; ${css1} ${css2} font-size: 17px; text-align:center;">
 				<div>Вы авторизовались.<br><br>Теперь вам доступно сохранение и загрузка проектов.</div> 
 				
+				<div nameId="divSubsUser"></div>
+				
+				<div nameId="divSubsTariff"></div>
+				
 				<div style="margin-top: 30px;">
 					<div nameId="btnUserExit" style='${btnLink}'>Выйти</div>
 				</div>				
@@ -499,6 +507,7 @@ class WindDivAccount
 					infProject.user.pass = data.info.pass;
 					infProject.user.status = data.info.status;
 					const token = data.info.token;
+					const subs = data.subs;
 
 					this.elReg.style.display = 'none';
 					this.elUser.style.display = '';
@@ -506,7 +515,9 @@ class WindDivAccount
 		
 					windUI.enterUser({id: infProject.user.id});
 					
-					myCookie.setCookie({token});
+					//myCookie.setCookie({token});
+					
+					this.crDivSubsUser({subs, token});
 				}
 				else
 				{
@@ -653,10 +664,28 @@ class WindDivAccount
 	}
 	
 	
+	// если у пользователя была или есть подписка отображаем кол-во дней
+	crDivSubsUser({subs, token})
+	{
+		this.divSubsUser.innerHTML = '';
+		this.divSubsTariff.innerHTML = '';
+		
+		if(!subs) return;
+		if(!token) return;
+		
+		const days = subs.days;
+		
+		this.divSubsUser.innerHTML = `<div style="margin-top: 40px;">Подписка оформлена на: ${days} (дней)</div>`;
+		
+		const divTariff = windDivSubs.crDivSubsTariff({token});
+		this.divSubsTariff.append(divTariff); 
+	}
+	
+	
 	// дективация авторизации
 	userExit()
 	{
-		myCookie.deleteCookie();
+		//myCookie.deleteCookie();
 		this.resetInfoUser();
 		
 		this.elUser.style.display = 'none';

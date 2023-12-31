@@ -46,6 +46,7 @@ new/ui/contour/tabs.js
 new/ui/contour/divAccount.js
 new/ui/contour/divProjectSave.js
 new/ui/contour/divProjectLoad.js
+new/ui/contour/divSubs.js
 new/ui/right-panel/tabs.js
 new/ui/right-panel/tabLevel.js
 new/ui/right-panel/divLevelVisible.js

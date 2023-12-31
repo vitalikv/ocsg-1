@@ -350,10 +350,6 @@ function loadUrlFile()
 	
 	if(json)
 	{
-		//url = 'https://files.planoplan.com/upload/catalog/lot/201810/40a5dafd.unity3d';
-		//url = 'https://files.planoplan.com/upload/catalog/lot/201903/bf730220.unity3d';	
-		//url = 'https://files.planoplan.com/upload/catalog/lot/201803/04bea56c.unity3d';	
-		
 		var loader = new THREE.ObjectLoader();
 		loader.load( url, function ( obj ) 						
 		{ 			

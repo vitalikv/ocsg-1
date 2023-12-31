@@ -1166,6 +1166,7 @@ let windUI;
 let windDivAccount;
 let windDivProjectLoad;
 let windDivProjectSave;
+let windDivSubs;
 let tabs;
 let tabLevel;
 let divLevelVisible;
@@ -1199,6 +1200,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	windDivAccount = new WindDivAccount();
 	windDivProjectLoad = new WindDivProjectLoad();
 	windDivProjectSave = new WindDivProjectSave();
+	windDivSubs = new WindDivSubs();
 	windDivAccount.init();
 	windDivProjectLoad.init();
 	windDivProjectSave.init();

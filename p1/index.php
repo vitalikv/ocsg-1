@@ -151,6 +151,7 @@
 	<script src="<?=$path?>new/ui/contour/divAccount.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/contour/divProjectSave.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/contour/divProjectLoad.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/contour/divSubs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/switchCamera.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabLevel.js?<?=$vrs?>"></script>

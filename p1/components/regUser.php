@@ -19,7 +19,7 @@ if(!preg_match("/^[a-z0-9]{4,20}$/i", $pass)) { exit; }
 
 
 
-// вход нового пользователя
+// вход пользователя
 if($type == 'reg_1')
 {
 	$sql = "SELECT * FROM user WHERE mail = :mail AND pass = :pass LIMIT 1";
@@ -40,7 +40,20 @@ if($type == 'reg_1')
 		if($res['active'])
 		{
 			$inf['success'] = true;
-			$inf['info'] = $res;			
+			$inf['info'] = $res;
+			
+			
+			$sql = "SELECT * FROM subscription WHERE user_id = :user_id LIMIT 1";
+			$r = $db->prepare($sql);
+			$r->bindValue(':user_id', $res['id'], PDO::PARAM_INT);
+			$r->execute();
+			$res2 = $r->fetch(PDO::FETCH_ASSOC);
+
+			if($res2)
+			{
+				$inf['subs'] = [];
+				$inf['subs']['days'] = $res2['days'];
+			}			
 		}
 		else
 		{
