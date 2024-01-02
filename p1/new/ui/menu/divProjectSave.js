@@ -27,14 +27,19 @@ class WindDivProjectSave
 		align-items: center;
 		justify-content: center;
 		height: 50px;
-		background-color:#f1f1f1;
 		font-size: 17px;
 		color: #666;`;
+
+		const cssInfo = 
+		`display: grid; 
+		grid-template-columns: auto auto auto;
+		justify-content: center;
+		align-items: center;`;
 		
 		const html = 
-		`<div wwm_1="button_load_1" style="display: none;"> 
+		`<div style="display: none;"> 
 			<div style="${cssHeader}">Сохранить</div>
-			<div nameId="infoReg"></div>
+			<div nameId="infoReg" style="${cssInfo}"></div>
 		</div>`;
 
 		return html;

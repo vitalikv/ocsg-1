@@ -1163,9 +1163,12 @@ function isCheckExsistFunction(functionToCheck)
 
 let docReady = false;
 let windUI;
+let windTabs;
+let windDivAbout;
 let windDivAccount;
 let windDivProjectLoad;
 let windDivProjectSave;
+let windDivProjectDemo;
 let windDivSubs;
 let tabs;
 let tabLevel;
@@ -1197,13 +1200,19 @@ document.addEventListener("DOMContentLoaded", ()=>
 	docReady = true;
 
 	windUI = new WindUI();
+	windTabs = new WindTabs();
+	windDivAbout = new WindDivAbout();
 	windDivAccount = new WindDivAccount();
 	windDivProjectLoad = new WindDivProjectLoad();
 	windDivProjectSave = new WindDivProjectSave();
+	windDivProjectDemo = new WindDivProjectDemo();
 	windDivSubs = new WindDivSubs();
+	windTabs.init();
+	windDivAbout.init();
 	windDivAccount.init();
 	windDivProjectLoad.init();
 	windDivProjectSave.init();
+	windDivProjectDemo.init();
 	windUI.init();
 	
 	myCookie = new MyCookie();
@@ -1237,7 +1246,8 @@ document.addEventListener("DOMContentLoaded", ()=>
 	startProject = new StartProject();
 	startProject.init();
 	
-	if(startProject.detectShowStartWind()) startWind = new StartWind();	
+	//if(startProject.detectShowStartWind()) startWind = new StartWind();
+	if(startProject.detectShowStartWind()) windUI.showWin();
 
 	animate();
 	renderCamera();	

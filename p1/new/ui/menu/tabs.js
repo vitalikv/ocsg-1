@@ -3,13 +3,15 @@
 class WindTabs 
 {
 	container;
+	btnInfo;
 	btnAccount;
 	btnLoad;
 	btnSave;
+	btnDemo;
 	btnReset;
 	
 	
-	constructor()
+	init()
 	{
 		this.crTabs();
 		this.getBtn();
@@ -25,16 +27,55 @@ class WindTabs
 	
 	getBtn()
 	{
+		this.btnInfo = this.container.querySelector('[nameId="btnInfo"]');
 		this.btnAccount = this.container.querySelector('[nameId="btnAccount"]');
 		this.btnLoad = this.container.querySelector('[nameId="btnLoad"]');
 		this.btnSave = this.container.querySelector('[nameId="btnSave"]');
+		this.btnDemo = this.container.querySelector('[nameId="btnDemo"]');
 		this.btnReset = this.container.querySelector('[nameId="btnReset"]');
 	}
 	
 	initEvent()
 	{
-		this.btnReset.onmousedown = () => { resetScene(); windUI.closeWin(); }
+		
 	}
+	
+	initEvent()
+	{
+		this.btnInfo.onmousedown = () => 
+		{ 
+			windUI.hideContainers();
+			windDivAbout.showVideo();
+			windDivAbout.container.style.display = ''; 
+		}		
+		this.btnAccount.onmousedown = () => 
+		{ 
+			windUI.hideContainers();
+			windDivAccount.switchRegPass({type: 'reg'});			
+			windDivAccount.container.style.display = '';			
+		}
+		this.btnSave.onmousedown = () => 
+		{ 
+			windUI.hideContainers(); 
+			windDivProjectSave.container.style.display = ''; 
+		}
+		this.btnLoad.onmousedown = () => 
+		{ 
+			windUI.hideContainers(); 
+			windDivProjectLoad.container.style.display = ''; 
+		}
+		this.btnDemo.onmousedown = () => 
+		{ 
+			windUI.hideContainers();
+			windDivProjectDemo.showDivDemo();
+			windDivProjectDemo.container.style.display = ''; 
+		}
+		this.btnReset.onmousedown = () => 
+		{ 
+			resetScene(); 
+			windUI.closeWin(); 
+		}
+	}	
 
 	html()
 	{
@@ -52,17 +93,19 @@ class WindTabs
 		text-align: center;
 		border: 1px solid #b3b3b3;
 		background: #f1f1f1;
-		cursor: pointer;`;		
+		cursor: pointer;
+		user-select: none;`;		
 		
 		
 		const html = 
-		`<div style='${wrapTabs}'>
-			<div nameId="btnAccount" style='${btnLink}'>Учетная запись</div>
-			<div nameId="btnLoad" style='${btnLink}'>Загрузить</div>
-			<div nameId="btnSave" style='${btnLink}'>Сохранить</div>
-			
-			<div nameId="btnReset" style='${btnLink} margin-top: 30px;'>Пустой проект</div>
-			<a href="/" style='${btnLink}'>На главную</a>
+		`<div style="${wrapTabs}">
+			<a href="/" style="${btnLink} margin-top: 20px;">На главную</a>
+			<div nameId="btnInfo" style="${btnLink}">О программе</div>
+			<div nameId="btnAccount" style="${btnLink}">Учетная запись</div>
+			<div nameId="btnLoad" style="${btnLink}">Загрузить</div>
+			<div nameId="btnSave" style="${btnLink}">Сохранить</div>
+			<div nameId="btnDemo" style="${btnLink}">Демо проекты</div>			
+			<div nameId="btnReset" style="${btnLink}">Пустой проект</div>			
 		</div>`;
 
 		return html;

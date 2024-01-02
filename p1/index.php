@@ -148,9 +148,11 @@
 	<script src="<?=$path?>new/ui/startWind.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/windUI.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/tabs.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/menu/divAbout.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/divAccount.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/divProjectSave.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/divProjectLoad.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/menu/divProjectDemo.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/divSubs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/switchCamera.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabs.js?<?=$vrs?>"></script>

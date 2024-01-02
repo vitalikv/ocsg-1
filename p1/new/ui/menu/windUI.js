@@ -3,9 +3,8 @@
 class WindUI 
 {
 	elMain;
-	windTabs;
-	
-	
+
+
 	init()
 	{
 		let div = document.createElement('div');
@@ -15,12 +14,14 @@ class WindUI
 		
 		const elBody = this.elMain.querySelector('[nameId="body"]');
 		
-		this.windTabs = new WindTabs();
-		elBody.children[0].append(this.windTabs.container);		
 		
+		elBody.children[0].append(windTabs.container);		
+		
+		elBody.children[1].append(windDivAbout.container);
 		elBody.children[1].append(windDivAccount.container);
-		elBody.children[1].append(windDivProjectSave.container);
 		elBody.children[1].append(windDivProjectLoad.container);
+		elBody.children[1].append(windDivProjectSave.container);		
+		elBody.children[1].append(windDivProjectDemo.container);
 		
 		this.initEvent();
 	}
@@ -33,16 +34,7 @@ class WindUI
 		btnMenu.onmousedown = () => { this.showWin(); }
 		
 		const btnClose = this.elMain.querySelector('[nameId="button_close_main_menu"]');
-		btnClose.onmousedown = () => { this.closeWin(); }
-		
-		this.windTabs.btnAccount.onmousedown = () => 
-		{ 
-			this.hideContainers();
-			windDivAccount.switchRegPass({type: 'reg'});			
-			windDivAccount.container.style.display = '';			
-		}
-		this.windTabs.btnSave.onmousedown = () => { this.hideContainers(); windDivProjectSave.container.style.display = ''; }
-		this.windTabs.btnLoad.onmousedown = () => { this.showTabProjectLoad(); }				
+		btnClose.onmousedown = () => { this.closeWin(); }			
 	}
 	
 	showTabProjectLoad()
@@ -54,9 +46,11 @@ class WindUI
 	// скрываем все блоки к контентом
 	hideContainers()
 	{
+		windDivAbout.container.style.display = 'none';
 		windDivAccount.container.style.display = 'none';
 		windDivProjectSave.container.style.display = 'none';
 		windDivProjectLoad.container.style.display = 'none';
+		windDivProjectDemo.container.style.display = 'none';
 	}
 	
 	
@@ -227,40 +221,40 @@ class WindUI
 		const css1 = 
 		`display: flex; 
 		align-items: center; 
-		justify-content: center;
+		justify-content: space-between;
 		flex-direction: column;
 		position: relative;		
-		margin: 35px auto;
+		margin: 35px;
 		width: 150px;	
 		height: 150px;
 		font-size: 14px;
 		color: #666;
 		text-decoration: none;
-		text-align:  center;			
+		text-align: center;			
 		border: 1px solid #b3b3b3; 
 		box-shadow: 0px 0px 2px #bababa, inset 0px 0px 1px #fff;
 		background:#f1f1f1;
 		cursor: pointer;`;
 
+		const cssName = `margin: 20px auto 0 auto;`;
+		const cssBtn = `margin: 0 auto 20px auto; padding: 10px; border: 1px solid #b3b3b3; cursor: pointer; user-select: none;`;
 		
 		for(let i = 0; i < arr.length; i++)
 		{
-			let src_1 = `<div><div>${arr[i].name}</div><div style='margin-top: 10px;'>сохранить</div></div>`;
-			let src_2 = `<div><div>${arr[i].name}</div><div style='margin-top: 10px;'>загрузить</div></div>`;
+			let src_1 = `<div style="${cssName}">${arr[i].name}</div><div class="button_gradient_1" style="${cssBtn}">сохранить</div>`;
+			let src_2 = `<div style="${cssName}">${arr[i].name}</div><div class="button_gradient_1" style="${cssBtn}">загрузить</div>`;
 			
 			if(arr[i].preview) 
 			{
-				src_1 = `			 
-				<div style='margin: auto;'>${arr[i].name}</div>
+				src_1 = 			 
+				`<div style='margin: auto;'>${arr[i].name}</div>
 				<img src="${arr[i].preview}" style="display: block; width: 100%; margin: auto; -o-object-fit: contain; object-fit: contain;">
-				<div style='margin: auto;'>сохранить</div>
-				`;
+				<div style='margin: auto;'>сохранить</div>`;
 				
-				src_2 = `
-				<div style='margin: auto;'>${arr[i].name}</div>
+				src_2 = 
+				`<div style='margin: auto;'>${arr[i].name}</div>
 				<img src="${arr[i].preview}" style="display: block; width: 100%; margin: auto; -o-object-fit: contain; object-fit: contain;"> 			
-				<div style='margin: auto;'>загрузить</div>
-				`;			
+				<div style='margin: auto;'>загрузить</div>`;			
 			}
 
 
