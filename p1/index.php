@@ -145,7 +145,6 @@
 	<script src="<?=$path?>new/tools/myPivot.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myGizmo.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myScale.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/startWind.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/windUI.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/tabs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/divAbout.js?<?=$vrs?>"></script>

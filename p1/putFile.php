@@ -39,7 +39,6 @@ new/ghostLevel.js
 new/startProject.js
 new/csgBox.js
 new/myTexture.js
-new/ui/startWind.js
 new/ui/switchCamera.js
 new/ui/menu/windUI.js
 new/ui/menu/tabs.js

@@ -1176,7 +1176,6 @@ let divLevelVisible;
 let tabPlan;
 let tabObject;
 let myCatalogList;
-let startWind;
 
 let myCookie;
 let myTexture;
@@ -1246,7 +1245,6 @@ document.addEventListener("DOMContentLoaded", ()=>
 	startProject = new StartProject();
 	startProject.init();
 	
-	//if(startProject.detectShowStartWind()) startWind = new StartWind();
 	if(startProject.detectShowStartWind()) windUI.showWin();
 
 	animate();
