@@ -24,6 +24,10 @@ class WindUI
 		elBody.children[1].append(windDivProjectDemo.container);
 		
 		this.initEvent();
+		
+		this.hideContainers();
+		windDivProjectDemo.showDivDemo();
+		windDivProjectDemo.container.style.display = ''; 	
 	}
 	
 	initEvent()
