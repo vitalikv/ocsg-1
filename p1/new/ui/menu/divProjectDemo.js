@@ -96,11 +96,13 @@ class WindDivProjectDemo
 		const btnPr2 = this.wrapDemo.querySelector('[nameId="strPr_2"]');
 		const btnPr3 = this.wrapDemo.querySelector('[nameId="strPr_3"]');
 		const btnPr4 = this.wrapDemo.querySelector('[nameId="strPr_4"]');
+		const btnPr5 = this.wrapDemo.querySelector('[nameId="strPr_5"]');
 		
 		btnPr1.onmousedown = () => { windUI.closeWin(); loadFile({json: 'demo/1.json'}); }
 		btnPr2.onmousedown = () => { windUI.closeWin(); loadFile({json: 'demo/2.json'}); }
 		btnPr3.onmousedown = () => { windUI.closeWin(); loadFile({json: 'demo/3.json'}); }
-		btnPr4.onmousedown = () => { windUI.closeWin(); loadFile({json: 'demo/4.json'}); }		
+		btnPr4.onmousedown = () => { windUI.closeWin(); loadFile({json: 'demo/4.json'}); }
+		btnPr5.onmousedown = () => { windUI.closeWin(); loadFile({json: 'demo/5.json'}); }
 	}	
 
 	// показываем демо проекты
@@ -113,12 +115,14 @@ class WindDivProjectDemo
 			const htmlPr_2 = this.html_2({text: 'Одноэтажный дом', nameId: 'strPr_2', src: 'demo/demo_2.jpg'});
 			const htmlPr_3 = this.html_2({text: 'Двухэтажный дом', nameId: 'strPr_3', src: 'demo/demo_3.jpg'});
 			const htmlPr_4 = this.html_2({text: 'Трехэтажный дом', nameId: 'strPr_4', src: 'demo/demo_4.jpg'});											
+			const htmlPr_5 = this.html_2({text: 'Квартира', nameId: 'strPr_5', src: 'demo/demo_5.jpg'});
 			
 			this.wrapDemo.innerHTML = 
 			`${htmlPr_1}
 			${htmlPr_2}
 			${htmlPr_3}
-			${htmlPr_4}`;
+			${htmlPr_4}
+			${htmlPr_5}`;
 
 			this.initEvent();
 		}		

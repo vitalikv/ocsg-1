@@ -12,7 +12,7 @@ class DivPanelTop
 		this.divP1 = this.crDivP1();
 		wrapP1.append(this.divP1);
 		
-		if(1===1)
+		if(1===2)
 		{
 			this.divP2 = this.crDivP2();
 			wrapP1.append(this.divP2);

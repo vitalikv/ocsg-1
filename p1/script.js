@@ -1229,7 +1229,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	startProject = new StartProject();
 	startProject.init();
 	
-	//if(startProject.detectShowStartWind()) windUI.showWin();
+	if(startProject.detectShowStartWind()) windUI.showWin();
 	
 	animate();
 	renderCamera();	

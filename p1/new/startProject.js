@@ -26,11 +26,12 @@ class StartProject
 			if(demo && Number(demo) === 2) this.name = 'demo 2';
 			if(demo && Number(demo) === 3) this.name = 'demo 3';
 			if(demo && Number(demo) === 4) this.name = 'demo 4';
+			if(demo && Number(demo) === 5) this.name = 'demo 5';
 			
 			console.log(888, demo, paramsString, this.name);
 		}
 		
-		if(this.name === 'demo 1' || this.name === 'demo 2' || this.name === 'demo 3' || this.name === 'demo 4')
+		if(this.name === 'demo 1' || this.name === 'demo 2' || this.name === 'demo 3' || this.name === 'demo 4' || this.name === 'demo 5')
 		{
 			divLevelVisible.switchShowAllLevel({value: true});
 			divLevelVisible.switchWallTransparent({value: false});
@@ -40,6 +41,7 @@ class StartProject
 			if(this.name === 'demo 2') nameFile = '2.json';
 			if(this.name === 'demo 3') nameFile = '3.json';
 			if(this.name === 'demo 4') nameFile = '4.json';
+			if(this.name === 'demo 5') nameFile = '5.json';
 			
 			infProject.settings.load.file = 'demo/' + nameFile;
 			infProject.settings.save.file = 'demo/' + nameFile;
@@ -56,7 +58,7 @@ class StartProject
 		myCameraOrbit.centerCamera2D({arr: obj_point});
 		
 			
-		if(this.name === 'demo 1' || this.name === 'demo 2' || this.name === 'demo 3' || this.name === 'demo 4')
+		if(this.name === 'demo 1' || this.name === 'demo 2' || this.name === 'demo 3' || this.name === 'demo 4' || this.name === 'demo 5')
 		{
 			if(this.name === 'demo 1')
 			{
@@ -84,6 +86,12 @@ class StartProject
 				const posCam = new THREE.Vector3(-10.150758808809238, 7.476452542725171, -9.096691766295946);
 				const posTarget = new THREE.Vector3(2.0579833473162843, 0, 3.485431627682769);
 				myCameraOrbit.setStartPosRot3D({posCam, posTarget});									
+			}
+			if(this.name === 'demo 5')
+			{
+				const posCam = new THREE.Vector3(-5.423621210213024, 8.416384589708008, 10.811106485572816);
+				const posTarget = new THREE.Vector3(-0.7498043105489184, -0.5977752688080544, 0);
+				myCameraOrbit.setStartPosRot3D({posCam, posTarget});				
 			}			
 			
 			switchCamera.clickOnBtn2D3D('3D');				
@@ -98,7 +106,7 @@ class StartProject
 	detectShowStartWind()
 	{
 		let show = true;
-		const listPr = ['demo 1', 'demo 2', 'demo 3', 'demo 4'];
+		const listPr = ['demo 1', 'demo 2', 'demo 3', 'demo 4', 'demo 5'];
 		
 		for(let i = 0; i < listPr.length; i++)
 		{
