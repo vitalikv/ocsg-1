@@ -161,6 +161,7 @@
 	<script src="<?=$path?>new/ui/menu/divProjectDemo.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/divSubs.js?<?=$vrs?>"></script>	
 	<script src="<?=$path?>new/ui/right-panel/myPanelR.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/plan/myPanelPlan.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabLevel.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/divLevelVisible.js?<?=$vrs?>"></script>

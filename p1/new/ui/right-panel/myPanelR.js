@@ -3,8 +3,6 @@
 class MyPanelR
 {
 	container;
-	divPanelPlan;
-	divPanelWF;
 	btnShow;
 	btnClose;
 	
@@ -12,8 +10,6 @@ class MyPanelR
 	init()
 	{
 		this.container = document.querySelector('[nameId="panelR"]');
-		this.divPanelPlan = this.container.querySelector('[nameId="panelPlan"]');
-		this.divPanelWF = this.container.querySelector('[nameId="panelWF"]');
 		this.btnShow = document.querySelector('[nameId="button_show_panel_catalog"]');
 		this.btnClose = this.container.querySelector('[nameId="button_catalog_close"]');
 		

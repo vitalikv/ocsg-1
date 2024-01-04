@@ -5,6 +5,10 @@ class MyPanelWF
 	container;
 	divPanel;
 	
+	constructor()
+	{
+		this.init();
+	}
 	
 	init()
 	{

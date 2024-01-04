@@ -145,16 +145,12 @@ class MyPanelTop
 		this.divP2 = this.crDivP2();
 		this.container.append(this.divP2);
 		
-		myPanelWF.init();
-		
-		const divPanelPlan = document.querySelector('[nameId="panelPlan"]');
-		
 		const btnPl = this.divP2.querySelector('[nameId="plan"]');
 		const btnOt = this.divP2.querySelector('[nameId="otop"]');
 		const btnWF = this.divP2.querySelector('[nameId="wf"]');
 		//btn.onmousedown = () => { clickInterface({button: 'add_pointWf'}); }
-		btnPl.onmousedown = () => { myPanelWF.showHidePanel({show: false}); divPanelPlan.style.display = ''; }
-		btnWF.onmousedown = () => { divPanelPlan.style.display = 'none'; myPanelWF.showHidePanel({show: true}); }
+		btnPl.onmousedown = () => { myPanelWF.showHidePanel({show: false}); myPanelPlan.showHidePanel({show: true}); }
+		btnWF.onmousedown = () => { myPanelPlan.showHidePanel({show: false}); myPanelWF.showHidePanel({show: true}); }
 	}
 }
 

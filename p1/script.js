@@ -1147,6 +1147,7 @@ let windDivProjectSave;
 let windDivProjectDemo;
 let windDivSubs;
 let myPanelR;
+let myPanelPlan;
 let tabs;
 let tabLevel;
 let divLevelVisible;
@@ -1168,9 +1169,11 @@ let myLevels;
 let myToolPG;
 let myToolPG_UI;
 let myHouse;
+let clRoof;
+let myWarmFloor;
 let startProject;
 
-let myWarmFloor;
+
 
 
 document.addEventListener("DOMContentLoaded", ()=>
@@ -1196,9 +1199,8 @@ document.addEventListener("DOMContentLoaded", ()=>
 	windDivProjectDemo.init();
 	windUI.init();
 	
-	myCookie = new MyCookie();
 	
-	myTexture = new MyTexture();
+	myCookie = new MyCookie();
 	
 	myManagerClick = new MyManagerClick();
 	myMouse = new MyMouse({container: containerF, scene});
@@ -1210,6 +1212,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myLevels = new MyLevels();
 
 	myPanelR = new MyPanelR();
+	myPanelPlan = new MyPanelPlan();
 	tabs = new Tabs();
 	tabLevel = new TabLevel();
 	divLevelVisible = new DivLevelVisible({showAllLevel: true, wallTransparent: false});
@@ -1217,18 +1220,17 @@ document.addEventListener("DOMContentLoaded", ()=>
 	tabPlan = new TabPlan();
 	tabObject = new TabObject();
 	myCatalogList = new MyCatalogList();
-	switchCamera = new SwitchCamera();
-	
-	myPanelWF = new MyPanelWF();
-	myPanelWF.init();
-	
+	switchCamera = new SwitchCamera();	
+	myPanelWF = new MyPanelWF();	
 	myPanelR.init();
 	
+	myTexture = new MyTexture();
 	
 	myToolPG = new MyToolPG();
 	myToolPG_UI = new MyToolPG_UI({container: containerF});
 	
 	myHouse = new MyHouse();
+	clRoof = new Roof();
 	myWarmFloor = new MyWarmFloor();
 	
 	startProject = new StartProject();

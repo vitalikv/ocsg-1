@@ -233,7 +233,7 @@ class Roof
 	}
 }
 
-let clRoof = new Roof();
+
 
 
 
