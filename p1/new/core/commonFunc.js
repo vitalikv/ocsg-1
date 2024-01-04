@@ -142,7 +142,11 @@ function clickInterface(cdm)
 		{
 			clickO.button = cdm.button;
 			clickO.options = cdm.value;
-		}					
+		}
+		else if(cdm.button === 'add_pointWf')
+		{
+			clickO.button = cdm.button;
+		}
 	}
 
 }	

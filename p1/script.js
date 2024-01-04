@@ -1192,6 +1192,7 @@ let myToolPG_UI;
 let myHouse;
 let startProject;
 
+let myWarmFloor;
 
 
 document.addEventListener("DOMContentLoaded", ()=>
@@ -1241,12 +1242,13 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myToolPG_UI = new MyToolPG_UI({container: containerF});
 	
 	myHouse = new MyHouse();
+	myWarmFloor = new MyWarmFloor();
 	
 	startProject = new StartProject();
 	startProject.init();
 	
-	if(startProject.detectShowStartWind()) windUI.showWin();
-
+	//if(startProject.detectShowStartWind()) windUI.showWin();
+	
 	animate();
 	renderCamera();	
 });

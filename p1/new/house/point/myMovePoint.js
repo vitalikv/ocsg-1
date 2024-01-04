@@ -17,7 +17,7 @@ class MyMovePoint
 	{
 		if(!this.isTypeToolPoint) return;
 		
-		obj = this.sObj
+		obj = this.sObj;
 		
 		if(obj.w.length == 0){ deleteOnePoint(obj); }  
 		else 

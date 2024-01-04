@@ -54,6 +54,10 @@ class MyMouse
 			{
 				deleteObjectPop({obj: obj, undoRedo: false}); 
 			}
+			else if(obj.userData.tag === 'pointWf' && myWarmFloor.myPointWfMove.isTypeToolPoint) 
+			{ 
+				myWarmFloor.myPointWfMove.clickRight({obj}); 
+			}			
 			else
 			{
 				done = false;
@@ -140,7 +144,19 @@ class MyMouse
 			return;
 		}		
 		
-		
+		// к курсору приклеин toolPoint
+		if(this.selectedObj && this.selectedObj.userData.tag === 'pointWf' && myWarmFloor.myPointWfMove.isTypeToolPoint) 
+		{ 			
+			this.selectedObj = myWarmFloor.myPointWfMove.mousedown({event, obj: this.selectedObj, toolPoint: true});
+			
+			if(!this.selectedObj)
+			{
+				this.clearClick();
+				this.setMouseStop(false);				
+			}
+			
+			return;
+		}		
 		
 		
 		this.isMove = false;
@@ -291,7 +307,8 @@ class MyMouse
 				myHouse.myRoofMove.mousedown({event, obj});
 			}		
 			else if(clickO.button == 'add_lotid')
-			{clickO.button = null;
+			{	
+				clickO.button = null;
 				obj = await loadObjServer({lotid: clickO.options, cursor: true});
 				intersects = rayIntersect( event, planeMath, 'one' );		
 				if(intersects.length === 0) return;					
@@ -299,7 +316,13 @@ class MyMouse
 				obj.position.copy(intersects[0].point);				
 				myHouse.myObjMove.mousedown({event, obj});
 			}
-
+			else if(clickO.button == 'add_pointWf')
+			{
+				obj = myWarmFloor.myPointWf.crPoint({pos: intersects[0].point});
+				myWarmFloor.myPointWfMove.mousedown({event, obj, toolPoint: true});
+			}
+			
+			
 			if(obj) 
 			{
 				this.selectedObj = obj;

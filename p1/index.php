@@ -199,6 +199,11 @@
 	<script src="<?=$path?>new/house/obj/myObjPrimitives.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/obj/myObjMove.js?<?=$vrs?>"></script>
 	
+	<script src="<?=$path?>new/warmFloor/myWarmFloor.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/point/myPointWf.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/point/myPointWfMove.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/tube/myTubeWf.js?<?=$vrs?>"></script>
+	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		
 		

@@ -90,6 +90,10 @@ new/house/obj/myObjUI.js
 new/house/obj/myObjAction.js
 new/house/obj/myObjPrimitives.js
 new/house/obj/myObjMove.js
+new/warmFloor/myWarmFloor.js
+new/warmFloor/point/myPointWf.js
+new/warmFloor/point/myPointWfMove.js
+new/warmFloor/tube/myTubeWf.js
 ';
 
 $arrF = array();

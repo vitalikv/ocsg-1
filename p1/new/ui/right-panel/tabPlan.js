@@ -10,6 +10,8 @@ class TabPlan
 		this.init();
 		
 		this.startSetInputValue();
+		
+		this.addBtnTube();
 	}
 	
 	init()
@@ -63,7 +65,36 @@ class TabPlan
 		this.inputs.roof.z.value = infProject.settings.roof.length;	
 	}
 
+	addBtnTube()
+	{
+		const cssBtn =
+		`width: auto;
+		height: 20px; 
+		margin: 30px 10px 10px 10px;
+		text-decoration:none; 
+		text-align:center; 
+		padding:11px; 
+		border:solid 1px #b3b3b3;   
+		font-size:15px; 
+		font-weight:bold; 
+		color:#737373; 
+		cursor: pointer;`;
+		
+		const html = 
+		`<div style="margin: 0 auto; font-size: 15px; text-align:center;">
+			<div nameId="btnTube" class="button_gradient_1" style="${cssBtn}">
+				Труба
+			</div>		
+		</div>`;
 
+		let btn = document.createElement('div');
+		btn.innerHTML = html;
+		btn = btn.children[0];	
+		
+		this.container.append(btn);
+		
+		btn.onmousedown = () => { console.log(22222); clickInterface({button: 'add_pointWf'}); }
+	}
 }
 
 

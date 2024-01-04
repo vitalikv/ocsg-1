@@ -12,6 +12,9 @@ class MyManagerClick
 		const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
 		const isCam3D = myCameraOrbit.activeCam.userData.isCam3D;
 		
+		rayhit = myWarmFloor.clickRayhit({event, type: 'points'});
+		if(!rayhit) return rayhit;
+		
 		if(myToolPG.pivot.visible)
 		{
 			var ray = rayIntersect( event, myToolPG.pivot.children, 'arr' );
@@ -207,6 +210,7 @@ class MyManagerClick
 			else if( tag == 'controll_wd' ) { myHouse.myWDPointsMove.mousedown({event, obj}); }						
 			else if( tag == 'roof' && isCam2D ) { myHouse.myRoofMove.click({event, obj}); }				
 			else if( tag == 'obj' && isCam2D ) { myHouse.myObjMove.click({event, obj}); }
+			else if( tag == 'pointWf' && isCam2D ) { myWarmFloor.myPointWfMove.mousedown({event, obj}); }
 			else { flag = false; }
 		}
 		else if(type === 'up')
@@ -248,7 +252,8 @@ class MyManagerClick
 		else if ( tag == 'room' ) {  }		
 		else if ( tag == 'free_dw' ) { dragWD_2( event, obj ); }
 		else if ( tag == 'roof' ) { myHouse.myRoofMove.mousemove(event); }
-		else if ( tag == 'obj' ) { myHouse.myObjMove.mousemove(event); }				
+		else if ( tag == 'obj' ) { myHouse.myObjMove.mousemove(event); }
+		else if ( tag == 'pointWf' ) { myWarmFloor.myPointWfMove.mousemove(event); }
 	}
 
 
@@ -265,6 +270,7 @@ class MyManagerClick
 		else if(tag == 'scale') { myToolPG.mouseup(); }
 		else if(tag == 'roof') { myHouse.myRoofMove.mouseup(); }
 		else if(tag == 'obj') { myHouse.myObjMove.mouseup(); }
+		else if(tag == 'pointWf') { myWarmFloor.myPointWfMove.mouseup(); }
 	}
 
 	
