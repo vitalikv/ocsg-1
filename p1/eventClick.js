@@ -1,20 +1,7 @@
 $(document).ready(function(){
 
-$('[data-action="top_panel_1"]').on('mousedown wheel DOMMouseScroll mousewheel mousemove touchstart touchend touchmove', function (e) { e.stopPropagation(); });
 $('[ui_1=""]').on('mousedown wheel DOMMouseScroll mousewheel mousemove touchstart touchend touchmove', function (e) { e.stopPropagation(); });
 		
-$('[data-action="top_panel_1"]').mousedown(function () { clickInterface(); });
-$('[data-action="left_panel_1"]').mousedown(function () { clickInterface(); });
-
-	
-
-
-$('[data-action="wall"]').mousedown(function () { clickInterface({button:'point_1'}); });
-$('[data-action="create_gate_1"]').mousedown(function () { clickInterface({button:'create_gate_1'}); });
-//$('[add_lotid]').mousedown(function () { clickInterface({button: 'add_lotid', value: this.attributes.add_lotid.value}); });
-$('[nameId="screenshot"]').mousedown(function () { createImageSvg(); createImageScene(); }); 				
-
-
 
 
 $('input').on('focus', function () { actionInputUI({el: $(this), act: 'down'}); });
@@ -125,24 +112,6 @@ $('[add_texture]').mousedown(function ()
 	myTexture.setImage(inf); 
 }); 
 // texture UI
-
-
-
-
-$('[data-action="modal_window"]').mousedown(function (e) { e.stopPropagation(); });		
-
-
-$('[data-action="modal"]').mousedown(function () 
-{			
-	clickInterface(); 
-	$('[data-action="modal"]').css({"display":"none"}); 
-});
-
-			
-$('[data-action="modal_window_close"]').mousedown(function () 
-{  
-	$('[data-action="modal"]').css({"display":"none"}); 
-});
 
 
 });

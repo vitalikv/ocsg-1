@@ -8,7 +8,7 @@ class TabPlan
 	constructor()
 	{
 		this.init();
-		
+		this.initEvent();
 		this.startSetInputValue();
 	}
 	
@@ -41,7 +41,11 @@ class TabPlan
 	
 	initEvent()
 	{
-				
+		const btnWall = this.container.querySelector('[nameId="wall"]');
+		btnWall.onmousedown = () => { clickInterface({button: 'point_1'}); }
+		
+		const btnGate1 = this.container.querySelector('[nameId="create_gate_1"]');
+		btnGate1.onmousedown = () => { clickInterface({button: 'create_gate_1'}); }						
 	}
 
 	// устанавливаем значения в input для вкладки план (окно/дверь/толщина стены/высота этажа)

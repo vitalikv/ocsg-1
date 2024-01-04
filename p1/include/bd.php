@@ -40,6 +40,11 @@ if($url == '/construction?demo=4')
 	$title = 'Проект коттеджа 3D';
 	$h1 = 'Демо проект';	
 }
+if($url == '/construction?demo=5')	
+{ 
+	$title = 'Проект квартиры 3D';
+	$h1 = 'Демо проект';	
+}
 
 
 $infProject = array('url' => $url, 'title' => $title, 'h1' => $h1, 'nameId' => $nameId, 'path' => $path, 'load' => [ img => [] ]);

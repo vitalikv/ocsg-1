@@ -4,10 +4,9 @@
 
 
 
-<div class="right_panel_1" data-action ='right_panel_1' ui_1="">
+<div class="right_panel_1" nameId="panelR" ui_1="">
 
-
-	<div class="flex_column_1 right_panel_1_1" nameId="panel_catalog_1">
+	<div class="flex_column_1 right_panel_1_1" nameId="panelPlan">
 		<div class="flex_1 bottom_line_1">
 			<div class="flex_1 relative_1 right_panel_1_item">	
 				<div class="right_panel_1_item_block" nameId="button_wrap_level">
@@ -127,7 +126,7 @@
 			<div class="flex_column_1 rp_item_plane">			
 				<div class="flex_1">
 					<div class="flex_column_1">
-						<div data-action ='wall' class="button2 button_gradient_1" style="font-size: 14px; font-weight: normal;"><div>стена</div></div>
+						<div nameId="wall" class="button2 button_gradient_1" style="font-size: 14px; font-weight: normal;"><div>стена</div></div>
 					</div>		
 					
 					<div class="flex_1 align_items">
@@ -225,7 +224,7 @@
 			<div class="flex_column_1 rp_item_plane">
 				<div class="flex_1">
 					<div class="flex_column_1">
-						<div data-action ='create_gate_1' class="button2 button_gradient_1" style="font-size: 14px; font-weight: normal;">ворота</div>
+						<div nameId='create_gate_1' class="button2 button_gradient_1" style="font-size: 14px; font-weight: normal;">ворота</div>
 					</div>
 				
 					<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -479,12 +478,10 @@
 		</div>
 		
 	</div>
-	
-	
-	<div class="button_show_panel_catalog" nameId="button_show_panel_catalog" style="display: none;">
-		<div class="button_show_panel_catalog_1">		
-		</div>	
-	</div>
 
-	
+</div>
+
+
+<div class="button_show_panel_catalog" nameId="button_show_panel_catalog" style="display: none; z-index: 2;">
+	<div class="button_show_panel_catalog_1"></div>	
 </div>

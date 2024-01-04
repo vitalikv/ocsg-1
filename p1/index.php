@@ -150,7 +150,7 @@
 	<script src="<?=$path?>new/tools/myPivot.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myGizmo.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myScale.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/panelTop/divPanelTop.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/panelTop/myPanelTop.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/panelTop/switchCamera.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/windUI.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/tabs.js?<?=$vrs?>"></script>
@@ -160,13 +160,14 @@
 	<script src="<?=$path?>new/ui/menu/divProjectLoad.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/divProjectDemo.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/divSubs.js?<?=$vrs?>"></script>	
-	<script src="<?=$path?>new/ui/right-panel/divPanelR.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/myPanelR.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabLevel.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/divLevelVisible.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabPlan.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabObject.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/catalog/myCatalogList.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/warmFloor/myPanelWF.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/myCookie.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/btnDropList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/level.js?<?=$vrs?>"></script>

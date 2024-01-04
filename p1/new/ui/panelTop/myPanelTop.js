@@ -1,25 +1,20 @@
 
 
-class DivPanelTop
+class MyPanelTop
 {
+	container;
 	divP1;
 	divP2;
 	
 	init()
 	{
-		const wrapP1 = document.querySelector('[nameId="wrapP1"]');
+		this.container = document.querySelector('[nameId="wrapP1"]');
 		
 		this.divP1 = this.crDivP1();
-		wrapP1.append(this.divP1);
+		this.container.append(this.divP1);
 		
-		if(1===2)
-		{
-			this.divP2 = this.crDivP2();
-			wrapP1.append(this.divP2);
-			
-			const btn = this.divP2.querySelector('[nameId="wf"]');
-			btn.onmousedown = () => { clickInterface({button: 'add_pointWf'}); }
-		}
+		const btnScreen = this.divP1.querySelector('[nameId="screenshot"]');
+		btnScreen.onmousedown = () => { createImageSvg(); createImageScene(); }
 		
 		//this.initEvent();
 	}
@@ -78,7 +73,7 @@ class DivPanelTop
 				</div>
 				
 				<div class="button1-wrap-1">
-					<div nameId='screenshot' class="button1 button_gradient_1" style="padding: 7px; font-weight: normal; border-radius: 0;"><img src="${infProject.path}img/screenshot.png"></div>
+					<div nameId="screenshot" class="button1 button_gradient_1" style="padding: 7px; font-weight: normal; border-radius: 0;"><img src="${infProject.path}img/screenshot.png"></div>
 				</div>		
 			</div> 
 			
@@ -143,7 +138,24 @@ class DivPanelTop
 		return html;
 	}
 
-	
+
+	// панель для платных пользователей
+	addPaidPanel()
+	{
+		this.divP2 = this.crDivP2();
+		this.container.append(this.divP2);
+		
+		myPanelWF.init();
+		
+		const divPanelPlan = document.querySelector('[nameId="panelPlan"]');
+		
+		const btnPl = this.divP2.querySelector('[nameId="plan"]');
+		const btnOt = this.divP2.querySelector('[nameId="otop"]');
+		const btnWF = this.divP2.querySelector('[nameId="wf"]');
+		//btn.onmousedown = () => { clickInterface({button: 'add_pointWf'}); }
+		btnPl.onmousedown = () => { myPanelWF.showHidePanel({show: false}); divPanelPlan.style.display = ''; }
+		btnWF.onmousedown = () => { divPanelPlan.style.display = 'none'; myPanelWF.showHidePanel({show: true}); }
+	}
 }
 
 

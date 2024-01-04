@@ -220,6 +220,7 @@ function createPlaneOutlineFloor()
 	var plane = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial( { color: 0x0000ff, transparent: true, opacity: 0 } ) );
 	plane.position.set( 0, infProject.settings.floor.posY, 0 );
 	plane.rotation.set( -Math.PI / 2, 0, 0 );
+	plane.visible = false; // когда буду делать, то это удалить
 	scene.add(plane);
 
 	return plane;

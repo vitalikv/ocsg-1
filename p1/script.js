@@ -1137,7 +1137,7 @@ function isCheckExsistFunction(functionToCheck)
 
 
 let docReady = false;
-let divPanelTop;
+let myPanelTop;
 let windUI;
 let windTabs;
 let windDivAbout;
@@ -1146,13 +1146,14 @@ let windDivProjectLoad;
 let windDivProjectSave;
 let windDivProjectDemo;
 let windDivSubs;
-let divPanelR;
+let myPanelR;
 let tabs;
 let tabLevel;
 let divLevelVisible;
 let tabPlan;
 let tabObject;
 let myCatalogList;
+let myPanelWF;
 
 let myCookie;
 let myTexture;
@@ -1176,8 +1177,8 @@ document.addEventListener("DOMContentLoaded", ()=>
 {
 	docReady = true;
 	
-	divPanelTop = new DivPanelTop();
-	divPanelTop.init();
+	myPanelTop = new MyPanelTop();
+	myPanelTop.init();
 	
 	windUI = new WindUI();
 	windTabs = new WindTabs();
@@ -1208,7 +1209,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	myLevels = new MyLevels();
 
-	divPanelR = new DivPanelR();
+	myPanelR = new MyPanelR();
 	tabs = new Tabs();
 	tabLevel = new TabLevel();
 	divLevelVisible = new DivLevelVisible({showAllLevel: true, wallTransparent: false});
@@ -1217,7 +1218,11 @@ document.addEventListener("DOMContentLoaded", ()=>
 	tabObject = new TabObject();
 	myCatalogList = new MyCatalogList();
 	switchCamera = new SwitchCamera();
-	divPanelR.init();
+	
+	myPanelWF = new MyPanelWF();
+	myPanelWF.init();
+	
+	myPanelR.init();
 	
 	
 	myToolPG = new MyToolPG();
@@ -1229,7 +1234,9 @@ document.addEventListener("DOMContentLoaded", ()=>
 	startProject = new StartProject();
 	startProject.init();
 	
-	if(startProject.detectShowStartWind()) windUI.showWin();
+	//if(startProject.detectShowStartWind()) windUI.showWin();
+	
+	if(1===1) myPanelTop.addPaidPanel();	// панель для платных пользователей	
 	
 	animate();
 	renderCamera();	

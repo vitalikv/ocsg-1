@@ -7,7 +7,7 @@ class Tabs
 	
 	constructor()
 	{
-		const container = document.querySelector('[nameId="panel_catalog_1"]');
+		const container = document.querySelector('[nameId="panelPlan"]');
 		
 		// кнопки переключения вкладок
 		const btn1 = container.querySelector('[nameId="button_wrap_level"]');
