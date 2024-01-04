@@ -39,7 +39,8 @@ new/ghostLevel.js
 new/startProject.js
 new/csgBox.js
 new/myTexture.js
-new/ui/switchCamera.js
+new/ui/panelTop/divPanelTop.js
+new/ui/panelTop/switchCamera.js
 new/ui/menu/windUI.js
 new/ui/menu/tabs.js
 new/ui/menu/divAbout.js
@@ -48,6 +49,7 @@ new/ui/menu/divProjectSave.js
 new/ui/menu/divProjectLoad.js
 new/ui/menu/divProjectDemo.js
 new/ui/menu/divSubs.js
+new/ui/right-panel/divPanelR.js
 new/ui/right-panel/tabs.js
 new/ui/right-panel/tabLevel.js
 new/ui/right-panel/divLevelVisible.js

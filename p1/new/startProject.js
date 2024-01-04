@@ -44,7 +44,7 @@ class StartProject
 			infProject.settings.load.file = 'demo/' + nameFile;
 			infProject.settings.save.file = 'demo/' + nameFile;
 			
-			showHideCatalogMenuUI({show: false});			
+			divPanelR.showHidePanelR({show: false});			
 		}
 
 		if(this.name === 'new') loadFile({id: 0});

@@ -42,7 +42,7 @@ if($url == '/construction?demo=4')
 }
 
 
-$infProject = array('url' => $url, 'title' => $title, 'nameId' => $nameId, 'path' => $path, 'load' => [ img => [] ]);
+$infProject = array('url' => $url, 'title' => $title, 'h1' => $h1, 'nameId' => $nameId, 'path' => $path, 'load' => [ img => [] ]);
 
 $infProject['activeInput'] = '';
 $infProject['activeInput_2'] = null;

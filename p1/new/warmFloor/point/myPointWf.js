@@ -86,11 +86,9 @@ class MyPointWf
 	// удаление точки
 	deletePointWf({obj})
 	{
-		console.log(myWarmFloor.points.length);
 		myWarmFloor.deleteFromArray({obj, type: 'points'}); 
 		disposeHierchy({obj});
 		scene.remove(obj);
-		console.log(myWarmFloor.points.length);
 	}
 	
 }

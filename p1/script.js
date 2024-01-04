@@ -1088,31 +1088,6 @@ document.addEventListener("keyup", function (e)
 
 
 
-
-// вкл/выкл сглаживание 
-function switchFxaaPass(cdm)
-{
-	if(!cdm) return;	
-	if(infProject.settings.shader.fxaaPass == undefined) return;
-	
-	if(cdm.switch)
-	{
-		var visible = (fxaaPass.enabled) ? false : true;
-	}
-
-	if(cdm.visible !== undefined)
-	{
-		var visible = cdm.visible;
-	}		
-	
-	fxaaPass.enabled = visible;		
-
-
-	renderCamera();
-}
-
-
-
 // проверяем правильность ввода числа (вводим число в своих единицах, отдаем в метрах)
 function checkNumberInput(cdm)
 {	
@@ -1162,6 +1137,7 @@ function isCheckExsistFunction(functionToCheck)
 
 
 let docReady = false;
+let divPanelTop;
 let windUI;
 let windTabs;
 let windDivAbout;
@@ -1170,6 +1146,7 @@ let windDivProjectLoad;
 let windDivProjectSave;
 let windDivProjectDemo;
 let windDivSubs;
+let divPanelR;
 let tabs;
 let tabLevel;
 let divLevelVisible;
@@ -1198,7 +1175,10 @@ let myWarmFloor;
 document.addEventListener("DOMContentLoaded", ()=>
 {
 	docReady = true;
-
+	
+	divPanelTop = new DivPanelTop();
+	divPanelTop.init();
+	
 	windUI = new WindUI();
 	windTabs = new WindTabs();
 	windDivAbout = new WindDivAbout();
@@ -1228,6 +1208,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	myLevels = new MyLevels();
 
+	divPanelR = new DivPanelR();
 	tabs = new Tabs();
 	tabLevel = new TabLevel();
 	divLevelVisible = new DivLevelVisible({showAllLevel: true, wallTransparent: false});
@@ -1236,6 +1217,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	tabObject = new TabObject();
 	myCatalogList = new MyCatalogList();
 	switchCamera = new SwitchCamera();
+	divPanelR.init();
 	
 	
 	myToolPG = new MyToolPG();

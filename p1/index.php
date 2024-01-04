@@ -54,13 +54,18 @@
 		require_once("admin/obj/adminInputLoadObj.php");
 	} ?>
 	
-	<div id="canvasFrame" style="position: fixed; width: 100%; height: 100%; top: 0; right: 0; overflow: hidden;">
+	<div id="canvasFrame" style="position: fixed; width: 100%; height: 100%; top: 0; right: 0; overflow: hidden; font-family: arial,sans-serif;">
 		<div class="frame block_select_text">
 				
 			<div class="flex_1 height100">
 				
-				<div style="flex-grow:1; position: relative;">
-					<? require_once("include/top_1.php"); ?>
+				<div style="flex-grow:1; position: relative;" nameId="wrapP1">
+					<div style="position: absolute; width: 100%; bottom: 110px; z-index: 2;" nameId="menu_loader_slider_UI">			
+						<div style="width: 260px; height: 60px; margin: auto; padding-bottom: 30px; background: #ffffff; border-radius: 8px; box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.5);">	
+							<div style="padding: 15px 0 0 0; font-size: 18px; text-align: center; color: #666;">Загрузка объектов</div>		
+							<div style="padding: 15px 0; font-size: 16px; text-align: center; color: #666;" nameId="txt_loader_slider_UI">0%</div>		
+						</div>	
+					</div>
 
 					<div style="position: absolute; bottom: 0; right: 20px; width: 170px; height: 80px; z-index: 2;">
 						<a href="/documentation" style="font-size: 16px; cursor: pointer; font-weight: normal;" class="button1 button_gradient_1" data-action ='top_panel_1' target="_blank">
@@ -145,6 +150,8 @@
 	<script src="<?=$path?>new/tools/myPivot.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myGizmo.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myScale.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/panelTop/divPanelTop.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/panelTop/switchCamera.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/windUI.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/tabs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/divAbout.js?<?=$vrs?>"></script>
@@ -152,8 +159,8 @@
 	<script src="<?=$path?>new/ui/menu/divProjectSave.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/divProjectLoad.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/divProjectDemo.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/menu/divSubs.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/switchCamera.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/menu/divSubs.js?<?=$vrs?>"></script>	
+	<script src="<?=$path?>new/ui/right-panel/divPanelR.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/tabLevel.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/divLevelVisible.js?<?=$vrs?>"></script>
@@ -167,7 +174,6 @@
 	<script src="<?=$path?>new/startProject.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/csgBox.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/myTexture.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/test.js?<?=$vrs?>"></script>
 	
 	
 	<script src="<?=$path?>new/core/myMouse.js?<?=$vrs?>"></script>
