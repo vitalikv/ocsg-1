@@ -53,20 +53,20 @@ class MyWarmFloor
 	// удаляем точку или трубу из сцены
 	deleteObj({obj})
 	{
-		let result = {del: {points: [], tube: null, line: null}, up: {tube: null, line: null}};
+		let result = {del: {points: [], tube: null}, up: {tube: null}};
 		
 		if(obj.userData.tag === 'pointWf')
 		{
 			result = this.checkDelPointWf({result, point: obj});
 			
 			// обновляем линию
-			if(result.up.line) this.myTubeWf.upLine({line: result.up.line, delPoint: obj});
+			if(result.up.tube) this.myTubeWf.upTube({tube: result.up.tube, delPoint: obj});
 			
 			// удаляем точки
 			result.del.points.forEach((o) => { this.myPointWf.deletePointWf({obj: o}); });
 			
 			// удаляем линию
-			if(result.del.line)	this.myTubeWf.deleteTubeWf({obj: result.del.line});			
+			if(result.del.tube)	this.myTubeWf.deleteTubeWf({obj: result.del.tube});			
 		}
 		
 	}
@@ -74,25 +74,25 @@ class MyWarmFloor
 	// проверка перед удалением точки
 	checkDelPointWf({result, point})
 	{		
-		const line = point.userData.line;
+		const tube = point.userData.tube;
 		
 		result.del.points.push(point);
 		
-		if(line)
+		if(tube)
 		{
-			const countP = this.myTubeWf.getCountPointsInLine({line});
-			const index = this.myTubeWf.existPointOnLine({line, point});
+			const countP = this.myTubeWf.getCountPointsInTube({tube});
+			const index = this.myTubeWf.existPointOnTube({tube, point});
 			
 			if(countP === 2)
 			{
 				const index2 = (index === 0) ? 1 : 0;
-				const point2 = this.myTubeWf.getPointInArrayLine({line, index: index2});
+				const point2 = this.myTubeWf.getPointInArrayTube({tube, index: index2});
 				result.del.points.push(point2);
-				result.del.line = line;
+				result.del.tube = tube;
 			}
 			else
 			{
-				result.up.line = line;
+				result.up.tube = tube;
 			}
 		}
 		

@@ -18,34 +18,48 @@ class MyTubeWf
 	}
 	
 
-	// создаем новую линию
-	crLine({points, id = null})
+	// создаем новую трубу
+	crTube({points, id = null})
 	{
-		const geometry = new THREE.Geometry();
-		
-		for(let i = 0; i < points.length; i++)
-		{
-			geometry.vertices.push(points[i].position);
-		}
+		const geometry = this.getGeometryTube({points});
 	
-		const line = new THREE.Line( geometry, new THREE.LineBasicMaterial({color: 0xff0000, linewidth: 2 }) );		
+		const tube = new THREE.Mesh(geometry, this.material);			
 
 		if(!id) { id = countId; countId++; }	
-		line.userData.id = id;	
-		line.userData.tag = 'tubeWf';
-		line.userData.points = points;
+		tube.userData.id = id;	
+		tube.userData.tag = 'tubeWf';
+		tube.userData.points = points;
 		
-		scene.add( line );	
+		myWarmFloor.addToArray({obj: tube, type: 'tubes'});
 		
-		myWarmFloor.addToArray({obj: line, type: 'tubes'});
+		scene.add( tube );	
 		
-		line.userData.tube = this.crTube({points});
-		
-		return line;
+		return tube;
 	}
+		
 	
+	// обновляем трубу
+	upTube({tube, addPoint = null, delPoint = null})
+	{
+		if(addPoint) 
+		{
+			tube.userData.points.push(addPoint);
+		}
+		if(delPoint) 
+		{
+			const index = tube.userData.points.indexOf(delPoint);
+			if (index > -1) tube.userData.points.splice(index, 1);
+		}
+				
+		const points = tube.userData.points;		
+		const geometry = this.getGeometryTube({points});
+		
+		tube.geometry.dispose();
+		tube.geometry = geometry;			
+	}	
 	
-	crTube({tube = null, points})
+	// рассчитываем геометрию трубы
+	getGeometryTube({points})
 	{
 		const arrPos = [];		
 		for(let i = 0; i < points.length; i++) arrPos[i] = points[i].position.clone();
@@ -67,81 +81,37 @@ class MyTubeWf
 		geometry.computeFaceNormals();
 		geometry.computeVertexNormals();
 
-		if(!tube) 
-		{
-			tube = new THREE.Mesh(geometry, this.material);			
-			scene.add( tube );			
-		}
-		else
-		{
-			tube.geometry.dispose();
-			tube.geometry = geometry;			
-		}
-
-		return tube;
+		return geometry;
 	}
-	
-	
-	// обновляем геометрию линии
-	upLine({line, addPoint = null, delPoint = null})
-	{
 
-		if(addPoint) 
-		{
-			line.userData.points.push(addPoint);
-		}
-		if(delPoint) 
-		{
-			const index = line.userData.points.indexOf(delPoint);
-			if (index > -1) line.userData.points.splice(index, 1);
-		}
-		
-		const geometry = new THREE.Geometry();
-		const points = line.userData.points;
-		
-		for(let i = 0; i < points.length; i++)
-		{
-			geometry.vertices.push(points[i].position);
-		}
-		
-		line.geometry.dispose();
-		line.geometry = geometry;
-		line.geometry.verticesNeedUpdate = true; 
-		line.geometry.elementsNeedUpdate = true;
-
-		this.crTube({tube: line.userData.tube, points});
-	}
-	
 	
 	// существует ли точка на линии
-	existPointOnLine({line, point})
+	existPointOnTube({tube, point})
 	{
-		const index = line.userData.points.indexOf(point);
+		const index = tube.userData.points.indexOf(point);
 		
 		return index;
 	}
 	
 	
 	// получаем кол-во точек из скольких состоит линия (нужно для проверки при удалении точки)
-	getCountPointsInLine({line})
+	getCountPointsInTube({tube})
 	{
-		return line.userData.points.length;
+		return tube.userData.points.length;
 	}
 	
 	// получаем точку из массива линии
-	getPointInArrayLine({line, index})
+	getPointInArrayTube({tube, index})
 	{
-		return line.userData.points[index];
+		return tube.userData.points[index];
 	}
 
 	// удаляем трубу
 	deleteTubeWf({obj})
 	{
-		console.log(myWarmFloor.tubes.length);
 		myWarmFloor.deleteFromArray({obj, type: 'tubes'}); 
 		disposeHierchy({obj});
 		scene.remove(obj);
-		console.log(myWarmFloor.tubes.length);
 	}	
 }
 

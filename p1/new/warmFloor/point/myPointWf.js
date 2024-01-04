@@ -13,8 +13,8 @@ class MyPointWf
 	
 	init()
 	{
-		this.geometry = new THREE.SphereGeometry( 0.1, 16, 16 );
-		this.material = new THREE.MeshPhongMaterial({ color : 0xcccccc, transparent: true, opacity: 1.0, depthTest: false });
+		this.geometry = new THREE.SphereGeometry( 0.03, 16, 16 );
+		this.material = new THREE.MeshStandardMaterial({ color : 0xff0000, transparent: true, opacity: 1.0, depthTest: false });
 		
 		this.defVert = this.getDefaultVertices();
 	}
@@ -38,7 +38,7 @@ class MyPointWf
 		if(!id) { id = countId; countId++; }	
 		point.userData.id = id;	
 		point.userData.tag = 'pointWf';
-		point.userData.line = null;
+		point.userData.tube = null;
 				
 		//point.visible = (myCameraOrbit.activeCam.userData.isCam2D) ? true : false;	
 		
@@ -48,18 +48,18 @@ class MyPointWf
 		
 		if(lastPoint)
 		{
-			let line = lastPoint.userData.line;
+			let tube = lastPoint.userData.tube;
 			
-			if(!line)
+			if(!tube)
 			{
-				line = myWarmFloor.myTubeWf.crLine({points: [lastPoint, point]});
-				point.userData.line = line;
-				lastPoint.userData.line = line;
+				tube = myWarmFloor.myTubeWf.crTube({points: [lastPoint, point]});
+				point.userData.tube = tube;
+				lastPoint.userData.tube = tube;
 			}
 			else
 			{
-				point.userData.line = line;
-				myWarmFloor.myTubeWf.upLine({line, addPoint: point});
+				point.userData.tube = tube;
+				myWarmFloor.myTubeWf.upTube({tube, addPoint: point});
 			}
 		}
 		
@@ -74,6 +74,7 @@ class MyPointWf
 		for ( let i = 0; i < v2.length; i++ )
 		{
 			v[i].x = v2[i].x * 1/value;
+			v[i].y = v2[i].y * 1/value;
 			v[i].z = v2[i].z * 1/value;
 		}	
 

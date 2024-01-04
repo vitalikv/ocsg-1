@@ -80,10 +80,10 @@ class MyPointWfMove
 		
 		obj.position.add( offset );	
 
-		const line = obj.userData.line;
-		if(line)
+		const tube = obj.userData.tube;
+		if(tube)
 		{
-			myWarmFloor.myTubeWf.upLine({line});
+			myWarmFloor.myTubeWf.upTube({tube});
 		}		
 	}
 	

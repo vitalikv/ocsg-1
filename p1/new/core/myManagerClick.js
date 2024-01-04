@@ -7,13 +7,14 @@ class MyManagerClick
 	// определяем на какой объект кликнули
 	getRayhit(event)
 	{ 
-		var rayhit = null;	
+		let rayhit = null;	
 					
 		const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
 		const isCam3D = myCameraOrbit.activeCam.userData.isCam3D;
 		
-		rayhit = myWarmFloor.clickRayhit({event, type: 'points'});
-		if(!rayhit) return rayhit;
+		rayhit = myWarmFloor.clickRayhit({event, type: 'points'});		
+		if(rayhit) return rayhit;
+		
 		
 		if(myToolPG.pivot.visible)
 		{

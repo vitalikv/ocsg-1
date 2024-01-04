@@ -57,6 +57,8 @@ class EventMyCamera
 		}
 
 		myToolPG.setScale();
+		
+		myWarmFloor.myPointWf.setScale({value: delta});
 	}
 	
 	cameraZoom3D()
