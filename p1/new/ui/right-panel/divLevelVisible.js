@@ -25,8 +25,8 @@ class DivLevelVisible
 	
 	init()
 	{
-		this.setCheckBox({type: 'allLevel'});
-		this.setCheckBox({type: 'wallTransparent'});
+		//this.setCheckBox({type: 'allLevel'});
+		//this.setCheckBox({type: 'wallTransparent'});
 	}
 	
 	// кликнули на checkBox

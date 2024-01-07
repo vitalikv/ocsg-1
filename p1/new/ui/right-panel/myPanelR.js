@@ -7,15 +7,47 @@ class MyPanelR
 	btnClose;
 	
 	
+	constructor()
+	{
+		this.init();
+	}
+	
 	init()
 	{
-		this.container = document.querySelector('[nameId="panelR"]');
-		this.btnShow = document.querySelector('[nameId="button_show_panel_catalog"]');
+		const wrap = document.querySelector('[nameId="wrapP2"]');
+		const div = this.crDiv();
+		wrap.append(div);
+		
+		this.container = div.querySelector('[nameId="panelR"]');
+		this.btnShow = div.querySelector('[nameId="button_show_panel_catalog"]');
 		this.btnClose = this.container.querySelector('[nameId="button_catalog_close"]');
 		
 		this.initEvent();
 	}
+
+	crDiv()
+	{
+		const div = document.createElement('div');
+		div.innerHTML = this.html_1();
+		return div.children[0];	
+	}
 	
+	html_1()
+	{
+		const html = 
+		`<div style="display: flex; height: 100%;">
+			<div class="right_panel_1" nameId="panelR" ui_1="">
+				<div nameId="button_catalog_close" class="button_catalog_close x_close" style="z-index: 2;">+</div>
+			</div>
+
+			<div nameId="button_show_panel_catalog" class="button_show_panel_catalog" style="display: none; z-index: 2;">
+				<div class="button_show_panel_catalog_1"></div>	
+			</div>
+		</div>`;
+
+		return html;
+	}
+
 	
 	initEvent()
 	{

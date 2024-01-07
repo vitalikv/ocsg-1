@@ -263,11 +263,11 @@ class MyCameraPerspective extends THREE.PerspectiveCamera
 		for ( let i = 0; i < circle.length; i++ )
 		{
 			v[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.0 );
-			v[n].y = 0.01;		
+			v[n].y = 0.03;		
 			n++;		
 			
 			v[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.25 );
-			v[n].y = 0.01;
+			v[n].y = 0.03;
 			n++;
 			
 			v[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.0 );
@@ -281,7 +281,7 @@ class MyCameraPerspective extends THREE.PerspectiveCamera
 
 
 		
-		const material = new THREE.MeshPhongMaterial({ color: 0xcccccc, transparent: true, opacity: 1, depthTest: false });	
+		const material = new THREE.MeshPhongMaterial({ color: 0xcccccc });	
 		const obj = new THREE.Mesh( createGeometryCircle(v), material ); 
 		obj.userData.tag = '';
 		obj.renderOrder = 2;
@@ -293,11 +293,11 @@ class MyCameraPerspective extends THREE.PerspectiveCamera
 		for ( let i = 0; i < circle.length; i++ )
 		{
 			v2[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.25 );
-			v2[n].y = 0.01;		
+			v2[n].y = 0.03;		
 			n++;		
 			
 			v2[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.26 );
-			v2[n].y = 0.01;
+			v2[n].y = 0.03;
 			n++;
 			
 			v2[n] = new THREE.Vector3().addScaledVector( circle[i].clone().normalize(), 0.25 );
@@ -309,7 +309,7 @@ class MyCameraPerspective extends THREE.PerspectiveCamera
 			n++;		
 		}	
 		
-		const mat2 = new THREE.MeshPhongMaterial({ color: 0xcccccc, transparent: true, opacity: 1, depthTest: false });
+		const mat2 = new THREE.MeshPhongMaterial({ color: 0xcccccc });
 		const obj_2 = new THREE.Mesh( createGeometryCircle(v2), mat2 );
 		obj_2.renderOrder = 2;
 		

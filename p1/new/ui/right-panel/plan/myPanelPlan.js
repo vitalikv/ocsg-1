@@ -60,9 +60,6 @@ class MyPanelPlan
 						</div>	
 					</div>			
 				</div>
-				<div class="button_catalog_close x_close" nameId="button_catalog_close">
-					+
-				</div>
 			</div>
 		
 		

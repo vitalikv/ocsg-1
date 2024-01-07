@@ -1216,13 +1216,12 @@ document.addEventListener("DOMContentLoaded", ()=>
 	tabs = new Tabs();
 	tabLevel = new TabLevel();
 	divLevelVisible = new DivLevelVisible({showAllLevel: true, wallTransparent: false});
-	divLevelVisible.init();
 	tabPlan = new TabPlan();
 	tabObject = new TabObject();
 	myCatalogList = new MyCatalogList();
 	switchCamera = new SwitchCamera();	
 	myPanelWF = new MyPanelWF();	
-	myPanelR.init();
+	
 	
 	myTexture = new MyTexture();
 	

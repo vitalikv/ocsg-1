@@ -5,8 +5,7 @@ class MyWarmFloor
 	myPointWf;
 	myPointWfMove;
 	myTubeWf;
-	points = [];
-	tubes = [];
+	levels = [];
 	
 	constructor()
 	{
@@ -15,16 +14,27 @@ class MyWarmFloor
 	
 	init()
 	{
+		this.initLevels();
 		this.myPointWf = new MyPointWf();
 		this.myPointWfMove = new MyPointWfMove();
 		this.myTubeWf = new MyTubeWf();
 	}
 	
+	initLevels()
+	{
+		this.levels[0] = {points: [], tubes: []};
+		this.levels[1] = {points: [], tubes: []};
+		this.levels[2] = {points: [], tubes: []};
+		this.levels[3] = {points: [], tubes: []};
+	}
+	
 	// проверка куда кликнули (попали на точку или трубу)
 	clickRayhit({event, type})
 	{
+		const id = myLevels.getIdActLevel();
+		
 		let rayhit = null;
-		const array = (type === 'points') ? this.points : this.tubes;
+		const array = (type === 'points') ? this.levels[id].points : this.levels[id].tubes;
 		const ray = rayIntersect( event, array, 'arr' );
 		if(ray.length > 0) rayhit = ray[0];
 
@@ -34,16 +44,20 @@ class MyWarmFloor
 	// добавляем точку или трубу в массив
 	addToArray({obj, type})
 	{
-		if(type === 'points') this.points.push(obj);
-		if(type === 'tubes') this.tubes.push(obj);
+		const id = myLevels.getIdActLevel();
+		
+		if(type === 'points') this.levels[id].points.push(obj);
+		if(type === 'tubes') this.levels[id].tubes.push(obj);
 	}
 
 	// удаляем точку или трубу уз массива
 	deleteFromArray({obj, type})
 	{
+		const id = myLevels.getIdActLevel();
+		
 		let array = [];
-		if(type === 'points') array = this.points;
-		if(type === 'tubes') array = this.tubes;
+		if(type === 'points') array = this.levels[id].points;
+		if(type === 'tubes') array = this.levels[id].tubes;
 		
 		const index = array.indexOf(obj);
 		if (index > -1) array.splice(index, 1);		

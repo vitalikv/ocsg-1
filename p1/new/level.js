@@ -32,6 +32,12 @@ class MyLevels
 		}
 	}
 	
+	// полчаем id активного этажа
+	getIdActLevel()
+	{
+		return this.activeId;
+	}
+	
 	// делаем выбранный этаж основным
 	activateLevel(id)
 	{
@@ -249,6 +255,10 @@ class MyLevels
 		for ( let i = 0; i < ceilings.length; i++ ) ceilings[i].position.y = ceilings[i].position.y - posY;
 		for ( let i = 0; i < objs.length; i++ ) objs[i].position.y = objs[i].position.y - posY;
 		for ( let i = 0; i < roofs.length; i++ ) roofs[i].position.y = roofs[i].position.y - posY;
+		
+		const otop = myWarmFloor.levels[id];
+		for ( let i = 0; i < otop.points.length; i++ ) otop.points[i].position.y = otop.points[i].position.y - posY;
+		for ( let i = 0; i < otop.tubes.length; i++ ) otop.tubes[i].position.y = otop.tubes[i].position.y - posY;
 	}
 
 

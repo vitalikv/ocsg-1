@@ -56,7 +56,8 @@
 	
 	<div id="canvasFrame" style="position: fixed; width: 100%; height: 100%; top: 0; right: 0; overflow: hidden; font-family: arial,sans-serif;">
 		<div class="frame block_select_text">
-				
+			
+			<noindex>
 			<div class="flex_1 height100">
 				
 				<div style="flex-grow:1; position: relative;" nameId="wrapP1">
@@ -72,14 +73,16 @@
 							<div>видеоинструкция</div>
 						</a>	
 					</div>					
-				</div>
+				</div>				
 				
-				<? require_once("include/right_panel_1.php"); ?>
-				
-			</div>
-		
-		</div>
+				<div nameId="wrapP2"></div>
 
+			</div>
+			</noindex>
+			
+		</div>
+		
+		
 		<svg id="svgFrame" height="100%" width="100%" xmlns="http://www.w3.org/2000/svg" style="position: absolute; z-index: 1">
 		</svg>	
 

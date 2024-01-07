@@ -148,9 +148,11 @@ class MyPanelTop
 		const btnPl = this.divP2.querySelector('[nameId="plan"]');
 		const btnOt = this.divP2.querySelector('[nameId="otop"]');
 		const btnWF = this.divP2.querySelector('[nameId="wf"]');
-		//btn.onmousedown = () => { clickInterface({button: 'add_pointWf'}); }
+		
 		btnPl.onmousedown = () => { myPanelWF.showHidePanel({show: false}); myPanelPlan.showHidePanel({show: true}); }
 		btnWF.onmousedown = () => { myPanelPlan.showHidePanel({show: false}); myPanelWF.showHidePanel({show: true}); }
+		
+		myPanelWF.addPaidContent();
 	}
 }
 
