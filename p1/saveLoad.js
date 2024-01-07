@@ -1,28 +1,12 @@
 
 
 
-function loadUrl(href) 
-{
-	var url = new URL(href); 
-	var url = url.searchParams.get('file');  
-	if(url) { loadFile(url); }
-}
-
-
 
 var resetPop =
-{
-
-
-	fileInfo : function()
-	{
-		return { last : {cam : { obj : camera, type : '', pos : new THREE.Vector3(), rot : new THREE.Vector3() }} };
-	},
-	
+{	
 	infProjectSceneArray : function()
 	{
-		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: [], roof: [], objSpot: [] };
-		array.cubeCam = [];
+		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: [], roof: [] };
 		array.base = (infProject.start)? infProject.scene.array.base : [];	// массив клонируемых объектов
 		
 		return array;
@@ -30,8 +14,7 @@ var resetPop =
 
 	infProjectMySceneArray : function()
 	{
-		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: [], roof: [], objSpot: [] };
-		array.cubeCam = [];
+		var array = { point: obj_point, wall: [], window: [], door: [], floor: room, ceiling: ceiling, obj: [], roof: [] };
 		array.base = infProject.scene.array.base;	// массив клонируемых объектов
 		
 		return array;
@@ -187,10 +170,14 @@ function compileJsonFile()
 	
 	for ( let i = 0; i < myLevels.levels.length; i++ )
 	{		
-		level[level.length] = compileJsonFile_2(myLevels.levels[i], posY);
+		const house = compileJsonFile_2(myLevels.levels[i], posY);
+		
+		level[level.length] = {...house};
 	}
 	
-	const json = {level: level};
+	const wf = myWarmFloor.getDataForSave({posY});
+	
+	const json = {level, wf};
 	
 	return json;
 }
@@ -545,6 +532,9 @@ async function loadFilePL(json)
 	myLevels.activateLevel(0);
 	myLevels.visibleLevelCam2D(0, true);
 	myLevels.switchLevel(0);
+	
+	
+	if(json.wf) myWarmFloor.load({data: json.wf});
 	
 	readyProject(); 
 }

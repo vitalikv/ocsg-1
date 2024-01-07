@@ -5,6 +5,8 @@ class MyWarmFloor
 	myPointWf;
 	myPointWfMove;
 	myTubeWf;
+	mySaveWf;
+	myLoadWf;
 	levels = [];
 	
 	constructor()
@@ -18,6 +20,8 @@ class MyWarmFloor
 		this.myPointWf = new MyPointWf();
 		this.myPointWfMove = new MyPointWfMove();
 		this.myTubeWf = new MyTubeWf();
+		this.mySaveWf = new MySaveWf();
+		this.myLoadWf = new MyLoadWf();
 	}
 	
 	initLevels()
@@ -28,13 +32,21 @@ class MyWarmFloor
 		this.levels[3] = {points: [], tubes: []};
 	}
 	
+	// полчаем массив объектов активного этажа или выбранного по номеру
+	getObjsActLevel(id = null)
+	{
+		if(id === null) id = myLevels.getIdActLevel();
+		
+		return this.levels[id];
+	}
+	
 	// проверка куда кликнули (попали на точку или трубу)
 	clickRayhit({event, type})
 	{
-		const id = myLevels.getIdActLevel();
+		const objs = this.getObjsActLevel();
 		
 		let rayhit = null;
-		const array = (type === 'points') ? this.levels[id].points : this.levels[id].tubes;
+		const array = (type === 'points') ? objs.points : objs.tubes;
 		const ray = rayIntersect( event, array, 'arr' );
 		if(ray.length > 0) rayhit = ray[0];
 
@@ -42,22 +54,22 @@ class MyWarmFloor
 	}
 	
 	// добавляем точку или трубу в массив
-	addToArray({obj, type})
+	addToArray({obj, type, idLevel = null})
 	{
-		const id = myLevels.getIdActLevel();
+		const objs = this.getObjsActLevel(idLevel);
 		
-		if(type === 'points') this.levels[id].points.push(obj);
-		if(type === 'tubes') this.levels[id].tubes.push(obj);
+		if(type === 'points') objs.points.push(obj);
+		if(type === 'tubes') objs.tubes.push(obj);
 	}
 
 	// удаляем точку или трубу уз массива
 	deleteFromArray({obj, type})
 	{
-		const id = myLevels.getIdActLevel();
+		const objs = this.getObjsActLevel();
 		
 		let array = [];
-		if(type === 'points') array = this.levels[id].points;
-		if(type === 'tubes') array = this.levels[id].tubes;
+		if(type === 'points') array = objs.points;
+		if(type === 'tubes') array = objs.tubes;
 		
 		const index = array.indexOf(obj);
 		if (index > -1) array.splice(index, 1);		
@@ -111,7 +123,20 @@ class MyWarmFloor
 		}
 		
 		return result;
-	}	
+	}
+
+
+	// собираем данные для сохренения теплого пола на всех этажах
+	getDataForSave({posY})
+	{
+		return this.mySaveWf.save({posY});
+	}
+	
+	load({data})
+	{
+		this.myLoadWf.load({data});
+	}
+
 }
 
 

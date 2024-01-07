@@ -238,7 +238,7 @@ class MyLevels
 	// меняем высоту этажей, самый первый ставим на 0, id - номер этажа
 	changePosYLevel(posY, id)
 	{
-		const { walls, points, floors, ceilings, objs, roofs } = this.getDestructObject(id);
+		const { walls, points, floors, ceilings, objs, roofs, otop } = this.getDestructObject(id);
 
 		for ( let i = 0; i < walls.length; i++ )
 		{		
@@ -256,7 +256,7 @@ class MyLevels
 		for ( let i = 0; i < objs.length; i++ ) objs[i].position.y = objs[i].position.y - posY;
 		for ( let i = 0; i < roofs.length; i++ ) roofs[i].position.y = roofs[i].position.y - posY;
 		
-		const otop = myWarmFloor.levels[id];
+		
 		for ( let i = 0; i < otop.points.length; i++ ) otop.points[i].position.y = otop.points[i].position.y - posY;
 		for ( let i = 0; i < otop.tubes.length; i++ ) otop.tubes[i].position.y = otop.tubes[i].position.y - posY;
 	}
@@ -350,8 +350,10 @@ class MyLevels
 		const ceilings = level[id].ceiling;
 		const objs = level[id].obj;
 		const roofs = level[id].roof;
+		
+		const otop = myWarmFloor.getObjsActLevel(id);
 
-		return { walls, points, doors, windows, floors, ceilings, objs, roofs };
+		return { walls, points, doors, windows, floors, ceilings, objs, roofs, otop };
 	}
 	
 	

@@ -19,7 +19,7 @@ class MyTubeWf
 	
 
 	// создаем новую трубу
-	crTube({points, id = null})
+	crTube({points, id = null, idLevel = null})
 	{
 		const geometry = this.getGeometryTube({points});
 	
@@ -30,7 +30,7 @@ class MyTubeWf
 		tube.userData.tag = 'tubeWf';
 		tube.userData.points = points;
 		
-		myWarmFloor.addToArray({obj: tube, type: 'tubes'});
+		myWarmFloor.addToArray({obj: tube, type: 'tubes', idLevel});
 		
 		scene.add( tube );	
 		
@@ -85,7 +85,7 @@ class MyTubeWf
 	}
 
 	
-	// существует ли точка на линии
+	// существует ли точка на трубе
 	existPointOnTube({tube, point})
 	{
 		const index = tube.userData.points.indexOf(point);
@@ -100,12 +100,18 @@ class MyTubeWf
 		return tube.userData.points.length;
 	}
 	
-	// получаем точку из массива линии
+	// получаем точку из массива трубы
 	getPointInArrayTube({tube, index})
 	{
 		return tube.userData.points[index];
 	}
 
+	// получаем все толчки из массива трубы
+	getPointsInArrayTube({tube})
+	{
+		return tube.userData.points;
+	}
+	
 	// удаляем трубу
 	deleteTubeWf({obj})
 	{

@@ -30,12 +30,12 @@ class MyPointWf
 	}
 
 
-	crPoint({pos, lastPoint = null, id = null})
+	crPoint({pos, lastPoint = null, id = null, idLevel = null})
 	{ 
 		const point = new THREE.Mesh( this.geometry, this.material.clone() );
 		point.position.copy( pos );		
 
-		if(!id) { id = countId; countId++; }	
+		if(id === null) { id = countId; countId++; }	
 		point.userData.id = id;	
 		point.userData.tag = 'pointWf';
 		point.userData.tube = null;
@@ -44,7 +44,7 @@ class MyPointWf
 		
 		scene.add( point );	
 		
-		myWarmFloor.addToArray({obj: point, type: 'points'});
+		myWarmFloor.addToArray({obj: point, type: 'points', idLevel});
 		
 		if(lastPoint)
 		{
