@@ -282,7 +282,7 @@ class MyLevels
 
 	visibleLevelCam2D(id, visible)
 	{
-		const { walls, points, doors, windows, floors, ceilings, objs, roofs } = this.getDestructObject(id);
+		const { walls, points, doors, windows, floors, ceilings, objs, roofs, otop } = this.getDestructObject(id);
 		
 		for ( let i = 0; i < points.length; i++ ) points[i].visible = visible;		
 		for ( let i = 0; i < walls.length; i++ ) walls[i].visible = visible;	
@@ -306,11 +306,14 @@ class MyLevels
 		for ( let i = 0; i < ceilings.length; i++ ) ceilings[i].visible = visible;
 		for ( let i = 0; i < objs.length; i++ ) objs[i].visible = visible;
 		for ( let i = 0; i < roofs.length; i++ ) roofs[i].visible = visible;
+		
+		//for ( let i = 0; i < otop.points.length; i++ ) otop.points[i].visible = visible;
+		for ( let i = 0; i < otop.tubes.length; i++ ) otop.tubes[i].visible = visible;		
 	}
 	
 	visibleLevelCam3D(id, visible)
 	{
-		const { walls, points, doors, windows, floors, ceilings, objs, roofs } = this.getDestructObject(id);
+		const { walls, points, doors, windows, floors, ceilings, objs, roofs, otop } = this.getDestructObject(id);
 		
 		for ( let i = 0; i < points.length; i++ ) points[i].visible = false;		
 		for ( let i = 0; i < walls.length; i++ ) walls[i].visible = visible;	
@@ -335,6 +338,9 @@ class MyLevels
 		for ( let i = 0; i < ceilings.length; i++ ) ceilings[i].visible = visible;
 		for ( let i = 0; i < objs.length; i++ ) objs[i].visible = visible;
 		for ( let i = 0; i < roofs.length; i++ ) roofs[i].visible = visible;
+		
+		//for ( let i = 0; i < otop.points.length; i++ ) otop.points[i].visible = visible;
+		for ( let i = 0; i < otop.tubes.length; i++ ) otop.tubes[i].visible = visible;		
 	}
 	
 
