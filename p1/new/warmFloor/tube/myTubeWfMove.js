@@ -64,16 +64,16 @@ class MyTubeWfMove
 		const isMove = this.isMove;
 		
 		// после смещения трубы, возращаем в 0 и обновляем геометрию
-		obj.position.set(0, 0, 0);
-		myWarmFloor.myTubeWf.upTube({tube: obj});
+		if(obj)
+		{
+			obj.position.set(0, 0, 0);
+			myWarmFloor.myTubeWf.upTube({tube: obj});			
+		}
 		
 		this.clearPoint();
 		
 		if (!isDown) return;
 		if (!isMove) return;
-
-		// определяем с чем точка пересеклась и дальнейшие действия
-		//if(!obj.userData.point.type) myHouse.myPointAction.clickCreateWall(obj);
 	}
 	
 	clearPoint()
