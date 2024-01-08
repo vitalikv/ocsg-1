@@ -1,48 +1,17 @@
 
 
-class MyPointWfMove 
+class MyTubeWfMove 
 {
 	isDown = false;
 	isMove = false;
 	offset = new THREE.Vector3();
-	isTypeToolPoint = false;	// режим добавления точки из каталога
 	sObj = null;		// выделенный объект (точка)
 	
 	
-	clickRight({obj})
-	{
-		if(!this.isTypeToolPoint) return;
-		
-		myWarmFloor.deleteObj({obj});		
-		
-		this.isTypeToolPoint = false;
-		this.clearPoint();
-
-		this.render();
-	}
-	
-	mousedown = ({event, obj, toolPoint = false}) =>
+	mousedown = ({event, obj}) =>
 	{
 		this.isDown = false;
 		this.isMove = false;	
-
-		// при первом создании Tool, это игнорируется
-		if(this.isTypeToolPoint) 
-		{
-			// определяем с чем точка пересеклась и дальнейшие действия
-			obj = myWarmFloor.myPointWf.crPoint({pos: obj.position.clone(), lastPoint: obj});
-			
-			this.sObj = obj;
-			
-			if(!this.sObj) 
-			{				
-				this.isTypeToolPoint = false;
-				this.clearPoint();
-				return null;
-			}
-		}
-		
-		this.isTypeToolPoint = toolPoint;
 		
 		this.sObj = obj;
 		
@@ -80,11 +49,12 @@ class MyPointWfMove
 		
 		obj.position.add( offset );	
 
-		const tube = obj.userData.tube;
-		if(tube)
+		const points = myWarmFloor.myTubeWf.getPointsInArrayTube({tube: obj});
+		
+		for ( let i = 0; i < points.length; i++ )
 		{
-			myWarmFloor.myTubeWf.upTube({tube});
-		}		
+			points[i].position.add( offset );
+		}
 	}
 	
 	mouseup = () =>
@@ -92,6 +62,9 @@ class MyPointWfMove
 		const obj = this.sObj;
 		const isDown = this.isDown;
 		const isMove = this.isMove;
+		
+		obj.position.set(0, 0, 0);
+		myWarmFloor.myTubeWf.upTube({tube: obj});
 		
 		this.clearPoint();
 		
@@ -103,9 +76,7 @@ class MyPointWfMove
 	}
 	
 	clearPoint()
-	{
-		if(this.isTypeToolPoint) return;
-		
+	{	
 		this.sObj = null;
 		this.isDown = false;
 		this.isMove = false;

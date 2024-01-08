@@ -5,6 +5,7 @@ class MyWarmFloor
 	myPointWf;
 	myPointWfMove;
 	myTubeWf;
+	myTubeWfMove;
 	mySaveWf;
 	myLoadWf;
 	levels = [];
@@ -20,6 +21,7 @@ class MyWarmFloor
 		this.myPointWf = new MyPointWf();
 		this.myPointWfMove = new MyPointWfMove();
 		this.myTubeWf = new MyTubeWf();
+		this.myTubeWfMove = new MyTubeWfMove();
 		this.mySaveWf = new MySaveWf();
 		this.myLoadWf = new MyLoadWf();
 	}

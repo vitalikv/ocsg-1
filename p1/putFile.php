@@ -100,6 +100,7 @@ new/warmFloor/myLoadWf.js
 new/warmFloor/point/myPointWf.js
 new/warmFloor/point/myPointWfMove.js
 new/warmFloor/tube/myTubeWf.js
+new/warmFloor/tube/myTubeWfMove.js
 ';
 
 $arrF = array();

@@ -90,7 +90,7 @@ class StartProject
 			if(this.name === 'demo 5')
 			{
 				const posCam = new THREE.Vector3(-5.423621210213024, 8.416384589708008, 10.811106485572816);
-				const posTarget = new THREE.Vector3(-0.7498043105489184, -0.5977752688080544, 0);
+				const posTarget = new THREE.Vector3(-0.7498043105489184, 0, 0);
 				myCameraOrbit.setStartPosRot3D({posCam, posTarget});				
 			}			
 			

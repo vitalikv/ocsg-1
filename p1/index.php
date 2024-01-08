@@ -216,6 +216,7 @@
 	<script src="<?=$path?>new/warmFloor/point/myPointWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/point/myPointWfMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/tube/myTubeWf.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/tube/myTubeWfMove.js?<?=$vrs?>"></script>
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		
