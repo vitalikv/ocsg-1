@@ -15,7 +15,7 @@ function createImageScene()
 		var background = scene.background.clone();
 		scene.background = new THREE.Color( 0xffffff );
 		infProject.scene.grid.visible = false;
-		infProject.settings.shader.fxaaPass.enabled = true;
+		//infProject.settings.shader.fxaaPass.enabled = true;
 		renderer.render( scene, myCameraOrbit.activeCam );
 		
 		var strMime = "image/png";
@@ -24,7 +24,7 @@ function createImageScene()
 		showHidePoint({visible: true});
 		scene.background = background;
 		infProject.scene.grid.visible = true;
-		infProject.settings.shader.fxaaPass.enabled = false;
+		//infProject.settings.shader.fxaaPass.enabled = false;
 		renderer.render( scene, myCameraOrbit.activeCam );
  
 				

@@ -111,6 +111,7 @@ class MyCameraOrbit
 
 	mouseDown = (event) =>
 	{
+		myComposerRenderer.fxaaPass.enabled = false;
 		if(this.stopMove) return;
 		this.mouse.down = true;
 		this.mouse.move = false;
@@ -161,9 +162,11 @@ class MyCameraOrbit
 
 	mouseUp = (event) =>
 	{
+		myComposerRenderer.fxaaPass.enabled = true;
 		this.mouse.button = '';
 		this.mouse.down = false;
-		this.mouse.move = false;		
+		this.mouse.move = false;
+		this.render();
 	}
 	
 	

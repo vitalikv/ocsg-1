@@ -57,7 +57,7 @@ class MyComposerRenderer
 		this.fxaaPass = new THREE.ShaderPass( THREE.FXAAShader );	
 		this.fxaaPass.material.uniforms[ 'resolution' ].value.x = 1 / ( containerF.clientWidth * window.devicePixelRatio );
 		this.fxaaPass.material.uniforms[ 'resolution' ].value.y = 1 / ( containerF.clientHeight * window.devicePixelRatio );	
-		this.fxaaPass.enabled = false;
+		this.fxaaPass.enabled = true;
 		
 		this.composer.addPass( this.fxaaPass ); 	
 	}	
