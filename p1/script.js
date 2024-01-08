@@ -1152,7 +1152,7 @@ let myTabsR;
 let myContentLevel;
 let myContentPlan;
 let divLevelVisible;
-let tabObject;
+let myContentObj;
 let myCatalogList;
 let myPanelWF;
 
@@ -1216,10 +1216,12 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	myContentLevel = new MyContentLevel();
 	myContentPlan = new MyContentPlan();
+	myContentObj = new MyContentObj();
+	
 	myTabsR = new MyTabsR();
 	
 	divLevelVisible = new DivLevelVisible({showAllLevel: true, wallTransparent: false});	
-	tabObject = new TabObject();
+	
 	myCatalogList = new MyCatalogList();
 	switchCamera = new SwitchCamera();	
 	myPanelWF = new MyPanelWF();	

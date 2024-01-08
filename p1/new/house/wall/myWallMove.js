@@ -55,7 +55,7 @@ class MyWallMove
 		//--------------
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
-		tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
+		myContentObj.activeObjRightPanelUI_1({obj: obj}); 	// UI
 
 		this.isDown = true;		
 	}
@@ -154,7 +154,7 @@ class MyWallMove
 		this.idSide = index;
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
-		tabObject.activeObjRightPanelUI_1({obj: obj, side: index});
+		myContentObj.activeObjRightPanelUI_1({obj: obj, side: index});
 	}
 
 

@@ -55,7 +55,7 @@ new/ui/right-panel/myTabsR.js
 new/ui/right-panel/myContentLevel.js
 new/ui/right-panel/myContentPlan.js
 new/ui/right-panel/divLevelVisible.js
-new/ui/right-panel/tabObject.js
+new/ui/right-panel/myContentObj.js
 new/ui/right-panel/catalog/myCatalogList.js
 new/ui/right-panel/warmFloor/myPanelWF.js
 new/tools/myToolPG.js

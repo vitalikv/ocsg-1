@@ -24,7 +24,7 @@ class MyTubeWfMove
 		this.offset = intersects[0].point;		
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
-		//tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
+		//myContentObj.activeObjRightPanelUI_1({obj: obj}); 	// UI
 		
 		myWarmFloor.myTubeWf.visiblePointsOnTube({tube: obj, visible: true});
 

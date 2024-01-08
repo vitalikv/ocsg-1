@@ -35,7 +35,7 @@ class MyRoofMove
 		}
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
-		tabObject.activeObjRightPanelUI_1({obj}); 	// UI
+		myContentObj.activeObjRightPanelUI_1({obj}); 	// UI
 		
 		myToolPG.activeTool({obj});		
 	}
@@ -63,7 +63,7 @@ class MyRoofMove
 		}
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
-		tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
+		myContentObj.activeObjRightPanelUI_1({obj: obj}); 	// UI
 		
 		myToolPG.activeTool({obj});
 

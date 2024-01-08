@@ -35,7 +35,7 @@ class MyWDMove
 		}
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
-		tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
+		myContentObj.activeObjRightPanelUI_1({obj: obj}); 	// UI
 
 		this.isDown = true;		
 	}

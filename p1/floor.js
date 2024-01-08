@@ -250,7 +250,7 @@ function clickFloor({obj})
 	myComposerRenderer.outlineAddObj({arr: [obj]});
 	plane.userData.floorId = obj.userData.id;	// нужно чтобы понять к какому полу приклеплен
 	
-	tabObject.activeObjRightPanelUI_1({obj});
+	myContentObj.activeObjRightPanelUI_1({obj});
 }
 
 

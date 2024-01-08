@@ -388,7 +388,7 @@ class MyManagerClick
 			}
 		}
 
-		tabObject.activeObjRightPanelUI_1();
+		myContentObj.activeObjRightPanelUI_1();
 		myComposerRenderer.outlineRemoveObj();
 	}
 
