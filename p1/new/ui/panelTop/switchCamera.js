@@ -44,7 +44,7 @@ class SwitchCamera
 		
 		myCameraOrbit.setActiveCam({cam});		
 		
-		tabs.upCurrentTab();	// обновляем текущую вкладку, например прячем в 3D вкладку 'Дом'
+		myTabsR.upCurrentTab();	// обновляем текущую вкладку, например прячем в 3D вкладку 'Дом'
 		this.showHideDivTypeCam();	
 	}
 	

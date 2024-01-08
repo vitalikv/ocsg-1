@@ -1148,8 +1148,8 @@ let windDivProjectDemo;
 let windDivSubs;
 let myPanelR;
 let myPanelPlan;
-let tabs;
-let tabLevel;
+let myTabsR;
+let myContentLevel;
 let divLevelVisible;
 let tabPlan;
 let tabObject;
@@ -1213,8 +1213,10 @@ document.addEventListener("DOMContentLoaded", ()=>
 
 	myPanelR = new MyPanelR();
 	myPanelPlan = new MyPanelPlan();
-	tabs = new Tabs();
-	tabLevel = new TabLevel();
+	
+	myContentLevel = new MyContentLevel();
+	myTabsR = new MyTabsR();
+	
 	divLevelVisible = new DivLevelVisible({showAllLevel: true, wallTransparent: false});
 	tabPlan = new TabPlan();
 	tabObject = new TabObject();

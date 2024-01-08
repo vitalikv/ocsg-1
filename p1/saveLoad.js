@@ -527,7 +527,7 @@ async function loadFilePL(json)
 		myLevels.visibleLevelCam2D(i, false);
 	}	
 	
-	tabLevel.setStartInputValue();
+	myContentLevel.setStartInputValue();
 	
 	myLevels.activateLevel(0);
 	myLevels.visibleLevelCam2D(0, true);

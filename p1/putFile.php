@@ -51,8 +51,8 @@ new/ui/menu/divProjectDemo.js
 new/ui/menu/divSubs.js
 new/ui/right-panel/myPanelR.js
 new/ui/right-panel/plan/myPanelPlan.js
-new/ui/right-panel/tabs.js
-new/ui/right-panel/tabLevel.js
+new/ui/right-panel/myTabsR.js
+new/ui/right-panel/myContentLevel.js
 new/ui/right-panel/divLevelVisible.js
 new/ui/right-panel/tabPlan.js
 new/ui/right-panel/tabObject.js

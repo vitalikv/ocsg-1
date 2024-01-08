@@ -1,13 +1,22 @@
 
 
-class Tabs 
+class MyTabsR 
 {
 	currentTabId = -1;
 	items = [];
 	
 	constructor()
 	{
+		this.init();
+	}
+	
+	init()
+	{
 		const container = document.querySelector('[nameId="panelPlan"]');
+		const wrapTabs = container.querySelector('[nameId="wrapTabsR"]');
+		
+		const divTabs = this.crDiv();
+		wrapTabs.append(divTabs);
 		
 		// кнопки переключения вкладок
 		const btn1 = container.querySelector('[nameId="button_wrap_level"]');
@@ -40,6 +49,47 @@ class Tabs
 		this.items[2].btn.onmousedown = () => { this.activeTab({id: 2}); };
 		this.items[3].btn.onmousedown = () => { this.activeTab({id: 3}); };		
 	}
+
+
+	crDiv()
+	{
+		const div = document.createElement('div');
+		div.innerHTML = this.html();
+		return div.children[0];	
+	}
+	
+	
+	html()
+	{
+		const html = 
+		`<div class="flex_1 bottom_line_1">
+			<div class="flex_1 relative_1 right_panel_1_item">	
+				<div class="right_panel_1_item_block" nameId="button_wrap_level">
+					<div class="right_panel_1_item_block_text">
+						этажи
+					</div>	
+				</div>			
+				<div class="right_panel_1_item_block" nameId="button_wrap_plan">
+					<div class="right_panel_1_item_block_text">
+						дом
+					</div>	
+				</div>			
+				<div class="right_panel_1_item_block" nameId="button_wrap_object">
+					<div class="right_panel_1_item_block_text">
+						объект
+					</div>	
+				</div>			
+				<div class="right_panel_1_item_block" nameId="button_wrap_catalog">
+					<div class="right_panel_1_item_block_text">
+						каталог
+					</div>	
+				</div>			
+			</div>
+		</div>`;
+
+		return html;
+	}
+	
 	
 	// переключаем вкладки правой панели 
 	activeTab({id})
