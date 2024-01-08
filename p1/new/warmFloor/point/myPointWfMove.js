@@ -56,6 +56,9 @@ class MyPointWfMove
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
 		//tabObject.activeObjRightPanelUI_1({obj: obj}); 	// UI
+		
+		const tube = myWarmFloor.myPointWf.getTubeFromPoint({point: obj});
+		if(tube) myWarmFloor.myTubeWf.visiblePointsOnTube({tube, visible: true});		
 
 		this.isDown = true;
 

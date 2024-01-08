@@ -32,7 +32,7 @@ function detectDeleteObj()
 
 function deleteWall_1( wall )
 {	
-	myManagerClick.hideMenuUI(wall);
+	myManagerClick.hideMenuUI();
 	
 	var points = wall.userData.wall.p;
 
@@ -145,7 +145,7 @@ function deletePoint( point )
 	if(!point){ return [ null, null ]; }
 	if(point.p.length != 2){ return [ null, null ]; }
 	
-	myManagerClick.hideMenuUI(point);
+	myManagerClick.hideMenuUI();
 	
 	var wall_1 = point.w[0];
 	var wall_2 = point.w[1];

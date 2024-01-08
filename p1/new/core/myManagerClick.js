@@ -219,12 +219,14 @@ class MyManagerClick
 		}
 		else if(type === 'up')
 		{	
-			if( tag == 'wall' && isCam3D ) { myHouse.myWallMove.click3D({obj, rayhit}); }
-			else if( tag == 'room' && isCam3D ) { clickFloor({obj}); }
-			else if( tag == 'window' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }
-			else if( tag == 'door' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }
-			else if( tag == 'roof' && isCam3D) { myHouse.myRoofMove.click({event, obj}); }
-			else if( tag == 'obj' && isCam3D) { myHouse.myObjMove.click({event, obj}); }
+			if(tag == 'wall' && isCam3D) { myHouse.myWallMove.click3D({obj, rayhit}); }
+			else if(tag == 'room' && isCam3D) { clickFloor({obj}); }
+			else if(tag == 'window' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }
+			else if(tag == 'door' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }
+			else if(tag == 'roof' && isCam3D) { myHouse.myRoofMove.click({event, obj}); }
+			else if(tag == 'obj' && isCam3D) { myHouse.myObjMove.click({event, obj}); }
+			else if(tag == 'pointWf' && isCam3D) { myWarmFloor.myPointWfMove.mousedown({event, obj}); }
+			else if(tag == 'tubeWf' && isCam3D) { myWarmFloor.myTubeWfMove.mousedown({event, obj}); }			
 			else { flag = false; }
 		}	
 
@@ -327,8 +329,8 @@ class MyManagerClick
 						this.hideMenuUI();
 					}					 
 				}
-				else if(tag == 'pointWf' && isCam2D) { this.hideMenuUI(); }
-				else if(tag == 'tubeWf' && isCam2D) { this.hideMenuUI(); }
+				else if(tag == 'pointWf' && isCam2D) { this.hideMenuUI({obj}); }
+				else if(tag == 'tubeWf' && isCam2D) { this.hideMenuUI({obj}); }
 				else { flag = false; }
 			}
 			else if(type === 'up')
@@ -340,8 +342,8 @@ class MyManagerClick
 				else if(tag == 'door' && isCam3D) { hideSizeWD(); this.hideMenuUI(); }
 				else if(tag == 'roof' && isCam3D) { myToolPG.hide(); this.hideMenuUI(); }
 				else if(tag == 'obj' && isCam3D) { myToolPG.hide(); this.hideMenuUI(); }
-				else if(tag == 'pointWf' && isCam3D) { this.hideMenuUI(); }
-				else if(tag == 'tubeWf' && isCam3D) { this.hideMenuUI(); }
+				else if(tag == 'pointWf' && isCam3D) { this.hideMenuUI({obj}); }
+				else if(tag == 'tubeWf' && isCam3D) { this.hideMenuUI({obj}); }
 				else { flag = false; }
 			}
 			else
@@ -354,8 +356,8 @@ class MyManagerClick
 				else if(tag == 'room') { this.hideMenuUI(); }
 				else if(tag == 'obj') { myToolPG.hide(); this.hideMenuUI(); }
 				else if(tag == 'roof') { myToolPG.hide(); this.hideMenuUI(); }
-				else if(tag == 'pointWf') { this.hideMenuUI(); }
-				else if(tag == 'tubeWf') { this.hideMenuUI(); }
+				else if(tag == 'pointWf') { this.hideMenuUI({obj}); }
+				else if(tag == 'tubeWf') { this.hideMenuUI({obj}); }
 				else { flag = false; }
 			}
 		}
@@ -367,9 +369,24 @@ class MyManagerClick
 		}
 	}
 
-	hideMenuUI() 
+	hideMenuUI({obj}={}) 
 	{
 		console.log('hideMenuUI');
+		
+		if(obj)
+		{
+			const tag = obj.userData.tag;
+			
+			if(tag)
+			{
+				if(tag == 'pointWf') 
+				{  
+					const tube = myWarmFloor.myPointWf.getTubeFromPoint({point: obj});
+					if(tube) myWarmFloor.myTubeWf.visiblePointsOnTube({tube, visible: false});					
+				}
+				else if(tag == 'tubeWf') { myWarmFloor.myTubeWf.visiblePointsOnTube({tube: obj, visible: false}); }
+			}
+		}
 
 		tabObject.activeObjRightPanelUI_1();
 		myComposerRenderer.outlineRemoveObj();

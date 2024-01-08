@@ -106,10 +106,18 @@ class MyTubeWf
 		return tube.userData.points[index];
 	}
 
-	// получаем все толчки из массива трубы
+	// получаем все точки из массива трубы
 	getPointsInArrayTube({tube})
 	{
 		return tube.userData.points;
+	}
+	
+	// скрываем показываем точки у трубы
+	visiblePointsOnTube({tube, visible})
+	{
+		const points = this.getPointsInArrayTube({tube});
+		
+		points.forEach((p) => { p.visible = visible; });
 	}
 	
 	// удаляем трубу

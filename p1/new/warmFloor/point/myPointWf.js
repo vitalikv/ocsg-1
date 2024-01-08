@@ -82,6 +82,11 @@ class MyPointWf
 		this.geometry.elementsNeedUpdate = true;		
 	}
 	
+	// получаем из точки трубу, к которой относится точка 
+	getTubeFromPoint({point})
+	{
+		return point.userData.tube;
+	}
 
 	// удаление точки
 	deletePointWf({obj})

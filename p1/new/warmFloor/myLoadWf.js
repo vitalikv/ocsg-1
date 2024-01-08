@@ -27,6 +27,7 @@ class MyLoadWf
 					pos.y -= minY;
 					
 					const point = myWarmFloor.myPointWf.crPoint({pos, id, idLevel});
+					point.visible = false;
 					arrP.push(point);
 				}
 				

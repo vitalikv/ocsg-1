@@ -48,7 +48,13 @@ class MyWarmFloor
 		const objs = this.getObjsActLevel();
 		
 		let rayhit = null;
-		const array = (type === 'points') ? objs.points : objs.tubes;
+		let array = (type === 'points') ? objs.points : objs.tubes;
+		
+		if(type === 'points')
+		{
+			array = array.filter((p) => p.visible);
+		}
+		
 		const ray = rayIntersect( event, array, 'arr' );
 		if(ray.length > 0) rayhit = ray[0];
 
