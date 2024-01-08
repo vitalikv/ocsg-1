@@ -63,6 +63,7 @@ class MyTubeWfMove
 		const isDown = this.isDown;
 		const isMove = this.isMove;
 		
+		// после смещения трубы, возращаем в 0 и обновляем геометрию
 		obj.position.set(0, 0, 0);
 		myWarmFloor.myTubeWf.upTube({tube: obj});
 		

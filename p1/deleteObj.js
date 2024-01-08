@@ -24,6 +24,7 @@ function detectDeleteObj()
 	else if ( tag == 'window' || tag == 'door' ) { deleteWinDoor({wd: obj}); }
 	else if ( tag == 'obj' ) { deleteObjectPop({obj: obj}); }
 	else if ( tag == 'roof' ) { deleteObjectPop({obj: obj}); }
+	else if ( tag == 'pointWf' || tag == 'tubeWf' ) { myWarmFloor.deleteObj({obj}); }
 	
 	renderCamera();
 }

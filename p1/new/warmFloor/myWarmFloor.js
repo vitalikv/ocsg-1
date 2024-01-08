@@ -87,7 +87,7 @@ class MyWarmFloor
 		{
 			result = this.checkDelPointWf({result, point: obj});
 			
-			// обновляем линию
+			// обновляем линию и удаляем из массива трубы точку
 			if(result.up.tube) this.myTubeWf.upTube({tube: result.up.tube, delPoint: obj});
 			
 			// удаляем точки
@@ -97,6 +97,14 @@ class MyWarmFloor
 			if(result.del.tube)	this.myTubeWf.deleteTubeWf({obj: result.del.tube});			
 		}
 		
+		if(obj.userData.tag === 'tubeWf')
+		{
+			const points = this.myTubeWf.getPointsInArrayTube({tube: obj});
+			
+			points.forEach((o) => { this.myPointWf.deletePointWf({obj: o}); });
+			
+			this.myTubeWf.deleteTubeWf({obj});
+		}
 	}
 	
 	// проверка перед удалением точки
