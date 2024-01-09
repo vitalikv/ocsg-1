@@ -167,7 +167,7 @@
 	<script src="<?=$path?>new/ui/right-panel/myTabsR.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/myContentLevel.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/myContentPlan.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/right-panel/divLevelVisible.js?<?=$vrs?>"></script>	
+	<script src="<?=$path?>new/ui/right-panel/myLevelVisible.js?<?=$vrs?>"></script>	
 	<script src="<?=$path?>new/ui/right-panel/myContentObj.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/catalog/myCatalogList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/warmFloor/myPanelWF.js?<?=$vrs?>"></script>

@@ -27,7 +27,7 @@ function changeCamera()
 		
 		// прячем стены
 		getInfoRenderWall();
-		if(divLevelVisible.wallTransparent && myCameraOrbit.cam3D.userData.type === 'fly') wallAfterRender_2();	
+		if(myPanelR.myLevelVisible.wallTransparent && myCameraOrbit.cam3D.userData.type === 'fly') wallAfterRender_2();	
 		else showAllWallRender();
 		
 		myHouse.myRoofCSG.cgs();

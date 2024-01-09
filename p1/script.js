@@ -1147,8 +1147,6 @@ let windDivProjectSave;
 let windDivProjectDemo;
 let windDivSubs;
 let myPanelR;
-let myTabsR;
-let divLevelVisible;
 let myCatalogList;
 let myPanelWF;
 
@@ -1208,11 +1206,8 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myLevels = new MyLevels();
 
 	myPanelR = new MyPanelR();
-	
-	
-	myTabsR = new MyTabsR();
-	
-	divLevelVisible = new DivLevelVisible({showAllLevel: true, wallTransparent: false});	
+
+		
 	
 	myCatalogList = new MyCatalogList();
 	switchCamera = new SwitchCamera();	

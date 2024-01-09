@@ -52,7 +52,7 @@ class MyLevels
 		}
 		else if(myCameraOrbit.activeCam.userData.isCam3D)
 		{
-			if(divLevelVisible.wallTransparent && myCameraOrbit.activeCam.userData.type === 'fly') wallAfterRender_2();
+			if(myPanelR.myLevelVisible.wallTransparent && myCameraOrbit.activeCam.userData.type === 'fly') wallAfterRender_2();
 			else showAllWallRender();
 		}
 		
@@ -269,7 +269,7 @@ class MyLevels
 		{		
 			if(myCameraOrbit.activeCam.userData.isCam3D && this.activeId !== i) 
 			{
-				this.visibleLevelCam3D(i, divLevelVisible.showAllLevel);
+				this.visibleLevelCam3D(i, myPanelR.myLevelVisible.showAllLevel);
 			}
 			if(myCameraOrbit.activeCam.userData.isCam2D && this.activeId !== i) 
 			{

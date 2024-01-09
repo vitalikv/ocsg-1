@@ -53,7 +53,7 @@ new/ui/right-panel/myPanelR.js
 new/ui/right-panel/myTabsR.js
 new/ui/right-panel/myContentLevel.js
 new/ui/right-panel/myContentPlan.js
-new/ui/right-panel/divLevelVisible.js
+new/ui/right-panel/myLevelVisible.js
 new/ui/right-panel/myContentObj.js
 new/ui/right-panel/catalog/myCatalogList.js
 new/ui/right-panel/warmFloor/myPanelWF.js

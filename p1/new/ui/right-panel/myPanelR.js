@@ -9,6 +9,8 @@ class MyPanelR
 	myContentLevel;
 	myContentPlan;
 	myContentObj;
+	myTabsR;
+	myLevelVisible;
 	
 	
 	constructor()
@@ -18,6 +20,9 @@ class MyPanelR
 		this.myContentLevel = new MyContentLevel();
 		this.myContentPlan = new MyContentPlan();
 		this.myContentObj = new MyContentObj();
+		this.myTabsR = new MyTabsR();
+		
+		this.myLevelVisible = new MyLevelVisible({showAllLevel: true, wallTransparent: false});
 	}
 	
 	init()

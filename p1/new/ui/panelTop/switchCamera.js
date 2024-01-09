@@ -44,15 +44,15 @@ class SwitchCamera
 		
 		myCameraOrbit.setActiveCam({cam});		
 		
-		myTabsR.upCurrentTab();	// обновляем текущую вкладку, например прячем в 3D вкладку 'Дом'
+		myPanelR.myTabsR.upCurrentTab();	// обновляем текущую вкладку, например прячем в 3D вкладку 'Дом'
 		this.showHideDivTypeCam();	
 	}
 	
 	// прячем/показываем блок с настройками отображения стен и этажей
 	showHideDivTypeCam()
 	{
-		if(myCameraOrbit.activeCam.userData.isCam2D) divLevelVisible.container.style.display = 'none';
-		if(myCameraOrbit.activeCam.userData.isCam3D) divLevelVisible.container.style.display = '';
+		if(myCameraOrbit.activeCam.userData.isCam2D) myPanelR.myLevelVisible.container.style.display = 'none';
+		if(myCameraOrbit.activeCam.userData.isCam3D) myPanelR.myLevelVisible.container.style.display = '';
 	}	
 }
 

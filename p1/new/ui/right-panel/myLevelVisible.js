@@ -1,6 +1,6 @@
 
 
-class DivLevelVisible 
+class MyLevelVisible 
 {
 	showAllLevel;
 	wallTransparent;

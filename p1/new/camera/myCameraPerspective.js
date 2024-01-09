@@ -106,7 +106,7 @@ class MyCameraPerspective extends THREE.PerspectiveCamera
 			
 			// прячем стены
 			getInfoRenderWall();
-			if(divLevelVisible.wallTransparent && this.userData.type === 'fly') wallAfterRender_2();	
+			if(myPanelR.myLevelVisible.wallTransparent && this.userData.type === 'fly') wallAfterRender_2();	
 			else showAllWallRender();
 		}
 	}

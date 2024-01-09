@@ -27,7 +27,7 @@ class EventMyCamera
 		
 	moveCamFly3D()
 	{
-		if(divLevelVisible.wallTransparent) wallAfterRender_2();
+		if(myPanelR.myLevelVisible.wallTransparent) wallAfterRender_2();
 		myToolPG.setScale();
 		myToolPG.setGizmoClipping();		
 	}
