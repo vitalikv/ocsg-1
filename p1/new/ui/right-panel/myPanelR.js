@@ -15,18 +15,6 @@ class MyPanelR
 	
 	constructor()
 	{
-		this.init();
-		
-		this.myContentLevel = new MyContentLevel();
-		this.myContentPlan = new MyContentPlan();
-		this.myContentObj = new MyContentObj();
-		this.myTabsR = new MyTabsR();
-		
-		this.myLevelVisible = new MyLevelVisible({showAllLevel: true, wallTransparent: false});
-	}
-	
-	init()
-	{
 		const wrap = document.querySelector('[nameId="wrapP2"]');
 		const div = this.crDiv({type: 1});
 		wrap.append(div);
@@ -35,9 +23,17 @@ class MyPanelR
 		
 		this.divPanel_1 = this.crDiv({type: 2});
 		this.divPanelR.append(this.divPanel_1);	
-		
-		
+				
 		this.btnShow = div.querySelector('[nameId="button_show_panel_catalog"]');		
+	}
+	
+	init()
+	{
+		this.myContentLevel = new MyContentLevel();
+		this.myContentPlan = new MyContentPlan();
+		this.myContentObj = new MyContentObj();
+		this.myTabsR = new MyTabsR();		
+		this.myLevelVisible = new MyLevelVisible({showAllLevel: true, wallTransparent: false});		
 		
 		this.initEvent();
 	}

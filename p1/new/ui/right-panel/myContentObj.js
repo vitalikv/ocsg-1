@@ -13,8 +13,7 @@ class MyContentObj
 	
 	init()
 	{
-		const container = document.querySelector('[nameId="panelPlan"]');
-		const wrapDiv = container.querySelector('[nameId="contObjR"]');		
+		const wrapDiv = myPanelR.divPanelR.querySelector('[nameId="contObjR"]');		
 		
 		const div = this.crDiv();
 		wrapDiv.append(div);

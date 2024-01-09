@@ -12,7 +12,7 @@ class MyTabsR
 	
 	init()
 	{
-		const container = document.querySelector('[nameId="panelPlan"]');
+		const container = myPanelR.divPanelR;
 		const wrapTabs = container.querySelector('[nameId="wrapTabsR"]');
 		
 		const divTabs = this.crDiv();

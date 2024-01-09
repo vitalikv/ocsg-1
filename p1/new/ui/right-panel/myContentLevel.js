@@ -6,8 +6,7 @@ class MyContentLevel
 	
 	constructor()
 	{
-		const container = document.querySelector('[nameId="panelPlan"]');
-		const wrapDiv = container.querySelector('[nameId="contLevelR"]');		
+		const wrapDiv = myPanelR.divPanelR.querySelector('[nameId="contLevelR"]');		
 		
 		const elBlock = this.crDiv();
 		wrapDiv.append(elBlock);

@@ -14,8 +14,7 @@ class MyContentPlan
 	
 	init()
 	{
-		const container = document.querySelector('[nameId="panelPlan"]');
-		const wrapDiv = container.querySelector('[nameId="contPlanR"]');		
+		const wrapDiv = myPanelR.divPanelR.querySelector('[nameId="contPlanR"]');		
 		
 		const div = this.crDiv();
 		wrapDiv.append(div);

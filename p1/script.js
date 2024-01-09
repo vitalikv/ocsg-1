@@ -1206,7 +1206,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myLevels = new MyLevels();
 
 	myPanelR = new MyPanelR();
-
+	myPanelR.init();
 		
 	
 	myCatalogList = new MyCatalogList();
