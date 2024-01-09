@@ -34,7 +34,7 @@ class MyObjMove
 		}
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
-		myContentObj.activeObjRightPanelUI_1({obj}); 	// UI
+		myPanelR.myContentObj.activeObjRightPanelUI_1({obj}); 	// UI
 		
 		myToolPG.activeTool({obj});		
 	}

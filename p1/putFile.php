@@ -50,7 +50,6 @@ new/ui/menu/divProjectLoad.js
 new/ui/menu/divProjectDemo.js
 new/ui/menu/divSubs.js
 new/ui/right-panel/myPanelR.js
-new/ui/right-panel/plan/myPanelPlan.js
 new/ui/right-panel/myTabsR.js
 new/ui/right-panel/myContentLevel.js
 new/ui/right-panel/myContentPlan.js

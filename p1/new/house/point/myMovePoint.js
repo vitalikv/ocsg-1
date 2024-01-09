@@ -90,7 +90,7 @@ class MyMovePoint
 		}
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
-		myContentObj.activeObjRightPanelUI_1({obj: obj}); 	// UI
+		myPanelR.myContentObj.activeObjRightPanelUI_1({obj: obj}); 	// UI
 
 		this.isDown = true;
 

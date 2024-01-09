@@ -3,35 +3,55 @@
 class MyPanelR
 {
 	container;
+	divPanelR;
+	divPanel_1;
 	btnShow;
-	btnClose;
+	myContentLevel;
+	myContentPlan;
+	myContentObj;
 	
 	
 	constructor()
 	{
 		this.init();
+		
+		this.myContentLevel = new MyContentLevel();
+		this.myContentPlan = new MyContentPlan();
+		this.myContentObj = new MyContentObj();
 	}
 	
 	init()
 	{
 		const wrap = document.querySelector('[nameId="wrapP2"]');
-		const div = this.crDiv();
+		const div = this.crDiv({type: 1});
 		wrap.append(div);
 		
-		this.container = div.querySelector('[nameId="panelR"]');
-		this.btnShow = div.querySelector('[nameId="button_show_panel_catalog"]');
-		this.btnClose = this.container.querySelector('[nameId="button_catalog_close"]');
+		this.divPanelR = div.querySelector('[nameId="panelR"]');
+		
+		this.divPanel_1 = this.crDiv({type: 2});
+		this.divPanelR.append(this.divPanel_1);	
+		
+		
+		this.btnShow = div.querySelector('[nameId="button_show_panel_catalog"]');		
 		
 		this.initEvent();
 	}
 
-	crDiv()
+	crDiv({type})
 	{
 		const div = document.createElement('div');
-		div.innerHTML = this.html_1();
+		
+		let html = '';
+		
+		if(type === 1) html = this.html_1();
+		if(type === 2) html = this.html_2();
+		
+		div.innerHTML = html;
+		
 		return div.children[0];	
 	}
 	
+	// пустая панель с кнопкой закрытия и открытия панели
 	html_1()
 	{
 		const html = 
@@ -48,11 +68,41 @@ class MyPanelR
 		return html;
 	}
 
+
+	// заполняем панель
+	html_2()
+	{  		
+		const html = 
+		`<div class="flex_column_1 right_panel_1_1" nameId="panelPlan">
+			<div nameId="wrapTabsR"></div>
+		
+			<div nameId="contLevelR"></div>
+			
+			<div nameId="contPlanR"></div>
+			
+			<div nameId="contObjR"></div>			
+			
+			<div class="flex_column_1 relative_1 height100" nameId="wrap_catalog" style="display: none;">
+				<div class="right_panel_1_1_h">Каталог</div>
+				
+				<div class="right_panel_2_1_list" list_ui="catalog">
+					
+				</div>
+			</div>
+			
+		</div>`;
+
+
+		return html;
+	}
+
 	
 	initEvent()
 	{
-		this.btnShow.onmousedown = () => { this.showHidePanelR({show: true}); }
-		this.btnClose.onmousedown = () => { this.showHidePanelR({show: false}); }		
+		const btnClose = this.divPanelR.querySelector('[nameId="button_catalog_close"]');
+		btnClose.onmousedown = () => { this.showHidePanelR({show: false}); }
+		
+		this.btnShow.onmousedown = () => { this.showHidePanelR({show: true}); }				
 	}
 	
 	// скрываем/показываем правую панель
@@ -60,12 +110,12 @@ class MyPanelR
 	{
 		if(show) 
 		{ 
-			this.container.style.display = ''; 
+			this.divPanelR.style.display = ''; 
 			this.btnShow.style.display = 'none';
 		}
 		else 
 		{ 
-			this.container.style.display = 'none'; 
+			this.divPanelR.style.display = 'none'; 
 			this.btnShow.style.display = '';
 		}
 	}

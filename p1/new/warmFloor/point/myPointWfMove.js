@@ -55,7 +55,7 @@ class MyPointWfMove
 		this.offset = intersects[0].point;		
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
-		//myContentObj.activeObjRightPanelUI_1({obj: obj}); 	// UI
+		//myPanelR.myContentObj.activeObjRightPanelUI_1({obj: obj}); 	// UI
 		
 		const tube = myWarmFloor.myPointWf.getTubeFromPoint({point: obj});
 		if(tube) myWarmFloor.myTubeWf.visiblePointsOnTube({tube, visible: true});		

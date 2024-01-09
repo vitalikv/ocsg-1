@@ -190,7 +190,7 @@ function inputLengthWall_1(cdm)
 	upLabelPlan_1( wallR );		
 	updateShapeFloor( compileArrPickZone(wall) );  				 			
 	
-	myContentObj.activeObjRightPanelUI_1({obj: wall});
+	myPanelR.myContentObj.activeObjRightPanelUI_1({obj: wall});
 
 	clickPointUP_BSP(wallR);
 }

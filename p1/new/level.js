@@ -58,7 +58,7 @@ class MyLevels
 		
 		if(myCameraOrbit.activeCam.userData.isCam2D) upPosLabels_1({resize: true});
 
-		myContentLevel.levelBackground_UI({id});	// меняем фон у UI item этажа
+		myPanelR.myContentLevel.levelBackground_UI({id});	// меняем фон у UI item этажа
 	}
 	
 	// обновляем данные для активного этажа, передаем от scene.array к this.levels[id]

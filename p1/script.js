@@ -1147,12 +1147,8 @@ let windDivProjectSave;
 let windDivProjectDemo;
 let windDivSubs;
 let myPanelR;
-let myPanelPlan;
 let myTabsR;
-let myContentLevel;
-let myContentPlan;
 let divLevelVisible;
-let myContentObj;
 let myCatalogList;
 let myPanelWF;
 
@@ -1212,11 +1208,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myLevels = new MyLevels();
 
 	myPanelR = new MyPanelR();
-	myPanelPlan = new MyPanelPlan();
 	
-	myContentLevel = new MyContentLevel();
-	myContentPlan = new MyContentPlan();
-	myContentObj = new MyContentObj();
 	
 	myTabsR = new MyTabsR();
 	
