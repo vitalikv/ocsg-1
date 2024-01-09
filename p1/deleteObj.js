@@ -18,9 +18,9 @@ function detectDeleteObj()
 	{
 		if ( tag == 'wall' ) return;
 	}
-		
+	
 	if ( tag == 'wall' ) { deleteWall_1( obj ).room; }
-	else if ( tag == 'point' ) { if(obj.p.length == 2) { deletePoint( obj ); } }
+	else if ( tag == 'point' ) { if(obj.p.length < 3) { deletePoint( obj ); } }
 	else if ( tag == 'window' || tag == 'door' ) { deleteWinDoor({wd: obj}); }
 	else if ( tag == 'obj' ) { deleteObjectPop({obj: obj}); }
 	else if ( tag == 'roof' ) { deleteObjectPop({obj: obj}); }
@@ -143,6 +143,7 @@ function deleteOnePoint( point )
 function deletePoint( point )
 {
 	if(!point){ return [ null, null ]; }
+	if(point.p.length === 1){ deleteWall_3({wall: point.w[0]}); return [ null, null ]; }
 	if(point.p.length != 2){ return [ null, null ]; }
 	
 	myManagerClick.hideMenuUI();
