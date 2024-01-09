@@ -169,6 +169,11 @@
 	<script src="<?=$path?>new/ui/right-panel/myContentPlan.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/myLevelVisible.js?<?=$vrs?>"></script>	
 	<script src="<?=$path?>new/ui/right-panel/myContentObj.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/insetObj/myTabObjWall.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/insetObj/myTabObjRoom.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/insetObj/myTabObjWD.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/insetObj/myTabObjRoof.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/insetObj/myTabObjObject.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/catalog/myCatalogList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/warmFloor/myPanelWF.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/myCookie.js?<?=$vrs?>"></script>

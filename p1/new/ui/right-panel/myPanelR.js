@@ -30,10 +30,13 @@ class MyPanelR
 	init()
 	{
 		this.myContentLevel = new MyContentLevel();
+		this.myLevelVisible = new MyLevelVisible({showAllLevel: true, wallTransparent: false});	
 		this.myContentPlan = new MyContentPlan();
-		this.myContentObj = new MyContentObj();
-		this.myTabsR = new MyTabsR();		
-		this.myLevelVisible = new MyLevelVisible({showAllLevel: true, wallTransparent: false});		
+		this.myContentObj = new MyContentObj();							
+		
+		this.myContentObj.init();
+		
+		this.myTabsR = new MyTabsR();
 		
 		this.initEvent();
 	}
