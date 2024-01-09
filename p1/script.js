@@ -1226,9 +1226,9 @@ document.addEventListener("DOMContentLoaded", ()=>
 	startProject = new StartProject();
 	startProject.init();
 	
-	//if(startProject.detectShowStartWind()) windUI.showWin();
+	if(startProject.detectShowStartWind()) windUI.showWin();
 	
-	if(1===1) myPanelTop.addPaidPanel();	// панель для платных пользователей	
+	if(1===2) myPanelTop.addPaidPanel();	// панель для платных пользователей	
 	
 	animate();
 	renderCamera();	

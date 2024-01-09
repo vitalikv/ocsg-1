@@ -17,8 +17,8 @@ class StartProject
 		let searchParams = new URLSearchParams(paramsString);	
 		let demo = searchParams.get('demo');
 			
-		divLevelVisible.switchShowAllLevel({value: true});
-		divLevelVisible.switchWallTransparent({value: true});			
+		myPanelR.myLevelVisible.switchShowAllLevel({value: true});
+		myPanelR.myLevelVisible.switchWallTransparent({value: true});			
 			
 		if(demo)
 		{
@@ -33,8 +33,8 @@ class StartProject
 		
 		if(this.name === 'demo 1' || this.name === 'demo 2' || this.name === 'demo 3' || this.name === 'demo 4' || this.name === 'demo 5')
 		{
-			divLevelVisible.switchShowAllLevel({value: true});
-			divLevelVisible.switchWallTransparent({value: false});
+			myPanelR.myLevelVisible.switchShowAllLevel({value: true});
+			myPanelR.myLevelVisible.switchWallTransparent({value: false});
 
 			let nameFile = '1.json';
 			if(this.name === 'demo 1') nameFile = '1.json';
