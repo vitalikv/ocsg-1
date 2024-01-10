@@ -100,10 +100,23 @@ class MyTabObjWfTube
 		if(!obj) return;
 		if(obj.userData.tag !== 'tubeWf') return;
 		
-		//const diameter = this.inputDiameter.value;
+		// проверка на правильный ввод числа
+		const result = checkNumberInput({ value: diameter, unit: 1, abs: true, limit: {min: 10, max: 1000} });
 		
-		diameter /= 1000;
-		myWarmFloor.myTubeWf.changeDiameterTube({tube: obj, diameter});
+		if(!result)
+		{
+			diameter = myWarmFloor.myTubeWf.getDiameterTube({tube: obj});
+			diameter *= 1000;		
+			diameter = Math.round(diameter * 100)/100;			
+		}
+		else
+		{
+			diameter = result.num;
+		}
+
+		myWarmFloor.myTubeWf.changeDiameterTube({tube: obj, diameter: diameter/1000});
+		
+		this.setInputDiameter({diameter: diameter/1000});
 	}
 }
 
