@@ -11,6 +11,8 @@ class MyContentObj
 	myTabObjWD;
 	myTabObjRoof;
 	myTabObjObject;
+	myTabObjWfPoint;
+	myTabObjWfTube;
 	
 	
 	constructor()
@@ -32,13 +34,18 @@ class MyContentObj
 		this.myTabObjRoom = new MyTabObjRoom();
 		this.myTabObjWD = new MyTabObjWD();
 		this.myTabObjRoof = new MyTabObjRoof();
-		this.myTabObjObject = new MyTabObjObject();		
+		this.myTabObjObject = new MyTabObjObject();
+		this.myTabObjWfPoint = new MyTabObjWfPoint();
+		this.myTabObjWfTube = new MyTabObjWfTube();
 		
 		this.divs.wall = this.container.querySelector('[nameId="rp_menu_wall"]');
 		this.divs.wd = this.container.querySelector('[nameId="rp_menu_wd"]');
 		this.divs.floor = this.container.querySelector('[nameId="rp_menu_room"]');
 		this.divs.roof = this.container.querySelector('[nameId="bl_roof_3d"]');
-		this.divs.obj = this.container.querySelector('[nameId="bl_object_3d"]');		
+		this.divs.obj = this.container.querySelector('[nameId="bl_object_3d"]');
+
+		this.divs.pointWf = this.container.querySelector('[nameId="bl_pointWf"]');
+		this.divs.tubeWf = this.container.querySelector('[nameId="bl_tubeWf"]');
 	}
 	
 	initEvent()
@@ -87,6 +94,8 @@ class MyContentObj
 		this.divs.floor.style.display = 'none';
 		this.divs.roof.style.display = 'none';
 		this.divs.obj.style.display = 'none';
+		this.divs.pointWf.style.display = 'none';
+		this.divs.tubeWf.style.display = 'none';
 		
 		
 		if(!obj) return;
@@ -170,6 +179,24 @@ class MyContentObj
 			
 			if( isCheckExsistFunction(window['getInfObjFromBD']) ) { getInfObjFromBD({obj: obj}); };
 		}
+		else if(obj.userData.tag === 'pointWf')
+		{
+			txtName = 'точка';
+			
+			this.divs.pointWf.style.display = '';
+		}
+		else if(obj.userData.tag === 'tubeWf')
+		{
+			txtName = 'труба';
+			
+			const length = myWarmFloor.myTubeWf.getLengthTube({tube: obj});
+			this.myTabObjWfTube.setInputLength({length});
+			
+			const diameter = myWarmFloor.myTubeWf.getDiameterTube({tube: obj});
+			this.myTabObjWfTube.setInputDiameter({diameter});
+			
+			this.divs.tubeWf.style.display = '';
+		}		
 
 		this.inputName.value = txtName;
 		

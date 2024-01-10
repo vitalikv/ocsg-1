@@ -60,6 +60,8 @@ new/ui/right-panel/insetObj/myTabObjRoom.js
 new/ui/right-panel/insetObj/myTabObjWD.js
 new/ui/right-panel/insetObj/myTabObjRoof.js
 new/ui/right-panel/insetObj/myTabObjObject.js
+new/ui/right-panel/insetObj/myTabObjWfPoint.js
+new/ui/right-panel/insetObj/myTabObjWfTube.js
 new/ui/right-panel/catalog/myCatalogList.js
 new/ui/right-panel/warmFloor/myPanelWF.js
 new/tools/myToolPG.js

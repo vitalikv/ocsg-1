@@ -14,7 +14,7 @@ class MyTubeWf
 	init()
 	{
 		this.geometry = new THREE.SphereGeometry( 0.1, 16, 16 );
-		this.material = new THREE.MeshStandardMaterial({ color: 0xcccccc, lightMap : lightMap_1 });
+		this.material = new THREE.MeshStandardMaterial({ color: 0xcccccc, lightMap : lightMap_1, side: THREE.DoubleSide });
 	}
 	
 
@@ -51,15 +51,16 @@ class MyTubeWf
 			if (index > -1) tube.userData.points.splice(index, 1);
 		}
 				
-		const points = tube.userData.points;		
-		const geometry = this.getGeometryTube({points});
+		const points = this.getPointsInArrayTube({tube});
+		const diameter = this.getDiameterTube({tube});
+		const geometry = this.getGeometryTube({points, diameter});
 		
 		tube.geometry.dispose();
 		tube.geometry = geometry;			
 	}	
 	
 	// рассчитываем геометрию трубы
-	getGeometryTube({points})
+	getGeometryTube({points, diameter = 0.05})
 	{
 		const arrPos = [];		
 		for(let i = 0; i < points.length; i++) arrPos[i] = points[i].position.clone();
@@ -74,7 +75,6 @@ class MyTubeWf
 			length += arrPos[i].distanceTo(arrPos[i + 1]); 
 		}		
 		
-		const diameter = 0.05;
 		const inf = { extrusionSegments: Math.round(length * 50), radiusSegments: 12, closed: false };
 		
 		const geometry = new THREE.TubeBufferGeometry( pipeSpline, inf.extrusionSegments, diameter/2, inf.radiusSegments, inf.closed );	
@@ -120,13 +120,55 @@ class MyTubeWf
 		points.forEach((p) => { p.visible = visible; });
 	}
 	
+	// получаем длину трубы
+	getLengthTube({tube})
+	{
+		const points = this.getPointsInArrayTube({tube});
+
+		let length = 0;
+		for(let i = 0; i < points.length - 1; i++) 
+		{ 
+			length += points[i].position.distanceTo(points[i + 1].position); 
+		}	
+		
+		length = Math.round(length * 100)/100;
+		
+		return length;
+	}
+
+
+	// получаем диаметр трубы
+	getDiameterTube({tube})
+	{
+		return tube.geometry.parameters.radius * 2;
+	}
+
+
+	// изменяем диаметр трубы
+	changeDiameterTube({tube, diameter})
+	{		
+		tube.geometry.parameters.radius = diameter / 2;
+		
+		const points = this.getPointsInArrayTube({tube});
+		
+		this.upTube({tube});
+		
+		this.render();
+	}		
+	
 	// удаляем трубу
 	deleteTubeWf({obj})
 	{
 		myWarmFloor.deleteFromArray({obj, type: 'tubes'}); 
 		disposeHierchy({obj});
 		scene.remove(obj);
-	}	
+	}
+
+	
+	render()
+	{
+		renderCamera();
+	}
 }
 
 

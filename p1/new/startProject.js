@@ -3,7 +3,7 @@
 
 class StartProject
 {
-	name = 'new';
+	name = '';
 	
 	constructor()
 	{
@@ -11,8 +11,10 @@ class StartProject
 	}
 	
 	
-	init()
+	init({name})
 	{
+		this.name = name;
+		
 		let paramsString = document.location.search; // ?demo=1&demo=2
 		let searchParams = new URLSearchParams(paramsString);	
 		let demo = searchParams.get('demo');

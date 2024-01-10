@@ -1224,9 +1224,9 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myWarmFloor = new MyWarmFloor();
 	
 	startProject = new StartProject();
-	startProject.init();
+	startProject.init({name: 'new2'});
 	
-	if(startProject.detectShowStartWind()) windUI.showWin();
+	//if(startProject.detectShowStartWind()) windUI.showWin();
 	
 	if(1===2) myPanelTop.addPaidPanel();	// панель для платных пользователей	
 	

@@ -24,7 +24,7 @@ class MyTubeWfMove
 		this.offset = intersects[0].point;		
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
-		//myPanelR.myContentObj.activeObjRightPanelUI_1({obj: obj}); 	// UI
+		myPanelR.myContentObj.activeObjRightPanelUI_1({obj}); 	// UI
 		
 		myWarmFloor.myTubeWf.visiblePointsOnTube({tube: obj, visible: true});
 
@@ -66,7 +66,7 @@ class MyTubeWfMove
 		const isMove = this.isMove;
 		
 		// после смещения трубы, возращаем в 0 и обновляем геометрию
-		if(obj)
+		if(obj && isMove)
 		{
 			obj.position.set(0, 0, 0);
 			myWarmFloor.myTubeWf.upTube({tube: obj});			
