@@ -201,10 +201,10 @@ class Roof
 		scene.remove(obj); 
 		
 		myLevels.updateArrLevel();
-	
-		myComposerRenderer.outlineRemoveObj();
 
-		myHouse.myRoofCSG.updateCgsRoof()
+		myHouse.myRoofCSG.updateCgsRoof();
+		
+		myManagerClick.hideMenuObjUI_2D();
 	
 		renderCamera();
 	}

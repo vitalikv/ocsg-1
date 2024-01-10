@@ -50,8 +50,6 @@ function deleteObjectPop(cdm)
 	
 	clickO = resetPop.clickO(); 
 	
-	myToolPG.hide();
-	
 	for(var i = 0; i < arr.length; i++)
 	{	
 		deleteValueFromArrya({arr : infProject.scene.array.obj, o : arr[i]});		
@@ -59,7 +57,7 @@ function deleteObjectPop(cdm)
 		scene.remove(arr[i]); 
 	}
 	
-	myComposerRenderer.outlineRemoveObj();
+	myManagerClick.hideMenuObjUI_2D();
 	
 	renderCamera();
 }

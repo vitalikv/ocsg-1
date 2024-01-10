@@ -162,6 +162,8 @@ class MyTubeWf
 		myWarmFloor.deleteFromArray({obj, type: 'tubes'}); 
 		disposeHierchy({obj});
 		scene.remove(obj);
+		
+		myManagerClick.hideMenuObjUI_2D();
 	}
 
 	

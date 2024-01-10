@@ -94,6 +94,8 @@ class MyPointWf
 		myWarmFloor.deleteFromArray({obj, type: 'points'}); 
 		disposeHierchy({obj});
 		scene.remove(obj);
+		
+		myManagerClick.hideMenuObjUI_2D();
 	}
 	
 }
