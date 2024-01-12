@@ -19,9 +19,9 @@ class MyTubeWf
 	
 
 	// создаем новую трубу
-	crTube({points, id = null, idLevel = null})
+	crTube({points, id = null, idLevel = null, diameter = 0.05})
 	{
-		const geometry = this.getGeometryTube({points});
+		const geometry = this.getGeometryTube({points, diameter});
 	
 		const tube = new THREE.Mesh(geometry, this.material);			
 

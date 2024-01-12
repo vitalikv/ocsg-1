@@ -16,6 +16,7 @@ class MyLoadWf
 				const t = levels[i].tubes[i2];
 				const id = t.id;
 				const minY = t.pos.y;
+				const diameter = (t.d) ? t.d : undefined;
 				const p = t.p;
 									
 				const arrP = [];
@@ -31,7 +32,7 @@ class MyLoadWf
 					arrP.push(point);
 				}
 				
-				const tube = myWarmFloor.myTubeWf.crTube({points: arrP, id, idLevel});
+				const tube = myWarmFloor.myTubeWf.crTube({points: arrP, id, idLevel, diameter});
 				tube.position.y += minY;
 				
 				for ( let i3 = 0; i3 < arrP.length; i3++ )
