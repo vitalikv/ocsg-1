@@ -68,12 +68,12 @@ class MyContentObj
 		`<div nameId="wrap_object">		
 			<div class="right_panel_1_1_h">Объект</div>
 			
-			<div class="flex_column_1" nameId="wrap_object_1" style="display: none;">								
+			<div class="flex_column_1" nameId="wrap_object_1" style="display: none; margin-top: 10px;">								
 				<div class="rp_obj_name">
 					<input type="text" nameId="rp_obj_name" value="Название">					
 				</div>								
 								
-				<div nameId="contentInfo"></div>				
+				<div nameId="contentInfo" style="margin-top: 20px;"></div>				
 			</div>	
 		</div>`;
 

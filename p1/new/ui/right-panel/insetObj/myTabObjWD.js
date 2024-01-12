@@ -40,8 +40,11 @@ class MyTabObjWD
 					</div>
 				</div>
 				<div class="flex_1 align_items" style="width: auto;">
-					<input type="text" style="width: 90%; margin:5px 5px;" nameId="size-wd-length" value="0">
+					<input type="text" style="width: 100px; margin:5px 5px;" nameId="size-wd-length" value="0">
 				</div>
+				<div class="flex_1 align_items" style="width: auto;">
+					<div style="margin: 5px; font-size: 16px; color: #666;">м</div>
+				</div>				
 			</div>
 			
 			<div class="flex_1">
@@ -51,8 +54,11 @@ class MyTabObjWD
 					</div>
 				</div>
 				<div class="flex_1 align_items" style="width: auto;">
-					<input type="text" style="width: 90%; margin:5px 5px;" nameId="size-wd-height" value="0">
+					<input type="text" style="width: 100px; margin:5px 5px;" nameId="size-wd-height" value="0">
 				</div>
+				<div class="flex_1 align_items" style="width: auto;">
+					<div style="margin: 5px; font-size: 16px; color: #666;">м</div>
+				</div>				
 			</div>	
 
 			<div class="flex_1" nameId="rp_item_wd_h1">
@@ -62,8 +68,11 @@ class MyTabObjWD
 					</div>
 				</div>
 				<div class="flex_1 align_items" style="width: auto;">
-					<input type="text" style="width: 90%; margin:5px 5px;" nameId="rp_wd_h1" value="0">
+					<input type="text" style="width: 100px; margin:5px 5px;" nameId="rp_wd_h1" value="0">
 				</div>
+				<div class="flex_1 align_items" style="width: auto;">
+					<div style="margin: 5px; font-size: 16px; color: #666;">м</div>
+				</div>				
 			</div>					
 			
 			<div class="flex_1" style="margin: 15px auto;">						

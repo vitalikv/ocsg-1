@@ -41,8 +41,11 @@ class MyTabObjWall
 						</div>
 					</div>
 					<div class="flex_1 align_items" style="width: auto;">
-						<input type="text" style="width: 90%; margin:5px 5px;" nameId="size_wall_width_1" value="0">
+						<input type="text" style="width: 100px; margin:5px 5px;" nameId="size_wall_width_1" value="0">
 					</div>
+					<div class="flex_1 align_items" style="width: auto;">
+						<div style="margin: 5px; font-size: 16px; color: #666;">м</div>
+					</div>					
 				</div>										
 			</div>
 
@@ -50,7 +53,7 @@ class MyTabObjWall
 				<div class="right_panel_1_1_h">
 					Текстура
 				</div>
-				<div class="flex_1 texture_wall" nameId="rp_block_wall_texture_1">
+				<div class="flex_1 texture_wall" nameId="rp_block_wall_texture_1" style="margin-top: 10px;">
 					<div class="button1 button_gradient_1 texture_wall_2" nameId="rp_button_wall_texture_1">
 						<div class="texture_wall_2_text">A</div>							
 						<img src="" nameId="wall_texture_1img">	

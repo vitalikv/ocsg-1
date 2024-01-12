@@ -56,7 +56,10 @@ class MyTabObjWfTube
 					</div>
 				</div>
 				<div class="flex_1 align_items" style="width: auto;">
-					<input type="text" style="width: 90%; margin:5px 5px; background: #eee; cursor: default;" nameId="tube-wf-length" value="0" readonly>
+					<input type="text" style="width: 100px; margin:5px 5px; background: #eee; cursor: default;" nameId="tube-wf-length" value="0" readonly>
+				</div>
+				<div class="flex_1 align_items" style="width: auto;">
+					<div style="margin: 5px; font-size: 16px; color: #666;">м</div>
 				</div>
 			</div>
 			
@@ -67,8 +70,11 @@ class MyTabObjWfTube
 					</div>
 				</div>
 				<div class="flex_1 align_items" style="width: auto;">
-					<input type="text" style="width: 90%; margin:5px 5px;" nameId="tube-wf-diameter" value="0">
+					<input type="text" style="width: 100px; margin:5px 5px;" nameId="tube-wf-diameter" value="0">
 				</div>
+				<div class="flex_1 align_items" style="width: auto;">
+					<div style="margin: 5px; font-size: 16px; color: #666;">мм</div>
+				</div>				
 			</div>						
 								
 		</div>`;
