@@ -35,7 +35,7 @@ class MyTabObjWfTube
 			}
 		};		
 		
-		this.divColor.onmousedown = () => { myPanelR.myColorPicker.showHidePicker({show: true}); }
+		this.divColor.onmousedown = () => { myPanelR.myColorPicker.showHidePicker({show: true, div: this.divColor}); }
 	}
 
 

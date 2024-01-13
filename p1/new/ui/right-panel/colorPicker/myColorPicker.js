@@ -5,10 +5,13 @@ class MyColorPicker
 	wrap;
 	container;
 	planeColor;
-	currentColor;
+	divColor;
 	divLineGradient;
 	arrowsLineG;
 	dataLineG = {height: 180, width: 20, Hue: 0};
+	currentObj = null;
+	oldColor = null;
+	divObjColor = null;
 	
 	
 	constructor()
@@ -20,7 +23,7 @@ class MyColorPicker
 		this.wrap.prepend(this.container);	
 		
 		this.planeColor = this.container.querySelector('[nameId="planeColor"]');
-		this.currentColor = this.container.querySelector('[nameId="currentColor"]');
+		this.divColor = this.container.querySelector('[nameId="divColor"]');
 		this.arrowsLineG = this.container.querySelector('[nameId="arrows"]');
 		this.circle = this.container.querySelector('[nameId="circle"]');
 		this.line = this.container.querySelector('[nameId="line"]');		
@@ -92,7 +95,7 @@ class MyColorPicker
 					<div nameId="circle" style="width:8px; height:8px; border:1px solid black; border-radius:50%; position:absolute; left:0; top:0;"></div>
 				</div>
 
-				<div nameId="currentColor" style="height: 20px; background: #FFF; border: solid 1px #b3b3b3; margin-top: 10px;"></div>
+				<div nameId="divColor" style="height: 20px; background: #FFF; border: solid 1px #b3b3b3; margin-top: 10px;"></div>
 				
 				<div style="display: flex; margin-top: 10px; justify-content: space-between;">
 				
@@ -100,7 +103,7 @@ class MyColorPicker
 						применить
 					</div>
 
-					<div nameId="btnClose" style="margin-left: 10px; text-decoration: none; text-align: center; padding: 5px; border: solid 1px #b3b3b3; font-size: 12px; font-weight: bold; color: #737373; box-shadow: 0px 0px 2px #bababa, inset 0px 0px 1px #ffffff; background-image: -webkit-linear-gradient(top, #ffffff 0%, #e3e3e3 100%); cursor: pointer;">
+					<div nameId="btnCancel" style="margin-left: 10px; text-decoration: none; text-align: center; padding: 5px; border: solid 1px #b3b3b3; font-size: 12px; font-weight: bold; color: #737373; box-shadow: 0px 0px 2px #bababa, inset 0px 0px 1px #ffffff; background-image: -webkit-linear-gradient(top, #ffffff 0%, #e3e3e3 100%); cursor: pointer;">
 						отменить
 					</div>
 				</div>			
@@ -145,10 +148,19 @@ class MyColorPicker
 		this.wrap.onmousedown = (e) => { this.closeWinOnWrap(e); }
 		
 		const btnOk = this.container.querySelector('[nameId="btnOk"]');
-		const btnClose = this.container.querySelector('[nameId="btnClose"]');
+		const btnCancel = this.container.querySelector('[nameId="btnCancel"]');
 		
-		btnOk.onmousedown = () => { this.showHidePicker({show: false}); }
-		btnClose.onmousedown = () => { this.showHidePicker({show: false}); }
+		btnOk.onmousedown = () => 
+		{ 
+			this.divObjColor.style.background = this.divColor.style.background;
+			this.showHidePicker({show: false}); 
+		}
+		
+		btnCancel.onmousedown = () => 
+		{ 
+			this.changeColorObj({color: this.oldColor});
+			this.showHidePicker({show: false}); 
+		}
 
 		// отменяем событие выбора цвета
 		this.wrap.onmouseup = () => { this.wrap.onmousemove = null; }
@@ -196,9 +208,9 @@ class MyColorPicker
 		this.dataLineG.Hue = t;
 
 		this.planeColor.style.background = "rgb("+this.hsv_rgb(t,100,100)+")";
-		this.currentColor.style.background = "rgb("+this.hsv_rgb(t, this.S, this.V)+")";
+		this.divColor.style.background = "rgb("+this.hsv_rgb(t, this.S, this.V)+")";
 		
-		this.changeColorObj();
+		this.changeColorObj({color: this.divColor.style.background});
 	}
 	
 	
@@ -239,9 +251,9 @@ class MyColorPicker
 		this.S = S;
 		this.V = V;
 
-		this.currentColor.style.background = "rgb("+this.hsv_rgb(this.dataLineG.Hue, S, V)+")";
+		this.divColor.style.background = "rgb("+this.hsv_rgb(this.dataLineG.Hue, S, V)+")";
 
-		this.changeColorObj();
+		this.changeColorObj({color: this.divColor.style.background});
 	}
 
 	
@@ -276,12 +288,11 @@ class MyColorPicker
 	
 	
 	// меняем цвет у выделенного объекта
-	changeColorObj()
+	changeColorObj({color})
 	{
-		const obj = myComposerRenderer.getOutlineObj();
-		if(!obj) return;
+		if(!this.currentObj) return;
 		
-		const color = this.currentColor.style.background;
+		const obj = this.currentObj;
 		
 		if(obj.userData.tag === 'tubeWf')
 		{
@@ -290,27 +301,37 @@ class MyColorPicker
 	}
 		
 	// скрываем/показываем colorPicker
-	showHidePicker({show})
+	showHidePicker({show, div = null})
 	{
-		if(show) { this.wrap.style.display = ''; this.openColorPicker(); }
-		else { this.wrap.style.display = 'none'; }
+		if(show) 
+		{ 
+			this.wrap.style.display = '';
+			this.resetObj();
+			this.openColorPicker({div});			
+		}
+		else 
+		{ 
+			this.wrap.style.display = 'none';
+			this.resetObj();			
+		}
 	}
 
 	// закрываем окно кликнув в пустоту 
 	closeWinOnWrap = (event) =>
 	{ 
 		if (this.wrap === event.target) 
-		{ 			 
+		{ 
+			this.changeColorObj({color: this.oldColor});
 			this.showHidePicker({show: false});
 		}
 	}
 
 	// при открытие ColorPicker устанавливаем цвета в нужные положения
-	openColorPicker()
+	openColorPicker({div})
 	{
 		const obj = myComposerRenderer.getOutlineObj();
 		if(!obj) return;
-
+		
 		let color = null;
 		
 		if(obj.userData.tag === 'tubeWf')
@@ -320,12 +341,13 @@ class MyColorPicker
 		
 		if(!color) return;
 		
-		const colorStr = '#'+ color.getHexString();
-			
-		this.currentColor.style.background = colorStr;
+		const colorStr = '#'+ color.clone().getHexString();
 		
-		const colorRGB = color.clone();	
-		const hsv = this.rgb2hsv(colorRGB.r, colorRGB.g, colorRGB.b);
+		this.setObj({obj, color: colorStr, div});
+				
+		this.divColor.style.background = colorStr;
+			
+		const hsv = this.rgb2hsv(color.r, color.g, color.b);
 		
 		this.arrowsLineG.style.top = (Math.abs(hsv.h - 360) * (this.dataLineG.height/ 360) - 2) + 'px';		
 		this.planeColor.style.backgroundColor = "rgb("+this.hsv_rgb(hsv.h,100,100)+")";		
@@ -386,7 +408,21 @@ class MyColorPicker
 		}
 		
 		return { h: Math.round(h * 360), s: percentRoundFn(s * 100), v: percentRoundFn(v * 100) };
-	}	
+	}
+
+	setObj({obj, color, div})
+	{
+		this.currentObj = obj;
+		this.oldColor = color;
+		this.divObjColor = div;
+	}
+	
+	resetObj()
+	{
+		this.currentObj = null;
+		this.oldColor = null;
+		this.divObjColor = null;
+	}
 }
 
 
