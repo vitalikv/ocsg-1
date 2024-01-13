@@ -306,7 +306,8 @@ class MyColorPicker
 		{ 
 			this.wrap.style.display = '';
 			this.resetObj();
-			this.openColorPicker({div});			
+			this.openColorPicker({div});
+			this.setPosModal({el: div});
 		}
 		else 
 		{ 
@@ -409,6 +410,19 @@ class MyColorPicker
 		return { h: Math.round(h * 360), s: percentRoundFn(s * 100), v: percentRoundFn(v * 100) };
 	}
 
+
+	// устанавливаем ColorPicker рядом с элементом/кнопкой на которую кликнули 
+	setPosModal({el})
+	{		
+		const rect = el.getBoundingClientRect();
+		
+		let top = (rect.top + rect.height/2 - this.container.clientHeight);		
+		if(top < 10) { top = 10; }
+		this.container.style.top = top+'px';
+		this.container.style.left = (rect.left - 20 - this.container.clientWidth)+'px';		
+	}
+	
+	// при открытии записываем данные
 	setObj({obj, color, div})
 	{
 		this.currentObj = obj;
@@ -416,6 +430,7 @@ class MyColorPicker
 		this.divObjColor = div;
 	}
 	
+	// при закрытии сбрасываем данные
 	resetObj()
 	{
 		this.currentObj = null;
