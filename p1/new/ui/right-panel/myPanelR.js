@@ -11,6 +11,7 @@ class MyPanelR
 	myContentObj;
 	myTabsR;
 	myLevelVisible;
+	myColorPicker;
 	
 	
 	constructor()
@@ -35,6 +36,8 @@ class MyPanelR
 		this.myContentObj = new MyContentObj();							
 		
 		this.myContentObj.init();
+		
+		this.myColorPicker = new MyColorPicker();
 		
 		this.myTabsR = new MyTabsR();
 		

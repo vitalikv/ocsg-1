@@ -176,6 +176,7 @@
 	<script src="<?=$path?>new/ui/right-panel/insetObj/myTabObjObject.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/insetObj/myTabObjWfPoint.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/insetObj/myTabObjWfTube.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/colorPicker/myColorPicker.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/catalog/myCatalogList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/warmFloor/myPanelWF.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/myCookie.js?<?=$vrs?>"></script>

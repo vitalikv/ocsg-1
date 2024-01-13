@@ -83,7 +83,7 @@ class WindUI
 	{ 
 		if (this.elMain === event.target) 
 		{ 			 
-			this.closeWin()
+			this.closeWin();
 		}
 	}	
 
