@@ -4,7 +4,7 @@ class MyTabObjWfTube
 {
 	inputLength;
 	inputDiameter;
-	
+	divColor;
 	
 	constructor()
 	{
@@ -20,6 +20,7 @@ class MyTabObjWfTube
 		
 		this.inputLength = div.querySelector('[nameId="tube-wf-length"]');
 		this.inputDiameter = div.querySelector('[nameId="tube-wf-diameter"]');
+		this.divColor = div.querySelector('[nameId="tube-wf-color"]');
 		
 		this.initEvent();
 	}
@@ -34,6 +35,7 @@ class MyTabObjWfTube
 			}
 		};		
 		
+		this.divColor.onmousedown = () => { myPanelR.myColorPicker.showHidePicker({show: true}); }
 	}
 
 
@@ -75,7 +77,18 @@ class MyTabObjWfTube
 				<div class="flex_1 align_items" style="width: auto;">
 					<div style="margin: 5px; font-size: 16px; color: #666;">мм</div>
 				</div>				
-			</div>						
+			</div>
+
+			<div class="flex_1">
+				<div class="flex_1 align_items">
+					<div class="rp_label_plane">
+						цвет
+					</div>
+				</div>
+				<div class="flex_1 align_items" style="width: auto;">
+					<div nameId="tube-wf-color" style="width: 100px; height: 18px; margin:5px 5px; padding: 2px; background: #9b9b9b; border: 1px solid #ccc; border-radius: 3px; cursor: pointer;"></div>
+				</div>				
+			</div>			
 								
 		</div>`;
 		
@@ -123,6 +136,12 @@ class MyTabObjWfTube
 		myWarmFloor.myTubeWf.changeDiameterTube({tube: obj, diameter: diameter/1000});
 		
 		this.setInputDiameter({diameter: diameter/1000});
+	}
+	
+	// устанавливаем цвет трубы
+	setDivColor({color})
+	{
+		this.divColor.style.background = color;
 	}
 }
 

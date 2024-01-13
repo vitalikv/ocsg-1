@@ -14,7 +14,7 @@ class MyTubeWf
 	init()
 	{
 		this.geometry = new THREE.SphereGeometry( 0.1, 16, 16 );
-		this.material = new THREE.MeshStandardMaterial({ color: 0xcccccc, lightMap : lightMap_1, side: THREE.DoubleSide });
+		this.material = new THREE.MeshStandardMaterial({ color: 0xcccccc, lightMap: lightMap_1, side: THREE.DoubleSide });
 	}
 	
 
@@ -23,7 +23,7 @@ class MyTubeWf
 	{
 		const geometry = this.getGeometryTube({points, diameter});
 	
-		const tube = new THREE.Mesh(geometry, this.material);			
+		const tube = new THREE.Mesh(geometry, this.material.clone());			
 
 		if(!id) { id = countId; countId++; }	
 		tube.userData.id = id;	
@@ -154,7 +154,23 @@ class MyTubeWf
 		this.upTube({tube});
 		
 		this.render();
-	}		
+	}
+
+
+	// получаем цвет трубы
+	getColorTube({tube})
+	{
+		return tube.material.color;
+	}
+
+	// изменяем цвет трубы
+	changeColorTube({tube, color})
+	{
+		tube.material.color = new THREE.Color( color );
+		tube.material.needsUpdate = true;
+		
+		this.render();
+	}	
 	
 	// удаляем трубу
 	deleteTubeWf({obj})

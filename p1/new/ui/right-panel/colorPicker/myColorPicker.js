@@ -10,6 +10,7 @@ class MyColorPicker
 	arrowsLineG;
 	dataLineG = {height: 180, width: 20, Hue: 0};
 	
+	
 	constructor()
 	{
 		this.wrap = this.crDiv({type: 1});
@@ -23,17 +24,10 @@ class MyColorPicker
 		this.arrowsLineG = this.container.querySelector('[nameId="arrows"]');
 		this.circle = this.container.querySelector('[nameId="circle"]');
 		this.line = this.container.querySelector('[nameId="line"]');		
-
 		
 		this.divLineGradient = this.crLineGradient();		
 		this.line.append(this.divLineGradient);
-		
-		this.cW = this.circle.offsetWidth ;
-		this.cH = this.circle.offsetHeight;
-		this.bWi = this.planeColor.offsetWidth - this.cW;
-		this.bHe = this.planeColor.offsetHeight - this.cH;
-		this.pxY = this.bHe / 100; 
-		this.pxX = this.bWi / 100;		
+				
 		this.V = 100;
 		this.S = 0;
 		
@@ -65,14 +59,14 @@ class MyColorPicker
 	html_1()
 	{
 		const cssWrap =
-		`display: block;
+		`display: none;
 		position: fixed;
 		left: 0px;
 		top: 0px;
 		width: 100%;
 		height: 100%;
 		font-family: arial, sans-serif;
-		background: rgba(0, 0, 0, 0.5);
+		background: rgba(0, 0, 0, 0.0);
 		user-select: none;`;
 
 		const html = `<div style="${cssWrap}"></div>`;
@@ -173,9 +167,9 @@ class MyColorPicker
 	initEventPlaneGradient()
 	{
 		this.planeColor.onmousedown = () =>
-		{
+		{ 
 			this.wrap.onmousemove = (e) =>
-			{
+			{ 
 				this.circlePickerMove(e);
 			}
 		}
@@ -204,7 +198,7 @@ class MyColorPicker
 		this.planeColor.style.background = "rgb("+this.hsv_rgb(t,100,100)+")";
 		this.currentColor.style.background = "rgb("+this.hsv_rgb(t, this.S, this.V)+")";
 		
-		//SettMat.changeColorTexture_2({ material: picker.mat, value: picker.out_color.style.backgroundColor });
+		this.changeColorObj();
 	}
 	
 	
@@ -213,15 +207,17 @@ class MyColorPicker
 	{
 		const planeColor = this.planeColor;
 		const circle = this.circle;
-		const cW = this.cW;
-		const cH = this.cH;
-		const bWi = this.bWi;
-		const bHe = this.bHe;
-		const pxY = this.pxY; 
-		const pxX = this.pxX;		
 
-		const bPstX = planeColor.getBoundingClientRect().left;
-		const bPstY = planeColor.getBoundingClientRect().top;		
+		const bound1 = planeColor.getBoundingClientRect();
+		
+		const cW = circle.offsetWidth ;
+		const cH = circle.offsetHeight;
+		const bWi = planeColor.offsetWidth - cW;
+		const bHe = planeColor.offsetHeight - cH;
+		const pxY = bHe / 100; 
+		const pxX = bWi / 100;		
+		const bPstX = bound1.left;
+		const bPstY = bound1.top;	
 	
 		let left = e.pageX - bPstX  - cW/2;
 		left = (left < 0) ? 0 : left;
@@ -245,7 +241,7 @@ class MyColorPicker
 
 		this.currentColor.style.background = "rgb("+this.hsv_rgb(this.dataLineG.Hue, S, V)+")";
 
-		//SettMat.changeColorTexture_2({ material: picker.mat, value: picker.out_color.style.backgroundColor });
+		this.changeColorObj();
 	}
 
 	
@@ -278,11 +274,25 @@ class MyColorPicker
 		return [parseInt(R*255), parseInt(G*255), parseInt(B*255)];
 	}
 	
+	
+	// меняем цвет у выделенного объекта
+	changeColorObj()
+	{
+		const obj = myComposerRenderer.getOutlineObj();
+		if(!obj) return;
+		
+		const color = this.currentColor.style.background;
+		
+		if(obj.userData.tag === 'tubeWf')
+		{
+			myWarmFloor.myTubeWf.changeColorTube({tube: obj, color});
+		}		
+	}
 		
 	// скрываем/показываем colorPicker
 	showHidePicker({show})
 	{
-		if(show) { this.wrap.style.display = ''; }
+		if(show) { this.wrap.style.display = ''; this.openColorPicker(); }
 		else { this.wrap.style.display = 'none'; }
 	}
 
@@ -293,8 +303,93 @@ class MyColorPicker
 		{ 			 
 			this.showHidePicker({show: false});
 		}
+	}
+
+	// при открытие ColorPicker устанавливаем цвета в нужные положения
+	openColorPicker()
+	{
+		const obj = myComposerRenderer.getOutlineObj();
+		if(!obj) return;
+
+		let color = null;
+		
+		if(obj.userData.tag === 'tubeWf')
+		{
+			color = myWarmFloor.myTubeWf.getColorTube({tube: obj});
+		}
+		
+		if(!color) return;
+		
+		const colorStr = '#'+ color.getHexString();
+			
+		this.currentColor.style.background = colorStr;
+		
+		const colorRGB = color.clone();	
+		const hsv = this.rgb2hsv(colorRGB.r, colorRGB.g, colorRGB.b);
+		
+		this.arrowsLineG.style.top = (Math.abs(hsv.h - 360) * (this.dataLineG.height/ 360) - 2) + 'px';		
+		this.planeColor.style.backgroundColor = "rgb("+this.hsv_rgb(hsv.h,100,100)+")";		
+
+		const bound1 = this.planeColor.getBoundingClientRect();		
+		const cW = this.circle.offsetWidth ;
+		const cH = this.circle.offsetHeight;
+		const bWi = this.planeColor.offsetWidth - cW;
+		const bHe = this.planeColor.offsetHeight - cH;
+		const pxY = bHe / 100; 
+		const pxX = bWi / 100;
+		
+		this.circle.style.top = Math.ceil(Math.abs((hsv.v - 100) * pxY)) + "px";
+		this.circle.style.left = Math.ceil(hsv.s * pxX)   + "px";
+		
+		if (hsv.v < 50) this.circle.style.borderColor = "#fff";
+		else this.circle.style.borderColor = "#000";
+
+		this.dataLineG.Hue = hsv.h;
+		this.S = hsv.s;
+		this.V = hsv.v;			
+	}
+
+	rgb2hsv(r, g, b) 
+	{
+		let rabs, gabs, babs, rr, gg, bb, h, s, v, diff, diffc, percentRoundFn;
+		rabs = r;
+		gabs = g;
+		babs = b;
+		v = Math.max(rabs, gabs, babs),
+		diff = v - Math.min(rabs, gabs, babs);
+		diffc = c => (v - c) / 6 / diff + 1 / 2;
+		percentRoundFn = num => Math.round(num * 100) / 100;
+		
+		if (diff == 0) 
+		{
+			h = s = 0;
+		} 
+		else 
+		{
+			s = diff / v;
+			rr = diffc(rabs);
+			gg = diffc(gabs);
+			bb = diffc(babs);
+
+			if (rabs === v) {
+				h = bb - gg;
+			} else if (gabs === v) {
+				h = (1 / 3) + rr - bb;
+			} else if (babs === v) {
+				h = (2 / 3) + gg - rr;
+			}
+			if (h < 0) {
+				h += 1;
+			}else if (h > 1) {
+				h -= 1;
+			}
+		}
+		
+		return { h: Math.round(h * 360), s: percentRoundFn(s * 100), v: percentRoundFn(v * 100) };
 	}	
 }
+
+
 
 
 

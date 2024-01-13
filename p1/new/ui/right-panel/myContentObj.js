@@ -195,6 +195,10 @@ class MyContentObj
 			const diameter = myWarmFloor.myTubeWf.getDiameterTube({tube: obj});
 			this.myTabObjWfTube.setInputDiameter({diameter});
 			
+			let color = myWarmFloor.myTubeWf.getColorTube({tube: obj});
+			color = '#'+ color.getHexString();
+			this.myTabObjWfTube.setDivColor({color});
+			
 			this.divs.tubeWf.style.display = '';
 		}		
 
