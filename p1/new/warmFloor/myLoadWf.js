@@ -17,6 +17,7 @@ class MyLoadWf
 				const id = t.id;
 				const minY = t.pos.y;
 				const diameter = (t.d) ? t.d : undefined;
+				const color = (t.color) ? t.color : undefined;
 				const p = t.p;
 									
 				const arrP = [];
@@ -34,6 +35,11 @@ class MyLoadWf
 				
 				const tube = myWarmFloor.myTubeWf.crTube({points: arrP, id, idLevel, diameter});
 				tube.position.y += minY;
+				
+				if(color)
+				{
+					myWarmFloor.myTubeWf.changeColorTube({tube, color});
+				}
 				
 				for ( let i3 = 0; i3 < arrP.length; i3++ )
 				{

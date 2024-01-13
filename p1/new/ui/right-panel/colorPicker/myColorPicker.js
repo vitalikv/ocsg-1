@@ -166,24 +166,23 @@ class MyColorPicker
 		this.wrap.onmouseup = () => { this.wrap.onmousemove = null; }
 	}
 	
-	
+	// событие по линии градиента
 	initEventLineGradient()
 	{
-		this.divLineGradient.onmousedown = () =>
+		this.divLineGradient.onmousedown = (e1) =>
 		{
-			this.wrap.onmousemove = (e) => { this.lineGradientMove(e); }
+			this.lineGradientMove(e1);
+			this.wrap.onmousemove = (e2) => { this.lineGradientMove(e2); }
 		}	
 	}
 
-
+	// событие по плоскости градиента
 	initEventPlaneGradient()
 	{
-		this.planeColor.onmousedown = () =>
+		this.planeColor.onmousedown = (e1) =>
 		{ 
-			this.wrap.onmousemove = (e) =>
-			{ 
-				this.circlePickerMove(e);
-			}
+			this.circlePickerMove(e1);
+			this.wrap.onmousemove = (e2) => { this.circlePickerMove(e2); }
 		}
 		
 		this.planeColor.ondragstart = () => { return false; }

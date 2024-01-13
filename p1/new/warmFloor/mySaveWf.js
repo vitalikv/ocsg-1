@@ -24,6 +24,7 @@ class MySaveWf
 				data.pos = objs.tubes[i2].position.clone();
 				data.pos.y -= posY;
 				data.d = myWarmFloor.myTubeWf.getDiameterTube({tube: objs.tubes[i2]});
+				data.color = myWarmFloor.myTubeWf.getColorTube({tube: objs.tubes[i2]});
 				data.p = [];
 				
 				for ( let i3 = 0; i3 < points.length; i3++ )
