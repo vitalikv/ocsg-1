@@ -18,6 +18,9 @@ class MyManagerClick
 		rayhit = myWarmFloor.clickRayhit({event, type: 'tubes'});
 		if(rayhit) return rayhit;
 		
+		rayhit = myWarmFloor.clickRayhit({event, type: 'objs'});
+		if(rayhit) return rayhit;		
+		
 		if(myToolPG.pivot.visible)
 		{
 			var ray = rayIntersect( event, myToolPG.pivot.children, 'arr' );
@@ -215,6 +218,7 @@ class MyManagerClick
 			else if(tag == 'obj' && isCam2D) { myHouse.myObjMove.click({event, obj}); }
 			else if(tag == 'pointWf' && isCam2D) { myWarmFloor.myPointWfMove.mousedown({event, obj}); }
 			else if(tag == 'tubeWf' && isCam2D) { myWarmFloor.myTubeWfMove.mousedown({event, obj}); }
+			else if(tag == 'objWf' && isCam2D) { myWarmFloor.myObjWfMove.mousedown({event, obj}); }
 			else { flag = false; }
 		}
 		else if(type === 'up')
@@ -226,7 +230,8 @@ class MyManagerClick
 			else if(tag == 'roof' && isCam3D) { myHouse.myRoofMove.click({event, obj}); }
 			else if(tag == 'obj' && isCam3D) { myHouse.myObjMove.click({event, obj}); }
 			else if(tag == 'pointWf' && isCam3D) { myWarmFloor.myPointWfMove.mousedown({event, obj}); }
-			else if(tag == 'tubeWf' && isCam3D) { myWarmFloor.myTubeWfMove.mousedown({event, obj}); }			
+			else if(tag == 'tubeWf' && isCam3D) { myWarmFloor.myTubeWfMove.mousedown({event, obj}); }
+			else if(tag == 'objWf' && isCam3D) { myWarmFloor.myObjWfMove.mousedown({event, obj}); }
 			else { flag = false; }
 		}	
 
@@ -261,6 +266,7 @@ class MyManagerClick
 		else if(tag == 'obj') { myHouse.myObjMove.mousemove(event); }
 		else if(tag == 'pointWf') { myWarmFloor.myPointWfMove.mousemove(event); }
 		else if(tag == 'tubeWf') { myWarmFloor.myTubeWfMove.mousemove(event); }
+		else if(tag == 'objWf') { myWarmFloor.myObjWfMove.mousemove(event); }
 	}
 
 
@@ -279,6 +285,7 @@ class MyManagerClick
 		else if(tag == 'obj') { myHouse.myObjMove.mouseup(); }
 		else if(tag == 'pointWf') { myWarmFloor.myPointWfMove.mouseup(); }
 		else if(tag == 'tubeWf') { myWarmFloor.myTubeWfMove.mouseup(); }
+		else if(tag == 'objWf') { myWarmFloor.myObjWfMove.mouseup(); }
 	}
 
 	
@@ -331,6 +338,7 @@ class MyManagerClick
 				}
 				else if(tag == 'pointWf' && isCam2D) { this.hideMenuUI({obj}); }
 				else if(tag == 'tubeWf' && isCam2D) { this.hideMenuUI({obj}); }
+				else if(tag == 'objWf' && isCam2D) { this.hideMenuUI({obj}); }
 				else { flag = false; }
 			}
 			else if(type === 'up')
@@ -344,6 +352,7 @@ class MyManagerClick
 				else if(tag == 'obj' && isCam3D) { myToolPG.hide(); this.hideMenuUI(); }
 				else if(tag == 'pointWf' && isCam3D) { this.hideMenuUI({obj}); }
 				else if(tag == 'tubeWf' && isCam3D) { this.hideMenuUI({obj}); }
+				else if(tag == 'objWf' && isCam3D) { this.hideMenuUI({obj}); }
 				else { flag = false; }
 			}
 			else
@@ -358,6 +367,7 @@ class MyManagerClick
 				else if(tag == 'roof') { myToolPG.hide(); this.hideMenuUI(); }
 				else if(tag == 'pointWf') { this.hideMenuUI({obj}); }
 				else if(tag == 'tubeWf') { this.hideMenuUI({obj}); }
+				else if(tag == 'objWf') { this.hideMenuUI({obj}); }
 				else { flag = false; }
 			}
 		}

@@ -27,11 +27,9 @@ class MyRadiatorAl
 		this.mats.rezba_1.map.wrapT = THREE.RepeatWrapping;	
 	}
 	
-	crObj(cdm)
+	crObj({ count, size, r1 })
 	{
-		const size = cdm.size;
-		const d1 = myWarmFloor.myListObjsWf.myCalcFormObjWf.sizeRezba({size: cdm.r1, side: 'v'});
-		const count = cdm.count;
+		const d1 = myWarmFloor.myListObjsWf.myCalcFormObjWf.sizeRezba({size: r1, side: 'v'});
 		const h1 = size.y;
 		
 		// доп. расчеты		
@@ -93,22 +91,22 @@ class MyRadiatorAl
 		obj.position.y = 1;
 		
 		//if(!id) { id = countId; countId++; }	
-		//tube.userData.id = id;	
-		obj.userData.tag = 'obj';
-		obj.userData.obj3D = {};
-		obj.userData.obj3D.nameRus = 'объект h';
-	// получаем начальные размеры объекта, что потом можно было масштабировать от начальных размеров
-	if(1==1)
-	{
-		obj.geometry.computeBoundingBox();
-		var x = obj.geometry.boundingBox.max.x - obj.geometry.boundingBox.min.x;
-		var y = obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y;
-		var z = obj.geometry.boundingBox.max.z - obj.geometry.boundingBox.min.z;	
-		obj.userData.obj3D.box = new THREE.Vector3(x, y, z);
-	}
-	infProject.scene.array.obj.push(obj);
+		//obj.userData.id = id;	
+		obj.userData.tag = 'objWf';
+		obj.userData.nameRus = 'Ал.радиатор h'+size.y*1000+ ' ('+count+'шт.)';
 		
-		//myWarmFloor.addToArray({obj: tube, type: 'tubes', idLevel});
+		// получаем начальные размеры объекта, что потом можно было масштабировать от начальных размеров
+		if(1==1)
+		{
+			obj.geometry.computeBoundingBox();
+			var x = obj.geometry.boundingBox.max.x - obj.geometry.boundingBox.min.x;
+			var y = obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y;
+			var z = obj.geometry.boundingBox.max.z - obj.geometry.boundingBox.min.z;	
+			obj.userData.box = new THREE.Vector3(x, y, z);
+		}
+		
+		
+		return obj;
 	}
 	
 	

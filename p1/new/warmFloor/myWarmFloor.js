@@ -11,6 +11,7 @@ class MyWarmFloor
 	levels = [];
 	
 	myListObjsWf;
+	myObjWfMove;
 	
 	constructor()
 	{
@@ -28,14 +29,15 @@ class MyWarmFloor
 		this.myLoadWf = new MyLoadWf();
 		
 		this.myListObjsWf = new MyListObjsWf();
+		this.myObjWfMove = new MyObjWfMove();
 	}
 	
 	initLevels()
 	{
-		this.levels[0] = {points: [], tubes: []};
-		this.levels[1] = {points: [], tubes: []};
-		this.levels[2] = {points: [], tubes: []};
-		this.levels[3] = {points: [], tubes: []};
+		this.levels[0] = {points: [], tubes: [], objs: []};
+		this.levels[1] = {points: [], tubes: [], objs: []};
+		this.levels[2] = {points: [], tubes: [], objs: []};
+		this.levels[3] = {points: [], tubes: [], objs: []};
 	}
 	
 	// полчаем массив объектов активного этажа или выбранного по номеру
@@ -49,10 +51,13 @@ class MyWarmFloor
 	// проверка куда кликнули (попали на точку или трубу)
 	clickRayhit({event, type})
 	{
-		const objs = this.getObjsActLevel();
+		const list = this.getObjsActLevel();
 		
 		let rayhit = null;
-		let array = (type === 'points') ? objs.points : objs.tubes;
+		let array = [];
+		if(type === 'points') array = list.points;
+		if(type === 'tubes') array = list.tubes;
+		if(type === 'objs') array = list.objs;
 		
 		if(type === 'points')
 		{
@@ -65,23 +70,25 @@ class MyWarmFloor
 		return rayhit;
 	}
 	
-	// добавляем точку или трубу в массив
+	// добавляем объект в массив
 	addToArray({obj, type, idLevel = null})
 	{
-		const objs = this.getObjsActLevel(idLevel);
+		const list = this.getObjsActLevel(idLevel);
 		
-		if(type === 'points') objs.points.push(obj);
-		if(type === 'tubes') objs.tubes.push(obj);
+		if(type === 'points') list.points.push(obj);
+		if(type === 'tubes') list.tubes.push(obj);
+		if(type === 'objs') list.objs.push(obj);
 	}
 
-	// удаляем точку или трубу уз массива
+	// удаляем объект уз массива
 	deleteFromArray({obj, type})
 	{
-		const objs = this.getObjsActLevel();
+		const list = this.getObjsActLevel();
 		
 		let array = [];
-		if(type === 'points') array = objs.points;
-		if(type === 'tubes') array = objs.tubes;
+		if(type === 'points') array = list.points;
+		if(type === 'tubes') array = list.tubes;
+		if(type === 'objs') array = list.objs;
 		
 		const index = array.indexOf(obj);
 		if (index > -1) array.splice(index, 1);		
@@ -115,6 +122,11 @@ class MyWarmFloor
 			
 			this.myTubeWf.deleteTubeWf({obj});
 		}
+		
+		if(obj.userData.tag === 'objWf')
+		{
+			this.myListObjsWf.deleteObjWf({obj});
+		}		
 	}
 	
 	// проверка перед удалением точки

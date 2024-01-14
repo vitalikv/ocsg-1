@@ -21,9 +21,7 @@ class MyListObjsWf
 	
 	getListObjsRadiatorAl()
 	{
-		const startPos = new THREE.Vector3(-4.5, 1, -3);
-
-		const arr2 = [0.2, 0.35, 0.5, 0.6, 0.7, 0.8];
+		const arr2 = [0.2, 0.35, 0.5, 0.6, 0.7, 0.8];	// высота радиатора
 
 		for(let i = 0; i < arr2.length; i++)
 		{
@@ -38,14 +36,23 @@ class MyListObjsWf
 			arr[arr.length] = { count: 8, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };
 			arr[arr.length] = { count: 9, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };
 			arr[arr.length] = { count: 10, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };
-			
-			//this.myRadiatorAl.crObj({arr, startPos, step: 0.35, cat: 'al_radiator_'+(arr2[i]*1000)+'_1'});
-
-			
 		}
 
-		this.myRadiatorAl.crObj({ count: 5, size: {x: 0.08, y: arr2[4], z: 0.08}, r1: '1' });
+		const obj = this.myRadiatorAl.crObj({ count: 5, size: {x: 0.08, y: arr2[4], z: 0.08}, r1: '1' });
+		
+		myWarmFloor.addToArray({obj, type: 'objs', idLevel: null});
 	}
+	
+	
+	// удаление obj
+	deleteObjWf({obj})
+	{
+		myWarmFloor.deleteFromArray({obj, type: 'objs'}); 
+		disposeHierchy({obj});
+		scene.remove(obj);
+		
+		myManagerClick.hideMenuObjUI_2D();
+	}	
 }
 
 
