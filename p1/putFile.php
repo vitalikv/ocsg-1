@@ -62,6 +62,7 @@ new/ui/right-panel/insetObj/myTabObjRoof.js
 new/ui/right-panel/insetObj/myTabObjObject.js
 new/ui/right-panel/insetObj/myTabObjWfPoint.js
 new/ui/right-panel/insetObj/myTabObjWfTube.js
+new/ui/right-panel/insetObj/myTabObjWfObj.js
 new/ui/right-panel/colorPicker/myColorPicker.js
 new/ui/right-panel/catalog/myCatalogList.js
 new/ui/right-panel/warmFloor/myPanelWF.js
@@ -78,6 +79,7 @@ new/core/composerRender.js
 new/core/myMouse.js
 new/core/myManagerClick.js
 new/core/commonFunc.js
+new/core/myMath.js
 new/house/myHouse.js
 new/house/point/myPoint.js
 new/house/point/myMovePoint.js

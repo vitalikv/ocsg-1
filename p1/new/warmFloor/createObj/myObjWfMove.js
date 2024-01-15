@@ -25,6 +25,8 @@ class MyObjWfMove
 
 		myComposerRenderer.outlineAddObj({arr: [obj]});
 		myPanelR.myContentObj.activeObjRightPanelUI_1({obj}); 	// UI
+		
+		if(myCameraOrbit.activeCam.userData.isCam3D) myToolPG.activeTool({obj});
 
 		this.isDown = true;
 

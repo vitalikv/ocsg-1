@@ -13,6 +13,7 @@ class MyContentObj
 	myTabObjObject;
 	myTabObjWfPoint;
 	myTabObjWfTube;
+	myTabObjWfObj;
 	
 	
 	constructor()
@@ -37,6 +38,7 @@ class MyContentObj
 		this.myTabObjObject = new MyTabObjObject();
 		this.myTabObjWfPoint = new MyTabObjWfPoint();
 		this.myTabObjWfTube = new MyTabObjWfTube();
+		this.myTabObjWfObj = new MyTabObjWfObj();
 		
 		this.divs.wall = this.container.querySelector('[nameId="rp_menu_wall"]');
 		this.divs.wd = this.container.querySelector('[nameId="rp_menu_wd"]');
@@ -46,6 +48,7 @@ class MyContentObj
 
 		this.divs.pointWf = this.container.querySelector('[nameId="bl_pointWf"]');
 		this.divs.tubeWf = this.container.querySelector('[nameId="bl_tubeWf"]');
+		this.divs.objWf = this.container.querySelector('[nameId="bl_objWf"]');
 	}
 	
 	initEvent()
@@ -96,6 +99,7 @@ class MyContentObj
 		this.divs.obj.style.display = 'none';
 		this.divs.pointWf.style.display = 'none';
 		this.divs.tubeWf.style.display = 'none';
+		this.divs.objWf.style.display = 'none';
 		
 		
 		if(!obj) return;
@@ -200,6 +204,12 @@ class MyContentObj
 			this.myTabObjWfTube.setDivColor({color});
 			
 			this.divs.tubeWf.style.display = '';
+		}
+		else if(obj.userData.tag === 'objWf')
+		{
+			txtName = obj.userData.nameRus;
+			
+			this.divs.objWf.style.display = '';
 		}		
 
 		this.inputName.value = txtName;

@@ -2,7 +2,7 @@
 var containerF = document.getElementById( 'canvasFrame' );
 var canvas = document.createElement( 'canvas' );
 var context = canvas.getContext( 'webgl2' );
-var renderer = new THREE.WebGLRenderer( { canvas: canvas, context: context, preserveDrawingBuffer: true, } );
+var renderer = new THREE.WebGLRenderer( { canvas: canvas, context: context, logarithmicDepthBuffer: true, preserveDrawingBuffer: true, } );
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.localClippingEnabled = true;
 renderer.shadowMap.enabled = false;
@@ -134,15 +134,15 @@ var offset = new THREE.Vector3();
 //----------- Light
 {
 	var lights = [];
-	lights[ 0 ] = new THREE.PointLight( 0x222222, 0.7, 0 );
-	lights[ 1 ] = new THREE.PointLight( 0x222222, 0.5, 0 );
-	lights[ 2 ] = new THREE.PointLight( 0x222222, 0.8, 0 );
-	lights[ 3 ] = new THREE.PointLight( 0x222222, 0.2, 0 );
+	lights[ 0 ] = new THREE.PointLight( 0x222222, 0.4, 0 );
+	lights[ 1 ] = new THREE.PointLight( 0x222222, 0.4, 0 );
+	lights[ 2 ] = new THREE.PointLight( 0x222222, 0.7, 0 );
+	lights[ 3 ] = new THREE.PointLight( 0x222222, 0.7, 0 );
 	
-	lights[ 0 ].position.set( -1000, 200, 1000 );
-	lights[ 1 ].position.set( -1000, 200, -1000 );
-	lights[ 2 ].position.set( 1000, 200, -1000 );
-	lights[ 3 ].position.set( 1000, 200, 1000 );
+	lights[ 0 ].position.set( -1000, 200, 0 );
+	lights[ 1 ].position.set( 1000, 200, 0 );
+	lights[ 2 ].position.set( 0, 200, -1000 );
+	lights[ 3 ].position.set( 0, 200, 1000 );
 	
 	scene.add( lights[ 0 ] );
 	scene.add( lights[ 1 ] );
@@ -152,6 +152,10 @@ var offset = new THREE.Vector3();
 
 	var light = new THREE.AmbientLight( 0xffffff, 0.93 );
 	scene.add( light );
+
+	//var lightD = new THREE.DirectionalLight( 0xffffff, 0.3 );
+	//lightD.position.set( 10, 10, 10 );
+	//scene.add( lightD );
 	
 	infProject.scene.light.global = {ambient: light, point: lights};
 }
@@ -1159,6 +1163,7 @@ let myManagerClick;
 let myCameraOrbit;
 let myCameraMoveKey;
 let myComposerRenderer;
+let myMath;
 let myLevels;
 let myToolPG;
 let myToolPG_UI;
@@ -1195,6 +1200,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	
 	myCookie = new MyCookie();
+	myMath = new MyMath();
 	
 	myManagerClick = new MyManagerClick();
 	myMouse = new MyMouse({container: containerF, scene});
@@ -1228,7 +1234,11 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	//if(startProject.detectShowStartWind()) windUI.showWin();
 	
-	if(1===2) myPanelTop.addPaidPanel();	// панель для платных пользователей	
+	if(1===1) myPanelTop.addPaidPanel();	// панель для платных пользователей	
+	
+	if(1===1) myPanelR.myTabsR.activeTab({id: 2});
+	
+	if(1===1) myWarmFloor.myListObjsWf.init();
 	
 	animate();
 	renderCamera();	

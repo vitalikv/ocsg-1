@@ -305,7 +305,10 @@ class MyPivot
 	}
 
 	mouseup = (e) => 
-	{		
+	{
+		const pivot = this.obj;
+		pivot.userData.propPivot({type: 'endPivot', obj: myToolPG.obj, arrO: []});
+		
 		this.render();
 	}
 			
@@ -317,7 +320,8 @@ class MyPivot
 		let type = params.type;			
 		
 		if(type == 'setPivot') { setPivot({obj: params.obj, arrO: params.arrO, pos: params.pos, qt: params.qt}); }
-		if(type == 'moveObjs') { moveObjs({obj: params.obj, arrO: params.arrO, offset: params.offset}); }		
+		if(type == 'moveObjs') { moveObjs({obj: params.obj, arrO: params.arrO, offset: params.offset}); }
+		if(type == 'endPivot') { endPivot({obj: params.obj, arrO: params.arrO}); }
 		if(type == 'offsetPivot') { offsetPivot({offset: params.offset}); }
 		if(type == 'setPosPivot') { setPosPivot({pos: params.pos}); }
 		if(type == 'setRotPivot') { setRotPivot({qt: params.qt}); }
@@ -365,11 +369,11 @@ class MyPivot
 			let offset = params.offset;
 			
 
-			if(obj && obj.userData.tag == 'new_point')		// точка трубы
+			if(obj && obj.userData.tag === 'new_point')		// точка трубы
 			{
 				obj.movePointTube({offset: offset});	
 			}			 
-			else if(obj && obj.userData.tag == 'wtGrid') 
+			else if(obj && obj.userData.tag === 'wtGrid') 
 			{ 
 				obj.userData.propObj({type: 'moveObj', obj: obj, offset: offset}); 
 			}
@@ -378,6 +382,15 @@ class MyPivot
 				if(obj && arrO.length === 0)
 				{
 					obj.position.add(offset);
+					
+					if(obj.userData.tag === 'pointWf')
+					{
+						myWarmFloor.myPointWfMove.movePointWf_2({obj});						
+					}
+					else if(obj.userData.tag === 'tubeWf')
+					{
+						myWarmFloor.myTubeWfMove.moveTubeWf_2({obj, offset});;						
+					}					
 				}
 				else
 				{
@@ -391,9 +404,14 @@ class MyPivot
 
 		
 		// прекращаем действия с pivot
-		function endPivot(params)
+		function endPivot({obj, arrO = []})
 		{
+			if(!obj) return;
 			
+			if(obj.userData.tag === 'tubeWf')
+			{
+				myWarmFloor.myTubeWfMove.mouseupTubeWf_2({obj});						
+			}
 		}
 
 

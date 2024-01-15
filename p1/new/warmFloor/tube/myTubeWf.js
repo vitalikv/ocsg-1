@@ -171,6 +171,75 @@ class MyTubeWf
 		
 		this.render();
 	}	
+
+
+	// получаем pos у трубы для pivot
+	getPosForPivot({tube = null, rayPos = null})
+	{
+		//if(ray) { tube = cdm.ray.object; } 
+		
+		if(!tube) return;		
+		
+		let pos = new THREE.Vector3();
+		
+		if(rayPos)
+		{
+			const result = this.detectPosTubeWF({tube, rayPos});		// определяем в какое место трубы кликнули
+			const p1 = result.p1;
+			pos = result.pos;							
+		}
+		else	// находим 2 центральные точки и получаем между ними позицию (когда кликаем в меню)
+		{
+			const p = this.getPointsInArrayTube({tube});
+			const num = (p.length % 2);	// четное/нечетное, 2=false 3=true
+			
+			if(num)
+			{
+				const n = (p.length - 1)/2;				
+				pos = p[n].position;
+			}
+			else
+			{
+				const n = (p.length - p.length/2) - 1;				
+				const pos1 = p[n].position;
+				const pos2 = p[n+1].position;
+				pos = new THREE.Vector3().subVectors( pos2, pos1 ).divideScalar( 2 ).add(pos1);
+			}			
+		}
+		
+		return pos;
+	}
+
+
+	// определяем в какое место трубы кликнули
+	detectPosTubeWF({tube, rayPos})
+	{		
+		const arr = [];
+		
+		const points = this.getPointsInArrayTube({tube});
+		
+		for ( var i = 0; i < points.length - 1; i++ )
+		{ 
+			const p1 = points[i];
+			const p2 = points[i + 1];
+			
+			const pos = myMath.mathProjectPointOnLine({p: [p1.position, p2.position], rayHit: rayPos});
+			
+			const dist = rayPos.distanceTo(pos);	
+			
+			if(myMath.checkPointBoundBoxLine(p1.position, p2.position, pos))
+			{
+				arr.push({dist, pos, p1, tube});
+			}
+		} 
+
+		arr.sort(function (a, b) { return a.dist - b.dist; });	// сортируем по увеличению дистанции 
+
+		const p1 = arr[0].p1;
+		const pos = arr[0].pos;
+
+		return {p1, pos};
+	}
 	
 	// удаляем трубу
 	deleteTubeWf({obj})

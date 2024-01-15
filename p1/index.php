@@ -176,6 +176,7 @@
 	<script src="<?=$path?>new/ui/right-panel/insetObj/myTabObjObject.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/insetObj/myTabObjWfPoint.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/insetObj/myTabObjWfTube.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/insetObj/myTabObjWfObj.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/colorPicker/myColorPicker.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/catalog/myCatalogList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/warmFloor/myPanelWF.js?<?=$vrs?>"></script>
@@ -192,6 +193,7 @@
 	<script src="<?=$path?>new/core/myManagerClick.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/core/composerRender.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/core/commonFunc.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/core/myMath.js?<?=$vrs?>"></script>
 	
 	<script src="<?=$path?>new/house/myHouse.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/point/myPoint.js?<?=$vrs?>"></script>

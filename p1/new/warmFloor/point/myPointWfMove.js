@@ -57,6 +57,8 @@ class MyPointWfMove
 		myComposerRenderer.outlineAddObj({arr: [obj]});
 		myPanelR.myContentObj.activeObjRightPanelUI_1({obj}); 	// UI
 		
+		if(myCameraOrbit.activeCam.userData.isCam3D) myToolPG.activeTool({obj});
+		
 		const tube = myWarmFloor.myPointWf.getTubeFromPoint({point: obj});
 		if(tube) myWarmFloor.myTubeWf.visiblePointsOnTube({tube, visible: true});		
 
@@ -83,11 +85,7 @@ class MyPointWfMove
 		
 		obj.position.add( offset );	
 
-		const tube = obj.userData.tube;
-		if(tube)
-		{
-			myWarmFloor.myTubeWf.upTube({tube});
-		}		
+		this.movePointWf_2({obj});
 	}
 	
 	mouseup = () =>
@@ -103,6 +101,16 @@ class MyPointWfMove
 
 		// определяем с чем точка пересеклась и дальнейшие действия
 		//if(!obj.userData.point.type) myHouse.myPointAction.clickCreateWall(obj);
+	}
+	
+	
+	movePointWf_2({obj})
+	{
+		const tube = obj.userData.tube;
+		if(tube)
+		{
+			myWarmFloor.myTubeWf.upTube({tube});
+		}		
 	}
 	
 	clearPoint()

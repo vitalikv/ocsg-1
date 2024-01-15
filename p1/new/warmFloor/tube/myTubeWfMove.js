@@ -8,7 +8,7 @@ class MyTubeWfMove
 	sObj = null;		// выделенный объект (точка)
 	
 	
-	mousedown = ({event, obj}) =>
+	mousedown = ({event, obj, rayPos = null}) =>
 	{
 		this.isDown = false;
 		this.isMove = false;	
@@ -27,6 +27,12 @@ class MyTubeWfMove
 		myPanelR.myContentObj.activeObjRightPanelUI_1({obj}); 	// UI
 		
 		myWarmFloor.myTubeWf.visiblePointsOnTube({tube: obj, visible: true});
+		
+		if(myCameraOrbit.activeCam.userData.isCam3D) 
+		{
+			const pos = myWarmFloor.myTubeWf.getPosForPivot({tube: obj, rayPos})
+			myToolPG.activeTool({obj, pos});
+		}
 
 		this.isDown = true;
 
@@ -51,12 +57,7 @@ class MyTubeWfMove
 		
 		obj.position.add( offset );	
 
-		const points = myWarmFloor.myTubeWf.getPointsInArrayTube({tube: obj});
-		
-		for ( let i = 0; i < points.length; i++ )
-		{
-			points[i].position.add( offset );
-		}
+		this.moveTubeWf_2({obj, offset});
 	}
 	
 	mouseup = () =>
@@ -68,8 +69,7 @@ class MyTubeWfMove
 		// после смещения трубы, возращаем в 0 и обновляем геометрию
 		if(obj && isMove)
 		{
-			obj.position.set(0, 0, 0);
-			myWarmFloor.myTubeWf.upTube({tube: obj});			
+			this.mouseupTubeWf_2({obj});			
 		}
 		
 		this.clearPoint();
@@ -77,6 +77,26 @@ class MyTubeWfMove
 		if (!isDown) return;
 		if (!isMove) return;
 	}
+	
+	
+	moveTubeWf_2({obj, offset})
+	{
+		const points = myWarmFloor.myTubeWf.getPointsInArrayTube({tube: obj});
+		
+		for ( let i = 0; i < points.length; i++ )
+		{
+			points[i].position.add( offset );
+		}	
+	}
+	
+	mouseupTubeWf_2({obj})
+	{
+		if(!obj) return;
+		
+		obj.position.set(0, 0, 0);
+		myWarmFloor.myTubeWf.upTube({tube: obj});	
+	}	
+	
 	
 	clearPoint()
 	{	

@@ -45,7 +45,7 @@ class MyToolPG
 		{ 
 			pos = obj.getWorldPosition(new THREE.Vector3());  
 		}		
-		else if(obj.userData.tag == 'wtGrid')		// сетка теплого пола
+		else //if(obj.userData.tag == 'wtGrid')	 сетка теплого пола
 		{ 
 			pos = obj.position;  
 		}
@@ -203,9 +203,17 @@ class MyToolPG
 	// скрываем Pivot/Gizmo
 	hide()
 	{
+		const obj = this.obj;
+		if(!obj) return;
+		
 		this.pivot.userData.propPivot({type: 'hide'});
 		this.gizmo.userData.propGizmo({type: 'hide'});
-		this.myScale.hide();
+		
+		let done = true;
+		if(obj.userData.tag === 'pointWf') done = false;
+		if(obj.userData.tag === 'tubeWf') done = false;
+		
+		if(done) this.myScale.hide();
 
 		this.obj = null;
 		this.arrO = [];		

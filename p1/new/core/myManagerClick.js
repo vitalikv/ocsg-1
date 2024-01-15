@@ -11,16 +11,7 @@ class MyManagerClick
 					
 		const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
 		const isCam3D = myCameraOrbit.activeCam.userData.isCam3D;
-		
-		rayhit = myWarmFloor.clickRayhit({event, type: 'points'});		
-		if(rayhit) return rayhit;
-		
-		rayhit = myWarmFloor.clickRayhit({event, type: 'tubes'});
-		if(rayhit) return rayhit;
-		
-		rayhit = myWarmFloor.clickRayhit({event, type: 'objs'});
-		if(rayhit) return rayhit;		
-		
+				
 		if(myToolPG.pivot.visible)
 		{
 			var ray = rayIntersect( event, myToolPG.pivot.children, 'arr' );
@@ -43,7 +34,18 @@ class MyManagerClick
 		{
 			var ray = rayIntersect( event, myToolPG.scale.children, 'arr' );
 			if(ray.length > 0) { rayhit = ray[0]; return rayhit; }		
-		}		
+		}
+
+
+		rayhit = myWarmFloor.clickRayhit({event, type: 'points'});		
+		if(rayhit) return rayhit;
+		
+		rayhit = myWarmFloor.clickRayhit({event, type: 'tubes'});
+		if(rayhit) return rayhit;
+		
+		rayhit = myWarmFloor.clickRayhit({event, type: 'objs'});
+		if(rayhit) return rayhit;
+		
 
 		if(isCam2D && !rayhit)
 		{
@@ -230,7 +232,7 @@ class MyManagerClick
 			else if(tag == 'roof' && isCam3D) { myHouse.myRoofMove.click({event, obj}); }
 			else if(tag == 'obj' && isCam3D) { myHouse.myObjMove.click({event, obj}); }
 			else if(tag == 'pointWf' && isCam3D) { myWarmFloor.myPointWfMove.mousedown({event, obj}); }
-			else if(tag == 'tubeWf' && isCam3D) { myWarmFloor.myTubeWfMove.mousedown({event, obj}); }
+			else if(tag == 'tubeWf' && isCam3D) { myWarmFloor.myTubeWfMove.mousedown({event, obj, rayPos: rayhit.point}); }
 			else if(tag == 'objWf' && isCam3D) { myWarmFloor.myObjWfMove.mousedown({event, obj}); }
 			else { flag = false; }
 		}	
@@ -392,9 +394,18 @@ class MyManagerClick
 				if(tag == 'pointWf') 
 				{  
 					const tube = myWarmFloor.myPointWf.getTubeFromPoint({point: obj});
-					if(tube) myWarmFloor.myTubeWf.visiblePointsOnTube({tube, visible: false});					
+					if(tube) myWarmFloor.myTubeWf.visiblePointsOnTube({tube, visible: false});
+					myToolPG.hide();
 				}
-				else if(tag == 'tubeWf') { myWarmFloor.myTubeWf.visiblePointsOnTube({tube: obj, visible: false}); }
+				else if(tag == 'tubeWf') 
+				{ 
+					myWarmFloor.myTubeWf.visiblePointsOnTube({tube: obj, visible: false});
+					myToolPG.hide();
+				}
+				else if(tag == 'objWf') 
+				{ 
+					myToolPG.hide(); 
+				}				
 			}
 		}
 
