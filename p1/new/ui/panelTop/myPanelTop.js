@@ -133,6 +133,7 @@ class MyPanelTop
 			<div nameId="plan" style="${cssTab}">планировка</div>
 			<div nameId="otop" style="${cssTab}">отопление</div>
 			<div nameId="wf" style="${cssTab}">теплый пол</div>
+			<div nameId="objWf" style="${cssTab}">объект</div>
 		</div>`;
 
 		return html;
@@ -148,13 +149,15 @@ class MyPanelTop
 		const btnPl = this.divP2.querySelector('[nameId="plan"]');
 		const btnOt = this.divP2.querySelector('[nameId="otop"]');
 		const btnWF = this.divP2.querySelector('[nameId="wf"]');
+		const btnObjWF = this.divP2.querySelector('[nameId="objWf"]');
 		
 		btnPl.onmousedown = () => { myPanelWF.showHidePanel({show: false}); myPanelR.divPanel_1.style.display = ''; }
 		btnWF.onmousedown = () => { myPanelR.divPanel_1.style.display = 'none'; myPanelWF.showHidePanel({show: true}); }
 		
 		myPanelWF.addPaidContent();
 				
-		btnOt.onmousedown = () => { clickInterface({button: 'add_pointWf'}); }		
+		btnOt.onmousedown = () => { clickInterface({button: 'add_pointWf'}); }
+		btnObjWF.onmousedown = () => { clickInterface({button: 'add_objWf'}); }
 	}
 }
 

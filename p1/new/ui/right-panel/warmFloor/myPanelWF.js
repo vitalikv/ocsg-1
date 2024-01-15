@@ -115,6 +115,7 @@ class MyPanelWF
 				
 				<div nameId="tube" style="${cssBtn}">труба</div>
 				<div nameId="grid" style="${cssBtn}">сетка</div>
+				<div nameId="radiator" style="${cssBtn}">радиатор</div>
 			</div>			
 			
 			
@@ -140,6 +141,9 @@ class MyPanelWF
 		
 		const btnTube = div.querySelector('[nameId="tube"]');		
 		btnTube.onmousedown = () => { clickInterface({button: 'add_pointWf'}); }
+		
+		const btnObj = div.querySelector('[nameId="radiator"]');		
+		btnObj.onmousedown = () => { clickInterface({button: 'add_objWf'}); }		
 	}
 }
 

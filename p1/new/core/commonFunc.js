@@ -147,6 +147,10 @@ function clickInterface(cdm)
 		{
 			clickO.button = cdm.button;
 		}
+		else if(cdm.button === 'add_objWf')
+		{
+			clickO.button = cdm.button;
+		}		
 	}
 
 }	

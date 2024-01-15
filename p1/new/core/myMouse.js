@@ -321,7 +321,12 @@ class MyMouse
 				obj = myWarmFloor.myPointWf.crPoint({pos: intersects[0].point});
 				myWarmFloor.myPointWfMove.mousedown({event, obj, toolPoint: true});
 			}
-			
+			else if(clickO.button == 'add_objWf')
+			{
+				obj = myWarmFloor.myListObjsWf.getObjWf({lotid: 1});
+				obj.position.copy(intersects[0].point);
+				myWarmFloor.myObjWfMove.mousedown({event, obj});
+			}			
 			
 			if(obj) 
 			{
