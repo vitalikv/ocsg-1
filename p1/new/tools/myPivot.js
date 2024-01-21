@@ -252,6 +252,22 @@ class MyPivot
 	}
 
 
+	// установить и показать Pivot
+	actPivot({obj, arrO, pos, qt, visible = true})
+	{
+		const pivot = this.obj;		
+		pivot.visible = visible;	
+		pivot.position.copy(pos);
+		pivot.quaternion.copy(qt);
+		
+		for ( let i = 0; i < pivot.children.length; i++ )
+		{
+			if(pivot.children[i].userData.axis == 'y') pivot.children[i].visible = (myCameraOrbit.activeCam.userData.isCam2D) ? false : true;
+		}
+		
+		this.upPivotScale();
+	}
+
 	mousedown = ({event, rayhit}) => 
 	{
 		const obj = rayhit.object;  					
@@ -296,8 +312,8 @@ class MyPivot
 		
 		const offset = new THREE.Vector3().subVectors( pos, pivot.userData.startPos );
 		
-		pivot.userData.propPivot({type: 'offsetPivot', offset});			
-		pivot.userData.propPivot({type: 'moveObjs', obj: myToolPG.obj, arrO: [], offset});
+		this.offsetPivot({offset});			
+		this.moveObjs({obj: myToolPG.obj, arrO: [], offset});
 		
 		myToolPG.setPosPivotGizmo({pos: pivot.position});	
 		
@@ -306,157 +322,116 @@ class MyPivot
 
 	mouseup = (e) => 
 	{
-		const pivot = this.obj;
-		pivot.userData.propPivot({type: 'endPivot', obj: myToolPG.obj, arrO: []});
+		this.endPivot({obj: myToolPG.obj, arrO: []});
 		
 		this.render();
 	}
-			
-	// ф-ция со всеми действиями Pivot
-	propPivot = (params) =>
+	
+
+	// перемещение объектов
+	moveObjs({obj, arrO, offset})
 	{
+
+		if(obj && obj.userData.tag === 'new_point')		// точка трубы
+		{
+			obj.movePointTube({offset: offset});	
+		}			 
+		else if(obj && obj.userData.tag === 'wtGrid') 
+		{ 
+			 
+		}
+		else 
+		{
+			if(obj && arrO.length === 0)
+			{
+				obj.position.add(offset);
+				
+				if(obj.userData.tag === 'pointWf')
+				{
+					myWarmFloor.myPointWfMove.movePointWf_2({obj});						
+				}
+				else if(obj.userData.tag === 'tubeWf')
+				{
+					myWarmFloor.myTubeWfMove.moveTubeWf_2({obj, offset});;						
+				}					
+			}
+			else
+			{
+				for(let i = 0; i < arrO.length; i++)
+				{
+					arrO[i].position.add(offset);		
+				}									
+			}
+		}	
+	}
+
+
+	offsetPivot({offset})
+	{ 
 		const pivot = this.obj;
 		
-		let type = params.type;			
+		pivot.position.add( offset );
+		pivot.userData.startPos.add( offset );
 		
-		if(type == 'setPivot') { setPivot({obj: params.obj, arrO: params.arrO, pos: params.pos, qt: params.qt}); }
-		if(type == 'moveObjs') { moveObjs({obj: params.obj, arrO: params.arrO, offset: params.offset}); }
-		if(type == 'endPivot') { endPivot({obj: params.obj, arrO: params.arrO}); }
-		if(type == 'offsetPivot') { offsetPivot({offset: params.offset}); }
-		if(type == 'setPosPivot') { setPosPivot({pos: params.pos}); }
-		if(type == 'setRotPivot') { setRotPivot({qt: params.qt}); }
-		if(type == 'updateScale') { updateScale(); }
-		if(type == 'hide') { hide(); }
+		this.upPivotScale();
+	}			
+
+	// прекращаем действия с pivot
+	endPivot({obj, arrO = []})
+	{
+		if(!obj) return;
 		
-
-		// установить и показать Pivot
-		function setPivot(params)
+		if(obj.userData.tag === 'tubeWf')
 		{
-			let obj = params.obj;
-			let arrO = params.arrO;
-			let pos = params.pos;
-			let qt = params.qt;
-			
-			pivot.visible = true;	
-			pivot.position.copy(pos);
-			pivot.quaternion.copy(qt);
-			
-			for ( let i = 0; i < pivot.children.length; i++ )
-			{
-				if(pivot.children[i].userData.axis == 'y') pivot.children[i].visible = (myCameraOrbit.activeCam.userData.isCam2D) ? false : true;
-			}
-			
-			pivot.userData.propPivot({type: 'updateScale'});
+			myWarmFloor.myTubeWfMove.mouseupTubeWf_2({obj});						
 		}
-
-
-		
-		function offsetPivot(params)
-		{ 
-			let offset = params.offset;
-			pivot.position.add( offset );
-			pivot.userData.startPos.add( offset );
-			
-			pivot.userData.propPivot({type: 'updateScale'});
-		}			
-
-
-		// перемещение объектов
-		function moveObjs(params)
-		{
-			let obj = params.obj;
-			let arrO = params.arrO;			
-			let offset = params.offset;
-			
-
-			if(obj && obj.userData.tag === 'new_point')		// точка трубы
-			{
-				obj.movePointTube({offset: offset});	
-			}			 
-			else if(obj && obj.userData.tag === 'wtGrid') 
-			{ 
-				obj.userData.propObj({type: 'moveObj', obj: obj, offset: offset}); 
-			}
-			else 
-			{
-				if(obj && arrO.length === 0)
-				{
-					obj.position.add(offset);
-					
-					if(obj.userData.tag === 'pointWf')
-					{
-						myWarmFloor.myPointWfMove.movePointWf_2({obj});						
-					}
-					else if(obj.userData.tag === 'tubeWf')
-					{
-						myWarmFloor.myTubeWfMove.moveTubeWf_2({obj, offset});;						
-					}					
-				}
-				else
-				{
-					for(let i = 0; i < arrO.length; i++)
-					{
-						arrO[i].position.add(offset);		
-					}									
-				}
-			}	
-		}
-
-		
-		// прекращаем действия с pivot
-		function endPivot({obj, arrO = []})
-		{
-			if(!obj) return;
-			
-			if(obj.userData.tag === 'tubeWf')
-			{
-				myWarmFloor.myTubeWfMove.mouseupTubeWf_2({obj});						
-			}
-		}
-
-
-		// установить position Pivot, когда меняем через input
-		function setPosPivot(params)
-		{
-			if (!pivot.visible) return;
-			
-			let pos = params.pos;
-			
-			pivot.position.copy(pos);			
-			pivot.userData.propPivot({type: 'updateScale'});
-		}
-		
-		// установить rotation Pivot, когда меняем rot через input
-		function setRotPivot(params)
-		{
-			if (!pivot.visible) return;
-			
-			const obj = myToolPG.obj;
-			const qt = myToolPG.calcRot({obj});
-			
-			pivot.quaternion.copy(qt);			
-		}
-
-		
-		function updateScale() 
-		{
-			if (!pivot.visible) return;
-			
-			let scale = 1;
-			
-			if(myCameraOrbit.activeCam.userData.isCam2D) { scale = 1 / myCameraOrbit.activeCam.zoom; }
-			if(myCameraOrbit.activeCam.userData.isCam3D) { scale = myCameraOrbit.activeCam.position.distanceTo(pivot.position) / 6; }			
-			
-			pivot.scale.set(scale, scale, scale);
-		}
-
-
-		function hide() 
-		{
-			pivot.visible = false;
-		}
-				
 	}
+	
+
+	// установить position Pivot, когда меняем через input
+	setPosPivot({pos})
+	{
+		const pivot = this.obj;
+		if (!pivot.visible) return;
+		
+		pivot.position.copy(pos);			
+		this.upPivotScale();
+	}
+
+
+	// установить rotation Pivot, когда меняем rot через input
+	setRotPivot()
+	{
+		const pivot = this.obj;
+		if (!pivot.visible) return;
+		
+		const obj = myToolPG.obj;
+		const qt = myToolPG.calcRot({obj});
+		
+		pivot.quaternion.copy(qt);			
+	}
+	
+	
+	upPivotScale() 
+	{
+		const pivot = this.obj;
+		if (!pivot.visible) return;
+		
+		let scale = 1;
+		
+		if(myCameraOrbit.activeCam.userData.isCam2D) { scale = 1 / myCameraOrbit.activeCam.zoom; }
+		if(myCameraOrbit.activeCam.userData.isCam3D) { scale = myCameraOrbit.activeCam.position.distanceTo(pivot.position) / 6; }			
+		
+		pivot.scale.set(scale, scale, scale);
+	}
+	
+
+	hidePivot() 
+	{
+		const pivot = this.obj;
+		pivot.visible = false;
+	}
+		
 	
 	render()
 	{

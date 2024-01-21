@@ -10,7 +10,7 @@ class MyRadiatorAl
 	
 	constructor()
 	{
-		this.material = new THREE.MeshStandardMaterial({ color: 0xf0f0f0, lightMap: lightMap_1, side: THREE.DoubleSide, metalness: 0.3, roughness: 0.5 });
+		this.material = new THREE.MeshStandardMaterial({ color: 0xffffff, lightMap: lightMap_1, side: THREE.DoubleSide, metalness: 0.1, roughness: 0.5 });
 		//this.material = new THREE.MeshStandardMaterial({ color: 0xf0f0f0, lightMap: lightMap_1, side: THREE.DoubleSide });
 		
 		this.init();

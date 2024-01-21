@@ -37,13 +37,7 @@ class MyManagerClick
 		}
 
 
-		rayhit = myWarmFloor.clickRayhit({event, type: 'points'});		
-		if(rayhit) return rayhit;
-		
-		rayhit = myWarmFloor.clickRayhit({event, type: 'tubes'});
-		if(rayhit) return rayhit;
-		
-		rayhit = myWarmFloor.clickRayhit({event, type: 'objs'});
+		rayhit = myWarmFloor.clickRayhit({event});		
 		if(rayhit) return rayhit;
 		
 
@@ -219,7 +213,7 @@ class MyManagerClick
 			else if(tag == 'roof' && isCam2D) { myHouse.myRoofMove.click({event, obj}); }				
 			else if(tag == 'obj' && isCam2D) { myHouse.myObjMove.click({event, obj}); }
 			else if(tag == 'pointWf' && isCam2D) { myWarmFloor.myPointWfMove.mousedown({event, obj}); }
-			else if(tag == 'tubeWf' && isCam2D) { myWarmFloor.myTubeWfMove.mousedown({event, obj}); }
+			else if(tag == 'tubeWf' && isCam2D) { myWarmFloor.myTubeWfMove.mousedown({event, obj, rayPos: rayhit.point}); }
 			else if(tag == 'objWf' && isCam2D) { myWarmFloor.myObjWfMove.mousedown({event, obj}); }
 			else { flag = false; }
 		}

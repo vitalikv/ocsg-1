@@ -118,13 +118,17 @@ class MyScale
 	}
 
 	// установить и показать Scale
-	actScale({obj, pos, qt})
+	actScale({obj, pos, qt, visible = true})
 	{	
 		const selectObj = obj;
 		const scaleObj = this.obj;
+
+		if(selectObj && selectObj.children.length > 0)
+		{
+			selectObj.material.visible = true;			
+		}
 		
-		selectObj.material.visible = true;
-		scaleObj.visible = true;	
+		scaleObj.visible = visible;	
 		scaleObj.position.copy(pos);
 		scaleObj.quaternion.copy(qt);
 
@@ -288,12 +292,12 @@ class MyScale
 		}			
 	}
 
-	hide() 
+	hideScale() 
 	{
 		this.obj.visible = false;
 		
 		const selectObj = myToolPG.obj;
-		if(selectObj)
+		if(selectObj && selectObj.children.length > 0)
 		{
 			selectObj.material.visible = false;
 		}

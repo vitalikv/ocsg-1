@@ -82,9 +82,14 @@ class MyToolPG
 	}
 
 	// показываем Pivot/Gizmo
-	activeTool({type = null, obj = null, arrO = [], pos = null})
+	activeTool({type = null, obj = null, arrO = [], pos = null, visible = null})
 	{
-		if(type) obj = this.obj;	// если есть type, то это переключение инструмента
+		if(visible === null) 
+		{
+			visible = {};
+			visible.tool = {p: true, r: true, s: true};
+			visible.ui = {p: true, r: true, s: true};
+		}
 		
 		this.hide();
 		
@@ -102,12 +107,12 @@ class MyToolPG
 		myToolPG_UI.setPosUI();
 		myToolPG_UI.setRotUI();
 		myToolPG_UI.setSclUI();
-		this.displayMenuUI({visible: ''});
+		this.displayMenuUI({visible: '', showUI: visible.ui});
 		
 
-		if(this.type == 'pivot') this.pivot.userData.propPivot({type: 'setPivot', obj: this.obj, arrO: this.arrO, pos: this.pos, qt: this.qt});		
-		if(this.type == 'gizmo') this.gizmo.userData.propGizmo({type: 'setGizmo', obj: this.obj, arrO: this.arrO, pos: this.pos, qt: this.qt});
-		if(this.type == 'scale') this.myScale.actScale({obj: this.obj, pos: this.pos, qt: this.qt});
+		if(this.type == 'pivot') this.myPivot.actPivot({obj: this.obj, arrO: this.arrO, pos: this.pos, qt: this.qt, visible: visible.tool.p});		
+		if(this.type == 'gizmo') this.myGizmo.actGizmo({obj: this.obj, arrO: this.arrO, pos: this.pos, qt: this.qt, visible: visible.tool.r});
+		if(this.type == 'scale') this.myScale.actScale({obj: this.obj, pos: this.pos, qt: this.qt, visible: visible.tool.s});
 		
 		//setClickLastObj({obj});
 		
@@ -176,7 +181,7 @@ class MyToolPG
 	
 	setScale()
 	{
-		if(this.type === 'pivot') this.pivot.userData.propPivot({type: 'updateScale'});
+		if(this.type === 'pivot') this.myPivot.upPivotScale();
 		if(this.type === 'gizmo') this.gizmo.userData.propGizmo({type: 'updateScale'});
 		if(this.type === 'scale') this.myScale.updateScale();
 	}
@@ -206,14 +211,9 @@ class MyToolPG
 		const obj = this.obj;
 		if(!obj) return;
 		
-		this.pivot.userData.propPivot({type: 'hide'});
-		this.gizmo.userData.propGizmo({type: 'hide'});
-		
-		let done = true;
-		if(obj.userData.tag === 'pointWf') done = false;
-		if(obj.userData.tag === 'tubeWf') done = false;
-		
-		if(done) this.myScale.hide();
+		this.myPivot.hidePivot();
+		this.myGizmo.hideGizmo();
+		this.myScale.hideScale();
 
 		this.obj = null;
 		this.arrO = [];		
@@ -224,9 +224,9 @@ class MyToolPG
 		this.render();		
 	}
 	
-	displayMenuUI({visible})
+	displayMenuUI({visible, showUI = null})
 	{
-		myToolPG_UI.displayMenuUI({visible});
+		myToolPG_UI.displayMenuUI({visible, showUI});
 	}
 	
 	render()

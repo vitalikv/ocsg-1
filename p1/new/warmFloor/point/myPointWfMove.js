@@ -57,7 +57,9 @@ class MyPointWfMove
 		myComposerRenderer.outlineAddObj({arr: [obj]});
 		myPanelR.myContentObj.activeObjRightPanelUI_1({obj}); 	// UI
 		
-		if(myCameraOrbit.activeCam.userData.isCam3D) myToolPG.activeTool({obj});
+		const visible = {tool: {p: true, r: false, s: false}, ui: {p: true, r: false, s: false}};
+		//if(myCameraOrbit.activeCam.userData.isCam3D) visible.tool.p = true;
+		myToolPG.activeTool({type: 'pivot', obj, visible});
 		
 		const tube = myWarmFloor.myPointWf.getTubeFromPoint({point: obj});
 		if(tube) myWarmFloor.myTubeWf.visiblePointsOnTube({tube, visible: true});		

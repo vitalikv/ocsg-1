@@ -84,6 +84,25 @@ class MyGizmo
 		
 		return geometry;
 	}
+
+
+	// установить и показать Gizmo
+	actGizmo({obj, arrO, pos, qt, visible = true})
+	{
+		const gizmo = this.obj;
+		gizmo.visible = visible;					
+		
+		gizmo.position.copy(pos);
+		gizmo.quaternion.copy(qt);
+		
+		const visible2 = (myCameraOrbit.activeCam.userData.isCam2D) ? false : true;			
+		gizmo.children[1].visible = visible2;
+		gizmo.children[2].visible = visible2;				
+			
+		
+		gizmo.userData.propGizmo({type: 'updateScale'});
+		gizmo.userData.propGizmo({type: 'clippingGizmo'});
+	}
 	
 
 	mousedown = ({event, rayhit}) => 
@@ -138,6 +157,13 @@ class MyGizmo
 	{		
 		this.render();
 	}
+
+
+	hideGizmo() 
+	{
+		const gizmo = this.obj;
+		gizmo.visible = false;
+	}				
 	
 	
 	// ф-ция со всеми действиями Pivot
@@ -148,14 +174,11 @@ class MyGizmo
 		let type = params.type;			
 		
 		if(type == 'clippingGizmo') { clippingGizmo(); }		
-		if(type == 'setGizmo') { setGizmo({obj: params.obj, arrO: params.arrO, pos: params.pos, qt: params.qt}); }
 		if(type == 'rotObjs') { rotObjs({pos: params.pos, arrO: params.arrO, q_Offset: params.q_Offset, rotY_Old: params.rotY_Old}); }
 		if(type == 'setPosGizmo') { setPosGizmo({pos: params.pos}); }
 		if(type == 'setRotGizmo') { setRotGizmo({qt: params.qt}); }
 		if(type == 'updateScale') { updateScale(); }
-		if(type == 'hide') { hide(); }		
-		
-
+	
 
 		// прячем текстуру если она находится за плоскостью 
 		function clippingGizmo() 
@@ -188,28 +211,6 @@ class MyGizmo
 			}
 
 		}		
-
-		// установить и показать Gizmo
-		function setGizmo(params)
-		{
-			let obj = params.obj;
-			let arrO = params.arrO;
-			let pos = params.pos;
-			let qt = params.qt;
-			
-			gizmo.visible = true;					
-			
-			gizmo.position.copy(pos);
-			gizmo.quaternion.copy(qt);
-			
-			let visible = (myCameraOrbit.activeCam.userData.isCam2D) ? false : true;			
-			gizmo.children[1].visible = visible;
-			gizmo.children[2].visible = visible;				
-				
-			
-			gizmo.userData.propGizmo({type: 'updateScale'});
-			gizmo.userData.propGizmo({type: 'clippingGizmo'});
-		}
 
 
 		
@@ -289,10 +290,6 @@ class MyGizmo
 		}
 		
 		
-		function hide() 
-		{
-			gizmo.visible = false;
-		}				
 	}
 
 	render()

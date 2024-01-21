@@ -28,11 +28,10 @@ class MyTubeWfMove
 		
 		myWarmFloor.myTubeWf.visiblePointsOnTube({tube: obj, visible: true});
 		
-		if(myCameraOrbit.activeCam.userData.isCam3D) 
-		{
-			const pos = myWarmFloor.myTubeWf.getPosForPivot({tube: obj, rayPos})
-			myToolPG.activeTool({obj, pos});
-		}
+		const pos = myWarmFloor.myTubeWf.getPosForPivot({tube: obj, rayPos});
+		const visible = {tool: {p: true, r: false, s: false}, ui: {p: true, r: false, s: false}};
+		//if(myCameraOrbit.activeCam.userData.isCam3D) visible.tool.p = true;
+		myToolPG.activeTool({type: 'pivot', obj, pos, visible});
 
 		this.isDown = true;
 

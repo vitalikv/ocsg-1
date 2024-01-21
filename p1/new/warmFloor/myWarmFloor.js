@@ -49,23 +49,35 @@ class MyWarmFloor
 	}
 	
 	// проверка куда кликнули (попали на точку или трубу)
-	clickRayhit({event, type})
+	clickRayhit({event})
 	{
 		const list = this.getObjsActLevel();
 		
 		let rayhit = null;
-		let array = [];
-		if(type === 'points') array = list.points;
-		if(type === 'tubes') array = list.tubes;
-		if(type === 'objs') array = list.objs;
+		const array = [];
 		
-		if(type === 'points')
-		{
-			array = array.filter((p) => p.visible);
-		}
+		const points = list.points.filter((p) => p.visible);
+		array.push(...points);		
+		array.push(...list.tubes);
+		array.push(...list.objs);
 		
 		const ray = rayIntersect( event, array, 'arr' );
-		if(ray.length > 0) rayhit = ray[0];
+		if(ray.length > 0) 
+		{
+			rayhit = ray[0];
+			
+			// если показываются точки у труб, ищем кликнули на них или нет
+			for ( let i = 0; i < ray.length; i++ )
+			{
+				const index = list.points.indexOf(ray[i].object);
+				
+				if(index > -1)
+				{
+					rayhit = ray[i];
+					break;
+				}
+			}
+		}
 
 		return rayhit;
 	}

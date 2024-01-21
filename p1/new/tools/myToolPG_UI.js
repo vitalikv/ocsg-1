@@ -33,7 +33,7 @@ class MyToolPG_UI
 		let str = 
 		`<div nameId="block_pos" class="block_pos" ui_1="" style="display: none;">
 			<div style="padding: 2px;">
-				<div style="display: flex; align-items: center;">
+				<div nameId="divPivot" style="display: flex; align-items: center;">
 					<div nameId="btn_pivot" class="button1 button_gradient_1" style="width: 20px; margin: 0;">
 						<img src="${infProject.path}img/icon/tools/pivot.svg">
 					</div>	
@@ -45,7 +45,7 @@ class MyToolPG_UI
 					</div>	
 				</div>
 				
-				<div style="display: flex; margin-top: 10px;">
+				<div nameId="divGizmo" style="display: flex; margin-top: 10px;">
 					<div nameId="btn_gizmo" class="button1 button_gradient_1" style="width: 20px; margin: 0;">
 						<img src="${infProject.path}img/icon/tools/gizmo.svg">	
 					</div>	
@@ -86,7 +86,7 @@ class MyToolPG_UI
 					</div>											
 				</div>
 
-				<div style="display: flex; margin-top: 10px;">
+				<div nameId="divScale" style="display: flex; margin-top: 10px;">
 					<div nameId="btn_scale" class="button1 button_gradient_1" style="width: 20px; margin: 0;">
 						<img src="${infProject.path}img/icon/tools/scale.svg">	
 					</div>	
@@ -117,9 +117,9 @@ class MyToolPG_UI
 	
 	initEventButton()
 	{
-		this.el.querySelector('[nameId="btn_pivot"]').onmousedown = (e) => { myToolPG.activeTool({type:'pivot'}); e.stopPropagation(); };
-		this.el.querySelector('[nameId="btn_gizmo"]').onmousedown = (e) => { myToolPG.activeTool({type:'gizmo'}); e.stopPropagation(); };
-		this.el.querySelector('[nameId="btn_scale"]').onmousedown = (e) => { myToolPG.activeTool({type:'scale'}); e.stopPropagation(); };
+		this.el.querySelector('[nameId="btn_pivot"]').onmousedown = (e) => { myToolPG.activeTool({type:'pivot', obj: myToolPG.obj}); e.stopPropagation(); };
+		this.el.querySelector('[nameId="btn_gizmo"]').onmousedown = (e) => { myToolPG.activeTool({type:'gizmo', obj: myToolPG.obj}); e.stopPropagation(); };
+		this.el.querySelector('[nameId="btn_scale"]').onmousedown = (e) => { myToolPG.activeTool({type:'scale', obj: myToolPG.obj}); e.stopPropagation(); };
 		
 		this.el.querySelector('[nameId="obj_rotate_X_90"]').onmousedown = (e) => { this.setAngleRotUI({axis: 'x', angle: -45}); e.stopPropagation(); };
 		this.el.querySelector('[nameId="obj_rotate_X_90m"]').onmousedown = (e) => { this.setAngleRotUI({axis: 'x', angle: 45}); e.stopPropagation(); };
@@ -134,16 +134,19 @@ class MyToolPG_UI
 	getPosRotUI()
 	{
 		this.ui.pos = {};
+		this.ui.pos.div = this.el.querySelector('[nameId="divPivot"]');
 		this.ui.pos.x = this.el.querySelector('[nameId="object_pos_X"]');
 		this.ui.pos.y = this.el.querySelector('[nameId="object_pos_Y"]');
 		this.ui.pos.z = this.el.querySelector('[nameId="object_pos_Z"]');
 		
 		this.ui.rot = {};
+		this.ui.rot.div = this.el.querySelector('[nameId="divGizmo"]');
 		this.ui.rot.x = this.el.querySelector('[nameId="object_rotate_X"]');
 		this.ui.rot.y = this.el.querySelector('[nameId="object_rotate_Y"]');
 		this.ui.rot.z = this.el.querySelector('[nameId="object_rotate_Z"]');
 
 		this.ui.scl = {};
+		this.ui.scl.div = this.el.querySelector('[nameId="divScale"]');
 		this.ui.scl.x = this.el.querySelector('[nameId="scaleX"]');
 		this.ui.scl.y = this.el.querySelector('[nameId="scaleY"]');
 		this.ui.scl.z = this.el.querySelector('[nameId="scaleZ"]');		
@@ -214,10 +217,10 @@ class MyToolPG_UI
 		let pos = new THREE.Vector3(x.num, y.num, z.num);
 		let offset = pos.clone().sub(myToolPG.pos);
 		
-		myToolPG.pivot.userData.propPivot({type: 'setPosPivot', pos: pos});
+		myToolPG.myPivot.setPosPivot({pos: pos});
 		myToolPG.gizmo.userData.propGizmo({type: 'setPosGizmo', pos: pos});
 		myToolPG.scale.userData.propScale({type: 'setPosScale', pos: pos});
-		myToolPG.pivot.userData.propPivot({type: 'moveObjs', obj: myToolPG.obj, arrO: myToolPG.arrO, offset: offset});				
+		myToolPG.myPivot.moveObjs({obj: myToolPG.obj, arrO: myToolPG.arrO, offset});				
 		
 		myToolPG.pos = pos;		
 		
@@ -259,7 +262,7 @@ class MyToolPG_UI
 		
 		myToolPG.gizmo.userData.propGizmo({type: 'setRotGizmo', qt: q_New});
 		myToolPG.gizmo.userData.propGizmo({type: 'rotObjs', pos: myToolPG.pos, arrO: [myToolPG.obj], q_Offset});
-		myToolPG.pivot.userData.propPivot({type: 'setRotPivot', qt: q_New});
+		myToolPG.myPivot.setRotPivot();
 		myToolPG.scale.userData.propScale({type: 'setRotScale', qt: q_New});
 
 		this.setRotUI();
@@ -428,9 +431,20 @@ class MyToolPG_UI
 	}
 
 	// скрываем/показываем меню
-	displayMenuUI({visible})
+	displayMenuUI({visible, showUI = null})
 	{
 		this.el.style.display = visible;
+		
+		this.ui.pos.div.style.display = 'flex';
+		this.ui.rot.div.style.display = 'flex';
+		this.ui.scl.div.style.display = 'flex';
+		
+		if(showUI)
+		{
+			this.ui.pos.div.style.display = showUI.p ? 'flex' : 'none';
+			this.ui.rot.div.style.display = showUI.r ? 'flex' : 'none';
+			this.ui.scl.div.style.display = showUI.s ? 'flex' : 'none';
+		}					
 	}
 
 	render()
