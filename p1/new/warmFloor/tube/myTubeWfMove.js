@@ -57,6 +57,8 @@ class MyTubeWfMove
 		obj.position.add( offset );	
 
 		this.moveTubeWf_2({obj, offset});
+		
+		myToolPG.activeTool({obj: this.sObj});
 	}
 	
 	mouseup = () =>

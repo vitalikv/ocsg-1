@@ -157,6 +157,20 @@ class MyGizmo
 	{		
 		this.render();
 	}
+	
+	
+	// установить rotation Gizmo, когда меняем через input
+	setRotGizmo()
+	{
+		const gizmo = this.obj;
+		if (!gizmo.visible) return;
+		
+		const obj = myToolPG.obj;
+		const qt = myToolPG.calcRot({obj});
+		
+		gizmo.quaternion.copy(qt);			
+	}		
+	
 
 
 	hideGizmo() 
@@ -176,7 +190,6 @@ class MyGizmo
 		if(type == 'clippingGizmo') { clippingGizmo(); }		
 		if(type == 'rotObjs') { rotObjs({pos: params.pos, arrO: params.arrO, q_Offset: params.q_Offset, rotY_Old: params.rotY_Old}); }
 		if(type == 'setPosGizmo') { setPosGizmo({pos: params.pos}); }
-		if(type == 'setRotGizmo') { setRotGizmo({qt: params.qt}); }
 		if(type == 'updateScale') { updateScale(); }
 	
 
@@ -265,17 +278,7 @@ class MyGizmo
 			gizmo.userData.propGizmo({type: 'clippingGizmo'});
 		}
 		
-		
-		// установить rotation Gizmo, когда меняем через input
-		function setRotGizmo(params)
-		{
-			if (!gizmo.visible) return;
-			
-			let qt = params.qt;
-			
-			gizmo.quaternion.copy(qt);			
-		}		
-		
+				
 		
 		function updateScale() 
 		{

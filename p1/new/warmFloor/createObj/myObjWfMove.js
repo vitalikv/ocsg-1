@@ -51,6 +51,8 @@ class MyObjWfMove
 		offset.y = 0;		
 		
 		obj.position.add( offset );	
+		
+		myToolPG.activeTool({obj: this.sObj});
 	}
 	
 	mouseup = () =>

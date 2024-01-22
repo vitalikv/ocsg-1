@@ -256,14 +256,14 @@ class MyToolPG_UI
 		z = THREE.Math.degToRad(z.num);		
 		
 		const qt = myToolPG.obj.quaternion.clone();
-		let q_New = new THREE.Quaternion().setFromEuler(new THREE.Euler().set(x, y, z))
+		let q_New = new THREE.Quaternion().setFromEuler(new THREE.Euler().set(x, y, z));	// новое положение gizmo
 		let q_Offset = q_New.clone().multiply(qt.clone().inverse());		
 				
-		
-		myToolPG.gizmo.userData.propGizmo({type: 'setRotGizmo', qt: q_New});
-		myToolPG.gizmo.userData.propGizmo({type: 'rotObjs', pos: myToolPG.pos, arrO: [myToolPG.obj], q_Offset});
+				
+		myToolPG.gizmo.userData.propGizmo({type: 'rotObjs', pos: myToolPG.pos, arrO: [myToolPG.obj], q_Offset});	// сначала обновляем rot obj
+		myToolPG.myGizmo.setRotGizmo();
 		myToolPG.myPivot.setRotPivot();
-		myToolPG.scale.userData.propScale({type: 'setRotScale', qt: q_New});
+		myToolPG.myScale.setRotScale({qt: q_New});
 
 		this.setRotUI();
 
@@ -336,9 +336,10 @@ class MyToolPG_UI
 		{
 			myHouse.myRoofAction.setObjSize({obj, size: new THREE.Vector3(x2, y2, z2)});
 			myHouse.myRoofCSG.updateCgsRoof();
-			myHouse.myRoofAction.upDateTextureRoof({obj})	
-			myToolPG.activeTool({obj});		
-		}			
+			myHouse.myRoofAction.upDateTextureRoof({obj})						
+		}
+
+		myToolPG.activeTool({obj});
 		
 		this.render();		
 	}

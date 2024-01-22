@@ -209,9 +209,11 @@ class MyManagerClick
 			else if(tag == 'point') { myHouse.myMovePoint.mousedown({event, obj}); }
 			else if(tag == 'window' && isCam2D) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if(tag == 'door' && isCam2D) { myHouse.myWDMove.mousedown({event, obj}); }
-			else if(tag == 'controll_wd') { myHouse.myWDPointsMove.mousedown({event, obj}); }						
+			else if(tag == 'controll_wd') { myHouse.myWDPointsMove.mousedown({event, obj}); }
 			else if(tag == 'roof' && isCam2D) { myHouse.myRoofMove.click({event, obj}); }				
-			else if(tag == 'obj' && isCam2D) { myHouse.myObjMove.click({event, obj}); }
+			else if(tag == 'obj' && isCam2D) { myHouse.myObjMove.click({event, obj}); }			
+			//else if(tag == 'roof' && isCam2D) { myHouse.myRoofMove.mousedown({event, obj}); }				
+			//else if(tag == 'obj' && isCam2D) { myHouse.myObjMove.mousedown({event, obj}); }
 			else if(tag == 'pointWf' && isCam2D) { myWarmFloor.myPointWfMove.mousedown({event, obj}); }
 			else if(tag == 'tubeWf' && isCam2D) { myWarmFloor.myTubeWfMove.mousedown({event, obj, rayPos: rayhit.point}); }
 			else if(tag == 'objWf' && isCam2D) { myWarmFloor.myObjWfMove.mousedown({event, obj}); }
@@ -308,33 +310,11 @@ class MyManagerClick
 				else if(tag == 'window' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(); }
 				else if(tag == 'door' && isCam2D) { hideSizeWD(obj); this.hideMenuUI(); }
 				else if(tag == 'controll_wd') { hideSizeWD(obj); this.hideMenuUI(); }				
-				else if(tag == 'roof' && isCam2D) 
-				{ 
-					let hide = true;
-					const rayObj = myMouse.getRayhitObj();
-					if(rayObj && (rayObj.userData.tag === 'pivot' || rayObj.userData.tag === 'gizmo' || rayObj.userData.tag === 'scale')) hide = false;
-					
-					if(hide)
-					{
-						myToolPG.hide(); 
-						this.hideMenuUI();
-					}					 
-				}
-				else if(tag == 'obj' && isCam2D) 
-				{ 
-					let hide = true;
-					const rayObj = myMouse.getRayhitObj();
-					if(rayObj && (rayObj.userData.tag === 'pivot' || rayObj.userData.tag === 'gizmo' || rayObj.userData.tag === 'scale')) hide = false;
-					
-					if(hide)
-					{
-						myToolPG.hide(); 
-						this.hideMenuUI();
-					}					 
-				}
-				else if(tag == 'pointWf' && isCam2D) { this.hideMenuUI({obj}); }
-				else if(tag == 'tubeWf' && isCam2D) { this.hideMenuUI({obj}); }
-				else if(tag == 'objWf' && isCam2D) { this.hideMenuUI({obj}); }
+				else if(tag == 'roof' && isCam2D) { this.checkSetToolPGS({obj}); }
+				else if(tag == 'obj' && isCam2D) { this.checkSetToolPGS({obj}); }
+				else if(tag == 'pointWf' && isCam2D) { this.checkSetToolPGS({obj}); }
+				else if(tag == 'tubeWf' && isCam2D) { this.checkSetToolPGS({obj}); }
+				else if(tag == 'objWf' && isCam2D) { this.checkSetToolPGS({obj}); }
 				else { flag = false; }
 			}
 			else if(type === 'up')
@@ -344,8 +324,8 @@ class MyManagerClick
 				else if(tag == 'room' && isCam3D) { this.hideMenuUI(); }
 				else if(tag == 'window' && isCam3D) { hideSizeWD(); this.hideMenuUI(); }
 				else if(tag == 'door' && isCam3D) { hideSizeWD(); this.hideMenuUI(); }
-				else if(tag == 'roof' && isCam3D) { myToolPG.hide(); this.hideMenuUI(); }
-				else if(tag == 'obj' && isCam3D) { myToolPG.hide(); this.hideMenuUI(); }
+				else if(tag == 'roof' && isCam3D) { this.hideMenuUI({obj}); }
+				else if(tag == 'obj' && isCam3D) { this.hideMenuUI({obj}); }
 				else if(tag == 'pointWf' && isCam3D) { this.hideMenuUI({obj}); }
 				else if(tag == 'tubeWf' && isCam3D) { this.hideMenuUI({obj}); }
 				else if(tag == 'objWf' && isCam3D) { this.hideMenuUI({obj}); }
@@ -359,8 +339,8 @@ class MyManagerClick
 				else if(tag == 'door') { hideSizeWD(); this.hideMenuUI(); }
 				else if(tag == 'controll_wd') { hideSizeWD(); this.hideMenuUI(); }
 				else if(tag == 'room') { this.hideMenuUI(); }
-				else if(tag == 'obj') { myToolPG.hide(); this.hideMenuUI(); }
-				else if(tag == 'roof') { myToolPG.hide(); this.hideMenuUI(); }
+				else if(tag == 'obj') { this.hideMenuUI({obj}); }
+				else if(tag == 'roof') { this.hideMenuUI({obj}); }
 				else if(tag == 'pointWf') { this.hideMenuUI({obj}); }
 				else if(tag == 'tubeWf') { this.hideMenuUI({obj}); }
 				else if(tag == 'objWf') { this.hideMenuUI({obj}); }
@@ -374,6 +354,20 @@ class MyManagerClick
 			
 		}
 	}
+	
+	
+	// проверяем установлен ли на объекте pivot
+	checkSetToolPGS({obj})
+	{
+		let hide = true;
+		const rayObj = myMouse.getRayhitObj();
+		if(rayObj && (rayObj.userData.tag === 'pivot' || rayObj.userData.tag === 'gizmo' || rayObj.userData.tag === 'scale')) hide = false;
+		
+		if(hide)
+		{ 
+			this.hideMenuUI({obj});
+		}		
+	}
 
 	hideMenuUI({obj}={}) 
 	{
@@ -385,6 +379,14 @@ class MyManagerClick
 			
 			if(tag)
 			{
+				if(tag == 'obj')
+				{
+					myToolPG.hide();
+				}
+				if(tag == 'roof')
+				{
+					myToolPG.hide();
+				}				
 				if(tag == 'pointWf') 
 				{  
 					const tube = myWarmFloor.myPointWf.getTubeFromPoint({point: obj});

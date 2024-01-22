@@ -269,6 +269,17 @@ class MyScale
 		this.render();
 	}
 
+
+	// установить rotation, когда меняем через input
+	setRotScale({qt})
+	{
+		const scaleObj = this.obj;
+		if (!scaleObj.visible) return;
+		
+		scaleObj.quaternion.copy(qt);			
+	}		
+
+
 	// меняем масштаб axis, при изменении положения камеры
 	updateScale() 
 	{
@@ -325,15 +336,6 @@ class MyScale
 			//pivot.userData.propScale({type: 'updateScale'});
 		}
 		
-		// установить rotation, когда меняем через input
-		function setRotScale(params)
-		{
-			if (!pivot.visible) return;
-			
-			let qt = params.qt;
-			
-			pivot.quaternion.copy(qt);			
-		}		
 	}
 	
 	render()

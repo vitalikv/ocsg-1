@@ -62,18 +62,18 @@ class MyToolPG
 		else if(myCameraOrbit.activeCam.userData.isCam3D) { mode = '3d'; }
 		
 		if(mode === '2d')	
-		{		
-			if(!obj.geometry.boundingBox) obj.geometry.computeBoundingBox();
-			const bound = obj.geometry.boundingBox;
+		{	
+			 
+			//if(!obj.geometry.boundingBox) obj.geometry.computeBoundingBox();
+			//const bound = obj.geometry.boundingBox;			
+			//obj.updateMatrixWorld();
+			//const v1 = new THREE.Vector3(bound.min.x, 0, 0).applyMatrix4( obj.matrixWorld );
+			//const v2 = new THREE.Vector3(bound.max.x, 0, 0).applyMatrix4( obj.matrixWorld );			
+			//const dir = v2.clone().sub(v1).normalize();
+			//const rotY = Math.atan2(dir.x, dir.z);			
+			//qt = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), rotY - Math.PI/2);
 			
-			obj.updateMatrixWorld();
-			const v1 = new THREE.Vector3(bound.min.x, 0, 0).applyMatrix4( obj.matrixWorld );
-			const v2 = new THREE.Vector3(bound.max.x, 0, 0).applyMatrix4( obj.matrixWorld );
-			
-			const dir = v2.clone().sub(v1).normalize();
-			const rotY = Math.atan2(dir.x, dir.z);
-			
-			qt = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), rotY - Math.PI/2);
+			qt = new THREE.Quaternion();	// в 2d всегда стартовое положение поворота
 		}
 		
 		if(mode === '3d') qt = obj.getWorldQuaternion(new THREE.Quaternion());	
