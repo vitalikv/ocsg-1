@@ -342,7 +342,18 @@ class MyLevels
 		//for ( let i = 0; i < otop.points.length; i++ ) otop.points[i].visible = visible;
 		for ( let i = 0; i < otop.tubes.length; i++ ) otop.tubes[i].visible = visible;		
 	}
-	
+
+
+	// меняем видимость всех крыш
+	changeVisibleRoofs({show}) 
+	{
+		for ( let i = 0; i < this.levels.length; i++ )
+		{		
+			const { roofs } = this.getDestructObject(i);
+
+			for ( let i2 = 0; i2 < roofs.length; i2++ ) roofs[i2].visible = show;
+		}
+	}	
 
 	getDestructObject(id)
 	{

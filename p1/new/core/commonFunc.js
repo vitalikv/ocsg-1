@@ -137,6 +137,7 @@ function clickInterface(cdm)
 		{
 			clickO.button = cdm.button;
 			clickO.options = cdm.lotid;
+			myPanelR.myLevelVisible.switchShowAllRoofs({value: true});
 		}		
 		else if(cdm.button === 'add_lotid')
 		{

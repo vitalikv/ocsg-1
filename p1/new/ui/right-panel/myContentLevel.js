@@ -118,22 +118,7 @@ class MyContentLevel
 				</div>
 			</div>
 
-			<div nameId="div_type_cam_vis" class="flex_column_1 rp_item_plane" style="display: none; padding: 10px; font-size: 16px; color: #666; font-family: arial,sans-serif;">
-				<div style="display: flex; align-items: center; margin:5px 0;">
-					<div nameId="type_cam_vis_1" style="width: 20px; height: 20px; margin-right: 15px; border: 1px solid #ccc; border-radius: 4px; background: #fff; cursor: pointer;">
-						<div style="width: 16px; height: 16px; margin: 2px; border-radius: 4px; background: rgb(213, 213, 213);">
-						</div>
-					</div>
-					<div>Показать все этажи</div>
-				</div>
-				<div style="display: flex; align-items: center; margin:5px 0;">
-					<div nameId="type_cam_vis_2" style="width: 20px; height: 20px; margin-right: 15px; border: 1px solid #ccc; border-radius: 4px; background: #fff; cursor: pointer;">
-						<div style="width: 16px; height: 16px; margin: 2px; border-radius: 4px; background: rgb(213, 213, 213);">
-						</div>
-					</div>
-					<div>Прозрачные внешние стены</div>
-				</div>				
-			</div>
+			<div nameId="wrapVisHs"></div>
 		</div>`;
 		
 		return html;

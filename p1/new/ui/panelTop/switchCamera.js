@@ -51,8 +51,8 @@ class SwitchCamera
 	// прячем/показываем блок с настройками отображения стен и этажей
 	showHideDivTypeCam()
 	{
-		if(myCameraOrbit.activeCam.userData.isCam2D) myPanelR.myLevelVisible.container.style.display = 'none';
-		if(myCameraOrbit.activeCam.userData.isCam3D) myPanelR.myLevelVisible.container.style.display = '';
+		if(myCameraOrbit.activeCam.userData.isCam2D) myPanelR.myLevelVisible.showHideBlock({show: false});
+		if(myCameraOrbit.activeCam.userData.isCam3D) myPanelR.myLevelVisible.showHideBlock({show: true});
 	}	
 }
 

@@ -12,7 +12,9 @@ class MyRoofAction
 	// при клике, определяем попали в крышу или нет
 	getRayIntersect()
 	{
-		let ray = rayIntersect( event, infProject.scene.array.roof, 'arr', true );	
+		const roofs = infProject.scene.array.roof.filter((p) => p.visible);
+		
+		let ray = rayIntersect( event, roofs, 'arr', true );	
 
 		let rayhit = null;
 		

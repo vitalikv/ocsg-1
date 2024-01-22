@@ -31,7 +31,7 @@ class MyPanelR
 	init()
 	{
 		this.myContentLevel = new MyContentLevel();
-		this.myLevelVisible = new MyLevelVisible({showAllLevel: true, wallTransparent: false});	
+		this.myLevelVisible = new MyLevelVisible();	
 		this.myContentPlan = new MyContentPlan();
 		this.myContentObj = new MyContentObj();							
 		
