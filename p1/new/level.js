@@ -276,6 +276,9 @@ class MyLevels
 				this.visibleLevelCam2D(i, false);
 			}		
 		}
+		
+		this.changeVisibleRoofs();
+		
 		if(myCameraOrbit.activeCam.userData.isCam2D) upPosLabels_1({resize: true});	// поправляем размеры и svg
 	}
 
@@ -305,7 +308,7 @@ class MyLevels
 		for ( let i = 0; i < floors.length; i++ ) floors[i].visible = visible;
 		for ( let i = 0; i < ceilings.length; i++ ) ceilings[i].visible = visible;
 		for ( let i = 0; i < objs.length; i++ ) objs[i].visible = visible;
-		for ( let i = 0; i < roofs.length; i++ ) roofs[i].visible = visible;
+		//for ( let i = 0; i < roofs.length; i++ ) roofs[i].visible = visible;
 		
 		//for ( let i = 0; i < otop.points.length; i++ ) otop.points[i].visible = visible;
 		for ( let i = 0; i < otop.tubes.length; i++ ) otop.tubes[i].visible = visible;		
@@ -337,21 +340,58 @@ class MyLevels
 		for ( let i = 0; i < floors.length; i++ ) floors[i].visible = visible;
 		for ( let i = 0; i < ceilings.length; i++ ) ceilings[i].visible = visible;
 		for ( let i = 0; i < objs.length; i++ ) objs[i].visible = visible;
-		for ( let i = 0; i < roofs.length; i++ ) roofs[i].visible = visible;
+		//for ( let i = 0; i < roofs.length; i++ ) roofs[i].visible = visible;
 		
 		//for ( let i = 0; i < otop.points.length; i++ ) otop.points[i].visible = visible;
 		for ( let i = 0; i < otop.tubes.length; i++ ) otop.tubes[i].visible = visible;		
 	}
 
 
-	// меняем видимость всех крыш
-	changeVisibleRoofs({show}) 
+	// меняем видимость всех крыш в зависимости от флага showAllRoofs (показывать или скрывать крыши)
+	changeVisibleRoofs() 
 	{
+		const showRoof = myPanelR.myLevelVisible.showAllRoofs;
+		const showLevel = myPanelR.myLevelVisible.showAllLevel;
+		
+		const is2D = myCameraOrbit.activeCam.userData.isCam2D;
+		const is3D = myCameraOrbit.activeCam.userData.isCam3D;
+		
+		const arrActRoofs = [];		// все крыши активного этажа
+		const arrNotActRoofs = [];	// все крыши НЕактивного этажа
+		
 		for ( let i = 0; i < this.levels.length; i++ )
 		{		
 			const { roofs } = this.getDestructObject(i);
+			
+			if(this.activeId === i) { arrActRoofs.push(...roofs); }
+			else { arrNotActRoofs.push(...roofs); }
+		}
+		
+		if(is2D)
+		{
+			for ( let i = 0; i < arrActRoofs.length; i++ ) arrActRoofs[i].visible = showRoof;
+			for ( let i = 0; i < arrNotActRoofs.length; i++ ) arrNotActRoofs[i].visible = false;
+		}
+		
+		if(is3D)
+		{
+			for ( let i = 0; i < arrActRoofs.length; i++ ) arrActRoofs[i].visible = showRoof;
+			
+			const show3D = (!showLevel) ? false : showRoof;
+			for ( let i = 0; i < arrNotActRoofs.length; i++ ) arrNotActRoofs[i].visible = show3D;
+		}
 
-			for ( let i2 = 0; i2 < roofs.length; i2++ ) roofs[i2].visible = show;
+		// если скрываем крышу и если это крыша выделана, то снимаем выделение
+		if(!showRoof)
+		{
+			const obj = myComposerRenderer.getOutlineObj();
+			
+			if(obj && obj.userData.tag === 'roof')
+			{
+				const ind = arrActRoofs.findIndex((o) => o === obj);
+				if(ind > -1) myManagerClick.hideMenuObjUI_2D();
+			}
+			
 		}
 	}	
 

@@ -98,6 +98,7 @@ class MyLevelVisible
 		this.setCheckBox({type: 'wallTransparent'});
 	}
 	
+	// вкл/выкл показ всех крыш
 	switchShowAllRoofs({value} = {value: undefined})
 	{
 		this.showAllRoofs = (value !== undefined) ? value : !this.showAllRoofs;
@@ -131,7 +132,7 @@ class MyLevelVisible
 		{
 			this.checkBox3.children[0].style.background = (this.showAllRoofs) ? 'rgb(213, 213, 213)' : 'none';
 			
-			myLevels.changeVisibleRoofs({show: this.showAllRoofs});		
+			myLevels.changeVisibleRoofs();		
 		}		
 	}
 
