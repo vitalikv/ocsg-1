@@ -9,6 +9,8 @@ class MyHouse
 	myWall;
 	myWallMove;
 	
+	myFloor;
+	
 	myDoor;
 	myWindow;
 	myWD;
@@ -27,6 +29,8 @@ class MyHouse
 		
 		this.myWall = new MyWall();
 		this.myWallMove = new MyWallMove();
+		
+		this.myFloor = new MyFloor();
 		
 		this.myDoor = new MyDoor();
 		this.myWindow = new MyWindow();

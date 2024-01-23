@@ -125,7 +125,7 @@ class MyWallMove
 		upLineYY( obj.userData.wall.p[ 0 ] );
 		upLineYY( obj.userData.wall.p[ 1 ] );
 		upLabelPlan_1( param_wall.wallR ); 
-		updateShapeFloor( param_wall.arrZone ); 		
+		myHouse.myFloor.updateShapeFloors( param_wall.arrZone ); 		
 		
 		clickPointUP_BSP(param_wall.wallR);
 	}

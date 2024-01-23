@@ -32,7 +32,7 @@ function rayFurniture( obj )
 // отпускаем перетаскиваемую точку на planeMath
 function movePointWallPlaneMath(point) 
 {
-	updateShapeFloor(point.zone); 
+	myHouse.myFloor.updateShapeFloors(point.zone); 
 	
 	clickPointUP_BSP(param_wall.wallR);
 }

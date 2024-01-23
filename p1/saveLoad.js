@@ -269,7 +269,12 @@ function compileJsonFile_2(array, posY)
 		rooms[i].id = floor[i].userData.id;  
 		
 		rooms[i].contour = [];
-		var s = 0; for ( var i2 = floor[i].p.length - 1; i2 >= 1; i2-- ) { rooms[i].contour[s] = floor[i].p[i2].userData.id; s++; } 
+		var s = 0; 
+		for ( var i2 = floor[i].userData.room.p.length - 1; i2 >= 1; i2-- ) 
+		{ 
+			rooms[i].contour[s] = floor[i].userData.room.p[i2].userData.id; 
+			s++; 
+		} 
 		
 		rooms[i].material = [floor[i].userData.material, ceiling[i].userData.material];	
 

@@ -140,54 +140,6 @@ function replaceParamPointOnZone(zone, newPoint, replacePoint)
 
 
 
-// при изменении формы пола обновляем geometry.faces
-function updateShapeFloor(arrRoom)
-{  
-	if(!infProject.settings.floor.o) { return; }
-	
-	for ( var i = 0; i < arrRoom.length; i++ ) 
-	{	 
-		var point = [];
-		for ( var i2 = 0; i2 < arrRoom[i].p.length - 1; i2++ ) { point[i2] = new THREE.Vector2 ( arrRoom[i].p[i2].position.x, arrRoom[i].p[i2].position.z ); }				
-		
-		var shape = new THREE.Shape( point );				
-
-		var geometry = new THREE.ExtrudeGeometry( shape, { bevelEnabled: false, depth: infProject.settings.floor.height } ); 
-				
-		arrRoom[i].geometry.vertices = geometry.vertices;
-		arrRoom[i].geometry.faces = geometry.faces;		
-		arrRoom[i].geometry.verticesNeedUpdate = true;
-		arrRoom[i].geometry.elementsNeedUpdate = true;
-		
-		arrRoom[i].geometry.computeBoundingSphere();
-		arrRoom[i].geometry.computeBoundingBox();
-		arrRoom[i].geometry.computeFaceNormals();
-		
-		geometry.dispose();
-		
-		//arrRoom[i].position.y = infProject.settings.floor.posY;
-		//arrRoom[i].position.y = arrRoom[i].p[0].position.y;
-		upUvs_1( arrRoom[i] );
-		getYardageSpace([arrRoom[i]]); 
-
-		// потолок	
-		var num = 0;		
-		for ( var i2 = 0; i2 < room.length; i2++ ) { if(room[i2].userData.id == arrRoom[i].userData.id) { num = i2; break; } }	// находим потолок	
-		
-		var geometry = new THREE.ShapeGeometry( shape );
-		
-		ceiling[num].geometry.vertices = geometry.vertices;
-		ceiling[num].geometry.faces = geometry.faces;			
-		ceiling[num].geometry.verticesNeedUpdate = true;
-		ceiling[num].geometry.elementsNeedUpdate = true;
-		
-		ceiling[num].geometry.computeBoundingSphere();
-		ceiling[num].geometry.computeBoundingBox();
-		ceiling[num].geometry.computeFaceNormals();
-
-		geometry.dispose();
-	}
-}
 
 
 

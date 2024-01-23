@@ -504,7 +504,7 @@ function undoRedoChangeMovePoint( point, walls )
 	
 	upLineYY(point);  
 	upLabelPlan_1(walls);
-	updateShapeFloor(point.zone); 
+	myHouse.myFloor.updateShapeFloors(point.zone); 
 	
 	clickPointUP_BSP(walls);
 	

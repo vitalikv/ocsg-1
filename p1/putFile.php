@@ -86,6 +86,7 @@ new/house/point/myMovePoint.js
 new/house/point/myPointAction.js
 new/house/wall/myWall.js
 new/house/wall/myWallMove.js
+new/house/floor/myFloor.js
 new/house/wd/myWD.js
 new/house/wd/myWDMove.js
 new/house/wd/myDoor.js

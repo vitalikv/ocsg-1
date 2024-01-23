@@ -28,7 +28,8 @@ function detectRoomZone()
 			 
 			var arr = compileArrPointRoom_1(p);						
 			
-			arrRoom[arrRoom.length] = createFloor({point : p, wall : arr[0], side : arr[1]});			
+			arrRoom[arrRoom.length] = myHouse.myFloor.createFloor({points: p, walls: arr[0], sides: arr[1]});
+			//arrRoom[arrRoom.length] = createFloor({point : p, wall : arr[0], side : arr[1]});
 			break; 
 		}
 	}
@@ -50,13 +51,13 @@ function detectSameZone( arrRoom, arrP )
 	{
 		var ln = 0;
 		
-		if(arrRoom[i].p.length != arrP.length) { continue; }
+		if(arrRoom[i].userData.room.p.length != arrP.length) { continue; }
 			
-		for ( var i2 = 0; i2 < arrRoom[i].p.length - 1; i2++ )
+		for ( var i2 = 0; i2 < arrRoom[i].userData.room.p.length - 1; i2++ )
 		{
 			for ( var i3 = 0; i3 < arrP.length - 1; i3++ )
 			{
-				if(arrRoom[i].p[i2] == arrP[i3]) { ln++; }
+				if(arrRoom[i].userData.room.p[i2] == arrP[i3]) { ln++; }
 			}
 		}
 		
@@ -198,7 +199,7 @@ function updateZone( point, obj, arrRoom, num, cdm )
 	else if(obj.userData.tag == 'point'){ var arr = detectChangeArrWall([], obj); }
 
 	upLabelPlan_1(arr);				// 3
-	updateShapeFloor(arrRoom);		// 4 	 
+	myHouse.myFloor.updateShapeFloors(arrRoom);		// 4 	 
 }
 
  
@@ -360,14 +361,14 @@ function deletePointZone(arrRoom)
 {
 	for ( var i = 0; i < arrRoom.length; i++ )
 	{
-		for ( var i2 = 0; i2 < arrRoom[i].p.length; i2++ )
+		for ( var i2 = 0; i2 < arrRoom[i].userData.room.p.length; i2++ )
 		{
-			for ( var i3 = 0; i3 < arrRoom[i].p[i2].zone.length; i3++ )
+			for ( var i3 = 0; i3 < arrRoom[i].userData.room.p[i2].zone.length; i3++ )
 			{
-				if(arrRoom[i].p[i2].zone[i3] == arrRoom[i])
+				if(arrRoom[i].userData.room.p[i2].zone[i3] == arrRoom[i])
 				{ 
-					arrRoom[i].p[i2].zone.splice(i3, 1);
-					arrRoom[i].p[i2].zoneP.splice(i3, 1); 
+					arrRoom[i].userData.room.p[i2].zone.splice(i3, 1);
+					arrRoom[i].userData.room.p[i2].zoneP.splice(i3, 1); 
 					break;
 				}							
 			}
@@ -383,17 +384,17 @@ function detectSameZone_2( arrRoom, arrP )
 	var flag = false;
 	var ln = 0;
 	
-	if(arrRoom.p.length - 1 != arrP.length) { return flag; }
+	if(arrRoom.userData.room.p.length - 1 != arrP.length) { return flag; }
 		
-	for ( var i2 = 0; i2 < arrRoom.p.length - 1; i2++ )
+	for ( var i2 = 0; i2 < arrRoom.userData.room.p.length - 1; i2++ )
 	{
 		for ( var i3 = 0; i3 < arrP.length; i3++ )
 		{
-			if(arrRoom.p[i2].userData.id == arrP[i3]) { ln++; }
+			if(arrRoom.userData.room.p[i2].userData.id == arrP[i3]) { ln++; }
 		}
 	}
 	
-	if(arrRoom.p.length - 1 == ln) 
+	if(arrRoom.userData.room.p.length - 1 == ln) 
 	{ 
 		//console.log(ln);
 		//var txt = '---p---'; for ( var i3 = 0; i3 < arrP.length; i3++ ) { txt += ' | ' + arrP[i3]; } console.log(txt);	
@@ -434,18 +435,18 @@ function assignOldToNewZones_1( oldZ, newZones, cdm )
 			var oldZones = oldZ[i2].floor; 
 			var count = 0;
 			
-			for ( var i3 = 0; i3 < newZones[i].p.length - 1; i3++ )
+			for ( var i3 = 0; i3 < newZones[i].userData.room.p.length - 1; i3++ )
 			{
-				for ( var i4 = 0; i4 < oldZones.p.length - 1; i4++ )
+				for ( var i4 = 0; i4 < oldZones.userData.room.p.length - 1; i4++ )
 				{
-					if(newZones[i].p[i3].userData.id == oldZones.p[i4].userData.id) { count++; break; };
+					if(newZones[i].userData.room.p[i3].userData.id == oldZones.userData.room.p[i4].userData.id) { count++; break; };
 				}				
 			}
 
 			
-			if(cdm == 'add') { var countNew = newZones[i].p.length - 2; }
-			else if(cdm == 'delete') { var countNew = newZones[i].p.length - 1; }
-			else if(cdm == 'copy') { var countNew = newZones[i].p.length - 1; }
+			if(cdm == 'add') { var countNew = newZones[i].userData.room.p.length - 2; }
+			else if(cdm == 'delete') { var countNew = newZones[i].userData.room.p.length - 1; }
+			else if(cdm == 'copy') { var countNew = newZones[i].userData.room.p.length - 1; }
 			
 			if(countNew == count)
 			{

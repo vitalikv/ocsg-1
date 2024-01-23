@@ -188,7 +188,7 @@ function inputLengthWall_1(cdm)
 	} 	
 	 
 	upLabelPlan_1( wallR );		
-	updateShapeFloor( compileArrPickZone(wall) );  				 			
+	myHouse.myFloor.updateShapeFloors( compileArrPickZone(wall) );  				 			
 	
 	myPanelR.myContentObj.activeObjRightPanelUI_1({obj: wall});
 

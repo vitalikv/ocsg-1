@@ -17,7 +17,10 @@ function getInfoRenderWall()
 		if(room.length == 1) 
 		{ 	
 			var side = 0;
-			for ( var i2 = 0; i2 < room[0].w.length; i2++ ) { if(room[0].w[i2] == wall[i]) { side = room[0].s[i2]; break; } }
+			for ( var i2 = 0; i2 < room[0].userData.room.w.length; i2++ ) 
+			{ 
+				if(room[0].userData.room.w[i2] == wall[i]) { side = room[0].userData.room.s[i2]; break; } 
+			}
 			//var pos = new THREE.Vector3().subVectors( wall[i].p[1].position, wall[i].p[0].position ).divideScalar( 2 ).add(wall[i].p[0].position);
 
 			if(side == 0) { var n1 = 0; var n2 = 1; }

@@ -428,7 +428,7 @@ class MyManagerClick
 		{
 			let txt = '';
 			
-			for ( let i = 0; i < obj.p.length - 1; i++ ) { txt += '| ' + obj.p[i].userData.id; }
+			for ( let i = 0; i < obj.userData.room.p.length - 1; i++ ) { txt += '| ' + obj.userData.room.p[i].userData.id; }
 			
 			console.log( "room id : " + obj.userData.id + " | point : " + txt, " | userData : ", obj.userData, obj );
 		}
