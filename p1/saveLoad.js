@@ -274,7 +274,9 @@ function compileJsonFile_2(array, posY)
 		{ 
 			rooms[i].contour[s] = floor[i].userData.room.p[i2].userData.id; 
 			s++; 
-		} 
+		}
+
+		rooms[i].depth = myHouse.myFloor.getDepthFloor({floor: floor[i]});
 		
 		rooms[i].material = [floor[i].userData.material, ceiling[i].userData.material];	
 
@@ -643,6 +645,7 @@ async function loadFileLevel(json)
 	
 	upLabelPlan_1(infProject.scene.array.wall);	// размеры стен
 
+	// восстанавливаем пол
 	detectRoomZone();
 	
 	// новый вариант, пол считается из планировки, а затем ищутся одинаковые зоны из файла 
@@ -672,7 +675,14 @@ async function loadFileLevel(json)
 				break;				
 			}
 		}
-	}		
+	}
+
+	// толщина пола
+	if(rooms.length > 0) 
+	{ 
+		if(rooms[0].depth) myHouse.myFloor.changeDepthFloorsOnLevel({depth: rooms[0].depth, floors: infProject.scene.array.floor});
+	}			
+		
 	// восстанавливаем пол 
 	
 	// устанавливаем окна/двери

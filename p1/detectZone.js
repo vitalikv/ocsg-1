@@ -29,7 +29,7 @@ function detectRoomZone()
 			var arr = compileArrPointRoom_1(p);						
 			
 			arrRoom[arrRoom.length] = myHouse.myFloor.createFloor({points: p, walls: arr[0], sides: arr[1]});
-			//arrRoom[arrRoom.length] = createFloor({point : p, wall : arr[0], side : arr[1]});
+			
 			break; 
 		}
 	}

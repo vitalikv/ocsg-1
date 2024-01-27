@@ -332,21 +332,8 @@ class MyRoofCSG
 			boxUnwrapUVs(wall.geometry);
 		}
 		
-		for ( let i = 0; i < f.length; i++ )
-		{
-			const p2 = [];
-			for ( let i2 = 0; i2 < f[i].userData.room.p.length - 1; i2++ ) 
-			{  
-				const p = f[i].userData.room.p[i2];
-				p2.push(new THREE.Vector2( p.position.x, p.position.z ));		
-			}	 
-			
-			const shape = new THREE.Shape( p2 );
-			const geometry = new THREE.ExtrudeGeometry( shape, { bevelEnabled: false, depth: f[i].userData.room.height } );
-			
-			f[i].geometry.dispose();				
-			f[i].geometry = geometry;	
-		}		
+		// восстанавливаем пол
+		myHouse.myFloor.updateShapeFloors(f);		
 	} 	
 	
 

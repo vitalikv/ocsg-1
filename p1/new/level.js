@@ -539,13 +539,14 @@ function resetArrScene()
 
 
 function saveArrLevel(id)
-{
-	console.log(id, myLevels.levels[id]);
+{	
 	myLevels.activeId = id;
 	myLevels.updateArrLevel();	
 	
  	changeDepthColor222();
 	resetArrScene();
+	
+	console.log(id, myLevels.levels[id]);
 }
 
 

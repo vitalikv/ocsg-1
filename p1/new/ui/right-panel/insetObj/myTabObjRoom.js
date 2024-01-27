@@ -2,6 +2,9 @@
 
 class MyTabObjRoom 
 {
+	inputDepthFloor;
+	
+	
 	constructor()
 	{
 		this.init();
@@ -13,11 +16,21 @@ class MyTabObjRoom
 		
 		const div = this.crDiv();
 		container.append(div);
+		
+		this.inputDepthFloor = div.querySelector('[nameId="inputDepthFloor"]');
+		
+		this.initEvent();
 	}
 	
 	initEvent()
 	{
-				
+		this.inputDepthFloor.onkeydown = (e) => 
+		{
+			if (e.code === 'Enter') 
+			{ 
+				this.changeInputDepthFloor({depth: Number(e.target.value)});
+			}
+		};
 	}
 
 
@@ -32,7 +45,23 @@ class MyTabObjRoom
 	html()
 	{
 		const html = 
-		`<div nameId="rp_menu_room" style="display: none;"> 
+		`<div nameId="rp_menu_room" style="display: none;">
+			<div class="flex_column_1">			
+				<div class="flex_1">
+					<div class="flex_1 align_items">
+						<div class="rp_label_plane">
+							толщина
+						</div>
+					</div>
+					<div class="flex_1 align_items" style="width: auto;">
+						<input type="text" style="width: 100px; margin:5px 5px;" nameId="inputDepthFloor" value="0">
+					</div>
+					<div class="flex_1 align_items" style="width: auto;">
+						<div style="margin: 5px; font-size: 16px; color: #666;">м</div>
+					</div>					
+				</div>										
+			</div>
+			
 			<div class="flex_column_1">
 				<div class="right_panel_1_1_h">
 					Текстура
@@ -60,7 +89,40 @@ class MyTabObjRoom
 
 		return html;
 	}
+
+
+
+	// в input поменяли толщену пола
+	changeInputDepthFloor({depth})
+	{
+		const obj = myComposerRenderer.getOutlineObj();		
+		if(!obj) return;
+		if(obj.userData.tag !== 'room') return;
 		
+		// проверка на правильный ввод числа
+		const result = checkNumberInput({ value: depth, abs: true, limit: {min: 0.01, max: 1} });
+		
+		if(!result)
+		{
+			depth = myHouse.myFloor.getDepthFloor({floor: obj});	
+			depth = Math.round(depth * 100)/100;			
+		}
+		else
+		{
+			depth = result.num;
+		}
+
+		myHouse.myFloor.changeDepthFloorsOnLevel({depth});
+		
+		this.setInputDepthFloor({depth});
+	}
+
+
+	// ставим в input толщину пола
+	setInputDepthFloor({depth})
+	{		
+		this.inputDepthFloor.value = depth;
+	}	
 }
 
 

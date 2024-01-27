@@ -166,6 +166,10 @@ class MyContentObj
 		else if(obj.userData.tag === 'room')
 		{
 			txtName = 'пол';
+						
+			const depth = myHouse.myFloor.getDepthFloor({floor: obj});
+			this.myTabObjRoom.setInputDepthFloor({depth});	
+
 			this.divs.floor.style.display = '';
 		}
 		else if(obj.userData.tag === 'roof')
