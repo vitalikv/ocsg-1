@@ -28,7 +28,9 @@ function detectRoomZone()
 			 
 			var arr = compileArrPointRoom_1(p);						
 			
-			arrRoom[arrRoom.length] = myHouse.myFloor.createFloor({points: p, walls: arr[0], sides: arr[1]});
+			const floor = myHouse.myFloor.createFloor({points: p, walls: arr[0], sides: arr[1]});
+			
+			arrRoom.push(floor);
 			
 			break; 
 		}
@@ -487,8 +489,10 @@ function assignOldToNewZones_2(newZones, oldZ, addId)
 		var ceiling = newZ[i].ceiling;
 		
 		floor.userData.id = oldZ.floor.userData.id;	
-		floor.userData.material = Object.assign({}, oldZ.floor.userData.material);		
-		floor.material = oldZ.floor.material.clone();
+		floor.userData.material = Object.assign({}, oldZ.floor.userData.material);
+
+		const mat = myHouse.myFloor.getMaterialFloor({floor: oldZ.floor});
+		myHouse.myFloor.setMaterialFloor({floor, material: mat});  
 		
 
 		ceiling.userData.id = oldZ.ceiling.userData.id;	

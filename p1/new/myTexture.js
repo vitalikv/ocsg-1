@@ -96,6 +96,8 @@ class MyTexture
 		
 		var material = (cdm.obj.userData.tag == "wall") ? cdm.obj.material[cdm.material.index] : cdm.obj.material;
 		
+		if(cdm.obj.userData.tag === "room") material = cdm.obj.material[0];
+		
 		new THREE.TextureLoader().load(infProject.path+'catalog/'+img, ( image ) =>  
 		{
 			material.color = new THREE.Color( 0xffffff );

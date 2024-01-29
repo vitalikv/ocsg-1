@@ -100,7 +100,7 @@ class MyTabObjRoom
 		if(obj.userData.tag !== 'room') return;
 		
 		// проверка на правильный ввод числа
-		const result = checkNumberInput({ value: depth, abs: true, limit: {min: 0.01, max: 1} });
+		const result = checkNumberInput({ value: depth, abs: true, limit: {min: 0.01, max: 0.5} });
 		
 		if(!result)
 		{

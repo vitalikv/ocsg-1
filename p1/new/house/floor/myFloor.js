@@ -18,12 +18,12 @@ class MyFloor
 	}
 		
 
-
+	// создаем участок пола
 	createFloor({points, walls, sides, depth = 0.01, id = null})
 	{
 		const geometry = this.crGeometry({type: 'extrude', points, depth});		
 		
-		const floor = new THREE.Mesh( geometry, this.material.clone() ); 
+		const floor = new THREE.Mesh( geometry, [this.material.clone(), this.material.clone()] ); 
 		floor.position.set( 0, points[0].position.y, 0 );
 		//floor.rotation.set( -Math.PI / 2, 0, 0 );		
 
@@ -42,7 +42,7 @@ class MyFloor
 		floor.userData.room.depth = depth;
 		floor.userData.room.html = {};
 		floor.userData.room.html.label = null; 
-		floor.userData.material = { tag: 'room', color: floor.material.color, img: null };
+		floor.userData.material = { tag: 'room', color: floor.material[0].color, img: null };
 		
 
 		myTexture.setImage({obj: floor, material: { img: "img/load/floor_1.jpg" }});
@@ -89,6 +89,7 @@ class MyFloor
 	}
 	
 	
+	// создаем новую пола или потолка
 	crGeometry({type = 'plane', points, depth = 0})
 	{
 		let geometry = null;
@@ -105,6 +106,10 @@ class MyFloor
 		{
 			geometry = new THREE.ExtrudeGeometry(shape, { bevelEnabled: false, depth });
 			geometry.rotateX(-Math.PI / 2);
+						
+			this.upFaceGeometry({geometry});
+
+			boxUnwrapUVs(geometry);
 		}
 		if(type === 'plane')
 		{
@@ -115,11 +120,38 @@ class MyFloor
 	}
 	
 	
+	// нужно чтобы нижняя и верхняя часть пола показывали разные материалы
+	upFaceGeometry({geometry})
+	{
+		geometry.computeFaceNormals();
+		
+		for ( let i = 0; i < geometry.faces.length; i++ )
+		{
+			geometry.faces[i].normal.normalize();
+			if(geometry.faces[i].normal.y === -1) { geometry.faces[i].materialIndex = 1; } 
+			else { geometry.faces[i].materialIndex = 0; }
+		}		
+	}
+	
+	
 	// получаем высоту пола
 	getDepthFloor({floor})
 	{
 		return floor.userData.room.depth;
 	}
+	
+	
+	// получаем материал пола (верхнюю часть, та что с текстурой)
+	getMaterialFloor({floor})
+	{
+		return floor.material[0];
+	}	
+
+	// назначаем материал для пола (верхнюю часть, та что с текстурой)
+	setMaterialFloor({floor, material})
+	{
+		floor.material[0] = material.clone();
+	}	
 	
 	// при изменении формы пола обновляем geometry.faces
 	updateShapeFloors(arrRoom)
@@ -132,8 +164,6 @@ class MyFloor
 			arrRoom[i].geometry.dispose();
 			arrRoom[i].geometry = this.crGeometry({type: 'extrude', points, depth});
 
-			//upUvs_1( arrRoom[i] );
-			boxUnwrapUVs(arrRoom[i].geometry);
 			getYardageSpace([arrRoom[i]]); 
 
 			// потолок	
@@ -157,13 +187,12 @@ class MyFloor
 	changeDepthFloorsOnLevel({depth, floors = null})
 	{
 		const idActLevel = myLevels.getIdActLevel();
+		
 		if(!floors) 
 		{
-			house = myLevels.getDestructObject(idActLevel);
+			const house = myLevels.getDestructObject(idActLevel);
 			floors = house.floors;
 		}
-		
-		console.log(idActLevel, depth, floors);
 		
 		for ( let i = 0; i < floors.length; i++ )
 		{

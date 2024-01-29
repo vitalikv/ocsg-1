@@ -248,11 +248,9 @@ class MyRoofCSG
 			f[i].geometry.dispose();				
 			f[i].geometry = newBSP.toGeometry();
 
-			/*if(infProject.tools.floorPl.userData.floorId && f[i].userData.id === infProject.tools.floorPl.userData.floorId)
-			{
-				infProject.tools.floorPl.geometry.dispose();				
-				infProject.tools.floorPl.geometry = f[i].geometry.clone();				
-			}*/			
+			myHouse.myFloor.upFaceGeometry({geometry: f[i].geometry});
+
+			boxUnwrapUVs(f[i].geometry);			
 		}
 	}
 
