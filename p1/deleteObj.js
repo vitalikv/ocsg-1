@@ -36,9 +36,9 @@ function deleteWall_1( wall )
 	
 	var points = wall.userData.wall.p;
 
-	var arrZone = detectCommonZone_1( wall );
-	var oldZ = findNumberInArrRoom(arrZone);
-	deleteArrZone(arrZone); 
+	var arrZone = myHouse.myRoom.detectCommonZone_1( wall );
+	var oldZ = myHouse.myRoom.findNumberInArrRoom(arrZone);
+	myHouse.myRoom.deleteArrZone(arrZone); 
 	
 	var zone = (arrZone.length == 0) ? rayFurniture( wall ).obj : null; 
 	
@@ -53,9 +53,9 @@ function deleteWall_1( wall )
 		var n = 0;
 		for ( var i = 0; i < oldZ.length; i++ ) { if(oldZ[i].floor.userData.room.areaTxt > area) { n = i; } }
 		
-		newZones = detectRoomZone();
+		newZones = myHouse.myRoom.calcRoomZone();
 
-		if(newZones.length > 0) { assignOldToNewZones_2([newZones[0]], oldZ[n], false); } // если есть новая зона после удаления стены		
+		if(newZones.length > 0) { myHouse.myRoom.assignOldToNewZones_2([newZones[0]], oldZ[n], false); } // если есть новая зона после удаления стены		
 	}
 	else
 	{	
@@ -216,9 +216,9 @@ function deletePoint( point )
 		if(wd.userData.door.open_type) { arrO[n].open_type = wd.userData.door.open_type; }
 	}
 	
-	var oldZones = detectCommonZone_1( wall_1 );   	// определяем с какиеми зонами соприкасается стена
-	var oldZ = findNumberInArrRoom( oldZones );
-	deleteArrZone( oldZones );						// удаляем зоны  с которыми соприкасается стена									
+	var oldZones = myHouse.myRoom.detectCommonZone_1( wall_1 );   	// определяем с какиеми зонами соприкасается стена
+	var oldZ = myHouse.myRoom.findNumberInArrRoom( oldZones );
+	myHouse.myRoom.deleteArrZone( oldZones );						// удаляем зоны  с которыми соприкасается стена									
 
 	
 	deleteWall_3({wall: wall_1, upWall: false});		// удаляем разделяемую стену и окна/двери, которые принадлежат ей (без удаления зон)		
@@ -243,8 +243,8 @@ function deletePoint( point )
 	
 	upLabelPlan_1( arrW );	
 	
-	var newZones = detectRoomZone();		// создаем пол, для новых помещений	
-	assignOldToNewZones_1(oldZ, newZones, 'delete');		// передаем параметры старых зон новым	(название зоны)			
+	var newZones = myHouse.myRoom.calcRoomZone();		// создаем пол, для новых помещений	
+	myHouse.myRoom.assignOldToNewZones_1(oldZ, newZones, 'delete');		// передаем параметры старых зон новым	(название зоны)			
 	
 	
 	// вставляем окна/двери (если стены параллельны)

@@ -228,9 +228,9 @@ function detectDirectionWall_1(wall, index, room)
 		{ 
 			var flag = true;
 			
-			for (var i2 = 0; i2 < room.w.length; i2++)  
+			for (var i2 = 0; i2 < room.userData.room.w.length; i2++)  
 			{
-				if(arrW[i] == room.w[i2]) { flag = false; break; }
+				if(arrW[i] == room.userData.room.w[i2]) { flag = false; break; }
 			}	
 
 			if(flag) { arrW.splice(i, 1); arrS.splice(i, 1); }
@@ -256,10 +256,10 @@ function detectDirectionWall_1(wall, index, room)
 					if(flag) { continue; }
 				
 					
-					for (var i4 = 0; i4 < room.w.length; i4++)  
+					for (var i4 = 0; i4 < room.userData.room.w.length; i4++)  
 					{
 						// если стена относится к выбранной room, то добавляем в массив
-						if(p[i2].w[i3] == room.w[i4]) 
+						if(p[i2].w[i3] == room.userData.room.w[i4]) 
 						{ 
 							var dir2 = new THREE.Vector3().subVectors( p[i2].w[i3].userData.wall.p[1].position, p[i2].w[i3].userData.wall.p[0].position ).normalize();
 							var rad = new THREE.Vector3(dir1.z, 0, dir1.x).angleTo(new THREE.Vector3(dir2.z, 0, dir2.x));
@@ -411,13 +411,13 @@ function detectRoomWallSide(wall, index)
 	
 	for ( var i = 0; i < room.length; i++ ) 
 	{  
-		for ( var i2 = 0; i2 < room[i].w.length; i2++ )
+		for ( var i2 = 0; i2 < room[i].userData.room.w.length; i2++ )
 		{
-			if(wall == room[i].w[i2])
+			if(wall == room[i].userData.room.w[i2])
 			{
 				var side = (index == 1) ? 1 : 0;
 				
-				if(side == room[i].s[i2]) { num = i; }
+				if(side == room[i].userData.room.s[i2]) { num = i; }
 				
 				break;
 			} 

@@ -205,7 +205,7 @@ class MyManagerClick
 			else if(tag == 'gizmo') { myToolPG.mousedown({event, rayhit}); }
 			else if(tag == 'scale') { myToolPG.mousedown({event, rayhit}); }
 			else if(tag == 'wall' && isCam2D) { myHouse.myWallMove.mousedown({event, obj}); }
-			else if(tag == 'room' && isCam2D) { clickFloor({obj}); }
+			else if(tag == 'room' && isCam2D) { myHouse.myFloor.clickFloor({obj}); }
 			else if(tag == 'point') { myHouse.myMovePoint.mousedown({event, obj}); }
 			else if(tag == 'window' && isCam2D) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if(tag == 'door' && isCam2D) { myHouse.myWDMove.mousedown({event, obj}); }
@@ -222,7 +222,7 @@ class MyManagerClick
 		else if(type === 'up')
 		{	
 			if(tag == 'wall' && isCam3D) { myHouse.myWallMove.click3D({obj, rayhit}); }
-			else if(tag == 'room' && isCam3D) { clickFloor({obj}); }
+			else if(tag == 'room' && isCam3D) { myHouse.myFloor.clickFloor({obj}); }
 			else if(tag == 'window' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if(tag == 'door' && isCam3D) { myHouse.myWDMove.mousedown({event, obj}); }
 			else if(tag == 'roof' && isCam3D) { myHouse.myRoofMove.click({event, obj}); }

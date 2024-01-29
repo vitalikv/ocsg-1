@@ -124,8 +124,6 @@
     <script src="<?=$path?>clickMoveWall.js?<?=$vrs?>"></script>
     <script src="<?=$path?>clickMoveWD.js?<?=$vrs?>"></script>
     <script src="<?=$path?>deleteObj.js?<?=$vrs?>"></script>
-    <script src="<?=$path?>floor.js?<?=$vrs?>"></script>
-    <script src="<?=$path?>detectZone.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>loadObj.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>substrate.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>svg_1.js?<?=$vrs?>"></script>
@@ -201,6 +199,7 @@
 	<script src="<?=$path?>new/house/point/myPointAction.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wall/myWall.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wall/myWallMove.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/floor/myRoom.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/floor/myFloor.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myWD.js?<?=$vrs?>"></script>	
 	<script src="<?=$path?>new/house/wd/myWDMove.js?<?=$vrs?>"></script>

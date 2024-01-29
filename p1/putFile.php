@@ -17,9 +17,7 @@ clickChangeWD.js
 clickMovePoint.js
 clickMoveWall.js
 clickMoveWD.js
-deleteObj.js
-floor.js
-detectZone.js  	
+deleteObj.js  	
 saveLoad.js
 script.js
 eventClick.js
@@ -86,6 +84,7 @@ new/house/point/myMovePoint.js
 new/house/point/myPointAction.js
 new/house/wall/myWall.js
 new/house/wall/myWallMove.js
+new/house/floor/myRoom.js
 new/house/floor/myFloor.js
 new/house/wd/myWD.js
 new/house/wd/myWDMove.js

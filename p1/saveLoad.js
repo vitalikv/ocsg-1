@@ -646,7 +646,7 @@ async function loadFileLevel(json)
 	upLabelPlan_1(infProject.scene.array.wall);	// размеры стен
 
 	// восстанавливаем пол
-	detectRoomZone();
+	myHouse.myRoom.calcRoomZone();
 	
 	// новый вариант, пол считается из планировки, а затем ищутся одинаковые зоны из файла 
 	for ( var n = 0; n < infProject.scene.array.floor.length; n++ )
@@ -655,7 +655,7 @@ async function loadFileLevel(json)
 		{
 			if(rooms[i].reference)
 			{
-				var floor = rayDetectedRoom({pos: rooms[i].reference, obj: infProject.scene.array.floor[n]});
+				var floor = myHouse.myRoom.rayDetectedRoom({pos: rooms[i].reference, obj: infProject.scene.array.floor[n]});
 				
 				if(floor.o == infProject.scene.array.floor[n])
 				{
@@ -667,7 +667,7 @@ async function loadFileLevel(json)
 			}
 			else if(rooms[i].contour)
 			{
-				if(!detectSameZone_2( infProject.scene.array.floor[n], rooms[i].contour )) continue;
+				if(!myHouse.myRoom.detectSameZone_2( infProject.scene.array.floor[n], rooms[i].contour )) continue;
 				
 				infProject.scene.array.floor[n].userData.id = rooms[i].id;
 				infProject.scene.array.ceiling[n].userData.id = rooms[i].id;

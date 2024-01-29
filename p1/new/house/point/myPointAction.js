@@ -302,7 +302,7 @@ class MyPointAction
 		upLineYY_2(point1);
 		upLabelPlan_1( point1.w ); 
 
-		splitZone(wall);   
+		myHouse.myRoom.splitZone(wall);   
 		
 		if(!point.userData.point.type) 
 		{ 

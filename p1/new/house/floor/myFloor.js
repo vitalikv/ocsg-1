@@ -2,9 +2,8 @@
 
 class MyFloor 
 {
-	geometry;
 	material;
-	defVert;
+	toolFloor;
 	
 	constructor()
 	{
@@ -13,8 +12,9 @@ class MyFloor
 	
 	init()
 	{
-		//this.geometry = new THREE.SphereGeometry( 0.1, 16, 16 );
 		this.material = new THREE.MeshStandardMaterial({ color: 0xe3e3e5, lightMap: lightMap_1, dithering: true });
+		
+		//this.toolFloor = this.createPlaneOutlineFloor();
 	}
 		
 
@@ -59,7 +59,7 @@ class MyFloor
 			walls[i].userData.wall.room.side2[ind] = floor; 
 		}	
 		
-		addParamPointOnZone(points, floor);		
+		myHouse.myRoom.addParamPointOnZone(points, floor);		
 		
 		scene.add(floor);
 		
@@ -203,7 +203,52 @@ class MyFloor
 		
 		this.render();
 	}
-	
+
+
+	// создаем плоскость для пола, которая будет принемать ее форму и виделяться Outline 
+	// пока отключено, нужно будет доделать и включить (была проблема при обрезании крышей пола, нужно рассчитывать корректный контур)
+	createPlaneOutlineFloor()
+	{
+		var shape = new THREE.Shape( [new THREE.Vector2(-2, 1), new THREE.Vector2(2, 1), new THREE.Vector2(2, -1), new THREE.Vector2(-2, -1)] );
+		var geometry = new THREE.ShapeGeometry( shape );
+
+		var plane = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial( { color: 0x0000ff, transparent: true, opacity: 0 } ) );
+		plane.position.set( 0, infProject.settings.floor.posY, 0 );
+		plane.rotation.set( -Math.PI / 2, 0, 0 );
+		//plane.visible = false; // когда буду делать, то это удалить
+		scene.add(plane);
+
+		return plane;
+	}
+
+	// кликнули на пол
+	clickFloor({obj})
+	{
+		// меняем форму плоскости под форму пола и выделяем outline
+		// TODO: прячем выделенный пол(клон с измененной геометрией), потому что при обрезки пола(клона) крышей,
+		// нужно дополнительно будет делать доп.расчеты для геометрии. вообщем долго объяснять 			
+		if(1===2)
+		{
+			const contour = obj.userData.room.contour;
+			const contour2 = [];
+			
+			for(let i = 0; i < contour.length; i++)
+			{
+				contour2[i] = new THREE.Vector2(contour[i].x, -contour[i].z);
+			}
+
+			const plane = this.toolFloor;	
+			plane.geometry.dispose();
+			plane.geometry = new THREE.ShapeGeometry( new THREE.Shape(contour2) );
+			plane.userData.floorId = obj.userData.id;	// нужно чтобы понять к какому полу приклеплен
+			myComposerRenderer.outlineAddObj({arr: [plane]});			
+		}
+		else
+		{
+			myComposerRenderer.outlineAddObj({arr: [obj]});
+			myPanelR.myContentObj.activeObjRightPanelUI_1({obj});			
+		}			
+	}	
 	
 	render()
 	{

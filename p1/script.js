@@ -100,7 +100,6 @@ infProject.svg.furn.boxCircle.show = infProject.settings.obj.cam2D.show.scale;
 
 // controllWD контроллеры для изменения ширины/длины wd
 infProject.tools = { cutWall: [], axis: createLineAxis() }; 
-infProject.tools.floorPl = createPlaneOutlineFloor(); 
 infProject.listColor = resetPop.listColor(); 
 infProject.start = true; 
 
@@ -1230,13 +1229,13 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myWarmFloor = new MyWarmFloor();
 	
 	startProject = new StartProject();
-	startProject.init({name: 'new'});
+	startProject.init({name: 'new2'});
 	
-	if(startProject.detectShowStartWind()) windUI.showWin();
+	//if(startProject.detectShowStartWind()) windUI.showWin();
 	
 	if(1===2) myPanelTop.addPaidPanel();	// панель для платных пользователей	
 	
-	if(1===2) myPanelR.myTabsR.activeTab({id: 2});
+	if(1===1) myPanelR.myTabsR.activeTab({id: 1});
 	
 	if(1===2) myWarmFloor.myListObjsWf.init();
 	

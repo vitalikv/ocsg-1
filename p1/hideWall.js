@@ -13,7 +13,7 @@ function getInfoRenderWall()
 	
 	for ( var i = 0; i < wall.length; i++ )
 	{	
-		var room = detectCommonZone_1( wall[i] );
+		var room = myHouse.myRoom.detectCommonZone_1( wall[i] );
 		if(room.length == 1) 
 		{ 	
 			var side = 0;

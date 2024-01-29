@@ -270,45 +270,6 @@ function getYardageSpace( room )
 
 
 
-//площадь многоугольника (нужно чтобы понять положительное значение или отрецательное, для того чтобы понять напрвление по часовой или проитв часовой)
-function checkClockWise( arrP )
-{  
-	var res = 0;
-	var n = arrP.length;
-	
-	for (i = 0; i < n; i++) 
-	{
-		var p1 = arrP[i].position;
-		
-		if (i == 0)
-		{
-			var p2 = arrP[n-1].position;
-			var p3 = arrP[i+1].position;					
-		}
-		else if (i == n-1)
-		{
-			var p2 = arrP[i-1].position;
-			var p3 = arrP[0].position;			
-		}
-		else
-		{
-			var p2 = arrP[i-1].position;
-			var p3 = arrP[i+1].position;			
-		}
-		
-		res += p1.x*(p2.z - p3.z);
-	}
-	
-	
-	res = res / 2;
-	res = Math.round(res * 10) / 10;
-	
-	return res;
-}
-
-
-
-
 
  
 

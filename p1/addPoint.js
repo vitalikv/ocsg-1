@@ -165,15 +165,15 @@ function splitWalls( wall, point )
 	if(point.userData.point.last.cdm == 'new_point_2' || point.userData.point.last.cdm == 'new_point')
 	{	
 		var zone = rayFurniture( point.w[0] ).obj;
-		var oldZ_1 = findNumberInArrRoom(zone);
+		var oldZ_1 = myHouse.myRoom.findNumberInArrRoom(zone);
 	}
 
 	var v2 = wall.userData.wall.v;
 	for ( var i2 = 0; i2 < wall.userData.wall.v.length; i2++ ) { v2[i2] = wall.userData.wall.v[i2].clone(); }
 
-	var oldZones = detectCommonZone_1( wall );   	// определяем с какими зонами соприкасается стена
-	var oldZ = findNumberInArrRoom( oldZones );
-	deleteArrZone( oldZones );						// удаляем зоны  с которыми соприкасается стена					
+	var oldZones = myHouse.myRoom.detectCommonZone_1( wall );   	// определяем с какими зонами соприкасается стена
+	var oldZ = myHouse.myRoom.findNumberInArrRoom( oldZones );
+	myHouse.myRoom.deleteArrZone( oldZones );						// удаляем зоны  с которыми соприкасается стена					
 	
 	deleteWall_3({wall: wall, delWD: false, upWall: false});  		// удаляем разделяемую стену (без удаления зон)(без удаления окон/дверей)	
 	
@@ -215,14 +215,14 @@ function splitWalls( wall, point )
 	upLabelPlan_1(arrW); 	
 	clickPointUP_BSP( arrW );
 	
-	var newZones = detectRoomZone();		// создаем пол, для новых помещений	
+	var newZones = myHouse.myRoom.calcRoomZone();		// создаем пол, для новых помещений	
 	
 	// передаем параметры старых зон новым	(название зоны)	
 	var flag = false;
 	if(point.userData.point.last.cdm == 'new_point_2' || point.userData.point.last.cdm == 'new_point') { if(zone) { flag = true; } }	// если замыкаем стену, то проверяем, есть ли пересечение с помещением
 	
-	if(flag) { assignOldToNewZones_2(newZones, oldZ_1[0], true); } 
-	else { assignOldToNewZones_1(oldZ, newZones, 'add'); }		
+	if(flag) { myHouse.myRoom.assignOldToNewZones_2(newZones, oldZ_1[0], true); } 
+	else { myHouse.myRoom.assignOldToNewZones_1(oldZ, newZones, 'add'); }		
 	
 	
 	// вставляем окна/двери
