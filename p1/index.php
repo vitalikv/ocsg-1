@@ -180,8 +180,7 @@
 	<script src="<?=$path?>new/ui/right-panel/warmFloor/myPanelWF.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/myCookie.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/btnDropList.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/level.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ghostLevel.js?<?=$vrs?>"></script>	
+	<script src="<?=$path?>new/level.js?<?=$vrs?>"></script>		
 	<script src="<?=$path?>new/startProject.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/csgBox.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/myTexture.js?<?=$vrs?>"></script>
@@ -194,6 +193,7 @@
 	<script src="<?=$path?>new/core/myMath.js?<?=$vrs?>"></script>
 	
 	<script src="<?=$path?>new/house/myHouse.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/myGhostLevel.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/point/myPoint.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/point/myMovePoint.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/point/myPointAction.js?<?=$vrs?>"></script>

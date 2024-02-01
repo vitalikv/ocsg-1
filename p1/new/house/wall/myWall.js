@@ -129,32 +129,6 @@ class MyWall
 		return wall;
 	}
 
-
-
-	// точка для призрочного этажа
-	createGhostPoint({pos})
-	{
-		const obj = new THREE.Mesh(this.geometry, this.material);
-		obj.position.copy(pos);
-		scene.add(obj);	
-
-		return obj;
-	}
-	
-	setScale({value})
-	{	
-		const v = this.geometry.vertices;
-		const v2 = this.defVert;
-			
-		for ( let i = 0; i < v2.length; i++ )
-		{
-			v[i].x = v2[i].x * 1/value;
-			v[i].z = v2[i].z * 1/value;
-		}	
-
-		this.geometry.verticesNeedUpdate = true;
-		this.geometry.elementsNeedUpdate = true;		
-	}
 }
 
 

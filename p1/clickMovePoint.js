@@ -104,7 +104,7 @@ function dragToolPoint( event, obj )
 	// ищем точки нижнего этажа, которые могут прилипать (чтобы посторить новые стены, как на нижнем этаже)
 	if(!glued)
 	{
-		let arrP = ghostLevel.arr.point;
+		let arrP = myHouse.myGhostLevel.arr.point;
 		const cam2D = myCameraOrbit.activeCam;
 		
 		for ( var i = 0; i < arrP.length; i++ )
@@ -113,7 +113,7 @@ function dragToolPoint( event, obj )
 			
 			if(p1.distanceTo( p2 ) < 0.1 / cam2D.zoom)
 			{ 		
-				obj.position.set( arrP[i].position.x, obj.position.y, arrP[i].position.z );
+				obj.position.set( arrP[i].position.x, 0, arrP[i].position.z );
 				point = arrP[i];
 				break;
 			}	

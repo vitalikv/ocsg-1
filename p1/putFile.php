@@ -33,7 +33,6 @@ getScreenshot.js
 new/myCookie.js
 new/btnDropList.js
 new/level.js
-new/ghostLevel.js
 new/startProject.js
 new/csgBox.js
 new/myTexture.js
@@ -79,6 +78,7 @@ new/core/myManagerClick.js
 new/core/commonFunc.js
 new/core/myMath.js
 new/house/myHouse.js
+new/house/myGhostLevel.js
 new/house/point/myPoint.js
 new/house/point/myMovePoint.js
 new/house/point/myPointAction.js

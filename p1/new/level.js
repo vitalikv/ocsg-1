@@ -136,7 +136,7 @@ class MyLevels
 		
 		if(myCameraOrbit.activeCam.userData.isCam2D) 
 		{
-			ghostLevel.createLevel();	// показываем призрачный этаж
+			myHouse.myGhostLevel.createLevel();	// показываем призрачный этаж
 			this.visibleLevelCam2D(id, true);
 		}
 		

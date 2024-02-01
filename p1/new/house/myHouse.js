@@ -18,9 +18,11 @@ class MyHouse
 	myWDMove;
 	myWDPoints;
 	myWDPointsMove;
-	MyWDRulers;
+	myWDRulers;
 	
-	MyObjMove;
+	myObjMove;
+	
+	myGhostLevel;
 	
 	constructor()
 	{
@@ -52,6 +54,8 @@ class MyHouse
 		this.myObjAction = new MyObjAction();
 		this.myObjPrimitives = new MyObjPrimitives();				
 		this.myObjMove = new MyObjMove();
+		
+		this.myGhostLevel = new MyGhostLevel();
 	}
 	
 	initBtn()

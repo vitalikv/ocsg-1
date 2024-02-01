@@ -11,7 +11,7 @@ function changeCamera()
 
 	if(myCameraOrbit.activeCam.userData.isCam2D)
 	{	
-		ghostLevel.createLevel();	// показываем призрачный этаж
+		myHouse.myGhostLevel.createLevel();	// показываем призрачный этаж
 		
 		blockActiveObj({visible_1: false, visible_2: false});
 
@@ -21,7 +21,7 @@ function changeCamera()
 	}
 	else if(myCameraOrbit.activeCam.userData.isCam3D)
 	{	
-		ghostLevel.deleteLevel();	// прячем призрачный этаж
+		myHouse.myGhostLevel.deleteLevel();	// прячем призрачный этаж
 		
 		blockActiveObj({visible_1: true, visible_2: true});			
 		

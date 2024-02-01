@@ -14,7 +14,7 @@ class MyPoint
 	init()
 	{
 		this.geometry = new THREE.SphereGeometry( 0.1, 16, 16 );
-		this.material = new THREE.MeshPhongMaterial({ color : 0xcccccc, transparent: true, opacity: 0.5, depthTest: false });
+		this.material = new THREE.MeshStandardMaterial({ color : 0xcccccc, transparent: true, opacity: 0.5, depthTest: false });
 		
 		this.defVert = this.getDefaultVertices();
 	}
@@ -27,6 +27,11 @@ class MyPoint
 		for ( let i = 0; i < v.length; i++ ) { v2[i] = v[i].clone(); }
 		
 		return v2;
+	}
+	
+	getGeometryPoint()
+	{
+		return this.geometry;
 	}
 		
 	createToolPoint()
@@ -75,17 +80,6 @@ class MyPoint
 		return point;
 	}
 
-
-
-	// точка для призрочного этажа
-	createGhostPoint({pos})
-	{
-		const obj = new THREE.Mesh(this.geometry, this.material);
-		obj.position.copy(pos);
-		scene.add(obj);	
-
-		return obj;
-	}
 	
 	setScale({value})
 	{	

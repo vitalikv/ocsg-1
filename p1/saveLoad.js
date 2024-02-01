@@ -92,7 +92,7 @@ function resetScene()
 	infProject.scene.array = resetPop.infProjectSceneArray();
 	
 	myLevels.deleteAllLevels();
-	ghostLevel.deleteLevel();
+	myHouse.myGhostLevel.deleteLevel();
 	
 	countId = 2;
 	
