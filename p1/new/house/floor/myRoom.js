@@ -9,6 +9,8 @@ class MyRoom
 	{		
 		const arrRoom = [];
 		
+		const depth = this.getDepthActFloor();
+		
 		for ( let i = 0; i < obj_point.length; i++ )
 		{			
 			if(obj_point[i].p.length < 2){ continue; }
@@ -28,7 +30,7 @@ class MyRoom
 				 
 				const arr = this.compileArrPointRoom_1(p);						
 				
-				const floor = myHouse.myFloor.createFloor({points: p, walls: arr[0], sides: arr[1]});
+				const floor = myHouse.myFloor.createFloor({points: p, walls: arr[0], sides: arr[1], depth});
 				
 				arrRoom.push(floor);
 				
@@ -39,6 +41,22 @@ class MyRoom
 		return arrRoom;
 	}
 
+	// получаем высоту пола у активного этажа (нужно когда строим новый участок пола или когда разделяем комнату стеной/создаем новый пол)
+	getDepthActFloor()
+	{
+		let depth = undefined;
+		
+		const idActLevel = myLevels.getIdActLevel();
+		
+		const { floors } = myLevels.getDestructObject(idActLevel);
+			
+		if(floors.length > 0) 
+		{
+			depth = myHouse.myFloor.getDepthFloor({floor: floors[0]});
+		}				
+		
+		return depth;
+	}
 
 	// проверяем, 2 точки принадлежат ли одной зоне или нет (не исользуется, закомментино, хз, надо ли это вообще и так норм работает)
 	checkeQuallyPointsZone(p1, p2)

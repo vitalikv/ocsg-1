@@ -1229,13 +1229,13 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myWarmFloor = new MyWarmFloor();
 	
 	startProject = new StartProject();
-	startProject.init({name: 'new2'});
+	startProject.init({name: 'new'});
 	
-	//if(startProject.detectShowStartWind()) windUI.showWin();
+	if(startProject.detectShowStartWind()) windUI.showWin();
 	
 	if(1===2) myPanelTop.addPaidPanel();	// панель для платных пользователей	
 	
-	if(1===1) myPanelR.myTabsR.activeTab({id: 1});
+	if(1===2) myPanelR.myTabsR.activeTab({id: 0});
 	
 	if(1===2) myWarmFloor.myListObjsWf.init();
 	
