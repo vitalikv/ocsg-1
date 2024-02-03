@@ -3,7 +3,7 @@
 class MySharKranNN
 {
 	
-	crObj({ m1, t1, r1, nameObj })
+	crObj({ m1, t1, r1, nameRus, typeObj })
 	{
 		// t1 - длина бабочки
 		
@@ -68,8 +68,8 @@ class MySharKranNN
 		
 		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: group});
 		
-		obj.userData.nameRus = 'Шаровой кран '+r1+'(н-н)';
-		obj.userData.nameObj = nameObj;
+		obj.userData.nameRus = nameRus;
+		obj.userData.typeObj = typeObj;
 		
 		return obj;
 	}

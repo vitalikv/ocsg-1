@@ -5,8 +5,7 @@ class MyObjsWfInit
 	myCalcFormObjWf;
 	myListObjsWf;
 	myListMaterialsWf;
-	myRadiatorAl;
-	mySharKranNN;
+
 	
 	constructor()
 	{
@@ -15,41 +14,45 @@ class MyObjsWfInit
 		this.myListObjsWf = new MyListObjsWf();
 		this.myListMaterialsWf = new MyListMaterialsWf();
 		
-		this.myRadiatorAl = new MyRadiatorAl();
-		this.mySharKranNN = new MySharKranNN();
+
 	}
 
 
 	// добавляем объекты в сцену (для теста, чтобы увидить кол-во и как выглядят)
 	testListObjs()
 	{
-		let obj = this.getObjWf({lotid: 1});
-		obj.position.set(1, 1, 0);
+		let obj = null;
+		let result = null;
 		
-		obj = this.getObjWf({lotid: 2});
-		obj.position.set(0, 1, 0);
+		result = this.myListObjsWf.getListByType({typeObj: 'radiator_al_1'});
+		
+		let offset = new THREE.Vector3(1, 1, 0);
+		for(let i = 0; i < result.list.length; i++)
+		{
+			obj = this.getObjWf({typeObj: 'radiator_al_1', lotid: i});
+			obj.position.copy(offset);
+			offset.z -= 0.2;
+		}
+		
+		
+		result = this.myListObjsWf.getListByType({typeObj: 'shar_kran_nn'});
+		
+		offset = new THREE.Vector3(0, 1, 0);
+		for(let i = 0; i < result.list.length; i++)
+		{
+			obj = this.getObjWf({typeObj: 'shar_kran_nn', lotid: i});
+			obj.position.copy(offset);
+			offset.z -= 0.1;
+			console.log(obj);
+		}
 		
 	}
 	
 	
 	// добавляем объект в сцену
-	getObjWf({lotid})
+	getObjWf({typeObj, lotid})
 	{
-		let obj = null;
-		
-		if(lotid === 1)
-		{
-			const list = this.myListObjsWf.getListObjsRadiatorAl();
-			
-			obj = this.myRadiatorAl.crObj(list[45]);
-		}
-		
-		if(lotid === 2)
-		{
-			const list = this.myListObjsWf.getListObjsSharKranNN();
-			
-			obj = this.mySharKranNN.crObj(list[2]);
-		}		
+		const obj = this.myListObjsWf.getObjFromListWf({typeObj, lotid});				
 		
 		if(obj) 
 		{

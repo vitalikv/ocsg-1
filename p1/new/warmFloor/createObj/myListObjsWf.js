@@ -2,38 +2,79 @@
 
 class MyListObjsWf
 {
+	listParams = [];
 	
-	// список параметров для создания радиатора (алюм.)
-	getListObjsRadiatorAl()
+	constructor()
 	{
-		const arr = [];
-		const arr2 = [0.2, 0.35, 0.5, 0.6, 0.7, 0.8];	// высота радиатора
-
-		for(let i = 0; i < arr2.length; i++)
-		{			
-			arr[arr.length] = { count: 1, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };	
-			arr[arr.length] = { count: 2, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };
-			arr[arr.length] = { count: 3, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };
-			arr[arr.length] = { count: 4, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };
-			arr[arr.length] = { count: 5, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };
-			arr[arr.length] = { count: 6, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };
-			arr[arr.length] = { count: 7, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };
-			arr[arr.length] = { count: 8, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };
-			arr[arr.length] = { count: 9, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };
-			arr[arr.length] = { count: 10, size: {x: 0.08, y: arr2[i], z: 0.08}, r1: '1' };
-		}
-		
-		for(let i = 0; i < arr.length; i++)
-		{
-			arr[i].nameObj = 'al_radiator_1';
-		}
-		
-		
-		return arr;
+		this.listParams.push(this.getListObjsRadiatorAl({typeObj: 'radiator_al_1'}));
+		this.listParams.push(this.getListObjsSharKranNN({typeObj: 'shar_kran_nn'})); 
 	}
 	
 	
-	getListObjsSharKranNN()
+	// получаем объект
+	getObjFromListWf({typeObj, lotid})
+	{
+		let obj = null;
+		
+		let result = this.getListByType({typeObj});
+		
+		if(result)
+		{			
+			obj = result.method.crObj(result.list[lotid]);
+		}
+		
+		return obj;
+	}
+	
+	// получаем список параметров и класс для создания объектов
+	getListByType({typeObj})
+	{
+		let result = null;
+		
+		for(let i = 0; i < this.listParams.length; i++)			
+		{
+			if(this.listParams[i].typeObj === typeObj)
+			{
+				result = {};
+				result.list = this.listParams[i].list;
+				result.method = this.listParams[i].method;
+				break;
+			}
+		}
+
+		return result;
+	}
+	
+	// список параметров для создания радиатора (алюм.)
+	getListObjsRadiatorAl({typeObj})
+	{
+		const arr = [];
+		const h = [0.2, 0.35, 0.5, 0.6, 0.7, 0.8];	// высота радиатора
+
+		for(let i = 0; i < h.length; i++)
+		{			
+			arr[arr.length] = { count: 1, size: {x: 0.08, y: h[i], z: 0.08}, r1: '1' };	
+			arr[arr.length] = { count: 2, size: {x: 0.08, y: h[i], z: 0.08}, r1: '1' };
+			arr[arr.length] = { count: 3, size: {x: 0.08, y: h[i], z: 0.08}, r1: '1' };
+			arr[arr.length] = { count: 4, size: {x: 0.08, y: h[i], z: 0.08}, r1: '1' };
+			arr[arr.length] = { count: 5, size: {x: 0.08, y: h[i], z: 0.08}, r1: '1' };
+			arr[arr.length] = { count: 6, size: {x: 0.08, y: h[i], z: 0.08}, r1: '1' };
+			arr[arr.length] = { count: 7, size: {x: 0.08, y: h[i], z: 0.08}, r1: '1' };
+			arr[arr.length] = { count: 8, size: {x: 0.08, y: h[i], z: 0.08}, r1: '1' };
+			arr[arr.length] = { count: 9, size: {x: 0.08, y: h[i], z: 0.08}, r1: '1' };
+			arr[arr.length] = { count: 10, size: {x: 0.08, y: h[i], z: 0.08}, r1: '1' };
+		}
+		
+		for(let i = 0; i < arr.length; i++) arr[i].nameRus = 'Ал.радиатор h'+arr[i].size.y*1000+ ' ('+arr[i].count+'шт.)';
+		
+		for(let i = 0; i < arr.length; i++) arr[i].typeObj = typeObj;
+		
+		
+		return {typeObj, list: arr, method: new MyRadiatorAl()};
+	}
+	
+	
+	getListObjsSharKranNN({typeObj})
 	{
 		const arr = [];
 		arr[arr.length] = { r1: '1/2', m1: 0.063, t1: 0.053 };
@@ -43,12 +84,12 @@ class MyListObjsWf
 		arr[arr.length] = { r1: '1 1/2', m1: 0.096, t1: 0.070 };
 		arr[arr.length] = { r1: '2', m1: 0.111, t1: 0.070 };		
 		
-		for(let i = 0; i < arr.length; i++)
-		{
-			arr[i].nameObj = 'shar_kran_n_1';
-		}		
+		for(let i = 0; i < arr.length; i++) arr[i].nameRus = 'Шаровой кран '+arr[i].r1+'(н-н)';
 		
-		return arr;
+		for(let i = 0; i < arr.length; i++) arr[i].typeObj = typeObj;	
+		
+		
+		return {typeObj, list: arr, method: new MySharKranNN()};
 	}		
 }
 

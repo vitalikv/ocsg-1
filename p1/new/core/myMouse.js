@@ -323,7 +323,7 @@ class MyMouse
 			}
 			else if(clickO.button == 'add_objWf')
 			{
-				obj = myWarmFloor.myObjsWfInit.getObjWf({lotid: 1});
+				obj = myWarmFloor.myObjsWfInit.getObjWf({typeObj: 'shar_kran_nn', lotid: 1});
 				obj.position.copy(intersects[0].point);
 				myWarmFloor.myObjWfMove.mousedown({event, obj});
 			}			
