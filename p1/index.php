@@ -228,6 +228,7 @@
 	<script src="<?=$path?>new/warmFloor/tube/myTubeWfMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/myObjWfInit.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/myListObjsWf.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/createObj/myListMaterialsWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/myObjWfMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/myCalcFormObjWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/radiator/myRadiatorAl.js?<?=$vrs?>"></script>

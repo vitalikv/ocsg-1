@@ -2,30 +2,6 @@
 
 class MyRadiatorAl
 {
-	geometry;
-	material;
-	defVert;
-	mats = {};
-	
-	
-	constructor()
-	{
-		this.material = new THREE.MeshStandardMaterial({ color: 0xffffff, lightMap: lightMap_1, side: THREE.DoubleSide, metalness: 0.1, roughness: 0.5 });
-		//this.material = new THREE.MeshStandardMaterial({ color: 0xf0f0f0, lightMap: lightMap_1, side: THREE.DoubleSide });
-		
-		this.init();
-	}
-	
-	init()
-	{
-		const mapRezba_1 = new THREE.TextureLoader().load(infProject.path+'/img/objs/rezba_1.png');
-		
-		this.mats.rezba_1 = new THREE.MeshStandardMaterial({ color: 0xc1c6c9, map: mapRezba_1, lightMap: lightMap_1, side: THREE.DoubleSide });
-		this.mats.rezba_1.map.repeat.x = 900; 
-		this.mats.rezba_1.map.rotation = THREE.Math.degToRad( 2 );
-		this.mats.rezba_1.map.wrapS = THREE.RepeatWrapping; 
-		this.mats.rezba_1.map.wrapT = THREE.RepeatWrapping;	
-	}
 	
 	crObj({ count, size, r1, nameObj })
 	{
@@ -71,11 +47,13 @@ class MyRadiatorAl
 		const bound = geometry.boundingBox;	
 		const offsetX = bound.max.x - bound.min.x;
 		
-		const group = [];
-		
+		const mats = myWarmFloor.myObjsWfInit.myListMaterialsWf.getListmat();
+		const material = [mats.metal_white_edge, mats.rezba_1]; 
+				
+		const group = [];		
 		for ( let i = 0; i < count; i++ )
 		{
-			const obj = new THREE.Mesh(geometry, [this.material, this.mats.rezba_1]);
+			const obj = new THREE.Mesh(geometry, material);
 			obj.position.x += offsetX * (i+1);
 			group.push(obj);
 			
@@ -84,17 +62,6 @@ class MyRadiatorAl
 		}
 		
 		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: group});
-
-		
-		// получаем начальные размеры объекта, что потом можно было масштабировать от начальных размеров
-		if(1==1)
-		{
-			obj.geometry.computeBoundingBox();
-			var x = obj.geometry.boundingBox.max.x - obj.geometry.boundingBox.min.x;
-			var y = obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y;
-			var z = obj.geometry.boundingBox.max.z - obj.geometry.boundingBox.min.z;	
-			obj.userData.box = new THREE.Vector3(x, y, z);
-		}
 		
 		obj.userData.nameRus = 'Ал.радиатор h'+size.y*1000+ ' ('+count+'шт.)';
 		obj.userData.nameObj = nameObj;

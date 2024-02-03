@@ -1,36 +1,7 @@
 
-
+// шаровой кран (н-н)
 class MySharKranNN
 {
-	mats = {};
-	
-	constructor()
-	{
-		
-		this.init();
-	}
-	
-	init()
-	{
-		const mapRezba_1 = new THREE.TextureLoader().load(infProject.path+'/img/objs/rezba_1.png');
-		
-		this.mats.rezba_1 = new THREE.MeshStandardMaterial({ color: 0xc1c6c9, map: mapRezba_1, lightMap: lightMap_1, side: THREE.DoubleSide });
-		this.mats.rezba_1.map.repeat.x = 900; 
-		this.mats.rezba_1.map.rotation = THREE.Math.degToRad( 2 );
-		this.mats.rezba_1.map.wrapS = THREE.RepeatWrapping; 
-		this.mats.rezba_1.map.wrapT = THREE.RepeatWrapping;
-
-		
-		this.mats.metal_1 = new THREE.MeshStandardMaterial({ color: 0xc1c6c9, lightMap: lightMap_1, side: THREE.DoubleSide, metalness: 0.1, roughness: 0.5 });
-
-		this.mats.metal_1_edge = this.mats.metal_1.clone();
-		this.mats.metal_1_edge.flatShading = true;	
-
-		this.mats.red_1 = new THREE.MeshStandardMaterial({ color: 0xbf2502, lightMap: lightMap_1, side: THREE.DoubleSide });
-		this.mats.red_1_edge = this.mats.red_1.clone();
-		this.mats.red_1_edge.flatShading = true;		
-	}
-	
 	
 	crObj({ m1, t1, r1, nameObj })
 	{
@@ -84,8 +55,11 @@ class MySharKranNN
 		const bound = geometry.boundingBox;	
 		const offsetX = bound.max.x - bound.min.x;
 		
+		const mats = myWarmFloor.myObjsWfInit.myListMaterialsWf.getListmat();
+		const material = [mats.metal_1, mats.rezba_1, mats.metal_1_edge, mats.red_1];
+		
 		const group = [];		
-		const object = new THREE.Mesh(geometry, [this.mats.metal_1, this.mats.rezba_1, this.mats.metal_1_edge, this.mats.red_1]);
+		const object = new THREE.Mesh(geometry, material);
 		group.push(object);
 		
 		//poM3.pos.x += offsetX;
@@ -93,17 +67,6 @@ class MySharKranNN
 
 		
 		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: group});
-
-		
-		// получаем начальные размеры объекта, что потом можно было масштабировать от начальных размеров
-		if(1==1)
-		{
-			obj.geometry.computeBoundingBox();
-			var x = obj.geometry.boundingBox.max.x - obj.geometry.boundingBox.min.x;
-			var y = obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y;
-			var z = obj.geometry.boundingBox.max.z - obj.geometry.boundingBox.min.z;	
-			obj.userData.box = new THREE.Vector3(x, y, z);
-		}
 		
 		obj.userData.nameRus = 'Шаровой кран '+r1+'(н-н)';
 		obj.userData.nameObj = nameObj;
@@ -111,9 +74,6 @@ class MySharKranNN
 		return obj;
 	}
 	
-	
-	
-	//-------------------
 	
 	// резьба
 	crDetail_1({x_1, x_2, d1, x_1L, x_2L})

@@ -3,6 +3,8 @@
 class MyObjsWfInit
 {
 	myCalcFormObjWf;
+	myListObjsWf;
+	myListMaterialsWf;
 	myRadiatorAl;
 	mySharKranNN;
 	
@@ -10,8 +12,10 @@ class MyObjsWfInit
 	{
 		this.myCalcFormObjWf = new MyCalcFormObjWf();
 		
+		this.myListObjsWf = new MyListObjsWf();
+		this.myListMaterialsWf = new MyListMaterialsWf();
+		
 		this.myRadiatorAl = new MyRadiatorAl();
-
 		this.mySharKranNN = new MySharKranNN();
 	}
 
@@ -35,31 +39,41 @@ class MyObjsWfInit
 		
 		if(lotid === 1)
 		{
-			const list = myWarmFloor.myListObjsWf.getListObjsRadiatorAl();
+			const list = this.myListObjsWf.getListObjsRadiatorAl();
 			
 			obj = this.myRadiatorAl.crObj(list[45]);
 		}
 		
 		if(lotid === 2)
 		{
-			const list = myWarmFloor.myListObjsWf.getListObjsSharKranNN();
+			const list = this.myListObjsWf.getListObjsSharKranNN();
 			
 			obj = this.mySharKranNN.crObj(list[2]);
 		}		
 		
 		if(obj) 
 		{
-			myWarmFloor.addToArray({obj, type: 'objs', idLevel: null});
-			
 			obj.material.visible = false;
 			obj.userData.tag = 'objWf';
+			
+			// получаем начальные размеры объекта, что потом можно было масштабировать от начальных размеров
+			if(1==1)
+			{
+				obj.geometry.computeBoundingBox();
+				var x = obj.geometry.boundingBox.max.x - obj.geometry.boundingBox.min.x;
+				var y = obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y;
+				var z = obj.geometry.boundingBox.max.z - obj.geometry.boundingBox.min.z;	
+				obj.userData.box = new THREE.Vector3(x, y, z);
+			}			
 
 			//if(!id) { id = countId; countId++; }	
 			//obj.userData.id = id;	
 		
 			//obj.userData.lotid = lotid;
 			
-			scene.add(obj);			
+			scene.add(obj);
+
+			myWarmFloor.addToArray({obj, type: 'objs', idLevel: null});
 		}
 		
 		return obj;

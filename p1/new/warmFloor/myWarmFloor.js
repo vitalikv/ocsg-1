@@ -11,7 +11,6 @@ class MyWarmFloor
 	levels = [];
 	
 	myObjsWfInit;
-	myListObjsWf;
 	myObjWfMove;
 	
 	constructor()
@@ -29,8 +28,7 @@ class MyWarmFloor
 		this.mySaveWf = new MySaveWf();
 		this.myLoadWf = new MyLoadWf();
 		
-		this.myObjsWfInit = new MyObjsWfInit();
-		this.myListObjsWf = new MyListObjsWf();
+		this.myObjsWfInit = new MyObjsWfInit();		
 		this.myObjWfMove = new MyObjWfMove();
 	}
 	
