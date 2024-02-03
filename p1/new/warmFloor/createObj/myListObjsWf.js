@@ -6,8 +6,9 @@ class MyListObjsWf
 	
 	constructor()
 	{
-		this.listParams.push(this.getListObjsRadiatorAl({typeObj: 'radiator_al_1'}));
-		this.listParams.push(this.getListObjsSharKranNN({typeObj: 'shar_kran_nn'})); 
+		this.listParams.push(this.getRadiatorAl({typeObj: 'radiator_al_1'}));
+		this.listParams.push(this.getSharKranNN({typeObj: 'shar_kran_nn'}));
+		this.listParams.push(this.getSharKranVV({typeObj: 'shar_kran_vv'}));
 	}
 	
 	
@@ -19,8 +20,14 @@ class MyListObjsWf
 		let result = this.getListByType({typeObj});
 		
 		if(result)
-		{			
-			obj = result.method.crObj(result.list[lotid]);
+		{
+			const method = result.method;
+			const params = result.list[lotid];
+			
+			obj = result.method.crObj(params);
+			
+			obj.userData.nameRus = params.nameRus;
+			obj.userData.typeObj = params.typeObj;			
 		}
 		
 		return obj;
@@ -46,7 +53,7 @@ class MyListObjsWf
 	}
 	
 	// список параметров для создания радиатора (алюм.)
-	getListObjsRadiatorAl({typeObj})
+	getRadiatorAl({typeObj})
 	{
 		const arr = [];
 		const h = [0.2, 0.35, 0.5, 0.6, 0.7, 0.8];	// высота радиатора
@@ -74,7 +81,7 @@ class MyListObjsWf
 	}
 	
 	
-	getListObjsSharKranNN({typeObj})
+	getSharKranNN({typeObj})
 	{
 		const arr = [];
 		arr[arr.length] = { r1: '1/2', m1: 0.063, t1: 0.053 };
@@ -90,7 +97,26 @@ class MyListObjsWf
 		
 		
 		return {typeObj, list: arr, method: new MySharKranNN()};
-	}		
+	}
+
+
+	getSharKranVV({typeObj})
+	{
+		const arr = [];
+		arr[arr.length] = { r1: '1/2', m1: 0.0475, t1: 0.053 };
+		arr[arr.length] = { r1: '3/4', m1: 0.0555, t1: 0.053 };
+		arr[arr.length] = { r1: '1', m1: 0.0625, t1: 0.060 };
+		arr[arr.length] = { r1: '1 1/4', m1: 0.0775, t1: 0.064 };
+		arr[arr.length] = { r1: '1 1/2', m1: 0.087, t1: 0.070 };
+		arr[arr.length] = { r1: '2', m1: 0.101, t1: 0.070 };		
+		
+		for(let i = 0; i < arr.length; i++) arr[i].nameRus = 'Шаровой кран '+arr[i].r1+'(в-в)';
+		
+		for(let i = 0; i < arr.length; i++) arr[i].typeObj = typeObj;	
+		
+		
+		return {typeObj, list: arr, method: new MySharKranVV()};
+	}	
 }
 
 

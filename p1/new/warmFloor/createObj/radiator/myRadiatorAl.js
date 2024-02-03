@@ -3,7 +3,7 @@
 class MyRadiatorAl
 {
 	
-	crObj({ count, size, r1, nameRus, typeObj })
+	crObj({ count, size, r1 })
 	{
 		const d1 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeRezba({size: r1, side: 'v'});
 		const h1 = size.y;
@@ -62,9 +62,6 @@ class MyRadiatorAl
 		}
 		
 		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: group});
-		
-		obj.userData.nameRus = nameRus;
-		obj.userData.typeObj = typeObj;
 		
 		return obj;
 	}
