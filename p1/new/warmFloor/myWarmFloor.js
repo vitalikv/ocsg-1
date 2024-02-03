@@ -10,6 +10,7 @@ class MyWarmFloor
 	myLoadWf;
 	levels = [];
 	
+	myObjsWfInit;
 	myListObjsWf;
 	myObjWfMove;
 	
@@ -28,6 +29,7 @@ class MyWarmFloor
 		this.mySaveWf = new MySaveWf();
 		this.myLoadWf = new MyLoadWf();
 		
+		this.myObjsWfInit = new MyObjsWfInit();
 		this.myListObjsWf = new MyListObjsWf();
 		this.myObjWfMove = new MyObjWfMove();
 	}
@@ -137,7 +139,7 @@ class MyWarmFloor
 		
 		if(obj.userData.tag === 'objWf')
 		{
-			this.myListObjsWf.deleteObjWf({obj});
+			this.myObjsWfInit.deleteObjWf({obj});
 		}		
 	}
 	

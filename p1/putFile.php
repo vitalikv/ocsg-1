@@ -110,10 +110,12 @@ new/warmFloor/point/myPointWf.js
 new/warmFloor/point/myPointWfMove.js
 new/warmFloor/tube/myTubeWf.js
 new/warmFloor/tube/myTubeWfMove.js
+new/warmFloor/createObj/myObjWfInit.js
 new/warmFloor/createObj/myListObjsWf.js
 new/warmFloor/createObj/myObjWfMove.js
 new/warmFloor/createObj/myCalcFormObjWf.js
 new/warmFloor/createObj/radiator/myRadiatorAl.js
+new/warmFloor/createObj/sharKran/mySharKranNN.js
 ';
 
 $arrF = array();

@@ -3,31 +3,31 @@
 class MyCalcFormObjWf
 {
 
-	
-	// произвольная форма с выдавливание
-	crShape(cdm)
+	// произвольная форма с выдавливанием
+	crShape({p, w1, pos = new THREE.Vector3(), rot = new THREE.Vector3(), scale = 1, matIndex = 0})
 	{
-		var w1 = cdm.w1;
-		var pos = (cdm.pos) ? cdm.pos : {x:0, y:0, z:0};
-		var rot = (cdm.rot) ? cdm.rot : {x:0, y:0, z:0};
-		var p = cdm.p;
+		// p - массив точек для построение формы
+		// w1 - глубина выдавливания
+		// pos - смещение geometry относительно 0
+		// rot - поворот геометрии
+		// matIndex - индекс материала, который нужно присвоить форме
 		
-		var scale = 1;
-		for ( var i = 0; i < p.length; i++ ) 
+		
+		for ( let i = 0; i < p.length; i++ ) 
 		{  
 			p[i].x *= scale;
 			p[i].y *= scale; 
 		}		
 		
 		
-		var shape = new THREE.Shape( p );
-		var gShape = new THREE.ExtrudeGeometry( shape, { bevelEnabled: false, depth: w1 } );
+		const shape = new THREE.Shape( p );
+		const gShape = new THREE.ExtrudeGeometry( shape, { bevelEnabled: false, depth: w1 } );
 		gShape.rotateX(rot.x); 
 		gShape.rotateY(rot.y); 
 		gShape.rotateZ(rot.z);		
 		gShape.translate(pos.x, pos.y, pos.z);
 
-		for(var i = 0; i < gShape.faces.length; i++){ gShape.faces[i].materialIndex = 0; }
+		for(let i = 0; i < gShape.faces.length; i++){ gShape.faces[i].materialIndex = matIndex; }
 
 		return gShape;
 	}

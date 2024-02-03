@@ -27,9 +27,9 @@ class MyRadiatorAl
 		this.mats.rezba_1.map.wrapT = THREE.RepeatWrapping;	
 	}
 	
-	crObj({ count, size, r1 })
+	crObj({ count, size, r1, nameObj })
 	{
-		const d1 = myWarmFloor.myListObjsWf.myCalcFormObjWf.sizeRezba({size: r1, side: 'v'});
+		const d1 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeRezba({size: r1, side: 'v'});
 		const h1 = size.y;
 		
 		// доп. расчеты		
@@ -38,10 +38,9 @@ class MyRadiatorAl
 		d1.n *= 1.2;
 		const t1 = 0.003;		// толщина ребер ал.радиатора 		
 		
-		const geometry = new THREE.Geometry();
 		
-		const gs = [];
 		
+		const gs = [];		
 		gs[0] = this.crDetail_1({d1, t1, h1});
 		gs[1] = this.crDetail_2({d1, t1, h1});
 		gs[2] = this.crDetail_3({d1, t1, h1});
@@ -61,7 +60,7 @@ class MyRadiatorAl
 		gs[15] = this.crDetail_16({x_1, x_2, d1, h1});
 		gs[16] = this.crDetail_17({x_1, x_2, d1, h1});
 
-		
+		const geometry = new THREE.Geometry();
 		for ( let i = 0; i < gs.length; i++ )
 		{
 			geometry.merge(gs[i], gs[i].matrix, 0);
@@ -84,16 +83,8 @@ class MyRadiatorAl
 			//poM4.pos.x += offsetX;
 		}
 		
-		const obj = myWarmFloor.myListObjsWf.myCalcFormObjWf.getBoundObject_1({obj: group});
-		scene.add(obj);
+		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: group});
 
-		obj.material.visible = false;
-		obj.position.y = 1;
-		
-		//if(!id) { id = countId; countId++; }	
-		//obj.userData.id = id;	
-		obj.userData.tag = 'objWf';
-		obj.userData.nameRus = 'Ал.радиатор h'+size.y*1000+ ' ('+count+'шт.)';
 		
 		// получаем начальные размеры объекта, что потом можно было масштабировать от начальных размеров
 		if(1==1)
@@ -105,6 +96,8 @@ class MyRadiatorAl
 			obj.userData.box = new THREE.Vector3(x, y, z);
 		}
 		
+		obj.userData.nameRus = 'Ал.радиатор h'+size.y*1000+ ' ('+count+'шт.)';
+		obj.userData.nameObj = nameObj;
 		
 		return obj;
 	}
@@ -126,7 +119,7 @@ class MyRadiatorAl
 		inf.pos = { x: -t1/2, y: 0, z: 0 };
 		inf.rot = { x: 0, y: Math.PI/2, z: 0 };		
 	
-		const gShape = myWarmFloor.myListObjsWf.myCalcFormObjWf.crShape(inf);
+		const gShape = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crShape(inf);
 		
 		return gShape;
 	}
@@ -138,7 +131,7 @@ class MyRadiatorAl
 		const p = [];
 		p[0] = new THREE.Vector2 ( d1.n/2 + 0.025, h1/2 );
 		
-		const resV = myWarmFloor.myListObjsWf.myCalcFormObjWf.getFormCircle({count: 16, size: d1.n/2, pi: Math.PI});
+		const resV = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getFormCircle({count: 16, size: d1.n/2, pi: Math.PI});
 		
 		for ( let i = 0; i < resV.length; i++ )
 		{
@@ -158,7 +151,7 @@ class MyRadiatorAl
 		inf.pos = { x: -t1/2, y: 0, z: 0 };
 		inf.rot = { x: 0, y: Math.PI/2, z: 0 };		
 	
-		const gShape = myWarmFloor.myListObjsWf.myCalcFormObjWf.crShape(inf);
+		const gShape = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crShape(inf);
 
 		return gShape;
 	}
@@ -179,7 +172,7 @@ class MyRadiatorAl
 		inf.pos = { x: -t1/2, y: 0, z: 0 };
 		inf.rot = { x: 0, y: Math.PI/2, z: 0 };		
 	
-		const gShape = myWarmFloor.myListObjsWf.myCalcFormObjWf.crShape(inf);
+		const gShape = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crShape(inf);
 
 		return gShape;
 	}
@@ -200,7 +193,7 @@ class MyRadiatorAl
 		inf.w1 = t1;
 		inf.pos = { x: 0, y: -offsetY, z: d1.n/2 + 0.025 };	 
 	
-		const gShape = myWarmFloor.myListObjsWf.myCalcFormObjWf.crShape(inf);
+		const gShape = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crShape(inf);
 
 		return gShape;
 	}
@@ -222,7 +215,7 @@ class MyRadiatorAl
 		inf.pos = { x: size.x/2, y: h1/2 + offsetY, z: d1.n/2 + t1 };	
 		inf.rot = { x: 0, y: -Math.PI/2, z: 0 };
 		
-		const gShape = myWarmFloor.myListObjsWf.myCalcFormObjWf.crShape(inf);
+		const gShape = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crShape(inf);
 
 		return gShape;
 	}
@@ -244,7 +237,7 @@ class MyRadiatorAl
 		inf.pos = { x: size.x/2, y: h1/2 + offsetY, z: d1.n/2 + t1 };	
 		inf.rot = { x: 0, y: -Math.PI/2, z: 0 };
 		
-		const gShape = myWarmFloor.myListObjsWf.myCalcFormObjWf.crShape(inf);
+		const gShape = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crShape(inf);
 
 		return gShape;
 	}
@@ -270,7 +263,7 @@ class MyRadiatorAl
 		inf.pos = { x: size.x/2, y: h1/2 + offsetY, z: d1.n/2 + t1 };	
 		inf.rot = { x: 0, y: -Math.PI/2, z: 0 };
 		
-		const gShape = myWarmFloor.myListObjsWf.myCalcFormObjWf.crShape(inf);
+		const gShape = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crShape(inf);
 
 		return gShape;		
 	}
@@ -290,7 +283,7 @@ class MyRadiatorAl
 		inf.w1 = t1;
 		inf.pos = { x: 0, y: 0, z: -d1.n/2 - 0.025 };	
 	
-		const gShape = myWarmFloor.myListObjsWf.myCalcFormObjWf.crShape(inf);
+		const gShape = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crShape(inf);
 
 		return gShape;		
 	}
@@ -316,7 +309,7 @@ class MyRadiatorAl
 		inf.pos = { x: size.x/2, y: 0, z: d1.n/2 + t1 };	
 		inf.rot = { x: 0, y: -Math.PI/2, z: 0 };
 		
-		const gShape = myWarmFloor.myListObjsWf.myCalcFormObjWf.crShape(inf);
+		const gShape = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crShape(inf);
 
 		return gShape;			
 	}
@@ -342,7 +335,7 @@ class MyRadiatorAl
 		inf.pos = { x: size.x/2, y: 0, z: 0 };	
 		inf.rot = { x: 0, y: -Math.PI/2, z: 0 };
 		
-		const gShape = myWarmFloor.myListObjsWf.myCalcFormObjWf.crShape(inf);
+		const gShape = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crShape(inf);
 
 		return gShape;		
 	}
@@ -354,7 +347,7 @@ class MyRadiatorAl
 		const inf = { dlina: x_2, diameter_nr: d1.n, diameter_vn: d1.v, ind: [0, 1, 0, 0] };
 		inf.pos = { x: -x_1/2 - x_2/2, y: h1/2, z: 0 };
 		
-		const geometry = myWarmFloor.myListObjsWf.myCalcFormObjWf.crFormSleeve(inf);
+		const geometry = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crFormSleeve(inf);
 
 		return geometry;		
 	}
@@ -366,7 +359,7 @@ class MyRadiatorAl
 		const inf = { dlina: x_2, diameter_nr: d1.n, diameter_vn: d1.v, ind: [0, 1, 0, 0] };
 		inf.pos = { x: x_1/2 + x_2/2, y: h1/2, z: 0 };
 		
-		const geometry = myWarmFloor.myListObjsWf.myCalcFormObjWf.crFormSleeve(inf);
+		const geometry = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crFormSleeve(inf);
 
 		return geometry;
 	}
@@ -378,7 +371,7 @@ class MyRadiatorAl
 		const inf = { dlina: x_1, diameter_nr: d1.n, diameter_vn: d1.v };
 		inf.pos = { x: 0, y: h1/2, z: 0 };
 		
-		const geometry = myWarmFloor.myListObjsWf.myCalcFormObjWf.crFormSleeve(inf);
+		const geometry = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crFormSleeve(inf);
 
 		return geometry;													
 	}
@@ -391,7 +384,7 @@ class MyRadiatorAl
 		inf.pos = { x: 0, y: 0, z: 0 };
 		inf.rot = { x: 0, y: 0, z: -Math.PI/2 };
 		
-		const geometry = myWarmFloor.myListObjsWf.myCalcFormObjWf.crFormSleeve(inf);
+		const geometry = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crFormSleeve(inf);
 
 		return geometry;					
 	}
@@ -403,7 +396,7 @@ class MyRadiatorAl
 		const inf = { dlina: x_1, diameter_nr: d1.n, diameter_vn: d1.v };
 		inf.pos = { x: 0, y: -h1/2, z: 0 };
 		
-		const geometry = myWarmFloor.myListObjsWf.myCalcFormObjWf.crFormSleeve(inf);
+		const geometry = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crFormSleeve(inf);
 
 		return geometry													
 	}
@@ -414,7 +407,7 @@ class MyRadiatorAl
 		const inf = { dlina: x_2, diameter_nr: d1.n, diameter_vn: d1.v, ind: [0, 1, 0, 0] };
 		inf.pos = { x: -x_1/2 - x_2/2, y: -h1/2, z: 0 };
 		
-		const geometry = myWarmFloor.myListObjsWf.myCalcFormObjWf.crFormSleeve(inf);
+		const geometry = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crFormSleeve(inf);
 
 		return geometry				
 	}
@@ -425,7 +418,7 @@ class MyRadiatorAl
 		const inf = { dlina: x_2, diameter_nr: d1.n, diameter_vn: d1.v, ind: [0, 1, 0, 0] };
 		inf.pos = { x: x_1/2 + x_2/2, y: -h1/2, z: 0 };
 		
-		const geometry = myWarmFloor.myListObjsWf.myCalcFormObjWf.crFormSleeve(inf);
+		const geometry = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crFormSleeve(inf);
 
 		return geometry				
 	}	

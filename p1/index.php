@@ -226,11 +226,13 @@
 	<script src="<?=$path?>new/warmFloor/point/myPointWfMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/tube/myTubeWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/tube/myTubeWfMove.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/createObj/myObjWfInit.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/myListObjsWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/myObjWfMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/myCalcFormObjWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/radiator/myRadiatorAl.js?<?=$vrs?>"></script>
-
+	<script src="<?=$path?>new/warmFloor/createObj/sharKran/mySharKranNN.js?<?=$vrs?>"></script>
+	
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		
