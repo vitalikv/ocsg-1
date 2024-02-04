@@ -54,6 +54,17 @@ class MyObjsWfInit
 			obj = this.getObjWf({typeObj: 'shar_kran_vv', lotid: i});
 			obj.position.copy(offset);
 			offset.z -= 0.1;
+		}
+
+
+		result = this.myListObjsWf.getListByType({typeObj: 'shar_kran_vn'});
+		
+		offset = new THREE.Vector3(-0.4, 1, 0);
+		for(let i = 0; i < result.list.length; i++)
+		{
+			obj = this.getObjWf({typeObj: 'shar_kran_vn', lotid: i});
+			obj.position.copy(offset);
+			offset.z -= 0.1;
 		}		
 	}
 	

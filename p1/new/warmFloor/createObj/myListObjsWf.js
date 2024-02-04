@@ -9,6 +9,7 @@ class MyListObjsWf
 		this.listParams.push(this.getRadiatorAl({typeObj: 'radiator_al_1'}));
 		this.listParams.push(this.getSharKranNN({typeObj: 'shar_kran_nn'}));
 		this.listParams.push(this.getSharKranVV({typeObj: 'shar_kran_vv'}));
+		this.listParams.push(this.getSharKranVN({typeObj: 'shar_kran_vn'}));
 	}
 	
 	
@@ -116,6 +117,25 @@ class MyListObjsWf
 		
 		
 		return {typeObj, list: arr, method: new MySharKranVV()};
+	}	
+	
+	
+	getSharKranVN({typeObj})
+	{
+		const arr = [];
+		arr[arr.length] = { r1: '1/2', m1: 0.063, t1: 0.053 };
+		arr[arr.length] = { r1: '3/4', m1: 0.070, t1: 0.053 };
+		arr[arr.length] = { r1: '1', m1: 0.076, t1: 0.060 };
+		arr[arr.length] = { r1: '1 1/4', m1: 0.085, t1: 0.064 };
+		arr[arr.length] = { r1: '1 1/2', m1: 0.096, t1: 0.070 };
+		arr[arr.length] = { r1: '2', m1: 0.111, t1: 0.070 };	
+		
+		for(let i = 0; i < arr.length; i++) arr[i].nameRus = 'Шаровой кран '+arr[i].r1+'(в-н)';
+		
+		for(let i = 0; i < arr.length; i++) arr[i].typeObj = typeObj;	
+		
+		
+		return {typeObj, list: arr, method: new MySharKranVN()};
 	}	
 }
 

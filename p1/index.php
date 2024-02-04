@@ -234,6 +234,7 @@
 	<script src="<?=$path?>new/warmFloor/createObj/radiator/myRadiatorAl.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/sharKran/mySharKranNN.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/sharKran/mySharKranVV.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/createObj/sharKran/mySharKranVN.js?<?=$vrs?>"></script>
 	
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 

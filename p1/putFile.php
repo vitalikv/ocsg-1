@@ -118,6 +118,7 @@ new/warmFloor/createObj/myCalcFormObjWf.js
 new/warmFloor/createObj/radiator/myRadiatorAl.js
 new/warmFloor/createObj/sharKran/mySharKranNN.js
 new/warmFloor/createObj/sharKran/mySharKranVV.js
+new/warmFloor/createObj/sharKran/mySharKranVN.js
 ';
 
 $arrF = array();
