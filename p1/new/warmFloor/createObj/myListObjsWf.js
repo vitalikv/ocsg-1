@@ -4,12 +4,18 @@ class MyListObjsWf
 {
 	listParams = [];
 	
+	myHalfSgon;
+	
 	constructor()
 	{
+		this.myHalfSgon = new MyHalfSgon();
+		
 		this.listParams.push(this.getRadiatorAl({typeObj: 'radiator_al_1'}));
 		this.listParams.push(this.getSharKranNN({typeObj: 'shar_kran_nn'}));
 		this.listParams.push(this.getSharKranVV({typeObj: 'shar_kran_vv'}));
 		this.listParams.push(this.getSharKranVN({typeObj: 'shar_kran_vn'}));
+		this.listParams.push(this.getSharKranSgon({typeObj: 'shar_kran_sgon'}));
+		this.listParams.push(this.getHalfSgon({typeObj: 'half_sgon'}));
 	}
 	
 	
@@ -136,6 +142,40 @@ class MyListObjsWf
 		
 		
 		return {typeObj, list: arr, method: new MySharKranVN()};
+	}
+
+
+	getSharKranSgon({typeObj})
+	{
+		const arr = [];
+		arr[arr.length] = { r1: '1/2', r2: '3/4', m1: 0.055, m2: 0.026, t1: 0.053 };
+		arr[arr.length] = { r1: '3/4', r2: '1', m1: 0.059, m2: 0.03, t1: 0.053 };
+		arr[arr.length] = { r1: '1', r2: '1 1/4', m1: 0.065, m2: 0.037, t1: 0.060 };		
+		arr[arr.length] = { r1: '1 1/4', r2: '1 1/2', m1: 0.075, m2: 0.045, t1: 0.060 };	
+		
+		for(let i = 0; i < arr.length; i++) arr[i].nameRus = 'Шаровой кран с полусгоном '+arr[i].r1;
+		
+		for(let i = 0; i < arr.length; i++) arr[i].typeObj = typeObj;	
+		
+		
+		return {typeObj, list: arr, method: new MySharKranSgon()};
+	}
+
+
+	getHalfSgon({typeObj})
+	{
+		const arr = [];
+		arr[arr.length] = { r1: '3/4', r2: '1/2', m1: 0.040 };
+		arr[arr.length] = { r1: '1', r2: '3/4', m1: 0.045 };
+		arr[arr.length] = { r1: '1 1/4', r2: '1', m1: 0.052 };
+		arr[arr.length] = { r1: '1 1/2', r2: '1 1/4', m1: 0.062 };
+		
+		for(let i = 0; i < arr.length; i++) arr[i].nameRus = 'Полусгон '+arr[i].r2;
+		
+		for(let i = 0; i < arr.length; i++) arr[i].typeObj = typeObj;	
+		
+		
+		return {typeObj, list: arr, method: this.myHalfSgon};
 	}	
 }
 
