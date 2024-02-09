@@ -5,7 +5,7 @@ class MyHalfSgon
 	
 	crObj({ m1, r1, r2 })
 	{
-		const geometry = this.getGeometry({ m1, r1, r2 });		
+		const geometry = this.crGeometry({ m1, r1, r2 });		
 		
 		geometry.computeBoundingBox();
 		const bound = geometry.boundingBox;	
@@ -28,7 +28,7 @@ class MyHalfSgon
 	}
 	
 	
-	getGeometry({ m1, r1, r2 })
+	crGeometry({ m1, r1, r2 })
 	{
 		const d1 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeRezba({size: r1, side: 'v'});
 		const d2 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeRezba({size: r2, side: 'n'});	

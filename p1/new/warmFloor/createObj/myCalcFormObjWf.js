@@ -392,24 +392,54 @@ class MyCalcFormObjWf
 		const material = new THREE.MeshStandardMaterial({ color: 0xcccccc, transparent: true, opacity: 0.7, depthTest: false });
 		
 		const box = new THREE.Mesh( geometry, material ); 	
-		box.position.copy(centerPos);
 		
-		box.updateMatrixWorld();
+		//box.updateMatrixWorld();
 		box.geometry.computeBoundingBox();	
 		box.geometry.computeBoundingSphere();	
 		
-		for ( var i = 0; i < arrObj.length; i++ )
+		for ( let i = 0; i < arrObj.length; i++ )
 		{
-			arrObj[i].position.sub(centerPos);
+			//arrObj[i].position.sub(centerPos); 
 			box.add(arrObj[i]);
-		}
-		
+		}  
 		
 		return box;	
 	}
 
 
+	// получаем центр у геометрии
+	getCenterGeometry({geometry})
+	{
+		geometry.computeBoundingSphere();
+		const center = geometry.boundingSphere.center.clone();
 
+		return center;
+	}
+	
+	
+	// создаем разъем для объектов
+	createJointPoint({objParent, id = 0, name = '', pos = new THREE.Vector3(), rot = new THREE.Vector3()}) 
+	{
+		//const geometry = new THREE.BufferGeometry().fromGeometry(createGeometryWD({x: 0.13, y: 0.13, z: 0.13}));
+		const geometry = new THREE.BoxGeometry( 0.03, 0.03, 0.03 ); 
+		const material = new THREE.MeshStandardMaterial({ color: 0xff0000, transparent: true, opacity: 1, depthTest: true, lightMap: lightMap_1 });
+		
+		const joint = new THREE.Mesh( geometry, material );
+		joint.position.copy(pos); 
+		
+		//if(cdm.q) { joint.quaternion.copy(cdm.q); }
+		joint.rotation.set(rot.x, rot.y, rot.z);
+		
+		//joint.visible = false;
+		joint.renderOrder = 1;						
+		
+		joint.userData.tag = 'joinPoint';
+		joint.userData.id = id;  
+		joint.userData.centerPoint = { join: null };						 
+		joint.userData.centerPoint.nameRus = name;
+		
+		objParent.add( joint );	
+	}	
 }
 
 

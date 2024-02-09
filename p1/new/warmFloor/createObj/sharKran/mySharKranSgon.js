@@ -43,7 +43,7 @@ class MySharKranSgon
 		gs[10] = this.crDetail_11({x_1, d1: d2, x_1R, x_2R});
 		gs[11] = this.crDetail_12({d1, t1, h1, w1});
 		
-		gs[12] = myWarmFloor.myObjsWfInit.myListObjsWf.myHalfSgon.getGeometry({ m1: m2, r1: r2, r2: r1 });	// geometry сгона
+		gs[12] = myWarmFloor.myObjsWfInit.myListObjsWf.myHalfSgon.crGeometry({ m1: m2, r1: r2, r2: r1 });	// geometry сгона
 		this.offsetSgon({geometry: gs[12], offset: offsetSgon});
 
 		const geometry = new THREE.Geometry();		
@@ -60,15 +60,14 @@ class MySharKranSgon
 		const mats = myWarmFloor.myObjsWfInit.myListMaterialsWf.getListmat();
 		const material = [mats.metal_1, mats.rezba_1, mats.metal_1_edge, mats.red_1];
 		
-		const group = [];		
+		
 		const object = new THREE.Mesh(geometry, material);
-		group.push(object);
 		
 		//poM3.pos.x += offsetX;
 		//poM4.pos.x += offsetX;
 
 		
-		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: group});
+		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: object});
 		
 		return obj;
 	}

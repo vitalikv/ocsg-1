@@ -5,6 +5,33 @@ class MyRadiatorAl
 	
 	crObj({ count, size, r1 })
 	{
+		const { g1, jointsPos } = this.crGeometry_1({ size, r1 });		
+		
+		g1.computeBoundingBox();
+		const bound = g1.boundingBox;	
+		const offsetX = bound.max.x - bound.min.x;
+			
+		const g2 = this.crGeometry_2({ g1, count, offsetX });
+		
+		const offsetCenterPos = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getCenterGeometry({geometry: g2});
+		g2.translate(-offsetCenterPos.x, -offsetCenterPos.y, -offsetCenterPos.z);
+
+		const mats = myWarmFloor.myObjsWfInit.myListMaterialsWf.getListmat();
+		const material = [mats.metal_white_edge, mats.rezba_1]; 
+		
+		const object = new THREE.Mesh(g2, material);
+				
+		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: object});
+		
+		this.crJoint({obj, jointsPos, offsetCenterPos, count, offsetX});
+		
+		return obj;
+	}
+	
+	
+	// создаем одну секцию радиатора
+	crGeometry_1({ size, r1 })
+	{
 		const d1 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeRezba({size: r1, side: 'v'});
 		const h1 = size.y;
 		
@@ -13,8 +40,7 @@ class MyRadiatorAl
 		const x_2 = (size.x - x_1)/2 + 0.001;
 		d1.n *= 1.2;
 		const t1 = 0.003;		// толщина ребер ал.радиатора 		
-		
-		
+				
 		
 		const gs = [];		
 		gs[0] = this.crDetail_1({d1, t1, h1});
@@ -35,6 +61,13 @@ class MyRadiatorAl
 		gs[14] = this.crDetail_15({x_1, x_2, d1, h1});
 		gs[15] = this.crDetail_16({x_1, x_2, d1, h1});
 		gs[16] = this.crDetail_17({x_1, x_2, d1, h1});
+		
+		const jointsPos = [];
+		jointsPos[0] = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getCenterGeometry({geometry: gs[10]});
+		jointsPos[1] = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getCenterGeometry({geometry: gs[15]});
+		jointsPos[2] = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getCenterGeometry({geometry: gs[11]});
+		jointsPos[3] = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getCenterGeometry({geometry: gs[16]});
+		
 
 		const geometry = new THREE.Geometry();
 		for ( let i = 0; i < gs.length; i++ )
@@ -42,30 +75,51 @@ class MyRadiatorAl
 			geometry.merge(gs[i], gs[i].matrix, 0);
 		}
 		
-		
-		geometry.computeBoundingBox();
-		const bound = geometry.boundingBox;	
-		const offsetX = bound.max.x - bound.min.x;
-		
-		const mats = myWarmFloor.myObjsWfInit.myListMaterialsWf.getListmat();
-		const material = [mats.metal_white_edge, mats.rezba_1]; 
-				
-		const group = [];		
-		for ( let i = 0; i < count; i++ )
-		{
-			const obj = new THREE.Mesh(geometry, material);
-			obj.position.x += offsetX * (i+1);
-			group.push(obj);
-			
-			//poM3.pos.x += offsetX;
-			//poM4.pos.x += offsetX;
-		}
-		
-		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: group});
-		
-		return obj;
+		return { g1: geometry, jointsPos };
 	}
 	
+	
+	// создаем из одной секции одну геометрию радиатора состоящего из нескольких секций
+	crGeometry_2({ g1, count, offsetX })
+	{
+		// offsetX - смещение каждой новой секции в право
+		
+		const geometry = new THREE.Geometry();
+		for ( let i = 0; i < count; i++ )
+		{
+			const g = g1.clone();
+			g.translate(offsetX * i, 0, 0);
+			geometry.merge(g, g.matrix, 0);
+		}
+
+		return geometry;
+	}
+	
+	
+	// создание стыков и добавление в объект
+	crJoint({obj, jointsPos, offsetCenterPos, count, offsetX})
+	{
+		for ( let i = 0; i < jointsPos.length; i++ )
+		{
+			jointsPos[i].sub(offsetCenterPos);
+		}
+		
+		// смещаем правые стыки в зависимости от кол-во секций
+		jointsPos[2].x += offsetX * (count - 1);
+		jointsPos[3].x += offsetX * (count - 1);
+
+		const jointsData = [];
+		jointsData.push({objParent: obj, id: 0, name: '', pos: jointsPos[0], rot: new THREE.Vector3(0, Math.PI, 0)});
+		jointsData.push({objParent: obj, id: 1, name: '', pos: jointsPos[1], rot: new THREE.Vector3(0, Math.PI, 0)});
+		jointsData.push({objParent: obj, id: 2, name: '', pos: jointsPos[2]});
+		jointsData.push({objParent: obj, id: 3, name: '', pos: jointsPos[3]});
+
+
+		for ( let i = 0; i < jointsData.length; i++ )
+		{
+			myWarmFloor.myObjsWfInit.myCalcFormObjWf.createJointPoint(jointsData[i]);
+		}						
+	}
 	
 	
 	// центрально ребро сзади
