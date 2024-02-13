@@ -325,6 +325,15 @@ class MyCalcFormObjWf
 	}	
 
 
+	// выровнить geometry по центру
+	centerAlignGeometry({geometry})
+	{
+		const offsetCenterPos = this.getPosCenterG({geometry});		// смещение
+		geometry.translate(-offsetCenterPos.x, -offsetCenterPos.y, -offsetCenterPos.z);
+
+		return offsetCenterPos;
+	}
+
 	// получаем габариты объекта и строим box-форму и вставляем в нее объекты
 	getBoundObject_1({obj})
 	{
@@ -407,8 +416,22 @@ class MyCalcFormObjWf
 	}
 
 
+
+	// получаем массив geometry и получаем их центр
+	getArrPosCenterG({arrG})
+	{
+		const arrPos = [];
+		
+		for ( let i = 0; i < arrG.length; i++ )
+		{
+			arrPos[i] = this.getPosCenterG({geometry: arrG[i]});
+		}
+
+		return arrPos;
+	}
+	
 	// получаем центр у геометрии
-	getCenterGeometry({geometry})
+	getPosCenterG({geometry})
 	{
 		geometry.computeBoundingSphere();
 		const center = geometry.boundingSphere.center.clone();
@@ -421,8 +444,8 @@ class MyCalcFormObjWf
 	createJointPoint({objParent, id = 0, name = '', pos = new THREE.Vector3(), rot = new THREE.Vector3()}) 
 	{
 		//const geometry = new THREE.BufferGeometry().fromGeometry(createGeometryWD({x: 0.13, y: 0.13, z: 0.13}));
-		const geometry = new THREE.BoxGeometry( 0.03, 0.03, 0.03 ); 
-		const material = new THREE.MeshStandardMaterial({ color: 0xff0000, transparent: true, opacity: 1, depthTest: true, lightMap: lightMap_1 });
+		const geometry = new THREE.BoxGeometry( 0.01, 0.01, 0.01 ); 
+		const material = new THREE.MeshStandardMaterial({ color: 0xff0000, transparent: true, opacity: 1, depthTest: false, lightMap: lightMap_1 });
 		
 		const joint = new THREE.Mesh( geometry, material );
 		joint.position.copy(pos); 

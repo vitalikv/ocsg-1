@@ -5,6 +5,28 @@ class MySharKranSgon
 	
 	crObj({ m1, t1, r1, m2, r2 })
 	{
+		const { g1, jointsPos } = this.crGeometry_1({ m1, t1, r1, m2, r2 });
+		
+		const g2 = this.crGeometry_2({ g1, jointsPos, m2, r1, r2});
+		
+		const offsetCenterPos = myWarmFloor.myObjsWfInit.myCalcFormObjWf.centerAlignGeometry({geometry: g2});
+		
+		const mats = myWarmFloor.myObjsWfInit.myListMaterialsWf.getListmat();
+		const material = [mats.metal_1, mats.rezba_1, mats.metal_1_edge, mats.red_1];		
+		
+		const object = new THREE.Mesh(g2, material);
+		
+		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: object});
+		
+		this.crJoint({obj, jointsPos, offsetCenterPos});
+		
+		return obj;
+	}
+	
+	
+	// создаем геометрию шар.крана
+	crGeometry_1({ m1, t1, r1, m2, r2 })
+	{
 		// t1 - длина бабочки
 		
 		const d1 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeRezba({size: r1, side: 'v'});
@@ -43,33 +65,59 @@ class MySharKranSgon
 		gs[10] = this.crDetail_11({x_1, d1: d2, x_1R, x_2R});
 		gs[11] = this.crDetail_12({d1, t1, h1, w1});
 		
-		gs[12] = myWarmFloor.myObjsWfInit.myListObjsWf.myHalfSgon.crGeometry({ m1: m2, r1: r2, r2: r1 });	// geometry сгона
-		this.offsetSgon({geometry: gs[12], offset: offsetSgon});
+		const jointsPos = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getArrPosCenterG({arrG: [gs[0], gs[10]]});
+		//jointsPos.push(offsetSgon);
 
 		const geometry = new THREE.Geometry();		
 		for ( let i = 0; i < gs.length; i++ )
 		{
 			geometry.merge(gs[i], gs[i].matrix, 0);
 		}
-		
-		
-		geometry.computeBoundingBox();
-		const bound = geometry.boundingBox;	
-		const offsetX = bound.max.x - bound.min.x;
-		
-		const mats = myWarmFloor.myObjsWfInit.myListMaterialsWf.getListmat();
-		const material = [mats.metal_1, mats.rezba_1, mats.metal_1_edge, mats.red_1];
-		
-		
-		const object = new THREE.Mesh(geometry, material);
-		
-		//poM3.pos.x += offsetX;
-		//poM4.pos.x += offsetX;
 
+		return { g1: geometry, jointsPos };
+	}
+	
+	
+	// получаем геометрию сгона и объединяем с шар.краном
+	crGeometry_2({ g1, jointsPos, m2, r1, r2})
+	{
+		const sgon = myWarmFloor.myObjsWfInit.myListObjsWf.myHalfSgon.crGeometry({ m1: m2, r1: r2, r2: r1 });	// geometry сгона
+		const g2 = sgon.geometry;
+		const jointsPos2 = sgon.jointsPos;
 		
-		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: object});
+		// находим правый стык у крана и левый у сгона -> вычисляем смещение, чтобы соединить кран и сгон
+		const offset = jointsPos[1].clone().sub(jointsPos2[0]);
+		g2.translate(offset.x, offset.y, offset.z);
 		
-		return obj;
+		// заменяем правый стык крана на правый сгона
+		jointsPos[1] = jointsPos2[1].add(offset);
+		
+		const geometry = new THREE.Geometry();		
+		geometry.merge(g1, g1.matrix, 0);
+		geometry.merge(g2, g2.matrix, 0);
+
+		return geometry;		
+		
+	}
+
+
+	// создание стыков и добавление в объект
+	crJoint({obj, jointsPos, offsetCenterPos})
+	{
+		for ( let i = 0; i < jointsPos.length; i++ )
+		{
+			jointsPos[i].sub(offsetCenterPos);
+		}
+
+		const jointsData = [];
+		jointsData.push({objParent: obj, id: 0, name: '', pos: jointsPos[0], rot: new THREE.Vector3(0, Math.PI, 0)});
+		jointsData.push({objParent: obj, id: 1, name: '', pos: jointsPos[1], rot: new THREE.Vector3(0, 0, 0)});
+
+
+		for ( let i = 0; i < jointsData.length; i++ )
+		{
+			myWarmFloor.myObjsWfInit.myCalcFormObjWf.createJointPoint(jointsData[i]);
+		}						
 	}
 	
 	

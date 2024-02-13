@@ -13,8 +13,7 @@ class MyRadiatorAl
 			
 		const g2 = this.crGeometry_2({ g1, count, offsetX });
 		
-		const offsetCenterPos = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getCenterGeometry({geometry: g2});
-		g2.translate(-offsetCenterPos.x, -offsetCenterPos.y, -offsetCenterPos.z);
+		const offsetCenterPos = myWarmFloor.myObjsWfInit.myCalcFormObjWf.centerAlignGeometry({geometry: g2});
 
 		const mats = myWarmFloor.myObjsWfInit.myListMaterialsWf.getListmat();
 		const material = [mats.metal_white_edge, mats.rezba_1]; 
@@ -62,12 +61,7 @@ class MyRadiatorAl
 		gs[15] = this.crDetail_16({x_1, x_2, d1, h1});
 		gs[16] = this.crDetail_17({x_1, x_2, d1, h1});
 		
-		const jointsPos = [];
-		jointsPos[0] = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getCenterGeometry({geometry: gs[10]});
-		jointsPos[1] = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getCenterGeometry({geometry: gs[15]});
-		jointsPos[2] = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getCenterGeometry({geometry: gs[11]});
-		jointsPos[3] = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getCenterGeometry({geometry: gs[16]});
-		
+		const jointsPos = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getArrPosCenterG({arrG: [gs[10], gs[15], gs[11], gs[16]]});		
 
 		const geometry = new THREE.Geometry();
 		for ( let i = 0; i < gs.length; i++ )

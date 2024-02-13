@@ -5,24 +5,18 @@ class MyHalfSgon
 	
 	crObj({ m1, r1, r2 })
 	{
-		const geometry = this.crGeometry({ m1, r1, r2 });		
+		const { geometry, jointsPos } = this.crGeometry({ m1, r1, r2 });		
 		
-		geometry.computeBoundingBox();
-		const bound = geometry.boundingBox;	
-		const offsetX = bound.max.x - bound.min.x;
+		const offsetCenterPos = myWarmFloor.myObjsWfInit.myCalcFormObjWf.centerAlignGeometry({geometry});
 		
 		const mats = myWarmFloor.myObjsWfInit.myListMaterialsWf.getListmat();
 		const material = [mats.metal_1, mats.rezba_1, mats.metal_1_edge];
-		
-		const group = [];		
+				
 		const object = new THREE.Mesh(geometry, material);
-		group.push(object);
 		
-		//poM3.pos.x += offsetX;
-		//poM4.pos.x += offsetX;
-
+		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: object});
 		
-		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: group});
+		this.crJoint({obj, jointsPos, offsetCenterPos});
 		
 		return obj;
 	}
@@ -34,8 +28,8 @@ class MyHalfSgon
 		const d2 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeRezba({size: r2, side: 'n'});	
 		
 		// доп. расчеты 
-		const x_1 = 0.02 * d1.n*20;
-		const x_2 = 0.02 * d2.n*20;
+		const x_1 = 0.015 * d1.n*20;
+		const x_2 = 0.015 * d2.n*20;
 		
 		const x_3 = 0.002;	// тольщина кольца
 		const x_4 = 0.002;	// тольщина кольца
@@ -56,14 +50,35 @@ class MyHalfSgon
 		gs[5] = this.crDetail_6({x_4, x_5, x_1R, d2});
 		gs[6] = this.crDetail_7({x_2, x_4, x_5, x_1R, d2});
 		
-
+		const jointsPos = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getArrPosCenterG({arrG: [gs[0], gs[6]]});
+		
 		const geometry = new THREE.Geometry();		
 		for ( let i = 0; i < gs.length; i++ )
 		{
 			geometry.merge(gs[i], gs[i].matrix, 0);
 		}
 
-		return geometry;
+		return { geometry, jointsPos };
+	}
+
+
+	// создание стыков и добавление в объект
+	crJoint({obj, jointsPos, offsetCenterPos})
+	{
+		for ( let i = 0; i < jointsPos.length; i++ )
+		{
+			jointsPos[i].sub(offsetCenterPos);
+		}
+
+		const jointsData = [];
+		jointsData.push({objParent: obj, id: 0, name: '', pos: jointsPos[0], rot: new THREE.Vector3(0, Math.PI, 0)});
+		jointsData.push({objParent: obj, id: 1, name: '', pos: jointsPos[1], rot: new THREE.Vector3(0, 0, 0)});
+
+
+		for ( let i = 0; i < jointsData.length; i++ )
+		{
+			myWarmFloor.myObjsWfInit.myCalcFormObjWf.createJointPoint(jointsData[i]);
+		}						
 	}	
 	
 	
