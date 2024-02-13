@@ -3,18 +3,18 @@
 class MyObjsWfInit
 {
 	myCalcFormObjWf;
+	myJointPointWf;
 	myListObjsWf;
 	myListMaterialsWf;
-
+	
 	
 	constructor()
 	{
 		this.myCalcFormObjWf = new MyCalcFormObjWf();
+		this.myJointPointWf = new MyJointPointWf();
 		
 		this.myListObjsWf = new MyListObjsWf();
 		this.myListMaterialsWf = new MyListMaterialsWf();
-		
-
 	}
 
 
@@ -98,7 +98,7 @@ class MyObjsWfInit
 		
 		if(obj) 
 		{
-			obj.material.visible = false;
+			//obj.material.visible = false;
 			obj.userData.tag = 'objWf';
 			
 			// получаем начальные размеры объекта, что потом можно было масштабировать от начальных размеров
@@ -109,7 +109,18 @@ class MyObjsWfInit
 				var y = obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y;
 				var z = obj.geometry.boundingBox.max.z - obj.geometry.boundingBox.min.z;	
 				obj.userData.box = new THREE.Vector3(x, y, z);
-			}			
+			}
+
+
+			// добавляем к объекту разъемы
+			const jointsData = obj.userData.jointsData; 
+			if(jointsData)
+			{
+				for ( let i = 0; i < jointsData.length; i++ )
+				{
+					this.myJointPointWf.crJointPoint({objParent: obj, ...jointsData[i]});
+				}							
+			}
 
 			//if(!id) { id = countId; countId++; }	
 			//obj.userData.id = id;	

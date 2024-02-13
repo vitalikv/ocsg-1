@@ -16,7 +16,7 @@ class MySharKranVV
 		
 		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: object});
 		
-		this.crJoint({obj, jointsPos, offsetCenterPos});
+		obj.userData.jointsData = this.crJoint({jointsPos, offsetCenterPos});
 		
 		return obj;
 	}
@@ -72,8 +72,8 @@ class MySharKranVV
 	}
 
 
-	// создание стыков и добавление в объект
-	crJoint({obj, jointsPos, offsetCenterPos})
+	// инфа для создание стыков(разъемов)
+	crJoint({jointsPos, offsetCenterPos})
 	{
 		for ( let i = 0; i < jointsPos.length; i++ )
 		{
@@ -81,14 +81,10 @@ class MySharKranVV
 		}
 
 		const jointsData = [];
-		jointsData.push({objParent: obj, id: 0, name: '', pos: jointsPos[0], rot: new THREE.Vector3(0, Math.PI, 0)});
-		jointsData.push({objParent: obj, id: 1, name: '', pos: jointsPos[1], rot: new THREE.Vector3(0, 0, 0)});
+		jointsData.push({id: 0, name: '', pos: jointsPos[0], rot: new THREE.Vector3(0, Math.PI, 0)});
+		jointsData.push({id: 1, name: '', pos: jointsPos[1], rot: new THREE.Vector3(0, 0, 0)});
 
-
-		for ( let i = 0; i < jointsData.length; i++ )
-		{
-			myWarmFloor.myObjsWfInit.myCalcFormObjWf.createJointPoint(jointsData[i]);
-		}						
+		return jointsData; 						
 	}
 	
 	

@@ -22,7 +22,7 @@ class MyRadiatorAl
 				
 		const obj = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getBoundObject_1({obj: object});
 		
-		this.crJoint({obj, jointsPos, offsetCenterPos, count, offsetX});
+		obj.userData.jointsData = this.crJoint({jointsPos, offsetCenterPos, count, offsetX});
 		
 		return obj;
 	}
@@ -90,30 +90,26 @@ class MyRadiatorAl
 	}
 	
 	
-	// создание стыков и добавление в объект
-	crJoint({obj, jointsPos, offsetCenterPos, count, offsetX})
+	// инфа для создание стыков(разъемов)
+	crJoint({jointsPos, offsetCenterPos, count, offsetX})
 	{
 		for ( let i = 0; i < jointsPos.length; i++ )
 		{
 			jointsPos[i].sub(offsetCenterPos);
 		}
-		
+
 		// смещаем правые стыки в зависимости от кол-во секций
 		jointsPos[2].x += offsetX * (count - 1);
 		jointsPos[3].x += offsetX * (count - 1);
 
 		const jointsData = [];
-		jointsData.push({objParent: obj, id: 0, name: '', pos: jointsPos[0], rot: new THREE.Vector3(0, Math.PI, 0)});
-		jointsData.push({objParent: obj, id: 1, name: '', pos: jointsPos[1], rot: new THREE.Vector3(0, Math.PI, 0)});
-		jointsData.push({objParent: obj, id: 2, name: '', pos: jointsPos[2]});
-		jointsData.push({objParent: obj, id: 3, name: '', pos: jointsPos[3]});
+		jointsData.push({id: 0, name: '', pos: jointsPos[0], rot: new THREE.Vector3(0, Math.PI, 0)});
+		jointsData.push({id: 1, name: '', pos: jointsPos[1], rot: new THREE.Vector3(0, Math.PI, 0)});
+		jointsData.push({id: 2, name: '', pos: jointsPos[2]});
+		jointsData.push({id: 3, name: '', pos: jointsPos[3]});
 
-
-		for ( let i = 0; i < jointsData.length; i++ )
-		{
-			myWarmFloor.myObjsWfInit.myCalcFormObjWf.createJointPoint(jointsData[i]);
-		}						
-	}
+		return jointsData; 						
+	}	
 	
 	
 	// центрально ребро сзади

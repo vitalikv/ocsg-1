@@ -231,6 +231,7 @@
 	<script src="<?=$path?>new/warmFloor/createObj/myListMaterialsWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/myObjWfMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/myCalcFormObjWf.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/createObj/jointPoint/myJointPointWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/radiator/myRadiatorAl.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/sharKran/mySharKranNN.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/sharKran/mySharKranVV.js?<?=$vrs?>"></script>
