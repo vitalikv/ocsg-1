@@ -52,6 +52,7 @@ class MyListObjsWf
 				result = {};
 				result.list = this.listParams[i].list;
 				result.method = this.listParams[i].method;
+				result.typeObj = this.listParams[i].typeObj;
 				break;
 			}
 		}
@@ -87,7 +88,7 @@ class MyListObjsWf
 		return {typeObj, list: arr, method: new MyRadiatorAl()};
 	}
 	
-	
+	// шаровой кран 
 	getSharKranNN({typeObj})
 	{
 		const arr = [];
@@ -106,7 +107,7 @@ class MyListObjsWf
 		return {typeObj, list: arr, method: new MySharKranNN()};
 	}
 
-
+	// шаровой кран
 	getSharKranVV({typeObj})
 	{
 		const arr = [];
@@ -125,7 +126,7 @@ class MyListObjsWf
 		return {typeObj, list: arr, method: new MySharKranVV()};
 	}	
 	
-	
+	// шаровой кран
 	getSharKranVN({typeObj})
 	{
 		const arr = [];
@@ -144,7 +145,7 @@ class MyListObjsWf
 		return {typeObj, list: arr, method: new MySharKranVN()};
 	}
 
-
+	// шаровой кран
 	getSharKranSgon({typeObj})
 	{
 		const arr = [];
@@ -161,7 +162,7 @@ class MyListObjsWf
 		return {typeObj, list: arr, method: new MySharKranSgon()};
 	}
 
-
+	// полусгон
 	getHalfSgon({typeObj})
 	{
 		const arr = [];

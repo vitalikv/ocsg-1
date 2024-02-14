@@ -1164,7 +1164,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	if(1===2) myPanelR.myTabsR.activeTab({id: 0});
 	
-	if(1===1) myWarmFloor.myObjsWfInit.testListObjs();
+	if(1===1) myWarmFloor.myObjsWfInit.myTestObjsWf.showObjs();
 	
 	animate();
 	renderCamera();	

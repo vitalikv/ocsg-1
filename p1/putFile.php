@@ -115,6 +115,7 @@ new/warmFloor/createObj/myListObjsWf.js
 new/warmFloor/createObj/myListMaterialsWf.js
 new/warmFloor/createObj/myObjWfMove.js
 new/warmFloor/createObj/myCalcFormObjWf.js
+new/warmFloor/createObj/myTestObjsWf.js
 new/warmFloor/createObj/jointPoint/myJointPointWf.js
 new/warmFloor/createObj/radiator/myRadiatorAl.js
 new/warmFloor/createObj/sharKran/mySharKranNN.js

@@ -7,6 +7,8 @@ class MyObjsWfInit
 	myListObjsWf;
 	myListMaterialsWf;
 	
+	myTestObjsWf;
+	
 	
 	constructor()
 	{
@@ -15,81 +17,11 @@ class MyObjsWfInit
 		
 		this.myListObjsWf = new MyListObjsWf();
 		this.myListMaterialsWf = new MyListMaterialsWf();
+		
+		this.myTestObjsWf = new MyTestObjsWf();
 	}
 
 
-	// добавляем объекты в сцену (для теста, чтобы увидить кол-во и как выглядят)
-	testListObjs()
-	{
-		let obj = null;
-		let result = null;
-		
-		result = this.myListObjsWf.getListByType({typeObj: 'radiator_al_1'});
-		
-		let offset = new THREE.Vector3(1, 1, 0);
-		for(let i = 0; i < result.list.length; i++)
-		{
-			obj = this.getObjWf({typeObj: 'radiator_al_1', lotid: i});
-			obj.position.copy(offset);
-			offset.z -= 0.2;
-		}
-		
-		
-		result = this.myListObjsWf.getListByType({typeObj: 'shar_kran_nn'});
-		
-		offset = new THREE.Vector3(0, 1, 0);
-		for(let i = 0; i < result.list.length; i++)
-		{
-			obj = this.getObjWf({typeObj: 'shar_kran_nn', lotid: i});
-			obj.position.copy(offset);
-			offset.z -= 0.1;
-		}
-
-
-		result = this.myListObjsWf.getListByType({typeObj: 'shar_kran_vv'});
-		
-		offset = new THREE.Vector3(-0.2, 1, 0);
-		for(let i = 0; i < result.list.length; i++)
-		{
-			obj = this.getObjWf({typeObj: 'shar_kran_vv', lotid: i});
-			obj.position.copy(offset);
-			offset.z -= 0.1;
-		}
-
-
-		result = this.myListObjsWf.getListByType({typeObj: 'shar_kran_vn'});
-		
-		offset = new THREE.Vector3(-0.4, 1, 0);
-		for(let i = 0; i < result.list.length; i++)
-		{
-			obj = this.getObjWf({typeObj: 'shar_kran_vn', lotid: i});
-			obj.position.copy(offset);
-			offset.z -= 0.1;
-		}
-
-
-		result = this.myListObjsWf.getListByType({typeObj: 'shar_kran_sgon'});
-		
-		offset = new THREE.Vector3(-0.6, 1, 0);
-		for(let i = 0; i < result.list.length; i++)
-		{
-			obj = this.getObjWf({typeObj: 'shar_kran_sgon', lotid: i});
-			obj.position.copy(offset);
-			offset.z -= 0.1;
-		}
-
-
-		result = this.myListObjsWf.getListByType({typeObj: 'half_sgon'});
-		
-		offset = new THREE.Vector3(-0.8, 1, 0);
-		for(let i = 0; i < result.list.length; i++)
-		{
-			obj = this.getObjWf({typeObj: 'half_sgon', lotid: i});
-			obj.position.copy(offset);
-			offset.z -= 0.1;
-		}		
-	}
-	
 	
 	// добавляем объект в сцену
 	getObjWf({typeObj, lotid})
