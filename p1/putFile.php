@@ -124,6 +124,7 @@ new/warmFloor/createObj/sharKran/mySharKranVN.js
 new/warmFloor/createObj/sharKran/mySharKranSgon.js
 new/warmFloor/createObj/sharKran/myHalfSgon.js
 new/warmFloor/createObj/mpl/perehod/myMplPerehodP.js
+new/warmFloor/createObj/mpl/perehod/myMplPerehodPR.js
 ';
 
 $arrF = array();

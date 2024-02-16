@@ -240,6 +240,7 @@
 	<script src="<?=$path?>new/warmFloor/createObj/sharKran/mySharKranSgon.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/sharKran/myHalfSgon.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/mpl/perehod/myMplPerehodP.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/createObj/mpl/perehod/myMplPerehodPR.js?<?=$vrs?>"></script>
 	
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 

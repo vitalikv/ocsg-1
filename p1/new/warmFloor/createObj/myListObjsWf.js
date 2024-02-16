@@ -17,6 +17,7 @@ class MyListObjsWf
 		this.listParams.push(this.getSharKranSgon({typeObj: 'shar_kran_sgon'}));
 		this.listParams.push(this.getHalfSgon({typeObj: 'half_sgon'}));
 		this.listParams.push(this.getMplPerehodP({typeObj: 'mpl_perehod_p'}));
+		this.listParams.push(this.getMplPerehodPR({typeObj: 'mpl_perehod_pr'}));
 	}
 	
 	
@@ -181,7 +182,7 @@ class MyListObjsWf
 	}
 
 
-	// соединитель (металлопластик)
+	// соединитель пресс-пресс (металлопластик)
 	getMplPerehodP({typeObj})
 	{
 		const arr = [];
@@ -198,12 +199,54 @@ class MyListObjsWf
 		arr[arr.length] = { r1: '32', r3: '20', m1: 0.062 };
 		arr[arr.length] = { r1: '32', r3: '26', m1: 0.063 };
 		
-		for(let i = 0; i < arr.length; i++) arr[i].nameRus = 'Соединитель '+arr[i].r1+'x'+arr[i].r3;
+		for(let i = 0; i < arr.length; i++) 
+		{
+			arr[i].nameRus = (arr[i].r1===arr[i].r3) ? 'Соединитель '+arr[i].r1 : 'Соединитель '+arr[i].r1+'x'+arr[i].r3;
+		}
 		
 		for(let i = 0; i < arr.length; i++) arr[i].typeObj = typeObj;	
 		
 		
 		return {typeObj, list: arr, method: new MyMplPerehodP()};
+	}
+
+
+	// соединитель пресс-резьба (металлопластик)
+	getMplPerehodPR({typeObj})
+	{
+		const arr = [];
+		arr[arr.length] = { side: 'n', r1: '16', r2: '1/2', m1: 0.048 };
+		arr[arr.length] = { side: 'n', r1: '16', r2: '3/4', m1: 0.049 };
+		arr[arr.length] = { side: 'n', r1: '20', r2: '1/2', m1: 0.048 };
+		arr[arr.length] = { side: 'n', r1: '20', r2: '3/4', m1: 0.049 };
+		arr[arr.length] = { side: 'n', r1: '26', r2: '3/4', m1: 0.050 };
+		arr[arr.length] = { side: 'n', r1: '26', r2: '1', m1: 0.052 };
+		arr[arr.length] = { side: 'n', r1: '32', r2: '1', m1: 0.052 };
+		arr[arr.length] = { side: 'n', r1: '32', r2: '1 1/4', m1: 0.057 };
+		arr[arr.length] = { side: 'n', r1: '40', r2: '1', m1: 0.060 };
+		arr[arr.length] = { side: 'n', r1: '40', r2: '1 1/4', m1: 0.060 };
+		
+		arr[arr.length] = { side: 'v', r1: '16', r2: '1/2', m1: 0.048 };
+		arr[arr.length] = { side: 'v', r1: '16', r2: '3/4', m1: 0.049 };
+		arr[arr.length] = { side: 'v', r1: '20', r2: '1/2', m1: 0.048 };
+		arr[arr.length] = { side: 'v', r1: '20', r2: '3/4', m1: 0.049 };
+		arr[arr.length] = { side: 'v', r1: '26', r2: '3/4', m1: 0.050 };
+		arr[arr.length] = { side: 'v', r1: '26', r2: '1', m1: 0.052 };
+		arr[arr.length] = { side: 'v', r1: '32', r2: '1', m1: 0.052 };
+		arr[arr.length] = { side: 'v', r1: '32', r2: '1 1/4', m1: 0.057 };
+		arr[arr.length] = { side: 'v', r1: '40', r2: '1', m1: 0.060 };
+		arr[arr.length] = { side: 'v', r1: '40', r2: '1 1/4', m1: 0.060 };
+		
+		for(let i = 0; i < arr.length; i++) 
+		{
+			const vh = (arr[i].side === 'v') ? '(в)' : '(н)';
+			arr[i].nameRus = 'Соединитель '+arr[i].r1+'x'+arr[i].r2+vh;
+		}
+		
+		for(let i = 0; i < arr.length; i++) arr[i].typeObj = typeObj;	
+		
+		
+		return {typeObj, list: arr, method: new MyMplPerehodPR()};
 	}	
 }
 
