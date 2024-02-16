@@ -37,7 +37,9 @@ class MyListMaterialsWf
 		this.listMat.red_1 = new THREE.MeshStandardMaterial({ color: 0xbf2502, lightMap: lightMap_1, side: THREE.DoubleSide });
 		
 		this.listMat.red_1_edge = this.listMat.red_1.clone();
-		this.listMat.red_1_edge.flatShading = true;		
+		this.listMat.red_1_edge.flatShading = true;	
+
+		this.listMat.bronz_1 = new THREE.MeshStandardMaterial({ color: 0xb87c23, lightMap: lightMap_1, side: THREE.DoubleSide, metalness: 0.1, roughness: 0.5 });
 	}		
 
 

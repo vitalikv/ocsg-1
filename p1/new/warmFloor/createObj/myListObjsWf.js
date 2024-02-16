@@ -16,6 +16,7 @@ class MyListObjsWf
 		this.listParams.push(this.getSharKranVN({typeObj: 'shar_kran_vn'}));
 		this.listParams.push(this.getSharKranSgon({typeObj: 'shar_kran_sgon'}));
 		this.listParams.push(this.getHalfSgon({typeObj: 'half_sgon'}));
+		this.listParams.push(this.getMplPerehodP({typeObj: 'mpl_perehod_p'}));
 	}
 	
 	
@@ -177,6 +178,32 @@ class MyListObjsWf
 		
 		
 		return {typeObj, list: arr, method: this.myHalfSgon};
+	}
+
+
+	// соединитель (металлопластик)
+	getMplPerehodP({typeObj})
+	{
+		const arr = [];
+		arr[arr.length] = { r1: '16', r3: '16', m1: 0.060 };
+		arr[arr.length] = { r1: '20', r3: '20', m1: 0.060 };
+		arr[arr.length] = { r1: '26', r3: '26', m1: 0.062 };
+		arr[arr.length] = { r1: '32', r3: '32', m1: 0.063 };
+		arr[arr.length] = { r1: '40', r3: '40', m1: 0.079 };
+		
+		arr[arr.length] = { r1: '20', r3: '16', m1: 0.060 };
+		arr[arr.length] = { r1: '26', r3: '16', m1: 0.061 };
+		arr[arr.length] = { r1: '26', r3: '20', m1: 0.061 };
+		arr[arr.length] = { r1: '32', r3: '16', m1: 0.062 };
+		arr[arr.length] = { r1: '32', r3: '20', m1: 0.062 };
+		arr[arr.length] = { r1: '32', r3: '26', m1: 0.063 };
+		
+		for(let i = 0; i < arr.length; i++) arr[i].nameRus = 'Соединитель '+arr[i].r1+'x'+arr[i].r3;
+		
+		for(let i = 0; i < arr.length; i++) arr[i].typeObj = typeObj;	
+		
+		
+		return {typeObj, list: arr, method: new MyMplPerehodP()};
 	}	
 }
 
