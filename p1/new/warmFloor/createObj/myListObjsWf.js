@@ -19,6 +19,7 @@ class MyListObjsWf
 		this.listParams.push(this.getMplPerehodP({typeObj: 'mpl_perehod_p'}));
 		this.listParams.push(this.getMplPerehodPR({typeObj: 'mpl_perehod_pr'}));
 		this.listParams.push(this.getMplTroinikP({typeObj: 'mpl_troinik_p'}));
+		this.listParams.push(this.getMplTroinikPR({typeObj: 'mpl_troinik_pr'}));
 	}
 	
 	
@@ -293,6 +294,45 @@ class MyListObjsWf
 		
 		return {typeObj, list: arr, method: new MyMplTroinikP()};
 	}		
+
+
+	// тройник пресс (металлопластик)
+	getMplTroinikPR({typeObj})
+	{
+		const arr = [];		
+		arr[arr.length] = { side: 'n', r1: '16', r2: '1/2', r3: '16', m1: 0.083, m2: 0.028 };
+		arr[arr.length] = { side: 'n', r1: '20', r2: '1/2', r3: '20', m1: 0.088, m2: 0.029 };
+		arr[arr.length] = { side: 'n', r1: '20', r2: '3/4', r3: '20', m1: 0.088, m2: 0.032 };
+		arr[arr.length] = { side: 'n', r1: '26', r2: '1/2', r3: '26', m1: 0.097, m2: 0.032 };
+		arr[arr.length] = { side: 'n', r1: '26', r2: '3/4', r3: '26', m1: 0.097, m2: 0.034 };
+		arr[arr.length] = { side: 'n', r1: '26', r2: '1', r3: '26', m1: 0.097, m2: 0.037 };		
+		arr[arr.length] = { side: 'n', r1: '32', r2: '3/4', r3: '32', m1: 0.104, m2: 0.035 };
+		arr[arr.length] = { side: 'n', r1: '32', r2: '1', r3: '32', m1: 0.104, m2: 0.039 };		
+
+		arr[arr.length] = { side: 'v', r1: '16', r2: '1/2', r3: '16', m1: 0.083, m2: 0.028 };
+		arr[arr.length] = { side: 'v', r1: '20', r2: '1/2', r3: '20', m1: 0.088, m2: 0.029 };
+		arr[arr.length] = { side: 'v', r1: '20', r2: '3/4', r3: '20', m1: 0.088, m2: 0.032 };
+		arr[arr.length] = { side: 'v', r1: '26', r2: '1/2', r3: '26', m1: 0.097, m2: 0.032 };
+		arr[arr.length] = { side: 'v', r1: '26', r2: '3/4', r3: '26', m1: 0.097, m2: 0.034 };
+		arr[arr.length] = { side: 'v', r1: '26', r2: '1', r3: '26', m1: 0.097, m2: 0.037 };		
+		arr[arr.length] = { side: 'v', r1: '32', r2: '3/4', r3: '32', m1: 0.104, m2: 0.035 };
+		arr[arr.length] = { side: 'v', r1: '32', r2: '1', r3: '32', m1: 0.104, m2: 0.039 };	
+		arr[arr.length] = { side: 'v', r1: '32', r2: '1 1/4', r3: '32', m1: 0.122, m2: 0.046 };
+		arr[arr.length] = { side: 'v', r1: '40', r2: '1', r3: '40', m1: 0.124, m2: 0.046 };
+		
+		for(let i = 0; i < arr.length; i++) 
+		{
+			const vh = (arr[i].side === 'v') ? '(в)' : '(н)';
+			arr[i].nameRus = 'Тройник '+arr[i].r1+'x'+arr[i].r2+vh+'x'+arr[i].r3;
+		}
+		
+		for(let i = 0; i < arr.length; i++) arr[i].typeObj = typeObj;	
+		
+		
+		return {typeObj, list: arr, method: new MyMplTroinikPR()};
+	}		
+
+
 }
 
 

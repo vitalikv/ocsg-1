@@ -1,16 +1,16 @@
 
-// тройник (пресс)
-class MyMplTroinikP
+// тройник (пресс-резьба)
+class MyMplTroinikPR
 {
 	
-	crObj({ m1, m2, r1, r2, r3 })
+	crObj({ m1, m2, r1, r2, r3, side })
 	{
-		const { geometry, jointsPos } = this.crGeometry({ m1, m2, r1, r2, r3 });		
+		const { geometry, jointsPos } = this.crGeometry({ m1, m2, r1, r2, r3, side });		
 		
 		const offsetCenterPos = myWarmFloor.myObjsWfInit.myCalcFormObjWf.centerAlignGeometry({geometry});
 		
 		const mats = myWarmFloor.myObjsWfInit.myListMaterialsWf.getListmat();
-		const material = [mats.bronz_1, mats.red_1, mats.metal_1];
+		const material = [mats.bronz_1, mats.red_1, mats.metal_1, mats.bronz_1_edge, mats.rezba_2];
 				
 		const object = new THREE.Mesh(geometry, material);
 		
@@ -22,29 +22,45 @@ class MyMplTroinikP
 	}
 	
 	
-	crGeometry({ m1, m2, r1, r2, r3 })
-	{
+	crGeometry({ m1, m2, r1, r2, r3, side })
+	{		
 		const d1 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeTubeMP({size: r1});	// левый разъем
-		const d2 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeTubeMP({size: r2}); 	// верхний
-		const d3 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeTubeMP({size: r3});	// правый
+		const d3 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeTubeMP({size: r3});	// правый	
+		
+		let d2 = 0;	
+		let matRezba = [];
+		let txt = '(в)';
+			
+		// доп. расчеты	
+		if(side === 'v') 
+		{ 
+			d2 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeRezba({size: r2, side: 'v'});
+			txt = '(в)';
+			matRezba = [0, 4, 0, 0];
+		}
+		else 
+		{ 
+			d2 = myWarmFloor.myObjsWfInit.myCalcFormObjWf.sizeRezba({size: r2, side: 'n'});
+			txt = '(н)';
+			matRezba = [4, 0, 0, 0];
+		}
 		
 		let dc = d1;
 		if(dc.n < d2.n) dc = d2;
-		if(dc.n < d3.n) dc = d3;		
+		if(dc.n < d3.n) dc = d3;	
 		
-		// доп. расчеты		
 		let w1 = 0.030 * d1.n * 30;
-		let w2 = 0.030 * d2.n * 30;
+		const w2 = 0.012;
 		let w3 = 0.030 * d3.n * 30;
 		
 		if(w1 < 0.025) { w1 = 0.025; }
-		if(w2 < 0.025) { w2 = 0.025; }
 		if(w3 < 0.025) { w3 = 0.025; }
 		
 		const s1 = (m1/2 - w1)/2;
 		const s2 = (m2 - w2)/2;
 		const s3 = (m1/2 - w3)/2;
 		const w12 = 0.0025;
+		const w22 = 0.007;
 		
 		const h1 = 0.005;
 		const h2 = 0.0025;
@@ -57,7 +73,7 @@ class MyMplTroinikP
 		tb1.v = d1.n/2 - (0.005 * d1.n * 30);
 		
 		tb2.n = d2.n/2;
-		tb2.v = d2.n/2 - (0.005 * d2.n * 30);
+		tb2.v = d2.v/2;
 
 		tb3.n = d3.n/2;
 		tb3.v = d3.n/2 - (0.005 * d3.n * 30);			
@@ -79,12 +95,10 @@ class MyMplTroinikP
 		
 		gs[12] = this.crDetail_13({s2, dc, d2});
 		gs[13] = this.crDetail_14({s2, d2});
-		gs[14] = this.crDetail_15({w12, d2, tb2, s2, h2});
-		gs[15] = this.crDetail_16({w12, d2, tb2, s2, h1});
-		gs[16] = this.crDetail_17({w2, tb2, s2});
-		gs[17] = this.crDetail_18({w2, d2, s2});
+		gs[14] = this.crDetail_15({w22, d2, tb2, s2});
+		gs[15] = this.crDetail_16({w2, d2, s2, matRezba});
 		
-		const jointsPos = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getArrPosCenterG({arrG: [gs[0], gs[17], gs[11]]});
+		const jointsPos = myWarmFloor.myObjsWfInit.myCalcFormObjWf.getArrPosCenterG({arrG: [gs[0], gs[15], gs[11]]});
 		
 		const geometry = new THREE.Geometry();		
 		for ( let i = 0; i < gs.length; i++ )
@@ -259,49 +273,29 @@ class MyMplTroinikP
 		return geometry;		
 	}	
 
-	// красная заглушка 1 часть
-	crDetail_15({w12, d2, tb2, s2, h2})
+	// гайка
+	crDetail_15({w22, d2, tb2, s2})
 	{
-		const inf = { dlina: w12, diameter_nr: d2.n + h2, diameter_vn: tb2.n, ind: [1, 1, 1, 1] };
-		inf.pos = { x: 0, y: s2*2 + w12/2, z: 0 };
+		const inf = { dlina: w22, diameter_nr: d2.n + 0.01, diameter_vn: tb2.n, edge_nr: 6, ind: [3, 0, 0, 0] };
+		inf.pos = { x: 0, y: s2*2 - w22/2, z: 0 };
 		inf.rot = { x: 0, y: Math.PI, z: Math.PI/2 };
 		const geometry = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crFormSleeve(inf);			
 
 		return geometry;		
 	}	
 	
-	// красная заглушка 2 часть
-	crDetail_16({w12, d2, tb2, s2, h1})
+	// резьба
+	crDetail_16({w2, d2, s2, matRezba})
 	{
-		const inf = { dlina: w12, diameter_nr: d2.n + h1, diameter_vn: tb2.n, ind: [1, 1, 1, 1] };
-		inf.pos = { x: 0, y: s2*2 + w12 + w12/2, z: 0 };
-		inf.rot = { x: 0, y: Math.PI, z: Math.PI/2 };
-		const geometry = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crFormSleeve(inf);			
-
-		return geometry;		
-	}
-
-	// соединитель 1 часть
-	crDetail_17({w2, tb2, s2})
-	{
-		const inf = { dlina: w2, diameter_nr: tb2.n, diameter_vn: tb2.v };
-		inf.pos = { x: 0, y: s2*2 + w2/2, z: 0 };
-		inf.rot = { x: 0, y: Math.PI, z: Math.PI/2 };
-		const geometry = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crFormSleeve(inf);			
-
-		return geometry;		
-	}	
-	
-	// соединитель 2 часть
-	crDetail_18({w2, d2, s2})
-	{
-		const inf = { dlina: w2, diameter_nr: d2.n, diameter_vn: d2.v, ind: [2, 2, 2, 2] };
+		const inf = { dlina: w2, diameter_nr: d2.n, diameter_vn: d2.v, ind: matRezba };
 		inf.pos = { x: 0, y: s2*2 + w2/2, z: 0 };
 		inf.rot = { x: 0, y: Math.PI, z: Math.PI/2 };
 		const geometry = myWarmFloor.myObjsWfInit.myCalcFormObjWf.crFormSleeve(inf);			
 
 		return geometry;		
 	}
+
+
 }
 
 
