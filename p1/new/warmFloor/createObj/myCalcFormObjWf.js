@@ -277,7 +277,6 @@ class MyCalcFormObjWf
 	}
 
 
-
 	// круг с отверстием или без отверстия
 	crCircle_2(cdm)
 	{
@@ -324,6 +323,22 @@ class MyCalcFormObjWf
 			
 		return geometry;
 	}
+
+
+	// сфера или полусфера
+	crSphere_2({r = 1, cutRad = 0, rotX = 0, rotY = 0, rotZ = 0, matIndex = 0})
+	{		
+		const geometry = new THREE.SphereGeometry( r, 32, 32, 0, cutRad );
+		
+		if(rotX) { geometry.rotateX(rotX); }
+		if(rotY) { geometry.rotateY(rotY); }
+		if(rotZ) { geometry.rotateZ(rotZ); }
+
+		for(let i = 0; i < geometry.faces.length; i++){ geometry.faces[i].materialIndex = matIndex; }
+
+		return geometry;	
+	}
+
 
 	upUvs_5( geometry )
 	{	

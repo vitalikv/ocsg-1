@@ -127,6 +127,7 @@ new/warmFloor/createObj/mpl/perehod/myMplPerehodP.js
 new/warmFloor/createObj/mpl/perehod/myMplPerehodPR.js
 new/warmFloor/createObj/mpl/troinik/myMplTroinikP.js
 new/warmFloor/createObj/mpl/troinik/myMplTroinikPR.js
+new/warmFloor/createObj/mpl/ugol/myMplUgolP.js
 ';
 
 $arrF = array();

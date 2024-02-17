@@ -243,6 +243,7 @@
 	<script src="<?=$path?>new/warmFloor/createObj/mpl/perehod/myMplPerehodPR.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/mpl/troinik/myMplTroinikP.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/mpl/troinik/myMplTroinikPR.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/createObj/mpl/ugol/myMplUgolP.js?<?=$vrs?>"></script>
 	
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 

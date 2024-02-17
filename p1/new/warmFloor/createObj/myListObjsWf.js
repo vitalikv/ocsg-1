@@ -20,6 +20,7 @@ class MyListObjsWf
 		this.listParams.push(this.getMplPerehodPR({typeObj: 'mpl_perehod_pr'}));
 		this.listParams.push(this.getMplTroinikP({typeObj: 'mpl_troinik_p'}));
 		this.listParams.push(this.getMplTroinikPR({typeObj: 'mpl_troinik_pr'}));
+		this.listParams.push(this.getMplUgolP({typeObj: 'mpl_ugol_p'}));
 	}
 	
 	
@@ -331,6 +332,25 @@ class MyListObjsWf
 		
 		return {typeObj, list: arr, method: new MyMplTroinikPR()};
 	}		
+
+
+	// угол пресс-пресс (металлопластик)
+	getMplUgolP({typeObj})
+	{
+		const arr = [];
+		arr[arr.length] = { r1: '16', m1: 0.042 };
+		arr[arr.length] = { r1: '20', m1: 0.044 };
+		arr[arr.length] = { r1: '26', m1: 0.049 };
+		arr[arr.length] = { r1: '32', m1: 0.052 };
+		arr[arr.length] = { r1: '40', m1: 0.063 };
+		
+		for(let i = 0; i < arr.length; i++) arr[i].nameRus = 'Угол '+arr[i].r1;
+		
+		for(let i = 0; i < arr.length; i++) arr[i].typeObj = typeObj;	
+		
+		
+		return {typeObj, list: arr, method: new MyMplUgolP()};
+	}
 
 
 }

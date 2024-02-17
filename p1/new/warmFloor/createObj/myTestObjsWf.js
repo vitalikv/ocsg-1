@@ -45,7 +45,10 @@ class MyTestObjsWf
 		this.addObjs({result, offset: new THREE.Vector3(-1.4, 1, 0), offsetZ: 0.1});
 
 		result = this.myListObjsWf.getListByType({typeObj: 'mpl_troinik_pr'});
-		this.addObjs({result, offset: new THREE.Vector3(-1.6, 1, 0), offsetZ: 0.1});		
+		this.addObjs({result, offset: new THREE.Vector3(-1.6, 1, 0), offsetZ: 0.1});
+
+		result = this.myListObjsWf.getListByType({typeObj: 'mpl_ugol_p'});
+		this.addObjs({result, offset: new THREE.Vector3(-1.8, 1, 0), offsetZ: 0.1});		
 	}
 	
 	
