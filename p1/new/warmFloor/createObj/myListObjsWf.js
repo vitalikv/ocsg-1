@@ -1,5 +1,5 @@
 
-
+// класс с параметрами объект и классами их создания
 class MyListObjsWf
 {
 	listParams = [];
@@ -21,6 +21,7 @@ class MyListObjsWf
 		this.listParams.push(this.getMplTroinikP({typeObj: 'mpl_troinik_p'}));
 		this.listParams.push(this.getMplTroinikPR({typeObj: 'mpl_troinik_pr'}));
 		this.listParams.push(this.getMplUgolP({typeObj: 'mpl_ugol_p'}));
+		this.listParams.push(this.getMplUgolPR({typeObj: 'mpl_ugol_pr'}));
 	}
 	
 	
@@ -351,7 +352,39 @@ class MyListObjsWf
 		
 		return {typeObj, list: arr, method: new MyMplUgolP()};
 	}
+	
+	
+	// угол пресс-резьба (металлопластик)
+	getMplUgolPR({typeObj})
+	{
+		const arr = [];
+		arr[arr.length] = { side: 'n', r1: '16', r2: '1/2', m1: 0.042, m2: 0.028 };		
+		arr[arr.length] = { side: 'n', r1: '16', r2: '3/4', m1: 0.043, m2: 0.030 };
+		arr[arr.length] = { side: 'n', r1: '20', r2: '1/2', m1: 0.044, m2: 0.029 };
+		arr[arr.length] = { side: 'n', r1: '20', r2: '3/4', m1: 0.044, m2: 0.032 };
+		arr[arr.length] = { side: 'n', r1: '26', r2: '3/4', m1: 0.049, m2: 0.034 };
+		arr[arr.length] = { side: 'n', r1: '26', r2: '1', m1: 0.049, m2: 0.037 };
+		arr[arr.length] = { side: 'n', r1: '32', r2: '1', m1: 0.051, m2: 0.039 };
 
+		arr[arr.length] = { side: 'v', r1: '16', r2: '1/2', m1: 0.042, m2: 0.028 };		
+		arr[arr.length] = { side: 'v', r1: '16', r2: '3/4', m1: 0.043, m2: 0.030 };
+		arr[arr.length] = { side: 'v', r1: '20', r2: '1/2', m1: 0.044, m2: 0.029 };
+		arr[arr.length] = { side: 'v', r1: '20', r2: '3/4', m1: 0.044, m2: 0.032 };
+		arr[arr.length] = { side: 'v', r1: '26', r2: '3/4', m1: 0.049, m2: 0.034 };
+		arr[arr.length] = { side: 'v', r1: '26', r2: '1', m1: 0.049, m2: 0.037 };
+		arr[arr.length] = { side: 'v', r1: '32', r2: '1', m1: 0.051, m2: 0.039 };
+		
+		for(let i = 0; i < arr.length; i++) 
+		{
+			const vh = (arr[i].side === 'v') ? '(в)' : '(н)';
+			arr[i].nameRus = 'Угол '+arr[i].r1+'x'+arr[i].r2+vh;
+		}
+		
+		for(let i = 0; i < arr.length; i++) arr[i].typeObj = typeObj;	
+		
+		
+		return {typeObj, list: arr, method: new MyMplUgolPR()};
+	}
 
 }
 

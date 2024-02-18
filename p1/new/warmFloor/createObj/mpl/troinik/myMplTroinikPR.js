@@ -29,7 +29,7 @@ class MyMplTroinikPR
 		
 		let d2 = 0;	
 		let matRezba = [];
-		let txt = '(в)';
+		let txt = '';
 			
 		// доп. расчеты	
 		if(side === 'v') 
