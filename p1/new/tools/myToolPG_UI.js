@@ -215,14 +215,14 @@ class MyToolPG_UI
 		}
 			
 		let pos = new THREE.Vector3(x.num, y.num, z.num);
-		let offset = pos.clone().sub(myToolPG.pos);
+		let offset = pos.clone().sub(myToolPG.getPos());
 		
 		myToolPG.myPivot.setPosPivot({pos: pos});
 		myToolPG.gizmo.userData.propGizmo({type: 'setPosGizmo', pos: pos});
 		myToolPG.scale.userData.propScale({type: 'setPosScale', pos: pos});
 		myToolPG.myPivot.moveObjs({obj: myToolPG.obj, arrO: myToolPG.arrO, offset});				
 		
-		myToolPG.pos = pos;		
+		myToolPG.setPos({pos});		
 		
 		this.setPosUI();
 		
@@ -260,7 +260,7 @@ class MyToolPG_UI
 		let q_Offset = q_New.clone().multiply(qt.clone().inverse());		
 				
 				
-		myToolPG.gizmo.userData.propGizmo({type: 'rotObjs', pos: myToolPG.pos, arrO: [myToolPG.obj], q_Offset});	// сначала обновляем rot obj
+		myToolPG.gizmo.userData.propGizmo({type: 'rotObjs', pos: myToolPG.getPos(), arrO: [myToolPG.obj], q_Offset});	// сначала обновляем rot obj
 		myToolPG.myGizmo.setRotGizmo();
 		myToolPG.myPivot.setRotPivot();
 		myToolPG.myScale.setRotScale({qt: q_New});
@@ -348,7 +348,7 @@ class MyToolPG_UI
 	// вставляем в input position
 	setPosUI()
 	{
-		let pos = myToolPG.pos;
+		let pos = myToolPG.getPos();
 		
 		this.ui.pos.x.value = Math.round(pos.x * 100) / 100;
 		this.ui.pos.y.value = Math.round(pos.y * 100) / 100;

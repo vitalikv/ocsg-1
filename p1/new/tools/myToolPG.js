@@ -47,7 +47,7 @@ class MyToolPG
 		}		
 		else //if(obj.userData.tag == 'wtGrid')	 сетка теплого пола
 		{ 
-			pos = obj.position;  
+			pos = obj.position.clone();  
 		}
 
 		return pos;
@@ -100,7 +100,8 @@ class MyToolPG
 		
 		const mode = (this.type === 'scale') ? '3d' : '';
 			
-		this.pos = (pos) ? pos : this.calcPos({obj: this.obj});		
+		if(!pos) pos = this.calcPos({obj: this.obj});
+		this.setPos({pos});		
 		this.qt = this.calcRot({obj: this.obj, mode});
 		
 		
@@ -110,9 +111,9 @@ class MyToolPG
 		this.displayMenuUI({visible: '', showUI: visible.ui});
 		
 
-		if(this.type == 'pivot') this.myPivot.actPivot({obj: this.obj, arrO: this.arrO, pos: this.pos, qt: this.qt, visible: visible.tool.p});		
-		if(this.type == 'gizmo') this.myGizmo.actGizmo({obj: this.obj, arrO: this.arrO, pos: this.pos, qt: this.qt, visible: visible.tool.r});
-		if(this.type == 'scale') this.myScale.actScale({obj: this.obj, pos: this.pos, qt: this.qt, visible: visible.tool.s});
+		if(this.type == 'pivot') this.myPivot.actPivot({obj: this.obj, arrO: this.arrO, pos, qt: this.qt, visible: visible.tool.p});		
+		if(this.type == 'gizmo') this.myGizmo.actGizmo({obj: this.obj, arrO: this.arrO, pos, qt: this.qt, visible: visible.tool.r});
+		if(this.type == 'scale') this.myScale.actScale({obj: this.obj, pos, qt: this.qt, visible: visible.tool.s});
 		
 		//setClickLastObj({obj});
 		
@@ -156,11 +157,21 @@ class MyToolPG
 		this.isDown = false;
 	}	
 	
-
+	
+	setPos({pos})
+	{
+		this.pos = pos;
+	}
+	
+	getPos()
+	{
+		return this.pos;
+	}	
+	
 	// назначаем pos после измениния/перемещения 
 	setPosPivotGizmo({pos})
 	{
-		this.pos = pos;
+		this.setPos({pos});
 		myToolPG_UI.setPosUI();
 		this.pivot.position.copy(pos);
 		this.gizmo.position.copy(pos);

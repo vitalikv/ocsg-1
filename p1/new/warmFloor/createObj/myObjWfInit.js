@@ -30,7 +30,7 @@ class MyObjsWfInit
 		
 		if(obj) 
 		{
-			//obj.material.visible = false;
+			obj.material.visible = false;
 			obj.userData.tag = 'objWf';
 			
 			// получаем начальные размеры объекта, что потом можно было масштабировать от начальных размеров

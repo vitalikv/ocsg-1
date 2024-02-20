@@ -228,13 +228,8 @@ class MyGizmo
 
 		
 		// вращаем объекты
-		function rotObjs(params)
+		function rotObjs({pos, arrO, rotY_Old = null, q_Offset})
 		{
-			let pos = params.pos;
-			let arrO = params.arrO;
-			let rotY_Old = params.rotY_Old;
-			let q_Offset = params.q_Offset;
-			
 			
 			if(rotY_Old)		// вращение по оси
 			{
