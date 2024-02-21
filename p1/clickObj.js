@@ -16,7 +16,7 @@ function deleteObjectPop(cdm)
 	if(cdm.obj && cdm.obj.userData.tag === 'roof' || obj && obj.userData.tag === 'roof')
 	{
 		let o2 = (cdm.obj) ? cdm.obj : obj;
-		clRoof.deleteRoof(o2);
+		myHouse.myRoofInit.deleteRoof(o2);
 		return;
 	}
 	

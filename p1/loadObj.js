@@ -194,19 +194,14 @@ function addObjInScene(inf, cdm)
 	
 	if(cdm.roof)
 	{
-		clRoof.initRoof({obj, lotid: cdm.lotid, nameRus: inf.name});
-		clRoof.setRoofParams({obj, id: cdm.id, pos: cdm.pos, q: cdm.q, scale: cdm.scale, material: cdm.material});
+		myHouse.myRoofInit.initRoof({obj, lotid: cdm.lotid, nameRus: inf.name});
+		myHouse.myRoofInit.setRoofParams({obj, id: cdm.id, pos: cdm.pos, q: cdm.q, scale: cdm.scale, material: cdm.material});
 		return obj;
 	}
 	
 	myHouse.myObjInit.initObj({obj, lotid: cdm.lotid, nameRus: inf.name});
-
 	myHouse.myObjInit.setObjParams({obj, id: cdm.id, pos: cdm.pos, q: cdm.q, scale: cdm.scale, material: cdm.material});
-		
-	
-	infProject.scene.array.obj.push(obj);
-
-	scene.add( obj );		
+				
 	
 	renderCamera();
 	

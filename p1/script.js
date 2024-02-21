@@ -1094,7 +1094,6 @@ let myLevels;
 let myToolPG;
 let myToolPG_UI;
 let myHouse;
-let clRoof;
 let myWarmFloor;
 let myStartProject;
 
@@ -1152,7 +1151,6 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myToolPG_UI = new MyToolPG_UI({container: containerF});
 	
 	myHouse = new MyHouse();
-	clRoof = new Roof();
 	myWarmFloor = new MyWarmFloor();
 	
 	myStartProject = new MyStartProject();

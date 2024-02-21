@@ -1,6 +1,6 @@
 
 
-class Roof 
+class MyRoofInit
 {
 	constructor()
 	{
@@ -67,10 +67,7 @@ class Roof
 		obj.scale.set(x2/obj.userData.roof.box.x, obj.scale.y, z2/obj.userData.roof.box.z);
 		
 		obj.material.visible = false;
-		
-		infProject.scene.array.roof.push(obj);
-
-		scene.add( obj );	
+			
 		
 		// отдельный материал, иначе при изменении в материале у всех других крыш, также примутся изменения
 		let matClone = obj.children[0].material.clone();		
@@ -85,11 +82,11 @@ class Roof
 		// текстура крыши по дефолту
 		myTexture.setImage({obj: obj.children[0], material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: matClone.color });
 		
-		//if(cdm.cursor) clickO.move = obj; 	// объект был добавлен в сцену из каталога
+		
+		infProject.scene.array.roof.push(obj);
+		scene.add( obj );
 		
 		renderCamera();	
-
-		return obj;
 	}
 
 
@@ -115,7 +112,9 @@ class Roof
 		
 		if(material && material.color)
 		{
-			this.setColorRoof({obj, color: material.color});
+			//this.setColorRoof({obj, color: material.color});
+			
+			myTexture.setImage({obj: obj.children[0], material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: material.color });
 		}
 	
 	}

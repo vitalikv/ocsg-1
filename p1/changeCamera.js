@@ -33,7 +33,7 @@ function changeCamera()
 		myHouse.myRoofCSG.cgs();
 	}
 	
-	clRoof.changeMaterialTransparent();
+	myHouse.myRoofInit.changeMaterialTransparent();
 	
 	infProject.tools.axis[0].visible = false;
 	infProject.tools.axis[1].visible = false;	

@@ -203,7 +203,7 @@
 	<script src="<?=$path?>new/house/wd/myWDPoints.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myWDPointsMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/wd/myWDRulers.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/house/roof/roof.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/roof/myRoofInit.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/roof/myRoofUI.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/roof/myRoofAction.js?<?=$vrs?>"></script>	
 	<script src="<?=$path?>new/house/roof/myRoofObj.js?<?=$vrs?>"></script>

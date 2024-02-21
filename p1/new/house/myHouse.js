@@ -20,6 +20,13 @@ class MyHouse
 	myWDPointsMove;
 	myWDRulers;
 	
+	myRoofInit;
+	myRoofUI;
+	myRoofAction;
+	myRoofObj;
+	myRoofCSG;
+	myRoofMove;	
+	
 	myObjInit;
 	myObjUI;
 	myObjAction;
@@ -48,6 +55,7 @@ class MyHouse
 		this.myWDPointsMove = new MyWDPointsMove();
 		this.myWDRulers = new MyWDRulers();
 			
+		this.myRoofInit = new MyRoofInit();
 		this.myRoofUI = new MyRoofUI();
 		this.myRoofAction = new MyRoofAction();
 		this.myRoofObj = new MyRoofObj();

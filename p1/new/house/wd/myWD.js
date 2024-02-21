@@ -255,7 +255,7 @@ class MyWD
 			obj2.geometry.verticesNeedUpdate = true;
 			myTexture.setImage({obj: obj2, material: { img: "img/load/proflist_1.jpg" } });
 			
-			setObjInWD({obj: obj2}, {wd: obj});
+			setObjInWD({obj: obj2, wd: obj});
 			mat2.visible = true;	// не прячем текстуру ,т.к. это самопальный объект и в нем нету пустого box(обертки), поэтому его не прячем		
 		}
 		else

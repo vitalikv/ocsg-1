@@ -5,16 +5,6 @@ class MyObjInit
 	
 	initObj({obj, lotid, nameRus = 'объект'})
 	{
-		// копираем материал, чтобы при можно было менять текстуру, цвета и это не влияло на другой такой же объект
-		obj.traverse(function(child) 
-		{
-			if(child.isMesh && child.material && child.material.visible) 
-			{ 
-				child.material = child.material.clone();
-			}
-		});	
-		
-		
 		obj.userData.tag = 'obj';
 		obj.userData.id = 0;
 		obj.userData.obj3D = {};
@@ -40,11 +30,22 @@ class MyObjInit
 		
 		obj.material.visible = false;
 
-
+		// копираем материал, чтобы при можно было менять текстуру, цвета и это не влияло на другой такой же объект
+		obj.traverse(function(child) 
+		{
+			if(child.isMesh && child.material && child.material.visible) 
+			{ 
+				child.material = child.material.clone();
+			}
+		});
+		
 		if(obj.userData.obj3D.lotid < 4)	// примитивы из каталога с нужным материалом
 		{
 			myTexture.setImage({obj: obj.children[0], material: { img: 'img/load/beton.jpg' } });	
-		}		
+		}
+
+		infProject.scene.array.obj.push(obj);
+		scene.add( obj );		
 	}
 	
 	setObjParams({obj, id = null, pos = null, q = null, scale = null, material = null})
