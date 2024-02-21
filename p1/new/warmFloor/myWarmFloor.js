@@ -9,6 +9,7 @@ class MyWarmFloor
 	mySaveWf;
 	myLoadWf;
 	levels = [];
+	bdObjs = [];
 	
 	myObjsWfInit;
 	myObjWfMove;
@@ -86,6 +87,34 @@ class MyWarmFloor
 		return rayhit;
 	}
 	
+	// добавляем объект в бд, если объект уже загружался, брать его от туда
+	addObjToBD({obj})
+	{
+		const { exists } = this.checkExistsObjToBD({typeObj: obj.userData.typeObj, lotid: obj.userData.lotid});
+		
+		if(!exists) this.bdObjs.push(obj.clone());
+	}
+	
+	// проверяем если объект в бд
+	checkExistsObjToBD({typeObj, lotid})
+	{
+		let exists = false;
+		let obj = null;
+		const bdObjs = this.bdObjs;
+		
+		for ( let i = 0; i < bdObjs.length; i++ )
+		{
+			if(typeObj === bdObjs[i].userData.typeObj && lotid === bdObjs[i].userData.lotid)
+			{
+				exists = true;
+				obj = bdObjs[i].clone();
+				break;
+			}
+		}
+
+		return { exists, obj };
+	}
+	
 	// добавляем объект в массив
 	addToArray({obj, type, idLevel = null})
 	{
@@ -94,6 +123,8 @@ class MyWarmFloor
 		if(type === 'points') list.points.push(obj);
 		if(type === 'tubes') list.tubes.push(obj);
 		if(type === 'objs') list.objs.push(obj);
+		
+		if(type === 'objs') this.addObjToBD({obj});
 	}
 
 	// удаляем объект уз массива

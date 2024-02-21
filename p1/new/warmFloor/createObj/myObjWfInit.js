@@ -24,17 +24,24 @@ class MyObjsWfInit
 
 	
 	// добавляем объект в сцену
-	getObjWf({typeObj, lotid})
+	getObjWf({id = undefined, typeObj, lotid})
 	{
-		const obj = this.myListObjsWf.getObjFromListWf({typeObj, lotid});				
+		let obj = null;
+		let objFromBD = false;
+		
+		const result = myWarmFloor.checkExistsObjToBD({typeObj, lotid});	// ищем в бд объект
+		if(result.exists)
+		{
+			objFromBD = true;
+			obj = result.obj;
+		}
+		
+		if(!obj) obj = this.myListObjsWf.getObjFromListWf({typeObj, lotid});	// создаем параметрический obj				
 		
 		if(obj) 
-		{
-			obj.material.visible = false;
-			obj.userData.tag = 'objWf';
-			
+		{	
 			// получаем начальные размеры объекта, что потом можно было масштабировать от начальных размеров
-			if(1==1)
+			if(objFromBD)
 			{
 				obj.geometry.computeBoundingBox();
 				var x = obj.geometry.boundingBox.max.x - obj.geometry.boundingBox.min.x;
@@ -45,19 +52,24 @@ class MyObjsWfInit
 
 
 			// добавляем к объекту разъемы
-			const jointsData = obj.userData.jointsData; 
-			if(jointsData)
+			if(objFromBD)
 			{
-				for ( let i = 0; i < jointsData.length; i++ )
+				const jointsData = obj.userData.jointsData; 
+				if(jointsData)
 				{
-					this.myJointPointWf.crJointPoint({objParent: obj, ...jointsData[i]});
-				}							
+					for ( let i = 0; i < jointsData.length; i++ )
+					{
+						this.myJointPointWf.crJointPoint({objParent: obj, ...jointsData[i]});
+					}							
+				}				
 			}
+			
 
-			//if(!id) { id = countId; countId++; }	
-			//obj.userData.id = id;	
-		
-			//obj.userData.lotid = lotid;
+			if(!id) { id = countId; countId++; }	
+			obj.userData.id = id;			
+			obj.userData.lotid = lotid;
+			obj.material.visible = false;
+			obj.userData.tag = 'objWf';			
 			
 			scene.add(obj);
 
