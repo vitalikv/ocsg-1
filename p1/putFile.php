@@ -98,6 +98,7 @@ new/house/roof/myRoofAction.js
 new/house/roof/myRoofObj.js
 new/house/roof/myRoofCSG.js
 new/house/roof/myRoofMove.js
+new/house/obj/myObjInit.js
 new/house/obj/myObjUI.js
 new/house/obj/myObjAction.js
 new/house/obj/myObjPrimitives.js

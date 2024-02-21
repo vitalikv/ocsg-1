@@ -44,28 +44,13 @@ class Roof
 		}		
 	}
 	
-	initRoof(inf, cdm)
+	initRoof({obj, lotid, nameRus = 'крыша'})
 	{
-		let obj = inf.obj; 
-		
-		if(cdm.pos){ obj.position.copy(cdm.pos); }
-		else
-		{
-			obj.position.y = 0;
-			planeMath.position.y = 0; 
-			planeMath.rotation.set(-Math.PI/2, 0, 0);
-			planeMath.updateMatrixWorld();			
-		}
-		
-		if(cdm.q){ obj.quaternion.set(cdm.q.x, cdm.q.y, cdm.q.z, cdm.q.w); }
-		
-		if(cdm.id){ obj.userData.id = cdm.id; }
-		else { obj.userData.id = countId; countId++; }
-		
 		obj.userData.tag = 'roof';
+		obj.userData.id = 0;
 		obj.userData.roof = {};
-		obj.userData.roof.lotid = cdm.lotid;
-		obj.userData.roof.nameRus = (inf.name) ? inf.name : 'крыша 1';
+		obj.userData.roof.lotid = lotid;
+		obj.userData.roof.nameRus = nameRus;
 		obj.userData.roof.typeGroup = '';
 		obj.userData.roof.helper = null;
 		obj.userData.roof.box = new THREE.Vector3();
@@ -77,19 +62,9 @@ class Roof
 		let z = obj.geometry.boundingBox.max.z - obj.geometry.boundingBox.min.z;	
 		obj.userData.roof.box = new THREE.Vector3(x, y, z);
 
-		if(cdm.scale){ obj.scale.set(cdm.scale.x, cdm.scale.y, cdm.scale.z); }
-		else if(!cdm.id)
-		{
-			let x = infProject.settings.roof.length;
-			let z = infProject.settings.roof.width;
-			
-			obj.scale.set(x/obj.userData.roof.box.x, obj.scale.y, z/obj.userData.roof.box.z);
-		}
-		
-		if(cdm.material)
-		{
-			if(cdm.material.color) this.setColorRoof({obj, color: cdm.material.color});
-		}
+		let x2 = infProject.settings.roof.length;
+		let z2 = infProject.settings.roof.width;		
+		obj.scale.set(x2/obj.userData.roof.box.x, obj.scale.y, z2/obj.userData.roof.box.z);
 		
 		obj.material.visible = false;
 		
@@ -105,7 +80,9 @@ class Roof
 			{ 
 				child.material = matClone; 
 			}
-		});			
+		});
+
+		// текстура крыши по дефолту
 		myTexture.setImage({obj: obj.children[0], material: { img: "img/load/roof_1.jpg" }, repeat: {x: 0.5, y: 0.5}, rotation: Math.PI/2, color: matClone.color });
 		
 		//if(cdm.cursor) clickO.move = obj; 	// объект был добавлен в сцену из каталога
@@ -115,6 +92,33 @@ class Roof
 		return obj;
 	}
 
+
+	setRoofParams({obj, id = null, pos = null, q = null, scale = null, material = null})
+	{
+		if(!id) { id = countId; countId++; }
+		obj.userData.id = id;	
+
+
+		if(pos){ obj.position.copy(pos); }
+		else
+		{
+			obj.position.y = 0;
+			planeMath.position.y = 0; 
+			planeMath.rotation.set(-Math.PI/2, 0, 0);
+			planeMath.updateMatrixWorld();			
+		}
+		
+		if(q){ obj.quaternion.set(q.x, q.y, q.z, q.w); }
+		
+		
+		if(scale){ obj.scale.set(scale.x, scale.y, scale.z); }
+		
+		if(material && material.color)
+		{
+			this.setColorRoof({obj, color: material.color});
+		}
+	
+	}
 
 	// получаем модифицированную клон-крышу, с высокими откасами, чтобы резать стены
 	crRoofMod( obj )

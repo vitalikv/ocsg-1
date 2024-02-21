@@ -224,10 +224,9 @@ function setPosWD_Obj3D(cdm)
 
 
 // вставляем в wd(форму) 3D объект окна/двери
-function setObjInWD(inf, cdm)
+function setObjInWD({obj, wd})
 {
-	var wd = cdm.wd;
-	var obj3D = inf.obj;
+	var obj3D = obj;
 	
 	obj3D.material.visible = false;
 	

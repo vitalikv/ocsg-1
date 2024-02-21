@@ -184,101 +184,27 @@ function addObjInScene(inf, cdm)
 	obj.material = obj.material.clone();
 	
 	//var inf = JSON.parse( JSON.stringify( inf ) );	
-	inf.obj = obj;
-	
 	
 	// загрузка wd
 	if(cdm.wd)
 	{  
-		setObjInWD(inf, cdm);
+		setObjInWD({obj, wd: cdm.wd});
 		return;
 	}
 	
 	if(cdm.roof)
 	{
-		return clRoof.initRoof(inf, cdm);
+		clRoof.initRoof({obj, lotid: cdm.lotid, nameRus: inf.name});
+		clRoof.setRoofParams({obj, id: cdm.id, pos: cdm.pos, q: cdm.q, scale: cdm.scale, material: cdm.material});
+		return obj;
 	}
 	
-	// копираем материал, чтобы при можно было менять текстуру, цвета и это не влияло на другой такой же объект
-	obj.traverse(function(child) 
-	{
-		if(child.isMesh && child.material && child.material.visible) 
-		{ 
-			child.material = child.material.clone();
-		}
-	});	
-	
-	
-	if(cdm.pos){ obj.position.copy(cdm.pos); }
-	else	// объект по кнопки из каталога
-	{ 
-		if(!obj.geometry.boundingBox) obj.geometry.computeBoundingBox();
-		const y = (obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y) / 2;
-		
-		obj.position.y = y;
-		planeMath.position.y = y; 
-		planeMath.rotation.set(-Math.PI/2, 0, 0);
-		planeMath.updateMatrixWorld(); 
-	}
-	
-	//if(cdm.rot){ obj.rotation.set(cdm.rot.x, cdm.rot.y, cdm.rot.z); }					
-	if(cdm.q){ obj.quaternion.set(cdm.q.x, cdm.q.y, cdm.q.z, cdm.q.w); }
-	
+	myHouse.myObjInit.initObj({obj, lotid: cdm.lotid, nameRus: inf.name});
 
-	if(cdm.id){ obj.userData.id = cdm.id; }
-	else { obj.userData.id = countId; countId++; }
-	
-	obj.userData.tag = 'obj';
-	obj.userData.obj3D = {};
-	obj.userData.obj3D.lotid = cdm.lotid;
-	obj.userData.obj3D.nameRus = (inf.name) ? inf.name : 'объект';
-	obj.userData.obj3D.typeGroup = '';
-	obj.userData.obj3D.helper = null;
-	
-	obj.userData.material = {};
-	obj.userData.material.img = null;
-	
-	obj.userData.obj3D.ur = {};
-	obj.userData.obj3D.ur.pos = new THREE.Vector3();
-	obj.userData.obj3D.ur.q = new THREE.Quaternion();
-	
-	if(!cdm.id){ obj.userData.obj3D.newO = true; }
-	
+	myHouse.myObjInit.setObjParams({obj, id: cdm.id, pos: cdm.pos, q: cdm.q, scale: cdm.scale, material: cdm.material});
 		
 	
-	// получаем начальные размеры объекта, что потом можно было масштабировать от начальных размеров
-	if(1==1)
-	{
-		obj.geometry.computeBoundingBox();
-		var x = obj.geometry.boundingBox.max.x - obj.geometry.boundingBox.min.x;
-		var y = obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y;
-		var z = obj.geometry.boundingBox.max.z - obj.geometry.boundingBox.min.z;	
-		obj.userData.obj3D.box = new THREE.Vector3(x, y, z);
-	}
-
-	
-	
-	if(cdm.scale)
-	{ 
-		obj.scale.set(cdm.scale.x, cdm.scale.y, cdm.scale.z);
-		upDateTextureObj3D({obj, force: true});
-	}
-	
-	if(cdm.material && cdm.material.img)
-	{
-		myTexture.setImage({obj: obj.children[0], material: { img: cdm.material.img } });
-	}
-	else if(cdm.lotid < 4)	// вот с этим нужно что-то делать, кастыль, который позволяет загрузить примитивы из каталога с нужным материалом
-	{
-		myTexture.setImage({obj: obj.children[0], material: { img: 'img/load/beton.jpg' } });	
-	}
-	
-	obj.material.visible = false;
-
-
-		
-	
-	infProject.scene.array.obj[infProject.scene.array.obj.length] = obj;
+	infProject.scene.array.obj.push(obj);
 
 	scene.add( obj );		
 	

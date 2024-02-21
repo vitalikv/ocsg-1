@@ -20,6 +20,10 @@ class MyHouse
 	myWDPointsMove;
 	myWDRulers;
 	
+	myObjInit;
+	myObjUI;
+	myObjAction;
+	myObjPrimitives;
 	myObjMove;
 	
 	myGhostLevel;
@@ -50,6 +54,7 @@ class MyHouse
 		this.myRoofCSG = new MyRoofCSG();
 		this.myRoofMove = new MyRoofMove();
 		
+		this.myObjInit = new MyObjInit();
 		this.myObjUI = new MyObjUI();
 		this.myObjAction = new MyObjAction();
 		this.myObjPrimitives = new MyObjPrimitives();				

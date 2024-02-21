@@ -209,6 +209,7 @@
 	<script src="<?=$path?>new/house/roof/myRoofObj.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/roof/myRoofCSG.js?<?=$vrs?>"></script>	
 	<script src="<?=$path?>new/house/roof/myRoofMove.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/house/obj/myObjInit.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/obj/myObjUI.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/obj/myObjAction.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/house/obj/myObjPrimitives.js?<?=$vrs?>"></script>
