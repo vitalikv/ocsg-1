@@ -6,7 +6,6 @@
 $list = 'inputWall.js
 crossWall.js
 uiInterface.js
-uiInterface_catalog.js
 meshBSP.js 	
 calculationArea.js
 addPoint.js
@@ -33,7 +32,7 @@ getScreenshot.js
 new/myCookie.js
 new/btnDropList.js
 new/level.js
-new/startProject.js
+new/myStartProject.js
 new/csgBox.js
 new/myTexture.js
 new/ui/panelTop/myPanelTop.js

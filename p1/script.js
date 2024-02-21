@@ -976,7 +976,7 @@ document.addEventListener("keydown", function (e)
 		if(clickO.keys[18] && e.keyCode == 90) { loadFile({json: true}); }		// alt + z
 		if(clickO.keys[18] && e.keyCode == 72) { disposeHierchy({obj: scene}); getConsoleRendererInfo(); }		// alt + h
 		if(clickO.keys[18] && e.keyCode == 77) { loadFile({id: 0}); }				// alt + m
-		if(clickO.keys[18] && e.keyCode == 84) { saveFile({json: true}); }			// alt + t
+		if(clickO.keys[18] && e.keyCode == 84) { saveFile({local: true}); }			// alt + t
 		if(clickO.keys[18] && e.keyCode == 86) { console.log(infProject); }
 		if(clickO.keys[18] && e.keyCode == 86) { console.log(clickO); }  		
 		if(clickO.keys[18] && e.keyCode == 86) { console.log(renderer.info.memory); }	// alt + v
@@ -1096,7 +1096,7 @@ let myToolPG_UI;
 let myHouse;
 let clRoof;
 let myWarmFloor;
-let startProject;
+let myStartProject;
 
 
 
@@ -1155,10 +1155,21 @@ document.addEventListener("DOMContentLoaded", ()=>
 	clRoof = new Roof();
 	myWarmFloor = new MyWarmFloor();
 	
-	startProject = new StartProject();
-	startProject.init({name: 'new2'});
+	myStartProject = new MyStartProject();
+	startInitProject();
+
 	
-	//if(startProject.detectShowStartWind()) windUI.showWin();
+	animate();
+	renderCamera();	
+});
+
+
+// запуск проекта при открытии страницы
+async function startInitProject()
+{
+	await myStartProject.init({name: 'new2'});
+
+	//if(myStartProject.detectShowStartWind()) windUI.showWin();
 	
 	if(1===1) myPanelTop.addPaidPanel();	// панель для платных пользователей	
 	
@@ -1166,10 +1177,8 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	if(1===2) myWarmFloor.myObjsWfInit.myTestObjsWf.showObjs();
 	
-	animate();
-	renderCamera();	
-});
-
+	if(1===1) myWarmFloor.myGeneratorWf.init();	// генератор отопления
+}
 
 
 function testSss()

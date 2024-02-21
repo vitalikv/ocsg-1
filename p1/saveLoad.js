@@ -402,54 +402,46 @@ function getJsonProject()
 
 
 
-async function saveFile(cdm) 
+async function saveFile({id = undefined, local = false, txt = false}) 
 { 
 	
-	var json = JSON.stringify( compileJsonFile() );
+	const json = JSON.stringify( compileJsonFile() );
 	
-	if(cdm.json)
+	
+	if(local)	// сохраняем в папку
 	{
-		// сохраняем в папку
-		$.ajax
-		({
-			url: infProject.path+'saveJson.php',
-			type: 'POST',
-			data: {myarray: json, nameFile: infProject.settings.save.file},		// nameFile: infProject.settings.save.file t/fileJson3.json
-			dataType: 'json',
-			success: function(json)
-			{ 			
-				console.log(json); 
-			},
-			error: function(json){ console.log(json);  }
-		});			
+		const url = infProject.path+'saveJson.php';			
+		const response = await fetch(url, 
+		{
+			method: 'POST',
+			body: 'myarray='+encodeURIComponent(json)+'&nameFile='+infProject.settings.save.file,
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },				
+		});
+		const data = await response.json();		
+		console.log(data);			
 	}
 	
 	
-	if(cdm.id)
-	{
-		// сохраняем в бд
-		var url = infProject.path+'components/saveSql.php';			
+	if(id)	// сохраняем в бд
+	{		
+		const url = infProject.path+'components/saveSql.php';			
 		
 		// preview= пустое, чтобы не сохранять изображение
-		var response = await fetch(url, 
+		const response = await fetch(url, 
 		{
 			method: 'POST',
-			body: 'id='+cdm.id+'&user_id='+infProject.user.id+'&preview=&json='+encodeURIComponent(json),
-			headers: 
-			{	
-				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' 
-			},				
+			body: 'id='+id+'&user_id='+infProject.user.id+'&preview=&json='+encodeURIComponent(json),
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },				
 		});
-		var json = await response.json();
-		
-		console.log(json);
+		const data = await response.json();		
+		console.log(data);
 		
 		//if(cdm.upUI) { getListProject({id: infProject.user.id}); }		// обновляем меню сохрание проектов		
 		
 		return true;	
 	}
 	
-	if(cdm.txt)
+	if(txt)
 	{	
 		var csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(json);	
 		
@@ -466,47 +458,33 @@ async function saveFile(cdm)
 
 
 
-function loadFile(cdm) 
+async function loadFile({id = undefined, local = undefined}) 
 {
-	if(cdm.id == 0) 
-	{ 
-		loadFilePL({level: []});
-		return; 
-	}	 
+	let data = {level: []};
 	
-	
-	if(cdm.json)	// загрузка json из папки
-	{
-		$.ajax
-		({
-			url: infProject.path + cdm.json, 	
-			type: 'POST',
-			dataType: 'json',
-			success: function(json)
-			{ 
-				//resetScene();
-				loadFilePL(json); 	// загрузка json
-			},
-		});			
-	}
-	else	// загрузка json из бд
-	{
-		$.ajax
-		({
-			url: infProject.path+'components/loadSql.php',
-			type: 'POST',
-			data: {id: cdm.id},
-			dataType: 'json',
-			success: function(json)
-			{ 
-				//resetScene();
-				loadFilePL(json); 	// загрузка json
-			},
+	if(local)	// загрузка json из папки
+	{		
+		const url = infProject.path + local;		
+		const response = await fetch(url, 
+		{
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },						
 		});		
-		
+		data = await response.json();					
+	}
+	else if(id)	// загрузка json из бд
+	{
+		const url = infProject.path + 'components/loadSql.php';		
+		const response = await fetch(url, 
+		{
+			method: 'POST',
+			body: 'id='+id,
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },						
+		});		
+		data = await response.json();		
 	}
 
-	
+	await loadFilePL(data);
 }
 
 
@@ -541,8 +519,7 @@ async function loadFilePL(json)
 	myLevels.switchLevel(0);
 	
 	
-	if(json.wf) myWarmFloor.load({data: json.wf});
-	myWarmFloor.myGeneratorWf.init();	// генератор отопления
+	if(json.wf) myWarmFloor.load({data: json.wf});	
 	
 	readyProject(); 
 }
@@ -886,7 +863,7 @@ function readyProject(cdm)
 	
 	$('[nameId="menu_loader_slider_UI"]').hide();
 	
-	startProject.setCamera();	
+	myStartProject.setCamera();	
 }
 
 

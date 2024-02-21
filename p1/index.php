@@ -48,11 +48,7 @@
 	<script src="<?=$path?>js/export/GLTFExporter.js?<?=$vrs?>"></script>
 	
 	
-	<? if($_SERVER['SERVER_NAME']=='ocsg') 
-	{ 
-		require_once("admin/catalog/admin_menu.php");
-		require_once("admin/obj/adminInputLoadObj.php");
-	} ?>
+
 	
 	<div id="canvasFrame" style="position: fixed; width: 100%; height: 100%; top: 0; right: 0; overflow: hidden; font-family: arial,sans-serif;">
 		<div class="frame block_select_text">
@@ -137,7 +133,6 @@
     <script src="<?=$path?>inputWall.js?<?=$vrs?>"></script>   
     <script src="<?=$path?>saveLoad.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>uiInterface.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>uiInterface_catalog.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>eventClick.js?<?=$vrs?>"></script>
 			
 		
@@ -181,7 +176,7 @@
 	<script src="<?=$path?>new/myCookie.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/btnDropList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/level.js?<?=$vrs?>"></script>		
-	<script src="<?=$path?>new/startProject.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/myStartProject.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/csgBox.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/myTexture.js?<?=$vrs?>"></script>
 	
@@ -250,12 +245,6 @@
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		
 		
-	<? if($_SERVER['SERVER_NAME']=='ocsg') 
-	{?> 
-		<script src="<?=$path?>admin/catalog/panel_menu.js?<?=$vrs?>"></script>
-		<script src="<?=$path?>admin/obj/adminLoadObj.js?<?=$vrs?>"></script>
-		<script src="<?=$path?>admin/obj/adminClickObj.js?<?=$vrs?>"></script>		
-	<?}?>
 
 	<? if($_SERVER['SERVER_NAME']=='engineering-plan.ru') {?>
 <!-- Yandex.Metrika counter --> <script type="text/javascript" > (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date(); for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }} k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(40245619, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/40245619" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->

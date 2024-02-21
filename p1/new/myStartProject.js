@@ -1,7 +1,7 @@
 
 
 
-class StartProject
+class MyStartProject
 {
 	name = '';
 	
@@ -11,7 +11,7 @@ class StartProject
 	}
 	
 	
-	init({name})
+	async init({name})
 	{
 		this.name = name;
 		
@@ -51,8 +51,8 @@ class StartProject
 			myPanelR.showHidePanelR({show: false});			
 		}
 
-		if(this.name === 'new') loadFile({id: 0});
-		else loadFile({json: infProject.settings.load.file});
+		if(this.name === 'new') await loadFile({});
+		else await loadFile({local: infProject.settings.load.file});
 	}
 	
 	setCamera()
