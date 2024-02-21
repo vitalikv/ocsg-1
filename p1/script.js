@@ -1156,7 +1156,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myWarmFloor = new MyWarmFloor();
 	
 	startProject = new StartProject();
-	startProject.init({name: 'new'});
+	startProject.init({name: 'new2'});
 	
 	//if(startProject.detectShowStartWind()) windUI.showWin();
 	
@@ -1164,7 +1164,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	
 	if(1===2) myPanelR.myTabsR.activeTab({id: 0});
 	
-	if(1===1) myWarmFloor.myObjsWfInit.myTestObjsWf.showObjs();
+	if(1===2) myWarmFloor.myObjsWfInit.myTestObjsWf.showObjs();
 	
 	animate();
 	renderCamera();	

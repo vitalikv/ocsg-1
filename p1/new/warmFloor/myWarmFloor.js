@@ -13,6 +13,8 @@ class MyWarmFloor
 	myObjsWfInit;
 	myObjWfMove;
 	
+	myGeneratorWf
+	
 	constructor()
 	{
 		this.init();
@@ -30,6 +32,8 @@ class MyWarmFloor
 		
 		this.myObjsWfInit = new MyObjsWfInit();		
 		this.myObjWfMove = new MyObjWfMove();
+		
+		this.myGeneratorWf = new MyGeneratorWf();
 	}
 	
 	initLevels()

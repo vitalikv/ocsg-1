@@ -245,7 +245,7 @@
 	<script src="<?=$path?>new/warmFloor/createObj/mpl/troinik/myMplTroinikPR.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/mpl/ugol/myMplUgolP.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/createObj/mpl/ugol/myMplUgolPR.js?<?=$vrs?>"></script>
-	
+	<script src="<?=$path?>new/warmFloor/generator/myGeneratorWf.js?<?=$vrs?>"></script>
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		

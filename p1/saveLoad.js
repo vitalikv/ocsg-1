@@ -542,6 +542,7 @@ async function loadFilePL(json)
 	
 	
 	if(json.wf) myWarmFloor.load({data: json.wf});
+	myWarmFloor.myGeneratorWf.init();	// генератор отопления
 	
 	readyProject(); 
 }
