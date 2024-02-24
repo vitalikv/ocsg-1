@@ -64,6 +64,14 @@ function actionChangeInputUI(cdm)
 	else if(infProject.activeInput == 'rp_gate_height_1')
 	{
 		upRightPlaneInput_1({ el: infProject.activeInput_2.el });
+	}
+	else if(infProject.activeInput == 'rp_roof_width_1')
+	{
+		upRightPlaneInput_1({ el: infProject.activeInput_2.el });
+	}
+	else if(infProject.activeInput == 'rp_roof_length_1')
+	{
+		upRightPlaneInput_1({ el: infProject.activeInput_2.el });
 	}	
 }
 

@@ -1165,17 +1165,17 @@ document.addEventListener("DOMContentLoaded", ()=>
 // запуск проекта при открытии страницы
 async function startInitProject()
 {
-	await myStartProject.init({name: 'new2'});
+	await myStartProject.init({name: 'new'});	// new - пустой проект 
 
-	//if(myStartProject.detectShowStartWind()) windUI.showWin();
+	//if(myStartProject.detectShowStartWind()) windUI.showWin();	// меню пользователя
 	
 	if(1===1) myPanelTop.addPaidPanel();	// панель для платных пользователей	
 	
-	if(1===2) myPanelR.myTabsR.activeTab({id: 0});
+	if(1===2) myPanelR.myTabsR.activeTab({id: 0});	// вклад при старте
 	
-	if(1===2) myWarmFloor.myObjsWfInit.myTestObjsWf.showObjs();
+	if(1===2) myWarmFloor.myObjsWfInit.myTestObjsWf.showObjs();		// загрузка объектов отопления
 	
-	if(1===1) myWarmFloor.myGeneratorWf.init();	// генератор отопления
+	if(1===2) myWarmFloor.myGeneratorWf.init();	// генератор отопления
 }
 
 

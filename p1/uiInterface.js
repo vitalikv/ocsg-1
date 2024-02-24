@@ -30,19 +30,19 @@ function upRightPlaneInput_1(cdm)
 	var value = el.val();
 	
 	var inf = null;
-	if(cdm.el[0] == $('[nameId="rp_wall_width_1"]')[0]) { var inf = { json: infProject.settings.wall, name: 'width' }; }
-	else if(cdm.el[0] == $('[nameId="rp_door_length_1"]')[0]) { var inf = { json: infProject.settings.door, name: 'width' }; }
-	else if(cdm.el[0] == $('[nameId="rp_door_height_1"]')[0]) { var inf = { json: infProject.settings.door, name: 'height' }; }
-	else if(cdm.el[0] == $('[nameId="rp_wind_length_1"]')[0]) { var inf = { json: infProject.settings.wind, name: 'width' }; }
-	else if(cdm.el[0] == $('[nameId="rp_wind_height_1"]')[0]) { var inf = { json: infProject.settings.wind, name: 'height' }; }	
-	else if(cdm.el[0] == $('[nameId="rp_wind_above_floor_1"]')[0]) { var inf = { json: infProject.settings.wind, name: 'h1' }; }
-	else if(cdm.el[0] == $('[nameId="rp_gate_length_1"]')[0]) { var inf = { json: infProject.settings.gate, name: 'width' }; }
-	else if(cdm.el[0] == $('[nameId="rp_gate_height_1"]')[0]) { var inf = { json: infProject.settings.gate, name: 'height' }; }
-	else if(cdm.el[0] == $('[nameId="rp_roof_width_1"]')[0]) { var inf = { json: infProject.settings.roof, name: 'width' }; }
-	else if(cdm.el[0] == $('[nameId="rp_roof_length_1"]')[0]) { var inf = { json: infProject.settings.roof, name: 'length' }; }		
+	if(cdm.el[0] == $('[nameId="rp_wall_width_1"]')[0]) { var inf = { json: infProject.settings.wall, name: 'width', limit: {min: 0.01, max: 1} }; }
+	else if(cdm.el[0] == $('[nameId="rp_door_length_1"]')[0]) { var inf = { json: infProject.settings.door, name: 'width', limit: {min: 0.01, max: 5} }; }
+	else if(cdm.el[0] == $('[nameId="rp_door_height_1"]')[0]) { var inf = { json: infProject.settings.door, name: 'height', limit: {min: 0.01, max: 5} }; }
+	else if(cdm.el[0] == $('[nameId="rp_wind_length_1"]')[0]) { var inf = { json: infProject.settings.wind, name: 'width', limit: {min: 0.01, max: 5} }; }
+	else if(cdm.el[0] == $('[nameId="rp_wind_height_1"]')[0]) { var inf = { json: infProject.settings.wind, name: 'height', limit: {min: 0.01, max: 5} }; }	
+	else if(cdm.el[0] == $('[nameId="rp_wind_above_floor_1"]')[0]) { var inf = { json: infProject.settings.wind, name: 'h1', limit: {min: 0.01, max: 5} }; }
+	else if(cdm.el[0] == $('[nameId="rp_gate_length_1"]')[0]) { var inf = { json: infProject.settings.gate, name: 'width', limit: {min: 0.01, max: 5} }; }
+	else if(cdm.el[0] == $('[nameId="rp_gate_height_1"]')[0]) { var inf = { json: infProject.settings.gate, name: 'height', limit: {min: 0.01, max: 5} }; }
+	else if(cdm.el[0] == $('[nameId="rp_roof_width_1"]')[0]) { var inf = { json: infProject.settings.roof, name: 'width', limit: {min: 0.01, max: 15} }; }
+	else if(cdm.el[0] == $('[nameId="rp_roof_length_1"]')[0]) { var inf = { json: infProject.settings.roof, name: 'length', limit: {min: 0.01, max: 15} }; }
 	else { return; }	
 	
-	var res = checkNumberInput({ value: value, unit: 1, limit: {min: 0.01, max: 5} });	
+	var res = checkNumberInput({ value: value, unit: 1, limit: inf.limit });	
 	
 	if(!res) 
 	{
@@ -52,7 +52,7 @@ function upRightPlaneInput_1(cdm)
 	
 	el.val(res.num);
 	
-	inf.json[inf.name] = res.num; 
+	inf.json[inf.name] = res.num;	
 }
 
 
