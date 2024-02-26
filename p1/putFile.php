@@ -107,6 +107,7 @@ new/warmFloor/myWarmFloor.js
 new/warmFloor/mySaveWf.js
 new/warmFloor/myLoadWf.js
 new/warmFloor/grid/myGridWf.js
+new/warmFloor/grid/myGridLinesWf.js
 new/warmFloor/grid/myGridPointWf.js
 new/warmFloor/grid/myGridWfMove.js
 new/warmFloor/grid/myGridPointWfMove.js

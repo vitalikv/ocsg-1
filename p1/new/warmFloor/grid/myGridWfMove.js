@@ -92,6 +92,12 @@ class MyGridWfMove
 		const obj = this.sObj;
 		const isDown = this.isDown;
 		const isMove = this.isMove;
+
+		// после смещения трубы, возращаем в 0 и обновляем геометрию
+		if(obj && isMove)
+		{
+			this.mouseupEndGridWf({obj});			
+		}
 		
 		this.clearPoint();
 		
@@ -99,7 +105,7 @@ class MyGridWfMove
 		if (!isMove) return;
 	}
 	
-	
+	// перемещаем точки стеки
 	moveGridPointsWf({obj, offset})
 	{
 		const points = myWarmFloor.myGridWf.getPoints({obj});
@@ -108,6 +114,15 @@ class MyGridWfMove
 		{
 			points[i].position.add( offset );
 		}	
+	}
+
+
+	mouseupEndGridWf({obj})
+	{
+		if(!obj) return;
+		
+		obj.position.set(0, 0, 0);
+		myWarmFloor.myGridWf.upGeometryGrid({obj});	
 	}	
 	
 	clearPoint()
