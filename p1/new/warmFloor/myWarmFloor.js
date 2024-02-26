@@ -2,6 +2,8 @@
 
 class MyWarmFloor 
 {
+	myGridWf;
+	
 	myPointWf;
 	myPointWfMove;
 	myTubeWf;
@@ -24,6 +26,9 @@ class MyWarmFloor
 	init()
 	{
 		this.initLevels();
+		
+		this.myGridWf = new MyGridWf();
+		
 		this.myPointWf = new MyPointWf();
 		this.myPointWfMove = new MyPointWfMove();
 		this.myTubeWf = new MyTubeWf();
