@@ -219,6 +219,8 @@
 	<script src="<?=$path?>new/warmFloor/mySaveWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/myLoadWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/grid/myGridWf.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/grid/myGridWfMove.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/grid/myGridPointWfMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/point/myPointWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/point/myPointWfMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/tube/myTubeWf.js?<?=$vrs?>"></script>

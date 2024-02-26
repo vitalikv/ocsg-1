@@ -3,6 +3,8 @@
 class MyWarmFloor 
 {
 	myGridWf;
+	myGridWfMove;
+	myGridPointWfMove;
 	
 	myPointWf;
 	myPointWfMove;
@@ -28,6 +30,8 @@ class MyWarmFloor
 		this.initLevels();
 		
 		this.myGridWf = new MyGridWf();
+		this.myGridWfMove = new MyGridWfMove();
+		this.myGridPointWfMove = new MyGridPointWfMove();
 		
 		this.myPointWf = new MyPointWf();
 		this.myPointWfMove = new MyPointWfMove();
@@ -44,10 +48,10 @@ class MyWarmFloor
 	
 	initLevels()
 	{
-		this.levels[0] = {points: [], tubes: [], objs: []};
-		this.levels[1] = {points: [], tubes: [], objs: []};
-		this.levels[2] = {points: [], tubes: [], objs: []};
-		this.levels[3] = {points: [], tubes: [], objs: []};
+		this.levels[0] = {points: [], tubes: [], grids: [], objs: []};
+		this.levels[1] = {points: [], tubes: [], grids: [], objs: []};
+		this.levels[2] = {points: [], tubes: [], grids: [], objs: []};
+		this.levels[3] = {points: [], tubes: [], grids: [], objs: []};
 	}
 	
 	// полчаем массив объектов активного этажа или выбранного по номеру
@@ -67,9 +71,21 @@ class MyWarmFloor
 		const array = [];
 		
 		const points = list.points.filter((p) => p.visible);
+		
+		const pointsGrids = [];
+		for ( let i = 0; i < list.grids.length; i++ )
+		{
+			const pointsGrid = this.myGridWf.getPoints({obj: list.grids[i]});
+			pointsGrids.push(...pointsGrid);
+		}
+		
+		
 		array.push(...points);		
 		array.push(...list.tubes);
+		array.push(...list.grids);
+		array.push(...pointsGrids);
 		array.push(...list.objs);
+		
 		
 		const ray = rayIntersect( event, array, 'arr' );
 		if(ray.length > 0) 
@@ -127,6 +143,7 @@ class MyWarmFloor
 		
 		if(type === 'points') list.points.push(obj);
 		if(type === 'tubes') list.tubes.push(obj);
+		if(type === 'grids') list.grids.push(obj);
 		if(type === 'objs') list.objs.push(obj);
 		
 		if(type === 'objs') this.addObjToBD({obj});

@@ -216,6 +216,8 @@ class MyManagerClick
 			//else if(tag == 'obj' && isCam2D) { myHouse.myObjMove.mousedown({event, obj}); }
 			else if(tag == 'pointWf' && isCam2D) { myWarmFloor.myPointWfMove.mousedown({event, obj}); }
 			else if(tag == 'tubeWf' && isCam2D) { myWarmFloor.myTubeWfMove.mousedown({event, obj, rayPos: rayhit.point}); }
+			else if(tag == 'gridWf' && isCam2D) { myWarmFloor.myGridWfMove.mousedown({event, obj}); }
+			else if(tag == 'gridPointWf' && isCam2D) { myWarmFloor.myGridPointWfMove.mousedown({event, obj}); }
 			else if(tag == 'objWf' && isCam2D) { myWarmFloor.myObjWfMove.mousedown({event, obj}); }
 			else { flag = false; }
 		}
@@ -229,6 +231,8 @@ class MyManagerClick
 			else if(tag == 'obj' && isCam3D) { myHouse.myObjMove.click({event, obj}); }
 			else if(tag == 'pointWf' && isCam3D) { myWarmFloor.myPointWfMove.mousedown({event, obj}); }
 			else if(tag == 'tubeWf' && isCam3D) { myWarmFloor.myTubeWfMove.mousedown({event, obj, rayPos: rayhit.point}); }
+			else if(tag == 'gridWf' && isCam3D) { myWarmFloor.myGridWfMove.mousedown({event, obj}); }
+			else if(tag == 'gridPointWf' && isCam3D) { myWarmFloor.myGridPointWfMove.mousedown({event, obj}); }
 			else if(tag == 'objWf' && isCam3D) { myWarmFloor.myObjWfMove.mousedown({event, obj}); }
 			else { flag = false; }
 		}	
@@ -264,6 +268,8 @@ class MyManagerClick
 		else if(tag == 'obj') { myHouse.myObjMove.mousemove(event); }
 		else if(tag == 'pointWf') { myWarmFloor.myPointWfMove.mousemove(event); }
 		else if(tag == 'tubeWf') { myWarmFloor.myTubeWfMove.mousemove(event); }
+		else if(tag == 'gridWf') { myWarmFloor.myGridWfMove.mousemove(event); }
+		else if(tag == 'gridPointWf') { myWarmFloor.myGridPointWfMove.mousemove(event); }
 		else if(tag == 'objWf') { myWarmFloor.myObjWfMove.mousemove(event); }
 	}
 
@@ -283,6 +289,8 @@ class MyManagerClick
 		else if(tag == 'obj') { myHouse.myObjMove.mouseup(); }
 		else if(tag == 'pointWf') { myWarmFloor.myPointWfMove.mouseup(); }
 		else if(tag == 'tubeWf') { myWarmFloor.myTubeWfMove.mouseup(); }
+		else if(tag == 'gridWf') { myWarmFloor.myGridWfMove.mouseup(); }
+		else if(tag == 'gridPointWf') { myWarmFloor.myGridPointWfMove.mouseup(); }
 		else if(tag == 'objWf') { myWarmFloor.myObjWfMove.mouseup(); }
 	}
 
@@ -314,6 +322,8 @@ class MyManagerClick
 				else if(tag == 'obj' && isCam2D) { this.checkSetToolPGS({obj}); }
 				else if(tag == 'pointWf' && isCam2D) { this.checkSetToolPGS({obj}); }
 				else if(tag == 'tubeWf' && isCam2D) { this.checkSetToolPGS({obj}); }
+				else if(tag == 'gridWf' && isCam2D) { this.checkSetToolPGS({obj}); }
+				else if(tag == 'gridPointWf' && isCam2D) { this.checkSetToolPGS({obj}); }
 				else if(tag == 'objWf' && isCam2D) { this.checkSetToolPGS({obj}); }
 				else { flag = false; }
 			}
@@ -328,6 +338,8 @@ class MyManagerClick
 				else if(tag == 'obj' && isCam3D) { this.hideMenuUI({obj}); }
 				else if(tag == 'pointWf' && isCam3D) { this.hideMenuUI({obj}); }
 				else if(tag == 'tubeWf' && isCam3D) { this.hideMenuUI({obj}); }
+				else if(tag == 'gridWf' && isCam3D) { this.hideMenuUI({obj}); }
+				else if(tag == 'gridPointWf' && isCam3D) { this.hideMenuUI({obj}); }
 				else if(tag == 'objWf' && isCam3D) { this.hideMenuUI({obj}); }
 				else { flag = false; }
 			}
@@ -343,6 +355,8 @@ class MyManagerClick
 				else if(tag == 'roof') { this.hideMenuUI({obj}); }
 				else if(tag == 'pointWf') { this.hideMenuUI({obj}); }
 				else if(tag == 'tubeWf') { this.hideMenuUI({obj}); }
+				else if(tag == 'gridWf') { this.hideMenuUI({obj}); }
+				else if(tag == 'gridPointWf') { this.hideMenuUI({obj}); }
 				else if(tag == 'objWf') { this.hideMenuUI({obj}); }
 				else { flag = false; }
 			}
@@ -398,6 +412,10 @@ class MyManagerClick
 					myWarmFloor.myTubeWf.visiblePointsOnTube({tube: obj, visible: false});
 					myToolPG.hide();
 				}
+				else if(tag == 'gridWf' || tag == 'gridPointWf') 
+				{ 
+					myToolPG.hide();
+				}				
 				else if(tag == 'objWf') 
 				{ 
 					myToolPG.hide(); 

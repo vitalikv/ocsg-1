@@ -12,13 +12,16 @@ class MyGridWf
 		this.matGrid = new THREE.MeshStandardMaterial({ color: 0xe3e3e5, lightMap: lightMap_1 });
 		//this.matGrid.visible = false;
 		this.matPoint = new THREE.MeshStandardMaterial({ color: 0x222222, lightMap: lightMap_1 });
-		
-		const grid = this.crGrid({});
-		const result = this.getBoundBox({obj: grid});
-		this.crLinesGrid({box: result.box, x: result.x, z: result.z});
 	}
 	
-	crGrid({id = null})
+	initTest()
+	{
+		const grid = this.crGrid({});
+		const result = this.getBoundBox({obj: grid});
+		this.crLinesGrid({box: result.box, x: result.x, z: result.z});		
+	}
+	
+	crGrid({id = null, idLevel = null})
 	{
 		const points = [];
 		points.push(new THREE.Vector2(-3, -1));
@@ -26,7 +29,7 @@ class MyGridWf
 		points.push(new THREE.Vector2(2, 1));
 		points.push(new THREE.Vector2(2, -2));
 		
-		const arrP = this.crPoints({points});
+		const arrPoints = this.crPoints({points});
 		
 		const geometry = this.crGeometry({points});		
 				
@@ -35,8 +38,11 @@ class MyGridWf
 
 		if(!id) { id = countId; countId++; }
 		
-		obj.userData.tag = 'grifWf';
-		obj.userData.id = id;	
+		obj.userData.tag = 'gridWf';
+		obj.userData.id = id;
+		obj.userData.arrPoints = arrPoints;
+
+		myWarmFloor.addToArray({obj, type: 'grids', idLevel});
 		
 		scene.add(obj);
 		
@@ -60,11 +66,18 @@ class MyGridWf
 	{
 		const obj = new THREE.Mesh( this.geomPoint, this.matPoint ); 
 
-		obj.userData.tag = 'pointGridWf';		
+		obj.userData.tag = 'gridPointWf';		
 		obj.position.copy(pos);		
 		scene.add( obj );
 
 		return obj;
+	}
+	
+	
+	// получаем точки стеки
+	getPoints({obj})
+	{
+		return obj.userData.arrPoints;
 	}
 	
 	crGeometry({points, depth = 0.1})
