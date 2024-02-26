@@ -87,7 +87,7 @@ class MyGridPointWfMove
 		
 		obj.position.add( offset );	
 
-		//this.movePointWf_2({obj});
+		this.changeGeometryGridWf({obj});
 	}
 	
 	mouseup = () =>
@@ -106,13 +106,10 @@ class MyGridPointWfMove
 	}
 	
 	
-	movePointWf_2({obj})
+	changeGeometryGridWf({obj})
 	{
-		const tube = obj.userData.tube;
-		if(tube)
-		{
-			myWarmFloor.myTubeWf.upTube({tube});
-		}		
+		const grid = myWarmFloor.myGridPointWf.getGrid({obj});
+		myWarmFloor.myGridWf.upGeometryGrid({obj: grid});	
 	}
 	
 	clearPoint()

@@ -19,21 +19,19 @@ class MyGridWf
 	
 	crGrid({id = null, idLevel = null})
 	{
-		const points = [];
-		points.push(new THREE.Vector2(-3, -1));
-		points.push(new THREE.Vector2(-1, 2));
-		points.push(new THREE.Vector2(2, 1));
-		points.push(new THREE.Vector2(2, -2));
+		const arrPos = [];
+		arrPos.push(new THREE.Vector3(-3, 0, -1));
+		arrPos.push(new THREE.Vector3(-1, 0, 2));
+		arrPos.push(new THREE.Vector3(2, 0, 1));
+		arrPos.push(new THREE.Vector3(2, 0, -2));
 		
-		const arrPoints = myWarmFloor.myGridPointWf.crPoints({points});
-		
-		const geometry = this.crGeometry({points});		
-				
+		const geometry = this.crGeometry({arrPos});						
 		const obj = new THREE.Mesh( geometry, this.matGrid ); 
 		//obj.position.set( 0, points[0].y, 0 );	
 
-		if(!id) { id = countId; countId++; }
+		const arrPoints = myWarmFloor.myGridPointWf.crPoints({arrPos, grid: obj});
 		
+		if(!id) { id = countId; countId++; }		
 		obj.userData.tag = 'gridWf';
 		obj.userData.id = id;
 		obj.userData.arrPoints = arrPoints;
@@ -51,14 +49,14 @@ class MyGridWf
 		return obj.userData.arrPoints;
 	}
 	
-	crGeometry({points, depth = 0.1})
+	crGeometry({arrPos, depth = 0.1})
 	{
 		let geometry = null;
 		
 		const form = [];
-		for ( let i = 0; i < points.length; i++ ) 
+		for ( let i = 0; i < arrPos.length; i++ ) 
 		{  
-			form.push(new THREE.Vector2(points[i].x, -points[i].y));		
+			form.push(new THREE.Vector2(arrPos[i].x, -arrPos[i].z));		
 		}	 
 		
 		const shape = new THREE.Shape( form );
@@ -70,6 +68,27 @@ class MyGridWf
 		return geometry;
 	}
 
+	// обновляем geometry у сетки
+	upGeometryGrid({obj, addPoint = null, delPoint = null})
+	{
+		if(addPoint) 
+		{
+			//tube.userData.points.push(addPoint);
+		}
+		if(delPoint) 
+		{
+			//const index = tube.userData.points.indexOf(delPoint);
+			//if (index > -1) tube.userData.points.splice(index, 1);
+		}
+					
+		const points = this.getPoints({obj});
+		const arrPos = points.map((p) => p.position);
+		
+		const geometry = this.crGeometry({arrPos});
+		
+		obj.geometry.dispose();
+		obj.geometry = geometry;			
+	}	
 
 	// получаем прямоугольник в который полностью попадает grid
 	getBoundBox({obj})

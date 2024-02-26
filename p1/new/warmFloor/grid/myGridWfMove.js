@@ -83,6 +83,8 @@ class MyGridWfMove
 		offset.y = 0;		
 		
 		obj.position.add( offset );	
+		
+		this.moveGridPointsWf({obj, offset});
 	}
 	
 	mouseup = () =>
@@ -96,6 +98,17 @@ class MyGridWfMove
 		if (!isDown) return;
 		if (!isMove) return;
 	}
+	
+	
+	moveGridPointsWf({obj, offset})
+	{
+		const points = myWarmFloor.myGridWf.getPoints({obj});
+		
+		for ( let i = 0; i < points.length; i++ )
+		{
+			points[i].position.add( offset );
+		}	
+	}	
 	
 	clearPoint()
 	{
