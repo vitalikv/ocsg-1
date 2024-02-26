@@ -3,6 +3,7 @@
 class MyWarmFloor 
 {
 	myGridWf;
+	myGridPointWf;
 	myGridWfMove;
 	myGridPointWfMove;
 	
@@ -30,6 +31,7 @@ class MyWarmFloor
 		this.initLevels();
 		
 		this.myGridWf = new MyGridWf();
+		this.myGridPointWf = new MyGridPointWf();
 		this.myGridWfMove = new MyGridWfMove();
 		this.myGridPointWfMove = new MyGridPointWfMove();
 		
