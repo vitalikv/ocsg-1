@@ -7,6 +7,7 @@ class MyGridLinesWf
 	constructor()
 	{
 		this.matLines = new THREE.MeshStandardMaterial({ color: 0xff0000, transparent: true, opacity: 1.0, depthTest: false });
+		//this.matLines = new THREE.MeshStandardMaterial({ color: 0xff0000 });
 	}
 
 	// линии для сетки
@@ -59,7 +60,7 @@ class MyGridLinesWf
 	
 
 	// получаем прямоугольник в который полностью попадает grid (для построения сетки)
-	getBoundBox({obj})
+	calcBoundBox({obj})
 	{
 		obj.geometry.computeBoundingBox();	
 		let bound = obj.geometry.boundingBox;
@@ -99,15 +100,19 @@ class MyGridLinesWf
 		return {x, z, centerPos};
 	}
 
+
+	
 	
 	// обновляем geometry линий сетки
 	upGeometryGridLines({obj})
 	{
-		const result = this.getBoundBox({obj});
+		const result = this.calcBoundBox({obj});
 		const geometry = this.crGeometryLinesGrid({x: result.x, z: result.z, centerPos: result.centerPos});
 
-		obj.userData.objLines.geometry.dispose();
-		obj.userData.objLines.geometry = geometry;
+		const objLines = myWarmFloor.myGridWf.getGridLines({obj});
+		
+		objLines.geometry.dispose();
+		objLines.geometry = geometry;
 	}
 	
 }

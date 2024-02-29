@@ -3,11 +3,13 @@
 class MyGridWf 
 {
 	myGridLinesWf;
+	myGridWfCSG;
 	matGrid;
 	
 	constructor()
 	{
 		this.myGridLinesWf = new MyGridLinesWf();
+		this.myGridWfCSG = new MyGridWfCSG();
 		this.matGrid = new THREE.MeshStandardMaterial({ color: 0xe3e3e5, lightMap: lightMap_1 });
 		//this.matGrid.visible = false;
 	}
@@ -15,31 +17,35 @@ class MyGridWf
 	initTest()
 	{
 		const grid = this.crGrid({});
-		const result = this.myGridLinesWf.getBoundBox({obj: grid});
-		const objLines = this.myGridLinesWf.crLinesGrid({x: result.x, z: result.z, centerPos: result.centerPos});
-
-		grid.userData.objLines = objLines;
+		this.myGridWfCSG.upGeometryLines({grid});
 	}
 	
 	crGrid({id = null, idLevel = null})
 	{
 		const arrPos = [];
-		arrPos.push(new THREE.Vector3(-3, 0, -1));
-		arrPos.push(new THREE.Vector3(-1, 0, 2));
+		arrPos.push(new THREE.Vector3(-3, 0, -2));
+		arrPos.push(new THREE.Vector3(-3, 0, 2));
+		arrPos.push(new THREE.Vector3(3, 0, 2));
+		arrPos.push(new THREE.Vector3(3, 0, 1));
 		arrPos.push(new THREE.Vector3(2, 0, 1));
-		arrPos.push(new THREE.Vector3(2, 0, -2));
+		arrPos.push(new THREE.Vector3(2, 0, -1));
+		arrPos.push(new THREE.Vector3(3, 0, -1));
+		arrPos.push(new THREE.Vector3(3, 0, -2));	
 		
 		const geometry = this.crGeometry({arrPos});						
 		const obj = new THREE.Mesh( geometry, this.matGrid ); 
 		//obj.position.set( 0, points[0].y, 0 );	
 
 		const arrPoints = myWarmFloor.myGridPointWf.crPoints({arrPos, grid: obj});
+		const result = this.myGridLinesWf.calcBoundBox({obj});
+		const objLines = this.myGridLinesWf.crLinesGrid({x: result.x, z: result.z, centerPos: result.centerPos});
 		
 		if(!id) { id = countId; countId++; }		
 		obj.userData.tag = 'gridWf';
 		obj.userData.id = id;
 		obj.userData.arrPoints = arrPoints;
-
+		obj.userData.objLines = objLines;
+		
 		myWarmFloor.addToArray({obj, type: 'grids', idLevel});
 		
 		scene.add(obj);
@@ -51,6 +57,12 @@ class MyGridWf
 	getPoints({obj})
 	{
 		return obj.userData.arrPoints;
+	}
+
+	// получаем линии сетки
+	getGridLines({obj})
+	{
+		return obj.userData.objLines;
 	}
 	
 	// создаем геометрию стеки
@@ -94,6 +106,7 @@ class MyGridWf
 		obj.geometry = geometry;
 
 		this.myGridLinesWf.upGeometryGridLines({obj});
+		
 	}	
 	
 

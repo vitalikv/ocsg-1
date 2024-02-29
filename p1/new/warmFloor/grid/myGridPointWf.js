@@ -20,6 +20,7 @@ class MyGridPointWf
 		{  
 			const obj = this.crPoint({pos: new THREE.Vector3(arrPos[i].x, arrPos[i].y, arrPos[i].z), grid});
 			arrP.push(obj);
+			console.log(arrPos[i]);
 		}
 
 		return arrP;

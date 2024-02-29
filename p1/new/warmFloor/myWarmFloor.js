@@ -77,7 +77,8 @@ class MyWarmFloor
 		const pointsGrids = [];
 		for ( let i = 0; i < list.grids.length; i++ )
 		{
-			const pointsGrid = this.myGridWf.getPoints({obj: list.grids[i]});
+			let pointsGrid = this.myGridWf.getPoints({obj: list.grids[i]});
+			pointsGrid = pointsGrid.filter((p) => p.visible);
 			pointsGrids.push(...pointsGrid);
 		}
 		
@@ -94,16 +95,16 @@ class MyWarmFloor
 		{
 			rayhit = ray[0];
 			
-			// если показываются точки у труб, ищем кликнули на них или нет
+			// проверка на приоритета на что кликнули
 			for ( let i = 0; i < ray.length; i++ )
 			{
-				const index = list.points.indexOf(ray[i].object);
+				// если показываются точки у труб, ищем кликнули на них или нет
+				let index = list.points.indexOf(ray[i].object);				
+				if(index > -1) { rayhit = ray[i]; break; }
 				
-				if(index > -1)
-				{
-					rayhit = ray[i];
-					break;
-				}
+				// точки стеки
+				index = pointsGrids.indexOf(ray[i].object);				
+				if(index > -1) { rayhit = ray[i]; break; }					
 			}
 		}
 

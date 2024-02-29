@@ -96,6 +96,8 @@ class MyGridPointWfMove
 		const isDown = this.isDown;
 		const isMove = this.isMove;
 		
+		this.mouseupEndGridWf({obj});
+		
 		this.clearPoint();
 		
 		if (!isDown) return;
@@ -105,12 +107,22 @@ class MyGridPointWfMove
 		//if(!obj.userData.point.type) myHouse.myPointAction.clickCreateWall(obj);
 	}
 	
-	
+	// обновляем форму сетки
 	changeGeometryGridWf({obj})
 	{
 		const grid = myWarmFloor.myGridPointWf.getGrid({obj});
 		myWarmFloor.myGridWf.upGeometryGrid({obj: grid});	
 	}
+	
+	mouseupEndGridWf({obj})
+	{
+		if(!obj) return;
+		
+		const grid = myWarmFloor.myGridPointWf.getGrid({obj});
+		myWarmFloor.myGridWf.myGridWfCSG.upGeometryLines({grid});
+		
+		this.render();
+	}	
 	
 	clearPoint()
 	{
