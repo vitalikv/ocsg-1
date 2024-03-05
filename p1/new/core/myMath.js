@@ -41,6 +41,33 @@ class MyMath
 
 		return true;
 	}	
+
+
+	//прорека находится ли точка внутри многоугольника
+	checkPointInsideForm({point, arrP})
+	{
+		point = (point instanceof THREE.Vector3) ? new THREE.Vector3(point.x, point.y, point.z) : point.position.clone(); 
+		const p = (arrP[0] instanceof THREE.Vector3) ? arrP : arrP.map((p) => p.position);
+		
+		let result = false;
+		
+		let j = p.length - 1;
+		for (let i = 0; i < p.length; i++) 
+		{
+			const calc1 = (p[i].z < point.z && p[j].z >= point.z || p[j].z < point.z && p[i].z >= point.z);
+			const calc2 = (p[i].x + (point.z - p[i].z) / (p[j].z - p[i].z) * (p[j].x - p[i].x) < point.x);
+			
+			if(calc1 && calc2)
+			{
+				result = !result;
+			}
+				
+			j = i;
+		}
+		
+		return result;
+	}
+
 }
 
 

@@ -221,6 +221,7 @@
 	<script src="<?=$path?>new/warmFloor/grid/myGridWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/grid/myGridLinesWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/grid/myGridPointWf.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/grid/myGridLinesPointWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/grid/myGridWfCSG.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/grid/myGridWfMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/grid/myGridPointWfMove.js?<?=$vrs?>"></script>

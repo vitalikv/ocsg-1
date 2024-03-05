@@ -3,12 +3,14 @@
 class MyGridWf 
 {
 	myGridLinesWf;
+	myGridLinesPointWf;
 	myGridWfCSG;
 	matGrid;
 	
 	constructor()
 	{
 		this.myGridLinesWf = new MyGridLinesWf();
+		this.myGridLinesPointWf = new MyGridLinesPointWf();
 		this.myGridWfCSG = new MyGridWfCSG();
 		this.matGrid = new THREE.MeshStandardMaterial({ color: 0xe3e3e5, lightMap: lightMap_1 });
 		//this.matGrid.visible = false;
@@ -17,7 +19,7 @@ class MyGridWf
 	initTest()
 	{
 		const grid = this.crGrid({});
-		this.myGridWfCSG.upGeometryLines({grid});
+		this.myGridWfCSG.upGeometryLines({grid});		
 	}
 	
 	crGrid({id = null, idLevel = null})
@@ -37,8 +39,7 @@ class MyGridWf
 		//obj.position.set( 0, points[0].y, 0 );	
 
 		const arrPoints = myWarmFloor.myGridPointWf.crPoints({arrPos, grid: obj});
-		const result = this.myGridLinesWf.calcBoundBox({obj});
-		const objLines = this.myGridLinesWf.crLinesGrid({x: result.x, z: result.z, centerPos: result.centerPos});
+		const objLines = this.myGridLinesWf.crLinesGrid({grid: obj, arrPoints});		
 		
 		if(!id) { id = countId; countId++; }		
 		obj.userData.tag = 'gridWf';
@@ -105,7 +106,7 @@ class MyGridWf
 		obj.geometry.dispose();
 		obj.geometry = geometry;
 
-		this.myGridLinesWf.upGeometryGridLines({obj});
+		this.myGridLinesWf.upGeometryGridLines({grid: obj});
 		
 	}	
 	

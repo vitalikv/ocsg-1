@@ -6,18 +6,22 @@ class MyGridLinesWf
 	
 	constructor()
 	{
-		this.matLines = new THREE.MeshStandardMaterial({ color: 0xff0000, transparent: true, opacity: 1.0, depthTest: false });
+		
+		this.matLines = new THREE.MeshStandardMaterial({ color: 0x0000ff, transparent: true, opacity: 1.0, depthTest: false });
 		//this.matLines = new THREE.MeshStandardMaterial({ color: 0xff0000 });
 	}
 
-	// линии для сетки
-	crLinesGrid({x, z, centerPos})
+	// создаем линии для сетки
+	crLinesGrid({grid, arrPoints})
 	{
-		const geometry = this.crGeometryLinesGrid({x, z, centerPos});
+		const result = this.calcBoundGrid({obj: grid});
+		const geometry = this.crGeometryLinesGrid({x: result.x, z: result.z, centerPos: result.centerPos});
 
 		const objLines = new THREE.Mesh( geometry, this.matLines );
+		objLines.userData.pointsTest = null;
 		scene.add( objLines );
-		
+				
+		myWarmFloor.myGridWf.myGridLinesPointWf.crTestPoints({objLines, arrPoints});				
 		
 		return objLines;
 	}
@@ -54,13 +58,16 @@ class MyGridLinesWf
 			lineZ.translate(centerPos.x, centerPos.y, centerPos.z);
 			geometry.merge(lineZ);
 		}
+		
+
+		this.setParamsGridLinesGeom({geometry, countX, countZ, size, ofssetX, ofssetZ, centerPos});	
 
 		return geometry;
 	}
 	
 
 	// получаем прямоугольник в который полностью попадает grid (для построения сетки)
-	calcBoundBox({obj})
+	calcBoundGrid({obj})
 	{
 		obj.geometry.computeBoundingBox();	
 		let bound = obj.geometry.boundingBox;
@@ -100,21 +107,52 @@ class MyGridLinesWf
 		return {x, z, centerPos};
 	}
 
-
-	
 	
 	// обновляем geometry линий сетки
-	upGeometryGridLines({obj})
+	upGeometryGridLines({grid})
 	{
-		const result = this.calcBoundBox({obj});
+		const result = this.calcBoundGrid({obj: grid});
 		const geometry = this.crGeometryLinesGrid({x: result.x, z: result.z, centerPos: result.centerPos});
 
-		const objLines = myWarmFloor.myGridWf.getGridLines({obj});
+		const objLines = myWarmFloor.myGridWf.getGridLines({obj: grid});
 		
 		objLines.geometry.dispose();
 		objLines.geometry = geometry;
+		
+		const arrPoints = myWarmFloor.myGridWf.getPoints({obj: grid});
+		myWarmFloor.myGridWf.myGridLinesPointWf.crTestPoints({objLines, arrPoints});
+	}
+
+
+	// назначаем параметры стеки, по которой она строилась
+	setParamsGridLinesGeom({geometry, countX, countZ, size, ofssetX, ofssetZ, centerPos})
+	{		
+		if(!geometry.userData) geometry.userData = {};
+		geometry.userData.params = {countX, countZ, size, ofssetX, ofssetZ, centerPos};
+	}
+
+
+	// получаем параметры стеки, по которой она строилась
+	getParamsGridLinesGeom({objLines})
+	{
+		const {countX, countZ, size, ofssetX, ofssetZ, centerPos} = objLines.geometry.userData.params;
+		
+		return {countX, countZ, size, ofssetX, ofssetZ, centerPos};
+	}
+
+
+	// назначаем точки пересечения сетки
+	setPointsTest({objLines, pointsTest})
+	{
+		objLines.userData.pointsTest = pointsTest;
 	}
 	
+	
+	// получаем точки пересечения сетки
+	getPointsTest({objLines})
+	{
+		return objLines.userData.pointsTest;
+	}	
 }
 
 
