@@ -122,7 +122,10 @@ class MyGridWfMove
 		if(!obj) return;
 		
 		obj.position.set(0, 0, 0);
-		myWarmFloor.myGridWf.upGeometryGrid({obj});	
+		myWarmFloor.myGridWf.upGeometryGrid({obj});
+
+		myWarmFloor.myGridWf.myGridLinesWf.upGeometryGridLines({grid: obj});
+		myWarmFloor.myGridWf.myGridWfCSG.upGeometryLines({grid: obj});
 	}	
 	
 	clearPoint()

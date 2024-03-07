@@ -111,7 +111,9 @@ class MyGridPointWfMove
 	changeGeometryGridWf({obj})
 	{
 		const grid = myWarmFloor.myGridPointWf.getGrid({obj});
-		myWarmFloor.myGridWf.upGeometryGrid({obj: grid});	
+		myWarmFloor.myGridWf.upGeometryGrid({obj: grid});
+		
+		myWarmFloor.myGridWf.myGridLinesWf.upGeometryGridLines({grid});
 	}
 	
 	mouseupEndGridWf({obj})

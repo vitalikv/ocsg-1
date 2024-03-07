@@ -69,6 +69,7 @@ class MyGridLinesWf
 	// получаем прямоугольник в который полностью попадает grid (для построения сетки)
 	calcBoundGrid({obj})
 	{
+		obj.updateMatrixWorld();
 		obj.geometry.computeBoundingBox();	
 		let bound = obj.geometry.boundingBox;
 		
@@ -97,7 +98,7 @@ class MyGridLinesWf
 		{
 			const geometry = new THREE.BoxGeometry(x, y, z);
 			const material = new THREE.MeshStandardMaterial({ color: 0x00ff00, transparent: true, opacity: 0.3, depthTest: false });
-			material.visible = false;
+			//material.visible = false;
 			
 			const box = new THREE.Mesh( geometry, material );
 			box.position.add(centerPos);

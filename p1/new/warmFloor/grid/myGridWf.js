@@ -105,9 +105,6 @@ class MyGridWf
 		
 		obj.geometry.dispose();
 		obj.geometry = geometry;
-
-		this.myGridLinesWf.upGeometryGridLines({grid: obj});
-		
 	}	
 	
 
