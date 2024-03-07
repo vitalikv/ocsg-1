@@ -1067,7 +1067,8 @@ function isCheckExsistFunction(functionToCheck)
 
 
 let docReady = false;
-let myPanelTop;
+let myPanelTop1;
+let myPanelTop2;
 let windUI;
 let windTabs;
 let windDivAbout;
@@ -1104,8 +1105,9 @@ document.addEventListener("DOMContentLoaded", ()=>
 {
 	docReady = true;
 	
-	myPanelTop = new MyPanelTop();
-	myPanelTop.init();
+	myPanelTop1 = new MyPanelTop1();
+	myPanelTop1.init();
+	myPanelTop2 = new MyPanelTop2();
 	
 	windUI = new WindUI();
 	windTabs = new WindTabs();
@@ -1169,7 +1171,7 @@ async function startInitProject()
 
 	//if(myStartProject.detectShowStartWind()) windUI.showWin();	// меню пользователя
 	
-	if(1===1) myPanelTop.addPaidPanel();	// панель для платных пользователей	
+	if(1===1) myPanelTop2.addPaidPanel();	// панель для платных пользователей	
 	
 	if(1===2) myPanelR.myTabsR.activeTab({id: 0});	// вклад при старте
 	

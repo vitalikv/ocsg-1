@@ -35,7 +35,8 @@ new/level.js
 new/myStartProject.js
 new/csgBox.js
 new/myTexture.js
-new/ui/panelTop/myPanelTop.js
+new/ui/panelTop/myPanelTop1.js
+new/ui/panelTop/myPanelTop2.js
 new/ui/panelTop/switchCamera.js
 new/ui/menu/windUI.js
 new/ui/menu/tabs.js

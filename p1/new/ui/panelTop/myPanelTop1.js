@@ -1,10 +1,9 @@
 
-
-class MyPanelTop
+// верхняя панель с кнопками камеры, меню, скриншота
+class MyPanelTop1
 {
 	container;
 	divP1;
-	divP2;
 	
 	init()
 	{
@@ -15,8 +14,6 @@ class MyPanelTop
 		
 		const btnScreen = this.divP1.querySelector('[nameId="screenshot"]');
 		btnScreen.onmousedown = () => { createImageSvg(); createImageScene(); }
-		
-		//this.initEvent();
 	}
 
 	
@@ -28,19 +25,6 @@ class MyPanelTop
 		return div.children[0];	
 	}
 
-	// верхняя панель с режимами (теплый пол, отопление и т.д.)
-	crDivP2()
-	{
-		const div = document.createElement('div');
-		div.innerHTML = this.html_2();
-		return div.children[0];	
-	}		
-	
-	initEvent()
-	{
-		//this.btnShow.onmousedown = () => { this.showHidePanelR({show: true}); }
-				
-	}
 	
 	html_1()
 	{
@@ -102,63 +86,6 @@ class MyPanelTop
 		return html;
 	}
 
-	html_2()
-	{
-		const css1 = 
-		`position: relative;
-		z-index: 2;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		height: 41px;
-		margin: 0;
-		border: 1px solid #b3b3b3;
-		border-top: none;
-		background: #f1f1f1;`;
-
-		const cssTab = 
-		`margin: auto 10px;
-		padding: 5px;
-		font-size: 15px;
-		color: #666;
-		text-align: center;
-		border: 1px solid #b3b3b3;
-		background: #fff;
-		cursor: pointer;
-		user-select: none;`;		
-		
-		const html = 
-		`<div ui_1="" style="${css1}">			
-			<div nameId="plan" style="${cssTab}">планировка</div>
-			<div nameId="otop" style="${cssTab}">отопление</div>
-			<div nameId="wf" style="${cssTab}">теплый пол</div>
-			<div nameId="objWf" style="${cssTab}">объект</div>
-		</div>`;
-
-		return html;
-	}
-
-
-	// панель для платных пользователей
-	addPaidPanel()
-	{
-		this.divP2 = this.crDivP2();
-		this.container.append(this.divP2);
-		
-		const btnPl = this.divP2.querySelector('[nameId="plan"]');
-		const btnOt = this.divP2.querySelector('[nameId="otop"]');
-		const btnWF = this.divP2.querySelector('[nameId="wf"]');
-		const btnObjWF = this.divP2.querySelector('[nameId="objWf"]');
-		
-		btnPl.onmousedown = () => { myPanelWF.showHidePanel({show: false}); myPanelR.divPanel_1.style.display = ''; }
-		btnWF.onmousedown = () => { myPanelR.divPanel_1.style.display = 'none'; myPanelWF.showHidePanel({show: true}); }
-		
-		myPanelWF.addPaidContent();
-				
-		btnOt.onmousedown = () => { clickInterface({button: 'add_pointWf'}); }
-		btnObjWF.onmousedown = () => { clickInterface({button: 'add_objWf'}); }
-	}
 }
 
 

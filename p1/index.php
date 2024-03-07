@@ -146,7 +146,8 @@
 	<script src="<?=$path?>new/tools/myPivot.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myGizmo.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/tools/myScale.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/panelTop/myPanelTop.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/panelTop/myPanelTop1.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/panelTop/myPanelTop2.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/panelTop/switchCamera.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/windUI.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/menu/tabs.js?<?=$vrs?>"></script>
