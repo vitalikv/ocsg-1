@@ -434,11 +434,9 @@ async function saveFile({id = undefined, local = false, txt = false})
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },				
 		});
 		const data = await response.json();		
-		console.log(data);
+		console.log(data);	
 		
-		//if(cdm.upUI) { getListProject({id: infProject.user.id}); }		// обновляем меню сохрание проектов		
-		
-		return true;	
+		return data;	
 	}
 	
 	if(txt)

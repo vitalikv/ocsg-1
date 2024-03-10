@@ -78,11 +78,9 @@ class WindDivProjectSave
 	// кликнули на кнопку сохранить проекта
 	async clickButtonSaveProjectUI(el)
 	{
-		var result = await saveFile({id: el.attributes.projectid.value, upUI: true}); 
+		const result = await saveFile({id: el.attributes.projectid.value, upUI: true}); 
 		
-		if(!result) return;
-		
-		//infProject.elem.mainMenu.g.style.display = 'none';
+		return result;
 	}
 
 

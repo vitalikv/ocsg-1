@@ -98,11 +98,11 @@ class WindDivProjectDemo
 		const btnPr4 = this.wrapDemo.querySelector('[nameId="strPr_4"]');
 		const btnPr5 = this.wrapDemo.querySelector('[nameId="strPr_5"]');
 		
-		btnPr1.onmousedown = () => { windUI.closeWin(); loadFile({json: 'demo/1.json'}); }
-		btnPr2.onmousedown = () => { windUI.closeWin(); loadFile({json: 'demo/2.json'}); }
-		btnPr3.onmousedown = () => { windUI.closeWin(); loadFile({json: 'demo/3.json'}); }
-		btnPr4.onmousedown = () => { windUI.closeWin(); loadFile({json: 'demo/4.json'}); }
-		btnPr5.onmousedown = () => { windUI.closeWin(); loadFile({json: 'demo/5.json'}); }
+		btnPr1.onmousedown = () => { windUI.closeWin(); loadFile({local: 'demo/1.json'}); }
+		btnPr2.onmousedown = () => { windUI.closeWin(); loadFile({local: 'demo/2.json'}); }
+		btnPr3.onmousedown = () => { windUI.closeWin(); loadFile({local: 'demo/3.json'}); }
+		btnPr4.onmousedown = () => { windUI.closeWin(); loadFile({local: 'demo/4.json'}); }
+		btnPr5.onmousedown = () => { windUI.closeWin(); loadFile({local: 'demo/5.json'}); }
 	}	
 
 	// показываем демо проекты

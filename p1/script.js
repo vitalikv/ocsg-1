@@ -1169,9 +1169,9 @@ async function startInitProject()
 {
 	await myStartProject.init({name: 'new'});	// new - пустой проект 
 
-	//if(myStartProject.detectShowStartWind()) windUI.showWin();	// меню пользователя
+	if(1===1) if(myStartProject.detectShowStartWind()) windUI.showWin();	// меню пользователя
 	
-	if(1===1) myPanelTop2.addPaidPanel();	// панель для платных пользователей	
+	if(1===2) myPanelTop2.addPaidPanel();	// панель для платных пользователей	
 	
 	if(1===2) myPanelR.myTabsR.activeTab({id: 0});	// вклад при старте
 	
@@ -1179,7 +1179,7 @@ async function startInitProject()
 	
 	if(1===2) myWarmFloor.myGeneratorWf.init();	// генератор отопления
 	
-	if(1===1) myWarmFloor.myGridWf.initTest(); 	// сетка для теплого пола
+	if(1===2) myWarmFloor.myGridWf.initTest(); 	// сетка для теплого пола
 }
 
 

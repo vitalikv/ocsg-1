@@ -64,7 +64,7 @@ class WindUI
 		windDivProjectSave.elInfoReg.innerHTML = '';
 		windDivProjectLoad.elInfoReg.innerHTML = '';
 		
-		this.getListProject({id});
+		this.getListProject({id, typeInfo: 'load'});
 	}
 	
 
@@ -189,11 +189,11 @@ class WindUI
 
 
 	// получаем с сервера список проектов принадлежащих пользователю
-	async getListProject({id})
+	async getListProject({id, typeInfo = 'load'})
 	{ 
-
-		const url = infProject.path+'components/loadListProject.php';			
+		this.infoWaitMessage({typeInfo});
 		
+		const url = infProject.path+'components/loadListProject.php';					
 		const response = await fetch(url, 
 		{
 			method: 'POST',
@@ -203,13 +203,8 @@ class WindUI
 				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' 
 			},				
 		});	
-
 		if(!response.ok) return;
 		const json = await response.json();
-		
-		
-		let html_load = '';
-		let html_save = '';
 		
 		const arr = [];
 		let count = 1;
@@ -242,6 +237,9 @@ class WindUI
 
 		const cssName = `margin: 20px auto 0 auto;`;
 		const cssBtn = `margin: 0 auto 20px auto; padding: 10px; border: 1px solid #b3b3b3; cursor: pointer; user-select: none;`;
+		
+		let html_load = '';
+		let html_save = '';		
 		
 		for(let i = 0; i < arr.length; i++)
 		{
@@ -283,16 +281,50 @@ class WindUI
 
 		arrSaveEl.forEach((el)=> 
 		{
-			el.onmousedown = () => 
+			el.onmousedown = async () => 
 			{
-				windDivProjectSave.clickButtonSaveProjectUI(el);
-				this.getListProject({id: infProject.user.id});  // обновляем меню сохрание проектов
-				this.closeWin();
+				const data = await windDivProjectSave.clickButtonSaveProjectUI(el);
+				this.infoSaveProject({data});
+				
+				this.getListProject({id: infProject.user.id, typeInfo: 'save'});  // обновляем меню сохрание проектов
+				//this.closeWin();
 			}
 		});	
 	}
 
-
+	// пока не загрузился список проектов, выводим информационный блок (что нужно подождать)
+	infoWaitMessage({typeInfo = 'load'})
+	{
+		const cssInf =
+		`margin: 30px auto 0 auto;
+		width: 70%;
+		padding: 40px;
+		font-size: 17px;
+		text-align: center;
+		border: solid 1px #b3b3b3;`;
+		
+		let textInfo = 'Подождите, идет загрузка списка проектов.';
+		if(typeInfo === 'save') textInfo = 'Подождите, идет сохранение проекта.';
+	
+		windDivProjectLoad.elInfoReg.innerHTML = `<div style="${cssInf}">${textInfo}</div>`;
+		windDivProjectSave.elInfoReg.innerHTML = `<div style="${cssInf}">${textInfo}</div>`;		
+	}
+	
+	// сообщение после сохранения проекта (удачно или нет)
+	infoSaveProject({data})
+	{
+		let result = false;
+		if(data && data.success) result = true;
+		
+		if(result)
+		{
+			console.log(data, 'успех');
+		}
+		else
+		{
+			console.log(data, 'ошибка');
+		}
+	}
 }
 
 

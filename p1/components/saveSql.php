@@ -5,7 +5,7 @@ require_once ("../include/bd_1.php");
 $id = trim($_POST['id']);
 $user_id = trim($_POST['user_id']);
 //$pass = trim($_POST['pass']);
-$name = 'Проект ('.date("G:i").' '.date("d-m-Y").')';
+$name = date("Y-m-d").' '.date("G:i");
 $json = $_POST['json']; 
 $preview = trim($_POST['preview']); 
 //$date = date("Y-m-d-G-i");
@@ -38,21 +38,6 @@ if($id == 0)
 	$r->bindValue(':date_cr', $time);
 	$r->bindValue(':date_up', $time);
 	$r->execute();
-
-
-	$count = $r->rowCount();
-
-	if($count==1)
-	{ 
-		$inf['success'] = true;
-		$inf['id'] = $db->lastInsertId(); 	
-	}
-	else
-	{  
-		$inf['success'] = false;
-		$inf['err']['code'] = 1;
-		$inf['err']['desc'] = 'неверная почта или пароль';
-	}
 }
 else
 {
@@ -65,6 +50,21 @@ else
 	$r->bindValue(':date_up', $time);
 	$r->execute();
 }
+
+$count = $r->rowCount();
+
+if($count==1)
+{ 
+	$inf['success'] = true;
+	$inf['id'] = $db->lastInsertId(); 	
+}
+else
+{  
+	$inf['success'] = false;
+	$inf['err']['code'] = 1;
+	$inf['err']['desc'] = 'ошибка';
+}
+
 
 echo json_encode( $inf );
 
