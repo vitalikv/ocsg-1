@@ -76,9 +76,9 @@ class WindDivProjectLoad
 
 		
 	// кликнули на кнопку загрузки проекта
-	clickButtonLoadProjectUI(el)
+	clickButtonLoadProjectUI({projectId})
 	{
-		loadFile({id: el.getAttribute("projectId")}); 
+		loadFile({id: projectId}); 
 		
 		//infProject.elem.mainMenu.g.style.display = 'none';
 	}

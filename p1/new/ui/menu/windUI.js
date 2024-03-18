@@ -186,7 +186,14 @@ class WindUI
 		return html;
 	}
 
+	
+	crDiv({html})
+	{
+		let div = document.createElement('div');
+		div.innerHTML = html;
 
+		return div.children[0];
+	}
 
 	// получаем с сервера список проектов принадлежащих пользователю
 	async getListProject({id, typeInfo = 'load'})
@@ -238,58 +245,40 @@ class WindUI
 		const cssName = `margin: 20px auto 0 auto;`;
 		const cssBtn = `margin: 0 auto 20px auto; padding: 10px; border: 1px solid #b3b3b3; cursor: pointer; user-select: none;`;
 		
-		let html_load = '';
-		let html_save = '';		
+		windDivProjectLoad.elInfoReg.innerHTML = '';
+		windDivProjectSave.elInfoReg.innerHTML = '';	
 		
 		for(let i = 0; i < arr.length; i++)
 		{
 			let src_1 = `<div style="${cssName}">${arr[i].name}</div><div class="button_gradient_1" style="${cssBtn}">сохранить</div>`;
 			let src_2 = `<div style="${cssName}">${arr[i].name}</div><div class="button_gradient_1" style="${cssBtn}">загрузить</div>`;
+
+			const htmlBtnSave = `<div style="${css1} background: #f0ebd1;">${src_1}</div>`;	
+			const htmlBtnLoad = `<div style="${css1} background: #d1d9f0;">${src_2}</div>`;
 			
-			if(arr[i].preview) 
+			const divBtnSave = this.crDiv({html: htmlBtnSave});
+			const divBtnLoad = this.crDiv({html: htmlBtnLoad});
+
+			// событие когда кликнули кнопку сохранить проект
+			divBtnSave.onmousedown = async () => 
 			{
-				src_1 = 			 
-				`<div style='margin: auto;'>${arr[i].name}</div>
-				<img src="${arr[i].preview}" style="display: block; width: 100%; margin: auto; -o-object-fit: contain; object-fit: contain;">
-				<div style='margin: auto;'>сохранить</div>`;
-				
-				src_2 = 
-				`<div style='margin: auto;'>${arr[i].name}</div>
-				<img src="${arr[i].preview}" style="display: block; width: 100%; margin: auto; -o-object-fit: contain; object-fit: contain;"> 			
-				<div style='margin: auto;'>загрузить</div>`;			
-			}
-
-
-			html_save += `<div style='${css1} background: #f0ebd1;' projectId="${arr[i].id}" nameId="save_pr_1">${src_1}</div>`;	
-			html_load += `<div style='${css1} background: #d1d9f0;' projectId="${arr[i].id}" nameId="load_pr_1">${src_2}</div>`;
-		}		
-		
-		windDivProjectLoad.elInfoReg.innerHTML = html_load;
-		windDivProjectSave.elInfoReg.innerHTML = html_save;
-
-		const arrLoadEl = windDivProjectLoad.elInfoReg.querySelectorAll('[nameId="load_pr_1"]');
-		const arrSaveEl = windDivProjectSave.elInfoReg.querySelectorAll('[nameId="save_pr_1"]');
-
-		arrLoadEl.forEach((el)=> 
-		{
-			el.onmousedown = () => 
-			{
-				windDivProjectLoad.clickButtonLoadProjectUI(el);
-				this.closeWin();
-			}
-		});	
-
-		arrSaveEl.forEach((el)=> 
-		{
-			el.onmousedown = async () => 
-			{
-				const data = await windDivProjectSave.clickButtonSaveProjectUI(el);
+				const data = await windDivProjectSave.clickButtonSaveProjectUI({projectId: arr[i].id});
 				this.infoSaveProject({data});
 				
 				this.getListProject({id: infProject.user.id, typeInfo: 'save'});  // обновляем меню сохрание проектов
 				//this.closeWin();
 			}
-		});	
+			
+			// событие когда кликнули кнопку загрузить проект
+			divBtnLoad.onmousedown = () => 
+			{
+				windDivProjectLoad.clickButtonLoadProjectUI({projectId: arr[i].id});
+				this.closeWin();
+			}			
+			
+			windDivProjectSave.elInfoReg.append(divBtnSave);
+			windDivProjectLoad.elInfoReg.append(divBtnLoad);
+		}		
 	}
 
 	// пока не загрузился список проектов, выводим информационный блок (что нужно подождать)
