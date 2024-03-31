@@ -218,6 +218,7 @@ class MyManagerClick
 			else if(tag == 'tubeWf' && isCam2D) { myWarmFloor.myTubeWfMove.mousedown({event, obj, rayPos: rayhit.point}); }
 			else if(tag == 'gridWf' && isCam2D) { myWarmFloor.myGridWfMove.mousedown({event, obj}); }
 			else if(tag == 'gridPointWf' && isCam2D) { myWarmFloor.myGridPointWfMove.mousedown({event, obj}); }
+			//else if(tag == 'gridContourWf' && isCam2D) { myWarmFloor.myGridContourWf.mousedown({event, obj}); }
 			else if(tag == 'objWf' && isCam2D) { myWarmFloor.myObjWfMove.mousedown({event, obj}); }
 			else { flag = false; }
 		}
@@ -270,6 +271,7 @@ class MyManagerClick
 		else if(tag == 'tubeWf') { myWarmFloor.myTubeWfMove.mousemove(event); }
 		else if(tag == 'gridWf') { myWarmFloor.myGridWfMove.mousemove(event); }
 		else if(tag == 'gridPointWf') { myWarmFloor.myGridPointWfMove.mousemove(event); }
+		else if(tag == 'gridContourWf') { myWarmFloor.myGridContourWf.mousemove(event); }
 		else if(tag == 'objWf') { myWarmFloor.myObjWfMove.mousemove(event); }
 	}
 
@@ -291,6 +293,7 @@ class MyManagerClick
 		else if(tag == 'tubeWf') { myWarmFloor.myTubeWfMove.mouseup(); }
 		else if(tag == 'gridWf') { myWarmFloor.myGridWfMove.mouseup(); }
 		else if(tag == 'gridPointWf') { myWarmFloor.myGridPointWfMove.mouseup(); }
+		else if(tag == 'gridContourWf') { myWarmFloor.myGridContourWf.mouseup(); }
 		else if(tag == 'objWf') { myWarmFloor.myObjWfMove.mouseup(); }
 	}
 

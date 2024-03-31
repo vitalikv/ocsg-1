@@ -5,6 +5,10 @@ class MyPanelWF
 	container;
 	divPanel;
 	
+	content1;
+	content2;
+	
+	
 	constructor()
 	{
 		this.init();
@@ -133,11 +137,11 @@ class MyPanelWF
 		const tab1 = div.querySelector('[nameId="tab_level"]');
 		const tab2 = div.querySelector('[nameId="tab_wf"]');
 		
-		const content1 = div.querySelector('[nameId="wrap_level_1"]');
-		const content2 = div.querySelector('[nameId="wrap_wf_1"]');
+		this.content1 = div.querySelector('[nameId="wrap_level_1"]');
+		this.content2 = div.querySelector('[nameId="wrap_wf_1"]');
 		
-		tab1.onmousedown = () => { content2.style.display = 'none'; content1.style.display = ''; }
-		tab2.onmousedown = () => { content1.style.display = 'none'; content2.style.display = ''; }
+		tab1.onmousedown = () => { this.content2.style.display = 'none'; this.content1.style.display = ''; }
+		tab2.onmousedown = () => { this.showTabOtop(); }
 		
 		const btnTube = div.querySelector('[nameId="tube"]');		
 		btnTube.onmousedown = () => { clickInterface({button: 'add_pointWf'}); }
@@ -146,7 +150,14 @@ class MyPanelWF
 		btnObj.onmousedown = () => { clickInterface({button: 'add_objWf'}); }
 
 		const btnGrid = div.querySelector('[nameId="grid"]');		
-		btnGrid.onmousedown = () => { console.log(2222); }		
+		btnGrid.onmousedown = () => { console.log(2222, 'add_cridContourWf'); clickInterface({button: 'add_cridContourWf'}); }		
+	}
+	
+	// показываем в правой панели вкладку теп.пол
+	showTabOtop()
+	{
+		this.content1.style.display = 'none'; 
+		this.content2.style.display = '';
 	}
 }
 

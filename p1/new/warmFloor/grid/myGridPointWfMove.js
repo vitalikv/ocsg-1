@@ -5,44 +5,15 @@ class MyGridPointWfMove
 	isDown = false;
 	isMove = false;
 	offset = new THREE.Vector3();
-	isTypeToolPoint = false;	// режим добавления точки из каталога
 	sObj = null;		// выделенный объект (точка)
 	
 	
-	clickRight({obj})
-	{
-		if(!this.isTypeToolPoint) return;
-		
-		myWarmFloor.deleteObj({obj});		
-		
-		this.isTypeToolPoint = false;
-		this.clearPoint();
 
-		this.render();
-	}
 	
-	mousedown = ({event, obj, toolPoint = false}) =>
+	mousedown = ({event, obj}) =>
 	{
 		this.isDown = false;
-		this.isMove = false;	
-
-		// при первом создании Tool, это игнорируется
-		if(this.isTypeToolPoint) 
-		{
-			// определяем с чем точка пересеклась и дальнейшие действия
-			obj = myWarmFloor.myPointWf.crPoint({pos: obj.position.clone(), lastPoint: obj});
-			
-			this.sObj = obj;
-			
-			if(!this.sObj) 
-			{				
-				this.isTypeToolPoint = false;
-				this.clearPoint();
-				return null;
-			}
-		}
-		
-		this.isTypeToolPoint = toolPoint;
+		this.isMove = false;
 		
 		this.sObj = obj;
 		
@@ -98,13 +69,9 @@ class MyGridPointWfMove
 		
 		this.mouseupEndGridWf({obj});
 		
-		this.clearPoint();
-		
-		if (!isDown) return;
-		if (!isMove) return;
-
-		// определяем с чем точка пересеклась и дальнейшие действия
-		//if(!obj.userData.point.type) myHouse.myPointAction.clickCreateWall(obj);
+		this.sObj = null;
+		this.isDown = false;
+		this.isMove = false;
 	}
 	
 	// обновляем форму сетки
@@ -126,14 +93,7 @@ class MyGridPointWfMove
 		this.render();
 	}	
 	
-	clearPoint()
-	{
-		if(this.isTypeToolPoint) return;
-		
-		this.sObj = null;
-		this.isDown = false;
-		this.isMove = false;
-	}
+
 	
 	render()
 	{

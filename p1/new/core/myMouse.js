@@ -57,7 +57,11 @@ class MyMouse
 			else if(obj.userData.tag === 'pointWf' && myWarmFloor.myPointWfMove.isTypeToolPoint) 
 			{ 
 				myWarmFloor.myPointWfMove.clickRight({obj}); 
-			}			
+			}
+			else if(obj.userData.tag === 'gridContourWf' && myWarmFloor.myGridContourWf.isTypeToolPoint) 
+			{ 
+				myWarmFloor.myGridContourWf.clickRight({obj}); 
+			}				
 			else
 			{
 				done = false;
@@ -148,6 +152,21 @@ class MyMouse
 		if(this.selectedObj && this.selectedObj.userData.tag === 'pointWf' && myWarmFloor.myPointWfMove.isTypeToolPoint) 
 		{ 			
 			this.selectedObj = myWarmFloor.myPointWfMove.mousedown({event, obj: this.selectedObj, toolPoint: true});
+			
+			if(!this.selectedObj)
+			{
+				this.clearClick();
+				this.setMouseStop(false);				
+			}
+			
+			return;
+		}
+
+
+		// к курсору приклеин точка для построения gridContourWf
+		if(this.selectedObj && this.selectedObj.userData.tag === 'gridContourWf' && myWarmFloor.myGridContourWf.isTypeToolPoint) 
+		{ 			
+			this.selectedObj = myWarmFloor.myGridContourWf.mousedown({event, obj: this.selectedObj, toolPoint: true});
 			
 			if(!this.selectedObj)
 			{
@@ -326,7 +345,12 @@ class MyMouse
 				obj = myWarmFloor.myObjsWfInit.getObjWf({typeObj: 'shar_kran_nn', lotid: 1});
 				obj.position.copy(intersects[0].point);
 				myWarmFloor.myObjWfMove.mousedown({event, obj});
-			}			
+			}
+			else if(clickO.button == 'add_cridContourWf')
+			{
+				obj = myWarmFloor.myGridContourWf.crPoint({pos: intersects[0].point});
+				myWarmFloor.myGridContourWf.mousedown({event, obj, toolPoint: true});
+			}				
 			
 			if(obj) 
 			{

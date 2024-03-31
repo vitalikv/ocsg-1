@@ -6,7 +6,7 @@ class MyPanelTop2
 	divP;
 	
 	// панель для платных пользователей
-	addPaidPanel()
+	addPaidPanel({panel = null})
 	{
 		this.container = document.querySelector('[nameId="wrapP1"]');
 		
@@ -16,6 +16,12 @@ class MyPanelTop2
 		myPanelWF.addPaidContent();
 		
 		this.initEvent();
+		
+		if(panel && panel === 'otop') 
+		{
+			this.showPanelROtop();
+			myPanelWF.showTabOtop();
+		}
 	}
 
 	// верхняя панель с режимами (теплый пол, отопление и т.д.)
@@ -32,7 +38,7 @@ class MyPanelTop2
 		const btnOt = this.divP.querySelector('[nameId="otop"]');
 		
 		btnPl.onmousedown = () => { myPanelWF.showHidePanel({show: false}); myPanelR.divPanel_1.style.display = ''; }
-		btnOt.onmousedown = () => { myPanelR.divPanel_1.style.display = 'none'; myPanelWF.showHidePanel({show: true}); }			
+		btnOt.onmousedown = () => { this.showPanelROtop(); }			
 	}
 
 
@@ -72,6 +78,11 @@ class MyPanelTop2
 	}
 
 
+	showPanelROtop()
+	{
+		myPanelR.divPanel_1.style.display = 'none'; 
+		myPanelWF.showHidePanel({show: true});
+	}
 }
 
 

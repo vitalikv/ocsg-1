@@ -151,6 +151,10 @@ function clickInterface(cdm)
 		else if(cdm.button === 'add_objWf')
 		{
 			clickO.button = cdm.button;
+		}
+		else if(cdm.button === 'add_cridContourWf')
+		{
+			clickO.button = cdm.button;
 		}		
 	}
 
