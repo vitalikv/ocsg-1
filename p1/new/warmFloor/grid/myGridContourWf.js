@@ -4,6 +4,7 @@ class MyGridContourWf
 {
 	geomPoint;
 	matPoint;
+	dataContour = {};
 	arrPoints = [];
 	
 	constructor()
@@ -17,7 +18,8 @@ class MyGridContourWf
 		const obj = new THREE.Mesh( this.geomPoint, this.matPoint ); 
 
 		obj.userData.tag = 'gridContourWf';
-		
+		obj.userData.lines = [];
+		obj.userData.points = [];
 		obj.position.copy(pos);		
 		scene.add( obj );
 		
@@ -37,20 +39,21 @@ class MyGridContourWf
 		//arrP.push(points[0].position.clone());
 		
 		const geometry = new THREE.Geometry();
-		geometry.vertices.push( ...arrP );
+		geometry.vertices.push( arrP[arrP.length - 2], arrP[arrP.length - 1] );
 		
 		const line = new THREE.Line( geometry, new THREE.LineBasicMaterial({color: 0xff0000}) );	
 		scene.add( line );
 	
+		points[points.length - 1].userData.lines.push(line);
+		points[points.length - 1].userData.points.push(points[points.length - 2]);
 	}
 	
 	clickRight({obj})
 	{
 		if(!this.isTypeToolPoint) return;
 		
-		this.deleteObj({obj});		
-		
-		this.isTypeToolPoint = false;
+		this.deletePoint({obj});		
+				
 		this.clearPoint();
 
 		this.render();
@@ -80,7 +83,15 @@ class MyGridContourWf
 			const joint = this.checkJointToPoint({point: obj, points: this.arrPoints});
 			if(joint) 
 			{
-				this.clickRight({obj});
+				const arrPos = [];
+				for ( let i = 0; i < this.arrPoints.length - 2; i++ ) arrPos.push(this.arrPoints[i].position.clone());
+				console.log(arrPos);
+				const grid = myWarmFloor.myGridWf.crGrid({arrPos});
+				myWarmFloor.myGridWf.myGridWfCSG.upGeometryLines({grid});
+				
+				//this.clickRight({obj});
+				this.deleteContour();
+				this.clearPoint();
 				return null;
 			}
 		}
@@ -130,6 +141,7 @@ class MyGridContourWf
 			this.offset = obj.position.clone();
 		}
 		
+		this.upGeometryLine({point: obj});
 	}
 	
 	mouseup = () =>
@@ -140,6 +152,18 @@ class MyGridContourWf
 		
 		//this.clearPoint();
 	}
+	
+	
+	upGeometryLine({point})
+	{
+		
+		if(point.userData.lines.length === 0) return;
+		const geometry = point.userData.lines[0].geometry;
+		geometry.dispose();
+		geometry.vertices = [point.userData.points[0].position.clone(), point.position.clone()];
+		geometry.verticesNeedUpdate = true;
+	}
+	
 
 	clearPoint()
 	{
@@ -149,6 +173,7 @@ class MyGridContourWf
 		this.isDown = false;
 		this.isMove = false;
 		this.arrPoints = [];
+		this.isTypeToolPoint = false;
 	}
 	
 	
@@ -165,37 +190,30 @@ class MyGridContourWf
 		return joint;
 	}
 	
+
 	
-	// находим ближайшую точку 
-	getClosestPoint({point, arrPoints})
-	{
-		let result = {minDist: Infinity, pos: new THREE.Vector3()};
-		
-		const pos = point.position.clone();
-		
-		for ( let i = 0; i < points.length; i++ )
-		{
-			if(point === points[i]) continue;
-			
-			const pos2 = points[i].position.clone();
-			
-			const dist = pos.distanceTo(pos2);
-			
-			if (dist < result.minDist) 
-			{
-				result.minDist = dist;
-				result.pos = pos2;
-			}			
-		}
-		
-		return result;
-	}
-	
-	
-	deleteObj({obj})
+	deletePoint({obj})
 	{
 		scene.remove(obj);
 	}
+	
+	deleteContour()
+	{
+		const arrLines = [];
+		const points = this.arrPoints;
+		
+		for ( let i = 0; i < points.length; i++ )
+		{
+			arrLines.push(...points[i].userData.lines);
+			this.deletePoint({obj: points[i]});
+		}
+		console.log(111, arrLines);
+		for ( let i = 0; i < arrLines.length; i++ )
+		{
+			arrLines[i].geometry.dispose();
+			scene.remove(arrLines[i]);			
+		}		
+	}	
 	
 	render()
 	{

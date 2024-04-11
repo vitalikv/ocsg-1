@@ -68,6 +68,32 @@ class MyMath
 		return result;
 	}
 
+
+	// находим ближайшую точку 
+	getClosestPoint({point, arrPoints})
+	{
+		let result = {minDist: Infinity, pos: new THREE.Vector3(), obj: null};
+		
+		const pos = point.position.clone();
+		
+		for ( let i = 0; i < points.length; i++ )
+		{
+			if(point === points[i]) continue;
+			
+			const pos2 = points[i].position.clone();
+			
+			const dist = pos.distanceTo(pos2);
+			
+			if (dist < result.minDist) 
+			{
+				result.minDist = dist;
+				result.pos = pos2;
+				result.obj = points[i];
+			}			
+		}
+		
+		return result;
+	}
 }
 
 

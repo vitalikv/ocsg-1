@@ -22,17 +22,20 @@ class MyGridWf
 		this.myGridWfCSG.upGeometryLines({grid});		
 	}
 	
-	crGrid({id = null, idLevel = null})
+	crGrid({id = null, idLevel = null, arrPos = []})
 	{
-		const arrPos = [];
-		arrPos.push(new THREE.Vector3(-3, 0, -2));
-		arrPos.push(new THREE.Vector3(-3, 0, 2));
-		arrPos.push(new THREE.Vector3(3, 0, 2));
-		arrPos.push(new THREE.Vector3(3, 0, 1));
-		arrPos.push(new THREE.Vector3(2, 0, 1));
-		arrPos.push(new THREE.Vector3(2, 0, -1));
-		arrPos.push(new THREE.Vector3(3, 0, -1));
-		arrPos.push(new THREE.Vector3(3, 0, -2));	
+		if(arrPos.length === 0)
+		{
+			arrPos.push(new THREE.Vector3(-3, 0, -2));
+			arrPos.push(new THREE.Vector3(-3, 0, 2));
+			arrPos.push(new THREE.Vector3(3, 0, 2));
+			arrPos.push(new THREE.Vector3(3, 0, 1));
+			arrPos.push(new THREE.Vector3(2, 0, 1));
+			arrPos.push(new THREE.Vector3(2, 0, -1));
+			arrPos.push(new THREE.Vector3(3, 0, -1));
+			arrPos.push(new THREE.Vector3(3, 0, -2));				
+		}
+
 		
 		const geometry = this.crGeometry({arrPos});						
 		const obj = new THREE.Mesh( geometry, this.matGrid ); 
