@@ -94,6 +94,175 @@ class MyMath
 		
 		return result;
 	}
+
+
+	// точка пересечения двух прямых 2D (1 вариант)
+	intersectionTwoLines({ line1, line2 }) {
+		const line1start = line1.start;
+		const line1end = line1.end;
+		const line2start = line2.start;
+		const line2end = line2.end;
+
+		const denominator =
+			( line2end.z - line2start.z ) * ( line1end.x - line1start.x )
+			- ( line2end.x - line2start.x ) * ( line1end.z - line1start.z );
+
+		// параллельны
+		if ( denominator == 0 ) 
+		{ 
+			const arrDist = [];
+			arrDist[0] = { dist: line1start.distanceTo(line2start), pos: line1start};
+			arrDist[1] = { dist: line1start.distanceTo(line2end), pos: line1start};
+			arrDist[2] = { dist: line1end.distanceTo(line2start), pos: line1end};
+			arrDist[3] = { dist: line1end.distanceTo(line2end), pos: line1end};
+			
+			arrDist.sort((a, b) => { return a.dist - b.dist; });
+			
+			return new THREE.Vector3( arrDist[0].pos.x, 0, arrDist[0].pos.z ); 
+		} 
+
+		const a =
+			( ( line2end.x - line2start.x ) * ( line1start.z - line2start.z )
+			- ( line2end.z - line2start.z ) * ( line1start.x - line2start.x ) ) / denominator;
+
+		const x = line1start.x + ( a * ( line1end.x - line1start.x ) );
+		const z = line1start.z + ( a * ( line1end.z - line1start.z ) );
+
+		return new THREE.Vector3( x, 0, z );
+	}	
+	
+
+	// Проверка двух отрезков на пересечение (ориентированная площадь треугольника)
+	checkCrossLine(a, b, c, d)
+	{
+		const swap = (a, b) => { let c; c = a; a = b; b = c; return [a, b]; }
+		
+		const intersect = (a, b, c, d) =>
+		{
+			if (a > b) { const res = swap(a, b); a = res[0]; b = res[1]; }
+			if (c > d) { const res = swap(c, d); c = res[0]; d = res[1]; }
+			return Math.max(a, c) <= Math.min(b, d);
+		}
+
+		const area = (a, b, c) => { return (b.x - a.x) * (c.z - a.z) - (b.z - a.z) * (c.x - a.x); }
+		
+		return intersect(a.x, b.x, c.x, d.x) && intersect(a.z, b.z, c.z, d.z) && area(a, b, c) * area(a, b, d) <= 0 && area(c, d, a) * area(c, d, b) <= 0;
+	}
+
+
+	// смещение формы (точки должны идти против часавой) (контру должен быть замкнут, последняя точка ровна первой)
+	offsetForm({points, offset}) 
+	{
+		const lines = this.offsetLines({points, offset});
+
+		const pt1 = this.intersectionTwoLines({line1: lines[0], line2: lines [lines.length - 1]});
+		const pointsOffset = [ new THREE.Vector3( pt1.x, 0, pt1.z ) ];
+
+		for ( let i = 0; i < lines.length - 1; i++ ) {
+
+			const pt = this.intersectionTwoLines({line1: lines[i], line2: lines [i + 1]});
+
+			pointsOffset.push( new THREE.Vector3( pt.x, 0, pt.z ) );
+		}
+
+		pointsOffset.push( pointsOffset[0].clone() );
+
+		return pointsOffset;
+	}
+	
+
+	// смещение массива точек контура, отдаем массив линий (контру должен быть замкнут, последняя точка ровна первой)
+	offsetLines({points, offset})
+	{
+		const lines = [];
+		
+		for ( let i = 0; i < points.length - 1; i++ ) {
+
+			let pt1 = points[ i ];
+			let pt2 = points[ i + 1 ];
+
+			const dir = pt2.clone().sub( pt1 );
+			const angle = Math.atan2( dir.z, dir.x );
+
+			const offsetPt1 = new THREE.Vector3( pt1.x - offset * Math.cos( angle - Math.PI / 2 ), 0, pt1.z + offset * Math.sin( angle + Math.PI / 2 ) );
+			const offsetPt2 = new THREE.Vector3( pt2.x - offset * Math.cos( angle - Math.PI / 2 ), 0, pt2.z + offset * Math.sin( angle + Math.PI / 2 ) );
+
+			lines.push({start: offsetPt1, end: offsetPt2});			
+		}
+
+		return lines;
+	}
+
+	// находим точку пересечения двух линий в 3D
+	// решение по ссылке
+	// https://discourse.threejs.org/t/find-intersection-between-two-line3/7119
+	// https://discourse.threejs.org/t/solved-how-to-find-intersection-between-two-rays/6464/8
+	// метод находит точку пересечения, даже если линии не пересеклись
+	// но есть проверка на пересечение (если dpnqnDet === 0, то линии пересекаются)
+	// по ссылке есть еще один метод, но я выбрал этот
+	closestPointsDet(p1, dir1, p2, dir2) 
+	{
+		const qp = new THREE.Vector3().subVectors(p1, p2);
+
+		const qpDotmp = qp.dot(dir1);
+		const qpDotmq = qp.dot(dir2);
+		const mpDotmp = dir1.dot(dir1);
+		const mqDotmq = dir2.dot(dir2);
+		const mpDotmq = dir1.dot(dir2);
+
+		const detp = qpDotmp * mqDotmq - qpDotmq * mpDotmq;
+		const detq = qpDotmp * mpDotmq - qpDotmq * mpDotmp;
+
+		const detm = mpDotmq * mpDotmq - mqDotmq * mpDotmp;
+
+		const pnDet = p1.clone().add(dir1.clone().multiplyScalar(detp / detm));
+		const qnDet = p2.clone().add(dir2.clone().multiplyScalar(detq / detm));
+
+		const dpnqnDet = pnDet.clone().sub(qnDet).length();
+
+		const cross = Number(dpnqnDet.toFixed(10)) < 0.0001 ? true : false;
+
+		return { cross, pos: qnDet };
+	}	
+
+	//площадь многоугольника (нужно чтобы понять положительное значение или отрецательное, для того чтобы понять напрвление по часовой или проитв часовой)
+	checkClockWise( arrP )
+	{  
+		let res = 0;
+		const n = arrP.length;
+		
+		for (let i = 0; i < n; i++) 
+		{
+			const p1 = arrP[i];
+			let p2 = new THREE.Vector3();
+			let p3 = new THREE.Vector3();
+			
+			if (i == 0)
+			{
+				p2 = arrP[n-1];
+				p3 = arrP[i+1];					
+			}
+			else if (i == n-1)
+			{
+				p2 = arrP[i-1];
+				p3 = arrP[0];			
+			}
+			else
+			{
+				p2 = arrP[i-1];
+				p3 = arrP[i+1];			
+			}
+			
+			res += p1.x*(p2.z - p3.z);
+		}
+		
+		
+		res = res / 2;
+		res = Math.round(res * 10) / 10;
+		
+		return res;
+	}
+
 }
 
 

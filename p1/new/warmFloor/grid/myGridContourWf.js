@@ -84,14 +84,19 @@ class MyGridContourWf
 			if(joint) 
 			{
 				const arrPos = [];
-				for ( let i = 0; i < this.arrPoints.length - 2; i++ ) arrPos.push(this.arrPoints[i].position.clone());
+				//for ( let i = 0; i < this.arrPoints.length - 2; i++ ) arrPos.push(this.arrPoints[i].position.clone());				
+				//const grid = myWarmFloor.myGridWf.crGrid({arrPos});
+				//myWarmFloor.myGridWf.myGridWfCSG.upGeometryLines({grid});
+				
+				for ( let i = 0; i < this.arrPoints.length - 1; i++ ) arrPos.push(this.arrPoints[i].position.clone());
 				console.log(arrPos);
-				const grid = myWarmFloor.myGridWf.crGrid({arrPos});
-				myWarmFloor.myGridWf.myGridWfCSG.upGeometryLines({grid});
+				
+				myWarmFloor.myUlitkaWf.drawFrom({points: arrPos})
 				
 				//this.clickRight({obj});
-				this.deleteContour();
-				this.clearPoint();
+				
+				//this.deleteContour();
+				//this.clearPoint();
 				return null;
 			}
 		}
