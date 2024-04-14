@@ -7,6 +7,9 @@ class MyUlitkaWf
 	helpAddPoints = true;
 	arrRoom = [];
 	
+	arrLines_1 = [];
+	linesScene = []; // потом удалить
+	
 	constructor()
 	{
 		this.initKeyboard();
@@ -20,17 +23,20 @@ class MyUlitkaWf
 		if(result < 0) points.reverse();	// если по часовой стрелки, то разворачиваем массив, чтобы был против часовой
 		
 		let arrFroms = [points];
-
+		
 		while (arrFroms.length > 0) 
 		{
 			arrFroms = this.loopFroms({oldFormPoints: arrFroms});
 			//arrFroms = [];
-		}		
+		}
+
+		return this.arrLines_1;
 	}
 	
 	loopFroms({oldFormPoints})
 	{
 		const arrFroms = [];
+		const arrLines = [];
 		
 		for ( let i = 0; i < oldFormPoints.length; i++ )
 		{
@@ -38,15 +44,66 @@ class MyUlitkaWf
 			const forms = this.calcForm(newFormPoints, oldFormPoints[i]);			
 			arrFroms.push(...forms);
 			
-			const geometryOffset = new THREE.Geometry();
-			geometryOffset.vertices = newFormPoints;
-			const materialOffset = new THREE.LineBasicMaterial( { color: 'red' } );
-			const lineOffset = new THREE.Line( geometryOffset, materialOffset );
-			scene.add( lineOffset );
+			this.crLines_1({newFormPoints});	// линии пола после смещения, без оптимизации
+			this.crLines_2({forms});	// линии пола после смещения и оптимизации
 		}
 		
 		return arrFroms;
-	}	
+	}
+
+
+	crLines_1({newFormPoints})
+	{
+		const geometryOffset = new THREE.Geometry();
+		geometryOffset.vertices = newFormPoints;
+		const materialOffset = new THREE.LineBasicMaterial( { color: 'red' } );
+		const lineOffset = new THREE.Line( geometryOffset, materialOffset );
+		scene.add( lineOffset );
+		this.arrLines_1.push(lineOffset);		
+	}
+
+	crLines_2({forms})
+	{
+		for ( let i2 = 0; i2 < forms.length; i2++ )
+		{
+			const p = forms[i2];
+			
+			const color = new THREE.Color( 0xffffff );
+			color.setHex( Math.random() * 0xffffff );
+			
+			for ( let i3 = 0; i3 < p.length; i3++ )
+			{
+				const h = 2;
+				
+				const newP = this.crHelpBox2({pos: p[i3]});
+				newP.visible = true;
+				newP.position.y = h;
+				newP.material = newP.material.clone();
+				newP.material.color.copy(color)
+				scene.add(newP)
+				//console.log(p[i3].userData.id);
+				
+				if(i3 < p.length - 1)
+				{
+					const geometryOffset = new THREE.Geometry();
+					const p1 = p[i3];
+					const p2 = p[i3+1];
+					p1.y = h;
+					p2.y = h;
+					geometryOffset.vertices = [p1, p2];
+					const materialOffset = new THREE.LineBasicMaterial( { color } );
+					const lineOffset = new THREE.Line( geometryOffset, materialOffset );			
+					scene.add( lineOffset );
+
+					this.linesScene.push(lineOffset);
+				}
+			}		
+			
+		}
+		
+	}
+	
+	
 	
 	calcForm(arrPos, arrOldPos, clear = true)
 	{
@@ -56,22 +113,13 @@ class MyUlitkaWf
 			this.helpCountPoints = -1;
 			this.helpAddPoints = true;
 		}
-
-
 		
 		arrPos = [...arrPos];
 		arrOldPos = [...arrOldPos];
 		
-		console.log(9999, arrPos, arrOldPos)
-		
 		arrPos.splice(arrPos.length - 1, 1); // удаляем последний элем., потому приходит массив, где последний элем. - копия нулевого элем.
 		arrOldPos.splice(arrOldPos.length - 1, 1);
 		
-		for ( let i = 0; i < arrPos.length; i++ )
-		{
-			const point = this.crHelpBox({pos: arrPos[i]});
-
-		}
 
 		const arrLine = [];
 		for ( let i = 0; i < arrPos.length - 1; i++ )
@@ -83,19 +131,18 @@ class MyUlitkaWf
 		arrLine.push({start: arrPos[arrPos.length - 1], end: arrPos[0], startId: arrPos.length - 1, endId: 0, dir, crossLines: [], crossPoints: []});
 		
 		
-		let result = this.calcCrossLine({arrLine});
+		const arrPos2 = this.calcCrossLine({arrLine});
 		
-		result = this.cccdf({arrLine: result.arrLine, arrPos, arrPos2: result.arrPos2});
+		const result = this.calcPath({arrLine, arrPos, arrPos2});
 		
 		return result;
 	}
 		
 	
 	// через массив последовательных точек строим отрезки и ищем пересечение между отрезками
-	calcCrossLine({arrPos, arrLine})
+	calcCrossLine({arrLine})
 	{
-		const arrPos2 = [];		// точки пересечения линий
-		
+		const arrPos2 = [];		// точки пересечения линий		
 
 		for ( let i = 0; i < arrLine.length; i++ )
 		{
@@ -111,23 +158,24 @@ class MyUlitkaWf
 				if(cross)
 				{				
 					const pos = myMath.intersectionTwoLines({ line1: arrLine[i], line2: arrLine[i2] });
-					//const pos = myMath.crossPointTwoLine(arrLine[i].start, arrLine[i].end, arrLine[i2].start, arrLine[i2].end);
 					
 					const d1 = pos.distanceTo(arrLine[i].start);
 					const d2 = pos.distanceTo(arrLine[i].end);
 					const d3 = pos.distanceTo(arrLine[i2].start);
 					const d4 = pos.distanceTo(arrLine[i2].end);
 					
-					
-					const limitD = 0.00001;	// проверка линии хоть и пересекались, но на самом дели может быть это стыковка концов отрезков
+					// проверка отрезков хоть и пересекались, но на самом дели может быть это стыковка концов отрезков
+					// т.к. мы отправляем уже готовые отрезки, а не линии
+					const limitD = 0.00001;	
 					let joint = false;
 					if(d1 < limitD) joint = true;
 					if(d2 < limitD) joint = true;
 					if(d3 < limitD) joint = true;
 					if(d4 < limitD) joint = true;
 					
-					
-					if(!pos[1] && !joint) 
+					// отрезкам которые пересеклись друг с другом, добавляем информацию 
+					// и добавляем в массив точек точки пересечения
+					if(!joint) 
 					{						
 						arrLine[i].crossLines.push(i2);
 						arrLine[i2].crossLines.push(i);
@@ -141,12 +189,12 @@ class MyUlitkaWf
 			}			
 		}
 
-		return {arrLine, arrPos2};
+		return arrPos2;
 	}
 	
 	
 	// собираем точки отрезков и точки пересечения отрезков в один массив и выстраиваем в упорядочанном порядке
-	cccdf({arrLine, arrPos, arrPos2})
+	calcPath({arrLine, arrPos, arrPos2})
 	{
 		const indexOffset = arrPos.length;
 		arrPos = [...arrPos, ...arrPos2];
@@ -173,8 +221,6 @@ class MyUlitkaWf
 				}
 				
 				arrDist.sort((a, b) => { return a.dist - b.dist; });
-				
-				console.log(i, arrDist);
 				
 				for ( let i2 = 0; i2 < arrDist.length; i2++ )
 				{
@@ -236,7 +282,7 @@ class MyUlitkaWf
 			//console.log(this.helpPoints[i].userData.id, this.helpPoints[i].userData.pIds);
 		}		
 		
-		console.log(points2);
+		//console.log(points2);
 		
 		return this.calcRoomZone(this.helpPoints)
 	}
@@ -299,7 +345,6 @@ class MyUlitkaWf
 		
 		for ( let i = 0; i < obj_point.length; i++ )
 		{			
-
 			for ( let i2 = 0; i2 < obj_point[i].p.length; i2++ )
 			{													
 				const p = this.getRoomContour([obj_point[i]], obj_point[i].p[i2]); 						 
@@ -307,42 +352,9 @@ class MyUlitkaWf
 				if(p[0] !== p[p.length - 1]){ continue; }	
 				
 				const trueDir = this.getCheckDir(p);
-				//console.log(trueDir);
 				if(!trueDir) continue;
-				//if(p.length > 5){ if(p[1] === p[p.length - 2]) continue; }
-				//if(this.checkClockWise(p) <= 0){ continue; }		//var txt = ''; for ( var i3 = 0; i3 < p.length; i3++ ) { txt += ' | ' + p[i3].userData.id; } console.log(txt);	
-
 
 				if(this.detectEqualForm( p )){ continue; }
-
-				const color = new THREE.Color( 0xffffff );
-				color.setHex( Math.random() * 0xffffff );
-				
-				for ( let i3 = 0; i3 < p.length; i3++ )
-				{
-					const h = 2;
-					
-					const newP = p[i3].clone();
-					newP.visible = true;
-					newP.position.y = h;
-					newP.material = newP.material.clone();
-					newP.material.color.copy(color)
-					scene.add(newP)
-					//console.log(p[i3].userData.id);
-					
-					if(i3 < p.length - 1)
-					{
-						const geometryOffset = new THREE.Geometry();
-						const p1 = p[i3].position.clone();
-						const p2 = p[i3+1].position.clone();
-						p1.y = h;
-						p2.y = h;
-						geometryOffset.vertices = [p1, p2];
-						const materialOffset = new THREE.LineBasicMaterial( { color } );
-						const lineOffset = new THREE.Line( geometryOffset, materialOffset );			
-						scene.add( lineOffset );										
-					}
-				}
 				
 				this.arrRoom.push(p);
 				

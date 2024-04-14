@@ -348,7 +348,7 @@ class MyMouse
 			}
 			else if(clickO.button == 'add_cridContourWf')
 			{
-				obj = myWarmFloor.myGridContourWf.crPoint({pos: intersects[0].point});
+				obj = myWarmFloor.myGridContourWf.crPoint({pos: intersects[0].point, toolPoint: true});
 				myWarmFloor.myGridContourWf.mousedown({event, obj, toolPoint: true});
 			}				
 			

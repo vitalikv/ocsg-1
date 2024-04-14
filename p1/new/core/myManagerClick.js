@@ -40,6 +40,10 @@ class MyManagerClick
 		rayhit = myWarmFloor.clickRayhit({event});		
 		if(rayhit) return rayhit;
 		
+		
+		rayhit = myWarmFloor.myGridContourWf.clickRayhit({event});
+		if(rayhit) return rayhit;
+		
 
 		if(isCam2D && !rayhit)
 		{
@@ -218,7 +222,7 @@ class MyManagerClick
 			else if(tag == 'tubeWf' && isCam2D) { myWarmFloor.myTubeWfMove.mousedown({event, obj, rayPos: rayhit.point}); }
 			else if(tag == 'gridWf' && isCam2D) { myWarmFloor.myGridWfMove.mousedown({event, obj}); }
 			else if(tag == 'gridPointWf' && isCam2D) { myWarmFloor.myGridPointWfMove.mousedown({event, obj}); }
-			//else if(tag == 'gridContourWf' && isCam2D) { myWarmFloor.myGridContourWf.mousedown({event, obj}); }
+			else if(tag == 'gridContourWf' && isCam2D) { myWarmFloor.myGridContourWf.mousedown({event, obj}); }
 			else if(tag == 'objWf' && isCam2D) { myWarmFloor.myObjWfMove.mousedown({event, obj}); }
 			else { flag = false; }
 		}

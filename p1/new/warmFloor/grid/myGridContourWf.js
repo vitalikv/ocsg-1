@@ -4,7 +4,9 @@ class MyGridContourWf
 {
 	geomPoint;
 	matPoint;
-	dataContour = {};
+	sObj = null;
+	dataContours = [];
+	dataLines = [];
 	arrPoints = [];
 	
 	constructor()
@@ -13,19 +15,20 @@ class MyGridContourWf
 		this.matPoint = new THREE.MeshStandardMaterial({ color: 0x222222, lightMap: lightMap_1 });
 	}
 	
-	crPoint({pos})
+	crPoint({pos, toolPoint = false})
 	{
 		const obj = new THREE.Mesh( this.geomPoint, this.matPoint ); 
 
 		obj.userData.tag = 'gridContourWf';
-		obj.userData.lines = [];
+		obj.userData.toolPoint = toolPoint;
+		obj.userData.line = null;
 		obj.userData.points = [];
 		obj.position.copy(pos);		
 		scene.add( obj );
 		
 		this.arrPoints.push(obj);
 		
-		if(this.arrPoints.length > 1) this.crLine({points: this.arrPoints});
+		if(this.arrPoints.length > 1) this.crLine({points: [...this.arrPoints]});
 
 		return obj;
 	}
@@ -33,20 +36,53 @@ class MyGridContourWf
 	
 	crLine({points})
 	{
-		const arrP = [];
 		
-		for ( let i = 0; i < points.length; i++ ) arrP.push(points[i].position.clone());
-		//arrP.push(points[0].position.clone());
+		let line = null;
 		
-		const geometry = new THREE.Geometry();
-		geometry.vertices.push( arrP[arrP.length - 2], arrP[arrP.length - 1] );
-		
-		const line = new THREE.Line( geometry, new THREE.LineBasicMaterial({color: 0xff0000}) );	
-		scene.add( line );
+		if(!points[0].userData.line)
+		{	
+			const arrP = [];
+			
+			for ( let i = 0; i < points.length; i++ ) arrP.push(points[i].position.clone());
+			const geometry = new THREE.Geometry();
+			geometry.vertices = arrP;
 	
-		points[points.length - 1].userData.lines.push(line);
-		points[points.length - 1].userData.points.push(points[points.length - 2]);
+			line = new THREE.Line( geometry, new THREE.LineBasicMaterial({color: 0xff0000}) );	
+			scene.add( line );					
+		}
+		else
+		{
+			line = points[0].userData.line;			
+		}
+		
+		for ( let i = 0; i < points.length; i++ )
+		{				
+			points[i].userData.line = line;
+			points[i].userData.points = points;
+		}
+		
+		//this.upGeometryLine({point: points[0]});
 	}
+	
+	
+	// проверка куда кликнули (попали на точку или трубу)
+	clickRayhit({event})
+	{
+		let rayhit = null;
+		
+		const points = [];
+		for ( let i = 0; i < this.dataContours.length; i++ )
+		{
+			const pointsV = this.dataContours[i].filter((p) => p.visible);
+			points.push(...pointsV);
+		}		
+		
+		const ray = rayIntersect( event, points, 'arr' );
+		if(ray.length > 0) { rayhit = ray[0]; }
+
+		return rayhit;
+	}
+	
 	
 	clickRight({obj})
 	{
@@ -69,17 +105,6 @@ class MyGridContourWf
 		if(this.isTypeToolPoint) 
 		{
 			// определяем с чем точка пересеклась и дальнейшие действия
-			obj = this.crPoint({pos: obj.position.clone()});
-			
-			this.sObj = obj;
-			
-			if(!this.sObj) 
-			{				
-				this.isTypeToolPoint = false;
-				//this.clearPoint();
-				return null;
-			}
-			
 			const joint = this.checkJointToPoint({point: obj, points: this.arrPoints});
 			if(joint) 
 			{
@@ -88,17 +113,35 @@ class MyGridContourWf
 				//const grid = myWarmFloor.myGridWf.crGrid({arrPos});
 				//myWarmFloor.myGridWf.myGridWfCSG.upGeometryLines({grid});
 				
-				for ( let i = 0; i < this.arrPoints.length - 1; i++ ) arrPos.push(this.arrPoints[i].position.clone());
-				console.log(arrPos);
+				this.deletePoint({obj});
 				
-				myWarmFloor.myUlitkaWf.drawFrom({points: arrPos})
+				for ( let i = 0; i < this.arrPoints.length; i++ ) arrPos.push(this.arrPoints[i].position.clone());
+				arrPos.push(this.arrPoints[0].position.clone());
+				
+				const arrLines = myWarmFloor.myUlitkaWf.drawFrom({points: arrPos})
 				
 				//this.clickRight({obj});
 				
+				
+				//const points = [...this.arrPoints];
+				//points.splice(points.length - 1, 1)
+				this.addContour({points: this.arrPoints, lines: arrLines});
+				
 				//this.deleteContour();
-				//this.clearPoint();
+				this.clearPoint();
 				return null;
 			}
+			
+			obj = this.crPoint({pos: obj.position.clone(), toolPoint});
+			
+			this.sObj = obj;
+			
+			if(!this.sObj) 
+			{				
+				this.isTypeToolPoint = false;
+				//this.clearPoint();
+				return null;
+			}			
 		}
 		
 		this.isTypeToolPoint = toolPoint;
@@ -151,28 +194,68 @@ class MyGridContourWf
 	
 	mouseup = () =>
 	{
-		//const obj = this.sObj;
-		//const isDown = this.isDown;
-		//const isMove = this.isMove;
+		if(this.isTypeToolPoint) return;
 		
-		//this.clearPoint();
+		const obj = this.sObj;
+		const isDown = this.isDown;
+		const isMove = this.isMove;
+		
+		this.clearPoint();
+		
+		
+		if(this.dataLines.length > 0)
+		{
+			const points = obj.userData.points;
+			
+			const arrP = [];
+			for ( let i = 0; i < points.length; i++ ) arrP.push(points[i].position.clone());
+			arrP.push(points[0].position.clone());			
+			
+			for ( let i = 0; i < this.dataLines.length; i++ )
+			{
+				this.dataLines[i].geometry.dispose();
+				scene.remove(this.dataLines[i]);
+			}
+			
+			const linesScene = myWarmFloor.myUlitkaWf.linesScene;
+			
+			for ( let i = 0; i < linesScene.length; i++ )
+			{
+				linesScene[i].geometry.dispose();
+				scene.remove(linesScene[i]);
+			}			
+			myWarmFloor.myUlitkaWf.linesScene = [];
+			
+			const arrLines = myWarmFloor.myUlitkaWf.drawFrom({points: arrP})			
+		}		
 	}
 	
 	
 	upGeometryLine({point})
-	{
+	{		
+		const line = point.userData.line;
+		if(!line) return;
 		
-		if(point.userData.lines.length === 0) return;
-		const geometry = point.userData.lines[0].geometry;
-		geometry.dispose();
-		geometry.vertices = [point.userData.points[0].position.clone(), point.position.clone()];
-		geometry.verticesNeedUpdate = true;
+		const points = point.userData.points;
+
+		const arrP = [];
+		
+		for ( let i = 0; i < points.length; i++ ) arrP.push(points[i].position.clone());
+		if(!point.userData.toolPoint) arrP.push(points[0].position.clone());
+		
+		var geometry = new THREE.Geometry();
+		geometry.vertices = arrP;
+		//geometry.verticesNeedUpdate = true;
+		
+		line.geometry.dispose();
+		line.geometry = geometry;
+	
 	}
 	
 
 	clearPoint()
 	{
-		if(this.isTypeToolPoint) return;
+		//if(this.isTypeToolPoint) return;
 		
 		this.sObj = null;
 		this.isDown = false;
@@ -195,28 +278,44 @@ class MyGridContourWf
 		return joint;
 	}
 	
+	
+	addContour({points, lines})
+	{
+		
+		for ( let i = 0; i < points.length; i++ )
+		{
+			points[i].userData.toolPoint = false;
+			points[i].userData.points = points;
+		}
 
+		this.dataContours.push(points);
+		this.dataLines.push(...lines);
+		
+	}
 	
 	deletePoint({obj})
 	{
 		scene.remove(obj);
+		
+		const index = this.arrPoints.indexOf(obj);
+		if (index > -1) this.arrPoints.splice(index, 1);		
 	}
 	
 	deleteContour()
 	{
 		const arrLines = [];
 		const points = this.arrPoints;
+		const line = points[0].userData.line;
 		
 		for ( let i = 0; i < points.length; i++ )
 		{
-			arrLines.push(...points[i].userData.lines);
 			this.deletePoint({obj: points[i]});
 		}
-		console.log(111, arrLines);
-		for ( let i = 0; i < arrLines.length; i++ )
+		
+		if(line)
 		{
-			arrLines[i].geometry.dispose();
-			scene.remove(arrLines[i]);			
+			line.geometry.dispose();
+			scene.remove(line);			
 		}		
 	}	
 	
