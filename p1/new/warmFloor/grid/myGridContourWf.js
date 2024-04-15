@@ -116,15 +116,11 @@ class MyGridContourWf
 				this.deletePoint({obj});
 				
 				for ( let i = 0; i < this.arrPoints.length; i++ ) arrPos.push(this.arrPoints[i].position.clone());
-				arrPos.push(this.arrPoints[0].position.clone());
 				
 				const arrLines = myWarmFloor.myUlitkaWf.drawFrom({points: arrPos})
 				
 				//this.clickRight({obj});
 				
-				
-				//const points = [...this.arrPoints];
-				//points.splice(points.length - 1, 1)
 				this.addContour({points: this.arrPoints, lines: arrLines});
 				
 				//this.deleteContour();
@@ -203,28 +199,14 @@ class MyGridContourWf
 		this.clearPoint();
 		
 		
-		if(this.dataLines.length > 0)
+		if(this.dataContours.length > 0)
 		{
 			const points = obj.userData.points;
 			
 			const arrP = [];
-			for ( let i = 0; i < points.length; i++ ) arrP.push(points[i].position.clone());
-			arrP.push(points[0].position.clone());			
+			for ( let i = 0; i < points.length; i++ ) arrP.push(points[i].position.clone());		
 			
-			for ( let i = 0; i < this.dataLines.length; i++ )
-			{
-				this.dataLines[i].geometry.dispose();
-				scene.remove(this.dataLines[i]);
-			}
-			
-			const linesScene = myWarmFloor.myUlitkaWf.linesScene;
-			
-			for ( let i = 0; i < linesScene.length; i++ )
-			{
-				linesScene[i].geometry.dispose();
-				scene.remove(linesScene[i]);
-			}			
-			myWarmFloor.myUlitkaWf.linesScene = [];
+			myWarmFloor.myUlitkaWf.clearForms();
 			
 			const arrLines = myWarmFloor.myUlitkaWf.drawFrom({points: arrP})			
 		}		

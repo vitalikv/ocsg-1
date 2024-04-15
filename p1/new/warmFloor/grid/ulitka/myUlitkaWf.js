@@ -2,18 +2,10 @@
 
 class MyUlitkaWf
 {
-	helpPoints = [];
-	helpCountPoints = -1;
-	helpAddPoints = true;
-	arrRoom = [];
-	
+	arrPoints_1 = [];
 	arrLines_1 = [];
-	linesScene = []; // потом удалить
+	arrLines_2 = []; // потом удалить
 	
-	constructor()
-	{
-		this.initKeyboard();
-	}
 	
 	drawFrom({points})
 	{
@@ -22,7 +14,7 @@ class MyUlitkaWf
 		const result = myMath.checkClockWise(points);	// проверяем последовательность построения точек (по часовой стрелке или нет)
 		if(result < 0) points.reverse();	// если по часовой стрелки, то разворачиваем массив, чтобы был против часовой
 		
-		let arrFroms = [points];
+		let arrFroms = [points];	// стартовый контур от которого идет смещение
 		
 		while (arrFroms.length > 0) 
 		{
@@ -36,7 +28,6 @@ class MyUlitkaWf
 	loopFroms({oldFormPoints})
 	{
 		const arrFroms = [];
-		const arrLines = [];
 		
 		for ( let i = 0; i < oldFormPoints.length; i++ )
 		{
@@ -44,81 +35,29 @@ class MyUlitkaWf
 			const forms = this.calcForm(newFormPoints, oldFormPoints[i]);			
 			arrFroms.push(...forms);
 			
-			this.crLines_1({newFormPoints});	// линии пола после смещения, без оптимизации
-			this.crLines_2({forms});	// линии пола после смещения и оптимизации
+			// линии пола после смещения, без оптимизации
+			//const line1 = this.crLines_3({points: newFormPoints, color: 0xff0000, addPoints: false, h: 0});
+			//this.arrLines_1.push(line1);
+			
+			// линии пола после смещения и оптимизации
+			for ( let i2 = 0; i2 < forms.length; i2++ )
+			{
+				const line2 = this.crLines_3({points: forms[i2], color: 0x0000ff, addPoints: false, h: 0});
+				this.arrLines_2.push(line2);				
+			}
 		}
 		
 		return arrFroms;
 	}
 
-
-	crLines_1({newFormPoints})
-	{
-		const geometryOffset = new THREE.Geometry();
-		geometryOffset.vertices = newFormPoints;
-		const materialOffset = new THREE.LineBasicMaterial( { color: 'red' } );
-		const lineOffset = new THREE.Line( geometryOffset, materialOffset );
-		scene.add( lineOffset );
-		this.arrLines_1.push(lineOffset);		
-	}
-
-	crLines_2({forms})
-	{
-		for ( let i2 = 0; i2 < forms.length; i2++ )
-		{
-			const p = forms[i2];
-			
-			const color = new THREE.Color( 0xffffff );
-			color.setHex( Math.random() * 0xffffff );
-			
-			for ( let i3 = 0; i3 < p.length; i3++ )
-			{
-				const h = 2;
-				
-				const newP = this.crHelpBox2({pos: p[i3]});
-				newP.visible = true;
-				newP.position.y = h;
-				newP.material = newP.material.clone();
-				newP.material.color.copy(color)
-				scene.add(newP)
-				//console.log(p[i3].userData.id);
-				
-				if(i3 < p.length - 1)
-				{
-					const geometryOffset = new THREE.Geometry();
-					const p1 = p[i3];
-					const p2 = p[i3+1];
-					p1.y = h;
-					p2.y = h;
-					geometryOffset.vertices = [p1, p2];
-					const materialOffset = new THREE.LineBasicMaterial( { color } );
-					const lineOffset = new THREE.Line( geometryOffset, materialOffset );			
-					scene.add( lineOffset );
-
-					this.linesScene.push(lineOffset);
-				}
-			}		
-			
-		}
-		
-	}
 	
-	
-	
-	calcForm(arrPos, arrOldPos, clear = true)
-	{
-		if(clear) 
-		{
-			this.helpPoints = [];
-			this.helpCountPoints = -1;
-			this.helpAddPoints = true;
-		}
-		
+	calcForm(arrPos, arrOldPos)
+	{	
 		arrPos = [...arrPos];
 		arrOldPos = [...arrOldPos];
 		
-		arrPos.splice(arrPos.length - 1, 1); // удаляем последний элем., потому приходит массив, где последний элем. - копия нулевого элем.
-		arrOldPos.splice(arrOldPos.length - 1, 1);
+		//arrPos.splice(arrPos.length - 1, 1); // удаляем последний элем., потому приходит массив, где последний элем. - копия нулевого элем.
+		//arrOldPos.splice(arrOldPos.length - 1, 1);
 		
 
 		const arrLine = [];
@@ -133,9 +72,11 @@ class MyUlitkaWf
 		
 		const arrPos2 = this.calcCrossLine({arrLine});
 		
-		const result = this.calcPath({arrLine, arrPos, arrPos2});
+		const points = this.calcPath({arrLine, arrPos, arrPos2});
 		
-		return result;
+		const forms = this.calcForms(points);
+		
+		return forms;
 	}
 		
 	
@@ -201,6 +142,7 @@ class MyUlitkaWf
 		
 		const points = [];
 		
+		// выстраиваем последовательность точек, чтобы шли по порядку 
 		for ( let i = 0; i < arrLine.length; i++ )
 		{
 			const dir = arrLine[i].dir;
@@ -231,6 +173,7 @@ class MyUlitkaWf
 			points.push({pos: arrLine[i].end, id: arrLine[i].endId, p: []});	// конечная точка отрезка
 		}
 		
+		// добавлем информацию о соседних точек (id)
 		for ( let i = 0; i < points.length - 1; i++ )
 		{			
 			const pId1 = (i === 0) ? points[points.length - 1].id : points[i - 1].id;
@@ -238,71 +181,50 @@ class MyUlitkaWf
 			
 			if(pId1 !== points[i].id) points[i].p.push(pId1);
 			if(pId2 !== points[i].id) points[i].p.push(pId2);
-			
-			
 		}
 		
 		const ind = points.length - 1;
 		if(points[ind].id !== points[ind - 1].id) points[ind].p.push(points[ind - 1].id);
 		if(points[ind].id !== points[0].id) points[ind].p.push(points[0].id);		
 		
+		// убираем повторяющиеся точки (с одинаковым id), чтобы были только уникальные точки
 		const points2 = [];
 		for ( let i = 0; i < points.length; i++ )
 		{
 			const ind = points2.findIndex((o) => o.id === points[i].id);
 			
-			if(ind === -1) points2.push(points[i]);
+			if(ind === -1) points2.push(points[i]);		// еще такого элемента в массиве не было
 			else
-			{				
-				points2[ind].p.push(...points[i].p);
+			{	
+				// элемент повторился, значит точка пересекалась с отрезком, добавлем к массиву соседних точек, еще соседние точки
+				points2[ind].p.push(...points[i].p);	
 				if(points[i].dir) points2[ind].dir = points[i].dir;
 			}
 		}
-		
-		
+
+
 		for ( let i = 0; i < points2.length; i++ )
 		{
-			const point = this.crHelpBox2({pos: points2[i].pos});
-			point.userData = {id: points2[i].id, pIds: points2[i].p, dir: points2[i].dir, p: []};
-			point.p = [];
-			point.visible = false;
-			this.helpPoints.push(point);
-		}
-
-		for ( let i = 0; i < this.helpPoints.length; i++ )
-		{
-			const p = [];
-			for ( let i2 = 0; i2 < this.helpPoints[i].userData.pIds.length; i2++ )
+			const pO = [];
+			for ( let i2 = 0; i2 < points2[i].p.length; i2++ )
 			{
-				const id = this.helpPoints[i].userData.pIds[i2];
-				const ind = this.helpPoints.findIndex((o) => o.userData.id === id);
-				p.push(this.helpPoints[ind]);
+				const id = points2[i].p[i2];
+				const ind = points2.findIndex((o) => o.id === id);
+				pO.push(points2[ind]);
 			}
-			this.helpPoints[i].p = p;
-			//console.log(this.helpPoints[i].userData.id, this.helpPoints[i].userData.pIds);
-		}		
+			points2[i].pO = pO;
+		}				
 		
 		//console.log(points2);
 		
-		return this.calcRoomZone(this.helpPoints)
+		return points2;
 	}
 
 
-	crHelpBox({pos})
+	crHelpBox2({pos, color = 0x0000ff})
 	{
 		const geometry = new THREE.BoxGeometry( 0.04, 0.04, 0.04 );
-		const material = new THREE.MeshNormalMaterial();
-		const mesh = new THREE.Mesh( geometry, material );
-		mesh.position.copy(pos);
-		scene.add( mesh );
-
-		return mesh;
-	}
-	
-	crHelpBox2({pos})
-	{
-		const geometry = new THREE.BoxGeometry( 0.04, 0.04, 0.04 );
-		const material = new THREE.MeshBasicMaterial({color: 0x0000ff});
+		const material = new THREE.MeshBasicMaterial({color});
 		const mesh = new THREE.Mesh( geometry, material );
 		mesh.position.copy(pos);
 		scene.add( mesh );
@@ -311,52 +233,25 @@ class MyUlitkaWf
 	}
 	
 	
-	helpAnimePoints({visible})
-	{
-		let id = this.helpCountPoints;
-		
-		if(visible && !this.helpAddPoints) id--;
-		if(!visible && this.helpAddPoints) id++;
-		
-		if(visible && id + 1 < this.helpPoints.length) id++;
-		if(!visible && id - 1 > -1) id--;
-		this.helpAddPoints = visible;
-		
-		if(id > -1 && id < this.helpPoints.length) this.helpPoints[id].visible = visible;
-		
-		this.helpCountPoints = id;
-		console.log(id, this.helpPoints[id].userData);
-	}
-	
-	initKeyboard()
-	{
-		document.addEventListener("keydown", (e)=> 
-		{
-			if(e.code === 'KeyS') this.helpAnimePoints({visible: false});
-			if(e.code === 'KeyD') this.helpAnimePoints({visible: true});
-		});			
-	}
-
-
-
-	calcRoomZone(obj_point)
+	// получаем массив оптимизированных контуров
+	calcForms(points)
 	{		
-		this.arrRoom = [];
+		const arrF = [];
 		
-		for ( let i = 0; i < obj_point.length; i++ )
+		for ( let i = 0; i < points.length; i++ )
 		{			
-			for ( let i2 = 0; i2 < obj_point[i].p.length; i2++ )
-			{													
-				const p = this.getRoomContour([obj_point[i]], obj_point[i].p[i2]); 						 
+			for ( let i2 = 0; i2 < points[i].pO.length; i2++ )
+			{						
+				const form = this.getContour([points[i]], points[i].pO[i2]); 						 
 				
-				if(p[0] !== p[p.length - 1]){ continue; }	
+				if(form[0].id !== form[form.length - 1].id){ continue; }					
 				
-				const trueDir = this.getCheckDir(p);
+				const trueDir = this.getCheckDir(form);
 				if(!trueDir) continue;
 
-				if(this.detectEqualForm( p )){ continue; }
+				if(this.detectEqualForm({arrF, points: form})){ continue; }
 				
-				this.arrRoom.push(p);
+				arrF.push(form);
 				
 				break; 
 			}
@@ -364,13 +259,13 @@ class MyUlitkaWf
 		
 		
 		const newV = [];
-		for ( let i = 0; i < this.arrRoom.length; i++ )
+		for ( let i = 0; i < arrF.length; i++ )
 		{
 			const v = [];
 			
-			for ( let i2 = 0; i2 < this.arrRoom[i].length; i2++ )
+			for ( let i2 = 0; i2 < arrF[i].length - 1; i2++ )
 			{
-				v.push(this.arrRoom[i][i2].position.clone());
+				v.push(arrF[i][i2].pos.clone());
 			}
 			
 			newV.push(v);
@@ -380,26 +275,27 @@ class MyUlitkaWf
 	}
 
 	// ищем замкнутый контур помещения
-	getRoomContour(arr, point)
+	getContour(arr, point)
 	{
 		var p2 = arr[arr.length - 1];
 		arr[arr.length] = point;		
 		
-		var dir1 = new THREE.Vector3().subVectors( point.position, p2.position ).normalize();	
+		var dir1 = new THREE.Vector3().subVectors( point.pos, p2.pos ).normalize();	
 		
 		var arrD = [];
 		var n = 0;
-		for ( var i = 0; i < point.p.length; i++ )
+		for ( var i = 0; i < point.pO.length; i++ )
 		{
-			if(point.p[i] == p2){ continue; }		
-			if(point.p[i].p.length < 2){ continue; }
+			if(point.p[i].id === p2.id){ continue; }		
+			if(point.pO[i].pO.length < 2){ continue; }
 			
-			var dir2 = new THREE.Vector3().subVectors( point.p[i].position, point.position ).normalize();
+			const pS = point.pO[i];
+			var dir2 = new THREE.Vector3().subVectors( pS.pos, point.pos ).normalize();
 			
 			arrD[n] = [];
-			arrD[n][1] = point.p[i];
+			arrD[n][1] = pS;
 			
-			var d = (point.p[i].position.x - p2.position.x) * (point.position.z - p2.position.z) - (point.p[i].position.z - p2.position.z) * (point.position.x - p2.position.x);
+			var d = (pS.pos.x - p2.pos.x) * (point.pos.z - p2.pos.z) - (pS.pos.z - p2.pos.z) * (point.pos.x - p2.pos.x);
 			
 			var angle = dir1.angleTo( dir2 );
 			
@@ -407,7 +303,6 @@ class MyUlitkaWf
 			
 			arrD[n][0] = angle;
 			if(!this.isNumeric(angle)) { return arr; }
-			//console.log([point.p[i].tag_2, d, angle * 180 / Math.PI]);
 			
 			n++;
 		}	
@@ -419,7 +314,7 @@ class MyUlitkaWf
 			
 			for ( var i = 0; i < arrD.length; i++ )
 			{			
-				if(arr[0] != arrD[i][1]) { return this.getRoomContour(arr, arrD[i][1]); }
+				if(arr[0].id !== arrD[i][1].id) { return this.getContour(arr, arrD[i][1]); }
 				else { arr[arr.length] = arrD[i][1]; break; }						
 			}
 		}
@@ -427,22 +322,18 @@ class MyUlitkaWf
 		return arr;
 	}
 
+
 	getCheckDir(points)
 	{
 		let trueDir = true;
-		
-		let txt = '';
-		for (let i = 0; i < points.length; i++) txt += ' ' + points[i].userData.id;
-		//console.log(txt);
-		
+
 		for (let i = 0; i < points.length - 1; i++) 
 		{			
-			if(!points[i].userData.dir) continue;
+			if(!points[i].dir) continue;
 			
-			const dir = new THREE.Vector3().subVectors( points[i].position, points[i + 1].position ).normalize();
+			const dir = new THREE.Vector3().subVectors( points[i].pos, points[i + 1].pos ).normalize();			
 			
-			
-			trueDir = (dir.dot(points[i].userData.dir) > 0.98) ? true : false;
+			trueDir = (dir.dot(points[i].dir) > 0.98) ? true : false;
 			//console.log(points[i].userData.id, points[i].userData.dir, dir, trueDir);
 			
 			if(!trueDir) break;
@@ -452,26 +343,26 @@ class MyUlitkaWf
 	}
 
 
-	// проверяем если зона с такими же точками
-	detectEqualForm( arrP )
+	// проверяем если контур с такими же точками в массиве контуров arrF
+	detectEqualForm({arrF, points})
 	{
 		let flag = false;
 		
-		for ( let i = 0; i < this.arrRoom.length; i++ )
+		for ( let i = 0; i < arrF.length; i++ )
 		{
 			let ln = 0;
 			
-			if(this.arrRoom[i].length != arrP.length) { continue; }
+			if(arrF[i].length !== points.length) { continue; }
 				
-			for ( let i2 = 0; i2 < this.arrRoom[i].length - 1; i2++ )
+			for ( let i2 = 0; i2 < arrF[i].length - 1; i2++ )
 			{
-				for ( let i3 = 0; i3 < arrP.length - 1; i3++ )
+				for ( let i3 = 0; i3 < points.length - 1; i3++ )
 				{
-					if(this.arrRoom[i][i2] === arrP[i3]) { ln++; }
+					if(arrF[i][i2].id === points[i3].id) { ln++; }
 				}
 			}
 			
-			if(ln == arrP.length - 1) { flag = true; break; }
+			if(ln === points.length - 1) { flag = true; break; }
 		}
 		
 		return flag;
@@ -486,7 +377,63 @@ class MyUlitkaWf
 	   // Если параметр не может быть преобразован, возвращает true, иначе возвращает false.
 	   // isNaN("12") // false 
 	}
+	
+
+	crLines_3({points, color = 0xff0000, addPoints = false, h = 0})
+	{
+		if(addPoints)
+		{
+			for ( let i = 0; i < points.length; i++ )
+			{
+				const newP = this.crHelpBox2({pos: points[i], color});
+				newP.position.y = h;
+				scene.add(newP);
+				this.arrPoints_1.push(newP);
+			}				
+		}			
 		
+		points = [...points];
+		points.push(points[0]);
+		
+		for ( let i = 0; i < points.length; i++ )
+		{
+			points[i].y = h;
+		}		
+		
+		const geometry = new THREE.Geometry();
+		geometry.vertices = points;
+		
+		const material = new THREE.LineBasicMaterial({ color });
+		
+		const line = new THREE.Line( geometry, material );
+		scene.add( line );		
+
+		return line;
+	}
+	
+	clearForms()
+	{
+		for ( let i = 0; i < this.arrPoints_1.length; i++ )
+		{
+			this.arrPoints_1[i].geometry.dispose();
+			scene.remove(this.arrPoints_1[i]);			
+		}		
+		
+		for ( let i = 0; i < this.arrLines_1.length; i++ )
+		{
+			this.arrLines_1[i].geometry.dispose();
+			scene.remove(this.arrLines_1[i]);			
+		}
+		
+		for ( let i = 0; i < this.arrLines_2.length; i++ )
+		{
+			this.arrLines_2[i].geometry.dispose();
+			scene.remove(this.arrLines_2[i]);			
+		}		
+
+		this.arrLines_1 = [];
+		this.arrLines_2 = []; 		
+	}
 }
 
 

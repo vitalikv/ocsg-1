@@ -158,14 +158,15 @@ class MyMath
 		const pt1 = this.intersectionTwoLines({line1: lines[0], line2: lines [lines.length - 1]});
 		const pointsOffset = [ new THREE.Vector3( pt1.x, 0, pt1.z ) ];
 
-		for ( let i = 0; i < lines.length - 1; i++ ) {
-
+		for ( let i = 0; i < lines.length - 1; i++ ) 
+		{
 			const pt = this.intersectionTwoLines({line1: lines[i], line2: lines [i + 1]});
 
 			pointsOffset.push( new THREE.Vector3( pt.x, 0, pt.z ) );
 		}
 
-		pointsOffset.push( pointsOffset[0].clone() );
+		const closed = (points[0].distanceTo(points[points.length - 1]) > 0.0001) ? false : true;	// закнут контру или нет
+		if(closed) pointsOffset.push( pointsOffset[0].clone() );
 
 		return pointsOffset;
 	}
@@ -176,8 +177,15 @@ class MyMath
 	{
 		const lines = [];
 		
-		for ( let i = 0; i < points.length - 1; i++ ) {
-
+		// проверяем закунт ли контур, если нет, то делаем замкнутый массив точек
+		if(points[0].distanceTo(points[points.length - 1]) > 0.0001)	
+		{
+			points = [...points]; 	// копируем массив, создав новый
+			points.push(points[0]);
+		}
+		
+		for ( let i = 0; i < points.length - 1; i++ ) 
+		{
 			let pt1 = points[ i ];
 			let pt2 = points[ i + 1 ];
 
