@@ -111,11 +111,12 @@ new/warmFloor/grid/myGridWf.js
 new/warmFloor/grid/myGridLinesWf.js
 new/warmFloor/grid/myGridLinesPointWf.js
 new/warmFloor/grid/myGridPointWf.js
-new/warmFloor/grid/myGridContourWf.js
 new/warmFloor/grid/myGridWfCSG.js
 new/warmFloor/grid/myGridWfMove.js
 new/warmFloor/grid/myGridPointWfMove.js
-new/warmFloor/grid/ulitka/myUlitkaWf.js
+new/warmFloor/ufh/myGridContourWf.js
+new/warmFloor/ufh/myArrowContourWf.js
+new/warmFloor/ufh/ulitka/myUlitkaWf.js
 new/warmFloor/point/myPointWf.js
 new/warmFloor/point/myPointWfMove.js
 new/warmFloor/tube/myTubeWf.js

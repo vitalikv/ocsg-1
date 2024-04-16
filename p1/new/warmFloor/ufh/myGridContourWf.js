@@ -4,9 +4,11 @@ class MyGridContourWf
 {
 	geomPoint;
 	matPoint;
+	isTypeToolPoint = false;
+	isDown = false;
+	isMove = false;	
 	sObj = null;
 	dataContours = [];
-	dataLines = [];
 	arrPoints = [];
 	
 	constructor()
@@ -271,7 +273,6 @@ class MyGridContourWf
 		}
 
 		this.dataContours.push(points);
-		this.dataLines.push(...lines);
 		
 	}
 	

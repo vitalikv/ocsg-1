@@ -1180,6 +1180,8 @@ async function startInitProject()
 	if(1===2) myWarmFloor.myGeneratorWf.init();	// генератор отопления
 	
 	if(1===2) myWarmFloor.myGridWf.initTest(); 	// сетка для теплого пола
+	if(1===1) myWarmFloor.myUlitkaWf.initUlitkaTest();	// тепл.пол улитка
+	
 }
 
 

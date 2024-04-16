@@ -40,6 +40,9 @@ class MyManagerClick
 		rayhit = myWarmFloor.clickRayhit({event});		
 		if(rayhit) return rayhit;
 		
+
+		rayhit = myWarmFloor.myArrowContourWf.clickRayhit({event});
+		if(rayhit) return rayhit;
 		
 		rayhit = myWarmFloor.myGridContourWf.clickRayhit({event});
 		if(rayhit) return rayhit;
@@ -49,8 +52,13 @@ class MyManagerClick
 		{
 			if(!infProject.scene.block.click.controll_wd)
 			{
-				var ray = rayIntersect( event, [myHouse.myWDPoints.points[0], myHouse.myWDPoints.points[1]], 'arr' );
-				if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }		
+				const arr = [myHouse.myWDPoints.points[0], myHouse.myWDPoints.points[1]].filter((o) => o.visible);
+				
+				if(arr.length > 0)
+				{
+					const ray = rayIntersect( event, arr, 'arr' );
+					if(!rayhit) { if(ray.length > 0) { rayhit = ray[0]; } }							
+				}
 			}
 			
 			if(!rayhit)
@@ -223,6 +231,7 @@ class MyManagerClick
 			else if(tag == 'gridWf' && isCam2D) { myWarmFloor.myGridWfMove.mousedown({event, obj}); }
 			else if(tag == 'gridPointWf' && isCam2D) { myWarmFloor.myGridPointWfMove.mousedown({event, obj}); }
 			else if(tag == 'gridContourWf' && isCam2D) { myWarmFloor.myGridContourWf.mousedown({event, obj}); }
+			else if(tag == 'arrowContourWf' && isCam2D) { myWarmFloor.myArrowContourWf.mousedown({event, obj}); }
 			else if(tag == 'objWf' && isCam2D) { myWarmFloor.myObjWfMove.mousedown({event, obj}); }
 			else { flag = false; }
 		}
@@ -276,6 +285,7 @@ class MyManagerClick
 		else if(tag == 'gridWf') { myWarmFloor.myGridWfMove.mousemove(event); }
 		else if(tag == 'gridPointWf') { myWarmFloor.myGridPointWfMove.mousemove(event); }
 		else if(tag == 'gridContourWf') { myWarmFloor.myGridContourWf.mousemove(event); }
+		else if(tag == 'arrowContourWf') { myWarmFloor.myArrowContourWf.mousemove(event); }
 		else if(tag == 'objWf') { myWarmFloor.myObjWfMove.mousemove(event); }
 	}
 
@@ -298,6 +308,7 @@ class MyManagerClick
 		else if(tag == 'gridWf') { myWarmFloor.myGridWfMove.mouseup(); }
 		else if(tag == 'gridPointWf') { myWarmFloor.myGridPointWfMove.mouseup(); }
 		else if(tag == 'gridContourWf') { myWarmFloor.myGridContourWf.mouseup(); }
+		else if(tag == 'arrowContourWf') { myWarmFloor.myArrowContourWf.mouseup(); }
 		else if(tag == 'objWf') { myWarmFloor.myObjWfMove.mouseup(); }
 	}
 
