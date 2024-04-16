@@ -223,7 +223,7 @@ class MyTubeWf
 			const p1 = points[i];
 			const p2 = points[i + 1];
 			
-			const pos = myMath.mathProjectPointOnLine({p: [p1.position, p2.position], rayHit: rayPos});
+			const pos = myMath.mathProjectPointOnLine3D({p: [p1.position, p2.position], rayHit: rayPos});
 			
 			const dist = rayPos.distanceTo(pos);	
 			

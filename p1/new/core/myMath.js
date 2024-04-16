@@ -4,8 +4,29 @@
 class MyMath
 {
 
+	// проекция точки(С) на прямую (A,B) (2D)
+	mathProjectPointOnLine2D({A,B,C})
+	{
+		const x1 = A.x;
+		const y1 = A.z; 
+		const x2 = B.x; 
+		const y2 = B.z; 
+		const x3 = C.x; 
+		const y3 = C.z;
+		
+		const px = x2 - x1;
+		const py = y2 - y1; 
+		const dAB = px * px + py * py;
+		
+		const u = ((x3 - x1) * px + (y3 - y1) * py) / dAB;
+		const x = x1 + u * px;
+		const z = y1 + u * py;
+		
+		return new THREE.Vector3(x, 0, z); 
+	} 
+
 	// проекция точки на линию (3D), получаем точку пересечения
-	mathProjectPointOnLine(cdm)
+	mathProjectPointOnLine3D(cdm)
 	{
 		var A = cdm.p[0];
 		var B = cdm.p[1];
@@ -29,6 +50,21 @@ class MyMath
 		return pos;
 	}
 	
+	// опредяляем, надодится точка D за пределами прямой или нет (точка D пересекает прямую АВ, идущая перпендикулярна от точки С)  
+	checkPointOnLine(A,B,C)
+	{	
+		let AB = { x : B.x - A.x, y : B.z - A.z };
+		let CD = { x : C.x - A.x, y : C.z - A.z };
+		const r1 = AB.x * CD.x + AB.y * CD.y;				// скалярное произведение векторов
+
+		AB = { x : A.x - B.x, y : A.z - B.z };
+		CD = { x : C.x - B.x, y : C.z - B.z };
+		const r2 = AB.x * CD.x + AB.y * CD.y;
+
+		const cross = (r1 < 0 | r2 < 0) ? false : true;	// если true , то точка D находится на отрезке AB	
+		
+		return cross;
+	}
 
 	// попадает ли точка в граница отрезка 3D BoundBox
 	checkPointBoundBoxLine(pointA, pointB, pointToCheck) 

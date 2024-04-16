@@ -25,6 +25,21 @@ class MyArrowContourWf
 		return obj;
 	}
 	
+	
+	testCounter()
+	{
+		const v = [];
+		v.push(new THREE.Vector3(-5, 0, 0));	
+		v.push(new THREE.Vector3(-5, 0, 5));
+		v.push(new THREE.Vector3(5, 0, 5));
+		v.push(new THREE.Vector3(5, 0, -5));
+		v.push(new THREE.Vector3(2.5, 0, -5));
+		v.push(new THREE.Vector3(2.5, 0, 0));
+
+		return v;
+	}
+	
+	
 	// проверка куда кликнули
 	clickRayhit({event})
 	{
@@ -75,7 +90,29 @@ class MyArrowContourWf
 		
 		offset.y = 0;		
 		
-		obj.position.add( offset );	
+		obj.position.add( offset );
+
+		const arrP = [];
+		let v = this.testCounter();
+		v = [...v];
+		v.push(v[0]);
+		for ( let i = 0; i < v.length - 1; i++ )
+		{
+			const pos = myMath.mathProjectPointOnLine2D({A: v[i], B: v[i + 1], C: intersects[0].point});
+			const onLine = myMath.checkPointOnLine(v[i], v[i + 1], intersects[0].point);
+			
+			if(onLine)
+			{
+				const dist = pos.distanceTo(intersects[0].point);
+				arrP.push({pos, dist});				
+			}
+		}
+		
+		if(arrP.length > 0)
+		{
+			arrP.sort((a, b) => { return a.dist - b.dist; });
+			obj.position.copy(arrP[0].pos);
+		}
 	}
 	
 	mouseup = () =>
