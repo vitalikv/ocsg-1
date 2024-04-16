@@ -7,21 +7,6 @@ class MyUlitkaWf
 	arrLines_2 = []; // потом удалить
 	
 	
-	initUlitkaTest()
-	{
-		const v = [];
-		v.push(new THREE.Vector3(-5, 0, 0));	
-		v.push(new THREE.Vector3(-5, 0, 5));
-		v.push(new THREE.Vector3(5, 0, 5));
-		v.push(new THREE.Vector3(5, 0, -5));
-		v.push(new THREE.Vector3(2.5, 0, -5));
-		v.push(new THREE.Vector3(2.5, 0, 0));
-		
-		this.crLines_3({points: v, color: 0x000000, addPoints: false, h: 0});		
-
-		this.drawFrom({points: v});
-	}
-	
 	
 	drawFrom({points})
 	{

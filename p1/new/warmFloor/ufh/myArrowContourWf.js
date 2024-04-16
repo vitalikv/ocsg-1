@@ -7,9 +7,14 @@ class MyArrowContourWf
 	toolObj = null;	
 	actObj = null;
 	
+	helpLines = [];	// временное, потом удалить
+	
+	
 	constructor()
 	{
 		this.toolObj = this.crPoint({pos: new THREE.Vector3()});
+		
+		this.helpLines = this.testLines();
 	}
 	
 	crPoint({pos})
@@ -26,18 +31,43 @@ class MyArrowContourWf
 	}
 	
 	
-	testCounter()
+	
+	testLines()
 	{
-		const v = [];
-		v.push(new THREE.Vector3(-5, 0, 0));	
-		v.push(new THREE.Vector3(-5, 0, 5));
-		v.push(new THREE.Vector3(5, 0, 5));
-		v.push(new THREE.Vector3(5, 0, -5));
-		v.push(new THREE.Vector3(2.5, 0, -5));
-		v.push(new THREE.Vector3(2.5, 0, 0));
+		const lines = [];
+		
+		for ( let i = 0; i < 2; i++ )
+		{
+			const geometry = new THREE.Geometry();
+			geometry.vertices = [new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -1)];
+			
+			const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
+			
+			const line = new THREE.Line( geometry, material );
+			scene.add(line);
 
-		return v;
+			lines.push(line);
+		}
+		
+		return lines;
 	}
+	
+	testGeometryLines({pos, normal})
+	{
+		const lines = this.helpLines;
+		
+		for ( let i = 0; i < lines.length; i++ )
+		{
+			lines[i].geometry.dispose();
+			
+			const geometry = new THREE.Geometry();
+			geometry.vertices = [pos.clone(), pos.clone().add(normal)];
+			
+			lines[i].geometry = geometry;
+		}
+		
+		return lines;
+	}	
 	
 	
 	// проверка куда кликнули
@@ -92,27 +122,7 @@ class MyArrowContourWf
 		
 		obj.position.add( offset );
 
-		const arrP = [];
-		let v = this.testCounter();
-		v = [...v];
-		v.push(v[0]);
-		for ( let i = 0; i < v.length - 1; i++ )
-		{
-			const pos = myMath.mathProjectPointOnLine2D({A: v[i], B: v[i + 1], C: intersects[0].point});
-			const onLine = myMath.checkPointOnLine(v[i], v[i + 1], intersects[0].point);
-			
-			if(onLine)
-			{
-				const dist = pos.distanceTo(intersects[0].point);
-				arrP.push({pos, dist});				
-			}
-		}
-		
-		if(arrP.length > 0)
-		{
-			arrP.sort((a, b) => { return a.dist - b.dist; });
-			obj.position.copy(arrP[0].pos);
-		}
+		this.setToolObj({pointPos: intersects[0].point});
 	}
 	
 	mouseup = () =>
@@ -122,6 +132,38 @@ class MyArrowContourWf
 		const isMove = this.isMove;
 		
 		this.clearPoint();		
+	}
+	
+	
+	// ставим стрелку на контур в зависимости от ближайшей грани 
+	setToolObj({pointPos})
+	{
+		const obj = this.toolObj;
+		
+		const arrP = [];
+		let v = myWarmFloor.myGridContourWf.getActContourPointsPos();
+		v = [...v];
+		v.push(v[0]);
+		for ( let i = 0; i < v.length - 1; i++ )
+		{
+			const pos = myMath.mathProjectPointOnLine2D({A: v[i], B: v[i + 1], C: pointPos});
+			const onLine = myMath.checkPointOnLine(v[i], v[i + 1], pointPos);
+			
+			if(onLine)
+			{
+				const dist = pos.distanceTo(pointPos);
+				const normal = myMath.calcNormal2D({p1: v[i], p2: v[i + 1]});
+				arrP.push({pos, dist, normal});				
+			}
+		}
+		
+		if(arrP.length > 0)
+		{
+			arrP.sort((a, b) => { return a.dist - b.dist; });
+			obj.position.copy(arrP[0].pos);
+			
+			this.testGeometryLines({pos: arrP[0].pos, normal: arrP[0].normal});
+		}		
 	}
 	
 

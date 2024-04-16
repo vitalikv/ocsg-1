@@ -3,7 +3,15 @@
 
 class MyMath
 {
-
+	// перпендикуляр линии (2D)
+	calcNormal2D({p1, p2})
+	{
+		const x = p1.z - p2.z;
+		const z = p2.x - p1.x;			
+		
+		return new THREE.Vector3(x, 0, z).normalize();								
+	}
+	
 	// проекция точки(С) на прямую (A,B) (2D)
 	mathProjectPointOnLine2D({A,B,C})
 	{

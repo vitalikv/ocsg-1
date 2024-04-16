@@ -17,6 +17,42 @@ class MyGridContourWf
 		this.matPoint = new THREE.MeshStandardMaterial({ color: 0x222222, lightMap: lightMap_1 });
 	}
 	
+	initTestContour()
+	{
+		const v = [];
+		
+		if(1===2)
+		{
+			v.push(new THREE.Vector3(-5, 0, 0));	
+			v.push(new THREE.Vector3(-5, 0, 5));
+			v.push(new THREE.Vector3(5, 0, 5));
+			v.push(new THREE.Vector3(5, 0, 0));			
+		}
+		else
+		{
+			v.push(new THREE.Vector3(-5, 0, 0));	
+			v.push(new THREE.Vector3(-5, 0, 5));
+			v.push(new THREE.Vector3(5, 0, 5));
+			v.push(new THREE.Vector3(5, 0, -5));
+			v.push(new THREE.Vector3(2.5, 0, -5));
+			v.push(new THREE.Vector3(2.5, 0, 0));			
+		}
+
+		for ( let i = 0; i < v.length; i++ )
+		{
+			this.crPoint({pos: v[i]});
+		}
+		
+		this.crContour();
+		
+		this.clearPoint();
+		
+		const n = 0;
+		const pointPos = v[n + 1].clone().sub(v[n + 0]).divideScalar( 2 ).add(v[n + 0]);		
+		myWarmFloor.myArrowContourWf.setToolObj({pointPos});
+	}
+	
+	
 	crPoint({pos, toolPoint = false})
 	{
 		const obj = new THREE.Mesh( this.geomPoint, this.matPoint ); 
@@ -67,6 +103,17 @@ class MyGridContourWf
 	}
 	
 	
+	crContour()
+	{
+		const arrPos = [];
+		
+		for ( let i = 0; i < this.arrPoints.length; i++ ) arrPos.push(this.arrPoints[i].position.clone());
+		
+		const arrLines = myWarmFloor.myUlitkaWf.drawFrom({points: arrPos});
+		
+		this.addContour({points: this.arrPoints});		
+	}
+	
 	// проверка куда кликнули (попали на точку или трубу)
 	clickRayhit({event})
 	{
@@ -109,21 +156,14 @@ class MyGridContourWf
 			// определяем с чем точка пересеклась и дальнейшие действия
 			const joint = this.checkJointToPoint({point: obj, points: this.arrPoints});
 			if(joint) 
-			{
-				const arrPos = [];
+			{				
 				//for ( let i = 0; i < this.arrPoints.length - 2; i++ ) arrPos.push(this.arrPoints[i].position.clone());				
 				//const grid = myWarmFloor.myGridWf.crGrid({arrPos});
 				//myWarmFloor.myGridWf.myGridWfCSG.upGeometryLines({grid});
 				
 				this.deletePoint({obj});
 				
-				for ( let i = 0; i < this.arrPoints.length; i++ ) arrPos.push(this.arrPoints[i].position.clone());
-				
-				const arrLines = myWarmFloor.myUlitkaWf.drawFrom({points: arrPos})
-				
-				//this.clickRight({obj});
-				
-				this.addContour({points: this.arrPoints, lines: arrLines});
+				this.crContour();
 				
 				//this.deleteContour();
 				this.clearPoint();
@@ -263,18 +303,29 @@ class MyGridContourWf
 	}
 	
 	
-	addContour({points, lines})
-	{
-		
+	addContour({points})
+	{		
 		for ( let i = 0; i < points.length; i++ )
 		{
 			points[i].userData.toolPoint = false;
 			points[i].userData.points = points;
 		}
 
-		this.dataContours.push(points);
-		
+		this.dataContours.push(points);		
 	}
+	
+	// получаем точки активного контура
+	getActContourPointsPos()
+	{
+		const contours = this.dataContours;
+		const points = contours[contours.length - 1];
+				
+		const arrPos = [];		
+		for ( let i = 0; i < points.length; i++ ) arrPos.push(points[i].position.clone());
+
+		return arrPos;		
+	}
+	
 	
 	deletePoint({obj})
 	{
