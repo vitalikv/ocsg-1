@@ -8,18 +8,20 @@ class MyUlitkaWf
 	
 	
 	
-	drawFrom({points})
+	drawFrom({points, offsetStart = -0.2, offsetNext = -0.2})
 	{
 		points = [...points];		
 		
 		const result = myMath.checkClockWise(points);	// проверяем последовательность построения точек (по часовой стрелке или нет)
 		if(result < 0) points.reverse();	// если по часовой стрелки, то разворачиваем массив, чтобы был против часовой
 		
-		let arrFroms = [points];	// стартовый контур от которого идет смещение
+		let offset = offsetStart;	// смещение стартового от контура
+		let arrFroms = [points];	// стартовый контур от которого идет смещение		
 		
 		while (arrFroms.length > 0) 
 		{
-			arrFroms = this.loopFroms({oldFormPoints: arrFroms});
+			arrFroms = this.loopFroms({oldFormPoints: arrFroms, offset});
+			offset = offsetNext;	// смещение от построеного контура
 			//arrFroms = [];
 		}
 
@@ -27,13 +29,13 @@ class MyUlitkaWf
 	}
 	
 	// расчитываем один шаг смещения от контура
-	loopFroms({oldFormPoints})
+	loopFroms({oldFormPoints, offset})
 	{
 		const arrFroms = [];
 		
 		for ( let i = 0; i < oldFormPoints.length; i++ )
 		{
-			const newFormPoints = myMath.offsetForm({points: oldFormPoints[i], offset: -0.2});
+			const newFormPoints = myMath.offsetForm({points: oldFormPoints[i], offset});
 			const forms = this.calcForm(newFormPoints, oldFormPoints[i]);			
 			arrFroms.push(...forms);
 			

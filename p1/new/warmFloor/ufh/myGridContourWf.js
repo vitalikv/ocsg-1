@@ -21,7 +21,7 @@ class MyGridContourWf
 	{
 		const v = [];
 		
-		if(1===2)
+		if(1===1)
 		{
 			v.push(new THREE.Vector3(-5, 0, 0));	
 			v.push(new THREE.Vector3(-5, 0, 5));
@@ -43,7 +43,7 @@ class MyGridContourWf
 			this.crPoint({pos: v[i]});
 		}
 		
-		this.crContour();
+		this.crContour({points: this.arrPoints});
 		
 		this.clearPoint();
 		
@@ -102,16 +102,24 @@ class MyGridContourWf
 		//this.upGeometryLine({point: points[0]});
 	}
 	
-	
-	crContour()
+	// создаем тепл.пол
+	crContour({points})
 	{
-		const arrPos = [];
+		let arrPos = [];		
+		for ( let i = 0; i < points.length; i++ ) arrPos.push(points[i].position.clone());
 		
-		for ( let i = 0; i < this.arrPoints.length; i++ ) arrPos.push(this.arrPoints[i].position.clone());
+		const result = myMath.checkClockWise(arrPos);	// проверяем последовательность построения точек (по часовой стрелке или нет)
+		// если по часовой стрелки, то разворачиваем массив, чтобы был против часовой
+		if(result < 0) 
+		{
+			points.reverse();
+			arrPos = [];
+			for ( let i = 0; i < points.length; i++ ) arrPos.push(points[i].position.clone());
+		}			
 		
-		const arrLines = myWarmFloor.myUlitkaWf.drawFrom({points: arrPos});
+		const arrLines = myWarmFloor.myUlitkaWf.drawFrom({points: arrPos, offsetStart: -0.2, offsetNext: -0.3});
 		
-		this.addContour({points: this.arrPoints});		
+		this.addContour({points});		
 	}
 	
 	// проверка куда кликнули (попали на точку или трубу)
@@ -163,7 +171,7 @@ class MyGridContourWf
 				
 				this.deletePoint({obj});
 				
-				this.crContour();
+				this.crContour({points: this.arrPoints});
 				
 				//this.deleteContour();
 				this.clearPoint();
@@ -241,7 +249,7 @@ class MyGridContourWf
 		this.clearPoint();
 		
 		
-		if(this.dataContours.length > 0)
+		if(obj && this.dataContours.length > 0)
 		{
 			const points = obj.userData.points;
 			

@@ -120,7 +120,7 @@ class MyArrowContourWf
 		
 		offset.y = 0;		
 		
-		obj.position.add( offset );
+		//obj.position.add( offset );
 
 		this.setToolObj({pointPos: intersects[0].point});
 	}
@@ -152,7 +152,7 @@ class MyArrowContourWf
 			if(onLine)
 			{
 				const dist = pos.distanceTo(pointPos);
-				const normal = myMath.calcNormal2D({p1: v[i], p2: v[i + 1]});
+				const normal = myMath.calcNormal2D({p1: v[i], p2: v[i + 1], reverse: true});
 				arrP.push({pos, dist, normal});				
 			}
 		}

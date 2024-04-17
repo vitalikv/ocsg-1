@@ -4,10 +4,17 @@
 class MyMath
 {
 	// перпендикуляр линии (2D)
-	calcNormal2D({p1, p2})
+	calcNormal2D({p1, p2, reverse = false})
 	{
-		const x = p1.z - p2.z;
-		const z = p2.x - p1.x;			
+		let x = p1.z - p2.z;
+		let z = p2.x - p1.x;
+
+		// нормаль вывернуть в обратное напрвление
+		if(reverse)
+		{
+			x *= -1;
+			z *= -1;
+		}
 		
 		return new THREE.Vector3(x, 0, z).normalize();								
 	}
