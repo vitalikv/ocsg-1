@@ -18,40 +18,48 @@ class MyUlitkaWf
 		let offset = offsetStart;	// смещение стартового от контура
 		let arrFroms = [points];	// стартовый контур от которого идет смещение		
 		
+		const formSteps = [];	// все формы одного контура
+		
 		while (arrFroms.length > 0) 
 		{
 			arrFroms = this.loopFroms({oldFormPoints: arrFroms, offset});
 			offset = offsetNext;	// смещение от построеного контура
 			//arrFroms = [];
+			if(arrFroms.length > 0) formSteps.push(arrFroms);
+		}
+		
+		
+		// показываем линии пола после смещения и оптимизации
+		for ( let i = 0; i < formSteps.length; i++ )
+		{
+			const points = formSteps[i];
+			for ( let i2 = 0; i2 < points.length; i2++ )
+			{
+				//const line2 = this.crLines_3({points: points[i2], color: 0x0000ff, addPoints: false, h: 0});
+				//this.arrLines_2.push(line2);									
+			}
 		}
 
-		return this.arrLines_1;
+		return formSteps;
 	}
 	
 	// расчитываем один шаг смещения от контура
 	loopFroms({oldFormPoints, offset})
 	{
-		const arrFroms = [];
+		const forms = [];
 		
 		for ( let i = 0; i < oldFormPoints.length; i++ )
 		{
 			const newFormPoints = myMath.offsetForm({points: oldFormPoints[i], offset});
-			const forms = this.calcForm(newFormPoints, oldFormPoints[i]);			
-			arrFroms.push(...forms);
+			const points = this.calcForm(newFormPoints, oldFormPoints[i]);			
+			forms.push(...points);
 			
-			// линии пола после смещения, без оптимизации
+			// линии пола после смещения, без оптимизации/обрезки пересечений
 			//const line1 = this.crLines_3({points: newFormPoints, color: 0xff0000, addPoints: false, h: 0});
 			//this.arrLines_1.push(line1);
-			
-			// линии пола после смещения и оптимизации
-			for ( let i2 = 0; i2 < forms.length; i2++ )
-			{
-				const line2 = this.crLines_3({points: forms[i2], color: 0x0000ff, addPoints: false, h: 0});
-				this.arrLines_2.push(line2);				
-			}
 		}
 		
-		return arrFroms;
+		return forms;
 	}
 
 	
@@ -225,18 +233,6 @@ class MyUlitkaWf
 	}
 
 
-	crHelpBox2({pos, color = 0x0000ff})
-	{
-		const geometry = new THREE.BoxGeometry( 0.04, 0.04, 0.04 );
-		const material = new THREE.MeshBasicMaterial({color});
-		const mesh = new THREE.Mesh( geometry, material );
-		mesh.position.copy(pos);
-		scene.add( mesh );
-
-		return mesh;
-	}
-	
-	
 	// получаем массив оптимизированных контуров
 	calcForms(points)
 	{		
@@ -385,11 +381,12 @@ class MyUlitkaWf
 
 	crLines_3({points, color = 0xff0000, addPoints = false, h = 0})
 	{
+		// по мимом линий, показываем точки
 		if(addPoints)
 		{
 			for ( let i = 0; i < points.length; i++ )
 			{
-				const newP = this.crHelpBox2({pos: points[i], color});
+				const newP = this.crHelpBox({pos: points[i], color});
 				newP.position.y = h;
 				scene.add(newP);
 				this.arrPoints_1.push(newP);
@@ -414,6 +411,20 @@ class MyUlitkaWf
 
 		return line;
 	}
+	
+
+	crHelpBox({pos, size = 0.04, color = 0x0000ff})
+	{
+		const geometry = new THREE.BoxGeometry( size, size, size );
+		const material = new THREE.MeshBasicMaterial({color});
+		const mesh = new THREE.Mesh( geometry, material );
+		mesh.position.copy(pos);
+		scene.add( mesh );
+
+		return mesh;
+	}
+	
+		
 	
 	clearForms()
 	{

@@ -3,6 +3,21 @@
 
 class MyMath
 {
+	// сдвиг всего массива, так чтобы выбранный index оказался самым первым 
+	// пример: myMath.offsetArrayToFirstElem({arr: [1,2,3,45,8,9,7,10], index: 5})
+	// было arr = [1,2,3,45,8,9,7,10], index: 5
+	// стало arr = [ 9, 7, 10, 1, 2, 3, 45, 8 ] 	
+	offsetArrayToFirstElem({arr, index})
+	{
+		// index - выбранный id элемента, который будет самым первым после смещения
+		const offsetInd = arr.length - index;
+		
+		arr = arr.map((el, i, array) => { return i < offsetInd ? array[array.length + i - offsetInd] : array[i - offsetInd] });
+
+		return arr;
+	}
+	
+	
 	// перпендикуляр линии (2D)
 	calcNormal2D({p1, p2, reverse = false})
 	{

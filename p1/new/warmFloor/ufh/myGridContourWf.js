@@ -43,13 +43,19 @@ class MyGridContourWf
 			this.crPoint({pos: v[i]});
 		}
 		
-		this.crContour({points: this.arrPoints});
+		const formSteps = this.crContour({points: this.arrPoints});
 		
 		this.clearPoint();
 		
-		const n = 0;
-		const pointPos = v[n + 1].clone().sub(v[n + 0]).divideScalar( 2 ).add(v[n + 0]);		
-		myWarmFloor.myArrowContourWf.setToolObj({pointPos});
+		const n = 1;
+		const pointPos = v[0].clone().sub(v[n + 0]).divideScalar( 2 ).add(v[n + 0]);		
+		myWarmFloor.myArrowContourWf.setToolObj({startPos: pointPos});
+		
+		let startPos = pointPos.clone();
+		for ( let i = 0; i < formSteps.length; i++ )
+		{
+			startPos = myWarmFloor.myArrowContourWf.testCutForm({startPos, formPoints: formSteps[i][0]})
+		}		
 	}
 	
 	
@@ -117,9 +123,11 @@ class MyGridContourWf
 			for ( let i = 0; i < points.length; i++ ) arrPos.push(points[i].position.clone());
 		}			
 		
-		const arrLines = myWarmFloor.myUlitkaWf.drawFrom({points: arrPos, offsetStart: -0.2, offsetNext: -0.3});
+		const formSteps = myWarmFloor.myUlitkaWf.drawFrom({points: arrPos, offsetStart: -0.2, offsetNext: -0.3});
 		
-		this.addContour({points});		
+		this.addContour({points});
+
+		return formSteps;
 	}
 	
 	// проверка куда кликнули (попали на точку или трубу)
