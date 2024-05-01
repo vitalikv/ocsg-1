@@ -122,7 +122,11 @@ class MyArrowContourWf
 		
 		//obj.position.add( offset );
 
-		this.setToolObj({startPos: intersects[0].point});
+		const pointPos = this.setToolObj({startPos: intersects[0].point});
+		
+		const arrP = myWarmFloor.myGridContourWf.getActContourPointsPos();		
+		const formSteps = myWarmFloor.myUlitkaWf.drawFrom({points: arrP, offsetStart: -0.2, offsetNext: -0.3});				
+		myWarmFloor.myJoinContourWf.joinForms({startPos: pointPos.clone(), formSteps});
 	}
 	
 	mouseup = () =>
@@ -135,9 +139,18 @@ class MyArrowContourWf
 	}
 	
 	
+	getPosToolObj()
+	{
+		const obj = this.toolObj;
+		if(!obj) return;
+		
+		return obj.position.clone();
+	}
+	
 	// ставим стрелку на контур в зависимости от ближайшей грани 
 	setToolObj({startPos})
 	{
+		let newPos = new THREE.Vector3();
 		const obj = this.toolObj;
 		
 		const arrP = [];
@@ -161,73 +174,14 @@ class MyArrowContourWf
 		{
 			arrP.sort((a, b) => { return a.dist - b.dist; });
 			obj.position.copy(arrP[0].pos);
+			newPos = arrP[0].pos.clone();
 			
 			this.testGeometryLines({pos: arrP[0].pos, normal: arrP[0].normal});
-		}		
-	}
-
-
-	// пока проверка потом удалить 
-	testCutForm({startPos, formPoints})
-	{
-		let newPos = new THREE.Vector3();
-		
-		const arrP = [];
-		const v = [...formPoints];
-		v.push(v[0]);
-		for ( let i = 0; i < v.length - 1; i++ )
-		{
-			const pos = myMath.mathProjectPointOnLine2D({A: v[i], B: v[i + 1], C: startPos});
-			const onLine = myMath.checkPointOnLine(v[i], v[i + 1], startPos);
-			
-			if(onLine)
-			{
-				const dist = pos.distanceTo(startPos);
-				const normal = myMath.calcNormal2D({p1: v[i], p2: v[i + 1], reverse: true});
-				
-				const pos2 = v[i + 1].clone().sub(v[i]).normalize().divideScalar(-3);
-				pos2.add(pos);
-				
-				arrP.push({ind: i, pos, dist, normal, pos2});				
-			}
-		}
-		
-		if(arrP.length > 0)
-		{
-			arrP.sort((a, b) => { return a.dist - b.dist; });
-			myWarmFloor.myUlitkaWf.crHelpBox({pos: arrP[0].pos, color:  0xff0000});
-						
-			newPos = arrP[0].pos2.clone();			
-			myWarmFloor.myUlitkaWf.crHelpBox({pos: newPos, color:  0xff0000});
-
-			let v = [...formPoints];
-//console.log(arrP[0].ind, [...v]);
-
-			if(arrP[0].ind === v.length - 1)
-			{
-				v.splice(arrP[0].ind + 1, 0, newPos);	// встявляем элемент в массив по индексу
-				v.splice(0, 0, arrP[0].pos);				
-			}
-			else
-			{
-				v.splice(arrP[0].ind + 1, 0, newPos);	// встявляем элемент в массив по индексу
-				v.splice(arrP[0].ind + 2, 0, arrP[0].pos);	
-				
-				v = myMath.offsetArrayToFirstElem({arr: v, index: arrP[0].ind + 2});				
-			}
-			
-			console.log(arrP[0].ind, newPos, arrP[0].pos, v);
-			console.log('--------');
-			
-			const geometry = new THREE.Geometry();
-			geometry.vertices = v;		
-			const material = new THREE.LineBasicMaterial({ color:  0x0000ff });		
-			const line = new THREE.Line( geometry, material );
-			scene.add( line );											
 		}
 
 		return newPos;
-	}	
+	}
+
 
 	clearPoint()
 	{

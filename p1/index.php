@@ -228,6 +228,7 @@
 	<script src="<?=$path?>new/warmFloor/grid/myGridPointWfMove.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/ufh/myGridContourWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/ufh/myArrowContourWf.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/warmFloor/ufh/myJoinContourWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/ufh/ulitka/myUlitkaWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/point/myPointWf.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/point/myPointWfMove.js?<?=$vrs?>"></script>

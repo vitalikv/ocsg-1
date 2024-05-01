@@ -8,6 +8,7 @@ class MyWarmFloor
 	myGridPointWfMove;
 	myGridContourWf;
 	myArrowContourWf;
+	myJoinContourWf;
 	myUlitkaWf;
 	
 	myPointWf;
@@ -39,6 +40,7 @@ class MyWarmFloor
 		this.myGridPointWfMove = new MyGridPointWfMove();
 		this.myGridContourWf = new MyGridContourWf();
 		this.myArrowContourWf = new MyArrowContourWf();
+		this.myJoinContourWf = new MyJoinContourWf();
 		this.myUlitkaWf = new MyUlitkaWf();
 		
 		this.myPointWf = new MyPointWf();

@@ -47,15 +47,13 @@ class MyGridContourWf
 		
 		this.clearPoint();
 		
-		const n = 1;
+		const n = 3;
 		const pointPos = v[0].clone().sub(v[n + 0]).divideScalar( 2 ).add(v[n + 0]);		
 		myWarmFloor.myArrowContourWf.setToolObj({startPos: pointPos});
 		
-		let startPos = pointPos.clone();
-		for ( let i = 0; i < formSteps.length; i++ )
-		{
-			startPos = myWarmFloor.myArrowContourWf.testCutForm({startPos, formPoints: formSteps[i][0]})
-		}		
+		myWarmFloor.myJoinContourWf.joinForms({startPos: pointPos.clone(), formSteps});
+		
+		
 	}
 	
 	
@@ -179,7 +177,12 @@ class MyGridContourWf
 				
 				this.deletePoint({obj});
 				
-				this.crContour({points: this.arrPoints});
+
+				const formSteps = this.crContour({points: this.arrPoints});
+
+				let pointPos = myWarmFloor.myArrowContourWf.getPosToolObj();
+				pointPos = myWarmFloor.myArrowContourWf.setToolObj({startPos: pointPos});				
+				myWarmFloor.myJoinContourWf.joinForms({startPos: pointPos.clone(), formSteps});				
 				
 				//this.deleteContour();
 				this.clearPoint();
@@ -259,14 +262,15 @@ class MyGridContourWf
 		
 		if(obj && this.dataContours.length > 0)
 		{
-			const points = obj.userData.points;
+			const points = obj.userData.points;		
 			
-			const arrP = [];
-			for ( let i = 0; i < points.length; i++ ) arrP.push(points[i].position.clone());		
+			//myWarmFloor.myUlitkaWf.clearForms();
 			
-			myWarmFloor.myUlitkaWf.clearForms();
-			
-			const arrLines = myWarmFloor.myUlitkaWf.drawFrom({points: arrP})			
+			const formSteps = this.crContour({points: obj.userData.points});
+
+			let pointPos = myWarmFloor.myArrowContourWf.getPosToolObj();
+			pointPos = myWarmFloor.myArrowContourWf.setToolObj({startPos: pointPos});				
+			myWarmFloor.myJoinContourWf.joinForms({startPos: pointPos.clone(), formSteps});			
 		}		
 	}
 	
