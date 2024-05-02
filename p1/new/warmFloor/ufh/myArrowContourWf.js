@@ -122,11 +122,11 @@ class MyArrowContourWf
 		
 		//obj.position.add( offset );
 
-		const pointPos = this.setToolObj({startPos: intersects[0].point});
+		const { newPos, dir } = this.setToolObj({startPos: intersects[0].point});
 		
 		const arrP = myWarmFloor.myGridContourWf.getActContourPointsPos();		
 		const formSteps = myWarmFloor.myUlitkaWf.drawFrom({points: arrP, offsetStart: -0.2, offsetNext: -0.3});				
-		myWarmFloor.myJoinContourWf.joinForms({startPos: pointPos.clone(), formSteps});
+		myWarmFloor.myJoinContourWf.joinForms({startPos: newPos.clone(), dir, formSteps});
 	}
 	
 	mouseup = () =>
@@ -151,6 +151,7 @@ class MyArrowContourWf
 	setToolObj({startPos})
 	{
 		let newPos = new THREE.Vector3();
+		let dir = null;
 		const obj = this.toolObj;
 		
 		const arrP = [];
@@ -175,11 +176,12 @@ class MyArrowContourWf
 			arrP.sort((a, b) => { return a.dist - b.dist; });
 			obj.position.copy(arrP[0].pos);
 			newPos = arrP[0].pos.clone();
+			dir = arrP[0].normal;
 			
 			this.testGeometryLines({pos: arrP[0].pos, normal: arrP[0].normal});
 		}
 
-		return newPos;
+		return { newPos, dir };
 	}
 
 

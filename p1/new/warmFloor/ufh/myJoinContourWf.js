@@ -11,7 +11,7 @@ class MyJoinContourWf
 	}
 	
 	
-	joinForms({startPos, formSteps})
+	joinForms({startPos, dir, formSteps})
 	{
 		this.delete();
 		
@@ -19,7 +19,7 @@ class MyJoinContourWf
 		
 		for ( let i = 0; i < formSteps.length; i++ )
 		{
-			const result = this.testCutForm({startPos, formPoints: formSteps[i][0]});
+			const result = this.testCutForm({startPos, dir, formPoints: formSteps[i][0]});
 			
 			if(result.newPos)
 			{
@@ -30,6 +30,7 @@ class MyJoinContourWf
 			{
 				break;
 			}
+			//break;
 		}
 
 		this.crLine({pointsPos});
@@ -37,7 +38,7 @@ class MyJoinContourWf
 	
 	
 	
-	testCutForm({startPos, formPoints})
+	testCutForm({startPos, dir, formPoints, stepOffset = 0.3})
 	{
 		let newPos = null;
 		
@@ -46,46 +47,103 @@ class MyJoinContourWf
 		v.push(v[0]);
 		for ( let i = 0; i < v.length - 1; i++ )
 		{
-			const pos = myMath.mathProjectPointOnLine2D({A: v[i], B: v[i + 1], C: startPos});
-			const onLine = myMath.checkPointOnLine(v[i], v[i + 1], startPos);
+			const line = {start: v[i], end: v[i + 1]};
+			const line2 = {start: startPos, end: startPos.clone().add(dir)};
 			
+			const posCross = myMath.intersectionTwoLines_2(v[i], v[i + 1], startPos, startPos.clone().add(dir));
+			if(!posCross) continue;
+			
+			//const posCross = myMath.mathProjectPointOnLine2D({A: v[i], B: v[i + 1], C: startPos});
+			//const onLine = myMath.checkPointOnLine(v[i], v[i + 1], posCross);
+			const onLine = true;
 			if(onLine)
 			{
-				const dist = pos.distanceTo(startPos);
+				//const dist = posCross.distanceTo(startPos);
 				const normal = myMath.calcNormal2D({p1: v[i], p2: v[i + 1], reverse: true});
 				
-				const pos2 = v[i + 1].clone().sub(v[i]).normalize();
-				pos2.x *= -0.3;
-				pos2.z *= -0.3;
-				pos2.add(pos);
+				const dir = v[i + 1].clone().sub(v[i]).normalize();
+				dir.x *= stepOffset/2;
+				dir.z *= stepOffset/2;
 				
-				arrP.push({ind: i, pos, dist, normal, pos2});				
+				let pos1 = posCross.clone().add(dir);
+				let pos2 = posCross.clone().sub(dir);
+				
+				const newPos1 = this.getPosLimitOnLine({pos: pos1, line});
+				const newPos2 = this.getPosLimitOnLine({pos: pos2, line});
+				
+				const flag1 = (pos1.length() === newPos1.length());
+				const flag2 = (pos2.length() === newPos2.length());
+
+				if(!flag1 && flag2)
+				{
+					pos1 = newPos1;
+					pos2 = pos1.clone().sub(dir).sub(dir);
+				}
+				if(flag1 && !flag2)
+				{
+					pos2 = newPos2;
+					pos1 = pos2.clone().add(dir).add(dir);
+				}
+
+				if(!flag1 && !flag2)
+				{
+					const dir1 = pos1.clone().sub(line.start);
+					const dir2 = v[i + 1].clone().sub(v[i]);
+					
+					const dot = dir1.dot(dir2);
+					
+					if(dot < 0)
+					{
+						pos2 = newPos2;
+						pos1 = pos2.clone().add(dir).add(dir);											
+					}
+					else
+					{
+						pos1 = newPos1;
+						pos2 = pos1.clone().sub(dir).sub(dir);						
+					}
+					//console.log(i, i+1);
+				}
+				
+				const dist = pos2.clone().sub(pos1).divideScalar( 2 ).add(pos1).distanceTo(startPos);
+				
+				arrP.push({ind: i, dist, pos1, pos2, normal});				
 			}
 		}
 		
-		let formPoints2 = [...formPoints];
+		let formPoints2 = [];
+		
 		
 		if(arrP.length > 0)
 		{
-			arrP.sort((a, b) => { return a.dist - b.dist; });
-			const p1 = myWarmFloor.myUlitkaWf.crHelpBox({pos: arrP[0].pos, color:  0xff0000});
-			this.pointsObj.push(p1);
+			arrP.sort((a, b) => { return a.dist - b.dist; }); 
 			
-			newPos = arrP[0].pos2.clone();			
-			const p2 = myWarmFloor.myUlitkaWf.crHelpBox({pos: newPos, color:  0xff0000});
-			this.pointsObj.push(p2);
+			const pos1 = arrP[0].pos1.clone();
+			const pos2 = arrP[0].pos2.clone();
+			newPos = arrP[0].pos2.clone();
+			
+			const helpVisible = true;
+			
+			if(helpVisible)
+			{
+				const p1 = myWarmFloor.myUlitkaWf.crHelpBox({pos: pos1, color:  0xff0000});
+				this.pointsObj.push(p1);
+										
+				const p2 = myWarmFloor.myUlitkaWf.crHelpBox({pos: pos2, color:  0x0000ff});
+				this.pointsObj.push(p2);			
+			}
 			
 			let v = [...formPoints];
 
 			if(arrP[0].ind === v.length - 1)
 			{
-				v.splice(arrP[0].ind + 1, 0, newPos);	// встявляем элемент в массив по индексу
-				v.splice(0, 0, arrP[0].pos);				
+				v.splice(arrP[0].ind + 1, 0, pos2);	// встявляем элемент в массив по индексу
+				v.splice(0, 0, pos1);				
 			}
 			else
 			{
-				v.splice(arrP[0].ind + 1, 0, newPos);	// встявляем элемент в массив по индексу
-				v.splice(arrP[0].ind + 2, 0, arrP[0].pos);	
+				v.splice(arrP[0].ind + 1, 0, pos2);	// встявляем элемент в массив по индексу
+				v.splice(arrP[0].ind + 2, 0, pos1);	
 				
 				v = myMath.offsetArrayToFirstElem({arr: v, index: arrP[0].ind + 2});				
 			}
@@ -95,6 +153,23 @@ class MyJoinContourWf
 
 		return { newPos, formPoints2 };
 	}	
+	
+	
+	// если точка находится за пределами отрезка, то назначаем pos точки самый край отрезка
+	getPosLimitOnLine({pos, line})
+	{
+		const onLine = myMath.checkPointOnLine(line.start, line.end, pos);
+		
+		if(!onLine)
+		{
+			const dist1 = pos.distanceTo(line.start);
+			const dist2 = pos.distanceTo(line.end);
+			
+			pos = (dist1 < dist2) ? line.start : line.end;
+		}
+		
+		return pos;
+	}
 	
 	
 	crLine({pointsPos})

@@ -162,8 +162,23 @@ class MyMath
 	}
 
 
+	// проверка на параллельность линий
+	checkLinesParallel({ line1, line2 })
+	{
+		const line1start = line1.start;
+		const line1end = line1.end;
+		const line2start = line2.start;
+		const line2end = line2.end;
+
+		const denominator = ( line2end.z - line2start.z ) * ( line1end.x - line1start.x ) - ( line2end.x - line2start.x ) * ( line1end.z - line1start.z );
+
+		const parallel = ( denominator == 0 ) ? true : false;
+		
+		return parallel;
+	}
+
 	// точка пересечения двух прямых 2D (1 вариант)
-	intersectionTwoLines({ line1, line2 }) {
+	intersectionTwoLines_1({ line1, line2 }) {
 		const line1start = line1.start;
 		const line1end = line1.end;
 		const line2start = line2.start;
@@ -221,12 +236,12 @@ class MyMath
 	{
 		const lines = this.offsetLines({points, offset});
 
-		const pt1 = this.intersectionTwoLines({line1: lines[0], line2: lines [lines.length - 1]});
+		const pt1 = this.intersectionTwoLines_1({line1: lines[0], line2: lines [lines.length - 1]});
 		const pointsOffset = [ new THREE.Vector3( pt1.x, 0, pt1.z ) ];
 
 		for ( let i = 0; i < lines.length - 1; i++ ) 
 		{
-			const pt = this.intersectionTwoLines({line1: lines[i], line2: lines [i + 1]});
+			const pt = this.intersectionTwoLines_1({line1: lines[i], line2: lines [i + 1]});
 
 			pointsOffset.push( new THREE.Vector3( pt.x, 0, pt.z ) );
 		}

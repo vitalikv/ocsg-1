@@ -49,9 +49,9 @@ class MyGridContourWf
 		
 		const n = 3;
 		const pointPos = v[0].clone().sub(v[n + 0]).divideScalar( 2 ).add(v[n + 0]);		
-		myWarmFloor.myArrowContourWf.setToolObj({startPos: pointPos});
+		const { newPos, dir } = myWarmFloor.myArrowContourWf.setToolObj({startPos: pointPos});
 		
-		myWarmFloor.myJoinContourWf.joinForms({startPos: pointPos.clone(), formSteps});
+		myWarmFloor.myJoinContourWf.joinForms({startPos: newPos.clone(), dir, formSteps});
 		
 		
 	}
@@ -181,8 +181,8 @@ class MyGridContourWf
 				const formSteps = this.crContour({points: this.arrPoints});
 
 				let pointPos = myWarmFloor.myArrowContourWf.getPosToolObj();
-				pointPos = myWarmFloor.myArrowContourWf.setToolObj({startPos: pointPos});				
-				myWarmFloor.myJoinContourWf.joinForms({startPos: pointPos.clone(), formSteps});				
+				const { newPos, dir } = myWarmFloor.myArrowContourWf.setToolObj({startPos: pointPos});				
+				myWarmFloor.myJoinContourWf.joinForms({startPos: newPos.clone(), dir, formSteps});				
 				
 				//this.deleteContour();
 				this.clearPoint();
@@ -269,8 +269,8 @@ class MyGridContourWf
 			const formSteps = this.crContour({points: obj.userData.points});
 
 			let pointPos = myWarmFloor.myArrowContourWf.getPosToolObj();
-			pointPos = myWarmFloor.myArrowContourWf.setToolObj({startPos: pointPos});				
-			myWarmFloor.myJoinContourWf.joinForms({startPos: pointPos.clone(), formSteps});			
+			const { newPos, dir } = myWarmFloor.myArrowContourWf.setToolObj({startPos: pointPos});				
+			myWarmFloor.myJoinContourWf.joinForms({startPos: newPos.clone(), dir, formSteps});			
 		}		
 	}
 	

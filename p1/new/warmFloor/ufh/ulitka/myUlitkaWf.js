@@ -110,7 +110,7 @@ class MyUlitkaWf
 				
 				if(cross)
 				{				
-					const pos = myMath.intersectionTwoLines({ line1: arrLine[i], line2: arrLine[i2] });
+					const pos = myMath.intersectionTwoLines_1({ line1: arrLine[i], line2: arrLine[i2] });
 					
 					const d1 = pos.distanceTo(arrLine[i].start);
 					const d2 = pos.distanceTo(arrLine[i].end);
