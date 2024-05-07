@@ -213,6 +213,22 @@ class MyMath
 	}	
 	
 
+	// точка пересечения двух прямых 2D (2 вариант, работает лучше)
+	intersectionTwoLines_2(a1, a2, b1, b2)
+	{
+		const t1 = DirectEquation(a1.x, a1.z, a2.x, a2.z);
+		const t2 = DirectEquation(b1.x, b1.z, b2.x, b2.z);
+		const f1 = DetMatrix2x2(t1[0], t1[1], t2[0], t2[1]);
+		
+		if(Math.abs(f1) < 0.0001) return null; // паралельны
+		
+		const point = new THREE.Vector3();
+		point.x = DetMatrix2x2(-t1[2], t1[1], -t2[2], t2[1]) / f1;
+		point.z = DetMatrix2x2(t1[0], -t1[2], t2[0], -t2[2]) / f1;		 
+		
+		return point;
+	}
+
 	// Проверка двух отрезков на пересечение (ориентированная площадь треугольника)
 	checkCrossLine(a, b, c, d)
 	{
@@ -232,7 +248,7 @@ class MyMath
 
 
 	// смещение формы (точки должны идти против часавой) (контру должен быть замкнут, последняя точка ровна первой)
-	offsetForm({points, offset}) 
+	offsetForm_3({points, offset}) 
 	{
 		const lines = this.offsetLines({points, offset});
 
@@ -251,6 +267,386 @@ class MyMath
 
 		return pointsOffset;
 	}
+	
+	
+	offsetForm_2({points, offset}) 
+	{
+		const lines = this.offsetLines({points, offset});
+		
+		const pointsOffset = [];
+		
+		let cross = this.checkCrossLine(lines[0].start, lines[0].end, lines[lines.length - 1].start, lines[lines.length - 1].end);
+		if(cross)
+		{
+			const pt1 = this.intersectionTwoLines_1({line1: lines[0], line2: lines [lines.length - 1]});
+			pointsOffset.push(new THREE.Vector3( pt1.x, 0, pt1.z ));			
+		}
+
+		let n1 = 0;
+		let n2 = 1;
+		
+		//for ( let i = 0; i < lines.length - 1; i++ )
+		while (n1 < lines.length - 1)
+		{
+			console.log(lines.length - 1, n2);
+			cross = this.checkCrossLine(lines[n1].start, lines[n1].end, lines[n2].start, lines[n2].end);
+			if(cross)
+			{
+				const pt = this.intersectionTwoLines_1({line1: lines[n1], line2: lines [n2]});
+				pointsOffset.push( new THREE.Vector3( pt.x, 0, pt.z ) );
+				n1++;
+				n2 = n1 + 1;
+				
+			}
+			else
+			{
+				const pt = this.intersectionTwoLines_1({line1: lines[n1], line2: lines [n2]});
+				pointsOffset.push( new THREE.Vector3( pt.x, 0, pt.z ) );
+				
+				n1++;
+				n2 = n1 + 1;				
+				if(n2 >= lines.length - 1)
+				{
+					n1++;
+					n2 = n1 + 1;					
+				}
+			}
+		}
+
+		const closed = (points[0].distanceTo(points[points.length - 1]) > 0.0001) ? false : true;	// закнут контру или нет
+		if(closed) pointsOffset.push( pointsOffset[0].clone() );
+
+		return pointsOffset;
+	}	
+
+
+	offsetForm({points, offset}) 
+	{
+		const lines1 = [];
+		
+		let points1 = [...points];
+		if(1 === 1)	
+		{
+			const p1 = points1[0];
+			const p2 = points1[points1.length - 1];
+			points1.push(p1);
+			points1.unshift(p2);
+		}	
+		
+		for ( let i = 1; i < points1.length - 1; i++ ) 
+		{
+			let pt1 = points1[ i - 1 ];
+			let ptC = points1[ i ];
+			let pt2 = points1[ i + 1 ];
+
+			const offsetPt0 = new THREE.Vector3( pt1.x, 0, pt1.z );
+			const offsetPt1 = new THREE.Vector3( ptC.x, 0, ptC.z );
+			const offsetPt2 = new THREE.Vector3( pt2.x, 0, pt2.z );
+
+			const dirB1 = offsetPt0.clone().sub(offsetPt1).normalize();
+			const dirB2 = offsetPt2.clone().sub(offsetPt1).normalize();
+			
+			//let helper = new THREE.ArrowHelper(this.calcNormal2D({p1: dirB1, p2: dirB2, reverse: true}).normalize(), offsetPt1, 0.5, 0x0000ff);
+			//scene.add(helper);
+		}		
+		
+		
+		const pointsOffset = [];
+		
+		const arr = this.offsetLines({points, offset});		
+		const lines2 = [arr[arr.length - 1], ...arr];
+
+		for ( let i = 0; i < lines2.length - 1; i++ ) 
+		{			
+			
+			const dirB1 = lines2[i].start.clone().sub(lines2[i].end).normalize();
+			const dirB2 = lines2[i + 1].end.clone().sub(lines2[i + 1].start).normalize();
+
+			//const dot1 = dirA1.dot(dirB2);
+			//const dot2 = dirB1.dot(dirA2);
+			//let dergree = THREE.Math.radToDeg( dirA2.angleTo(dirA1) );
+			
+			const pt = this.intersectionTwoLines_1({line1: lines2[i], line2: lines2[i + 1]});
+
+			pointsOffset.push( new THREE.Vector3( pt.x, 0, pt.z ) );
+			
+			//const rad = Math.atan2(dirB2.x - dirB1.x, dirB2.z - dirB1.z);	
+			
+			//myWarmFloor.myUlitkaWf.crLines_3({points: [lines2[i].start, lines2[i].end], color: 0x000000, addPoints: true, h: 0});			
+		}
+		
+		
+		const points2 = [...pointsOffset];
+		// 
+		if(1 === 1)	
+		{
+			const p1 = points2[0];
+			const p2 = points2[points2.length - 1];
+			points2.push(p1);
+			points2.unshift(p2);
+		}		
+		
+		for ( let i = 1; i < points2.length - 1; i++ )
+		{
+			let pt1 = points2[ i - 1 ];
+			let ptC = points2[ i ];
+			let pt2 = points2[ i + 1 ];
+
+			const offsetPt0 = new THREE.Vector3( pt1.x, 0, pt1.z );
+			const offsetPt1 = new THREE.Vector3( ptC.x, 0, ptC.z );
+			const offsetPt2 = new THREE.Vector3( pt2.x, 0, pt2.z );
+			//myWarmFloor.myUlitkaWf.crLines_3({points: [offsetPt1, offsetPt2], color: 0xff0000, addPoints: true, h: 0});
+			
+
+			const dirB1 = offsetPt0.clone().sub(offsetPt1).normalize();
+			const dirB2 = offsetPt2.clone().sub(offsetPt1).normalize();
+			
+			//let helper = new THREE.ArrowHelper(this.calcNormal2D({p1: dirB1, p2: dirB2, reverse: true}).normalize(), offsetPt1, 0.5, 0xff0000);
+			//scene.add(helper);			
+			
+			//helper = new THREE.ArrowHelper(dirB1, offsetPt1, 0.2, 0x000000);
+			//scene.add(helper);
+
+			//helper = new THREE.ArrowHelper(dirB2, offsetPt1, 0.2, 0x000000);
+			//scene.add(helper);			
+		}
+		
+		const points3 = [];
+		
+		for ( let i = 1; i < points2.length - 1; i++ )
+		{
+			let ps1 = points1[ i - 1 ];
+			let psC = points1[ i ];
+			let ps2 = points1[ i + 1 ];
+
+			const offsetPs0 = new THREE.Vector3( ps1.x, 0, ps1.z );
+			const offsetPs1 = new THREE.Vector3( psC.x, 0, psC.z );
+			const offsetPs2 = new THREE.Vector3( ps2.x, 0, ps2.z );
+
+			const dirA1 = offsetPs0.clone().sub(offsetPs1).normalize();
+			const dirA2 = offsetPs2.clone().sub(offsetPs1).normalize();			
+			
+			
+			
+			let pt1 = points2[ i - 1 ];
+			let ptC = points2[ i ];
+			let pt2 = points2[ i + 1 ];
+
+			const offsetPt0 = new THREE.Vector3( pt1.x, 0, pt1.z );
+			const offsetPt1 = new THREE.Vector3( ptC.x, 0, ptC.z );
+			const offsetPt2 = new THREE.Vector3( pt2.x, 0, pt2.z );
+			myWarmFloor.myUlitkaWf.crLines_3({points: [offsetPt1, offsetPt2], color: 0xff0000, addPoints: true, h: 0});
+			
+
+			const dirB1 = offsetPt0.clone().sub(offsetPt1).normalize();
+			const dirB2 = offsetPt2.clone().sub(offsetPt1).normalize();
+			
+			const dir1 = this.calcNormal2D({p1: dirA1, p2: dirA2, reverse: true}).normalize();
+			const dir2 = this.calcNormal2D({p1: dirB1, p2: dirB2, reverse: true}).normalize();
+			
+			if(1===2)
+			{				
+				let helper = new THREE.ArrowHelper(dir1, offsetPt1, 0.5, 0x0000ff);
+				scene.add(helper);
+				
+				helper = new THREE.ArrowHelper(dir2, offsetPt1, 0.5, 0xff0000);
+				scene.add(helper);							
+			}
+			
+			//helper = new THREE.ArrowHelper(dirB1, offsetPt1, 0.2, 0x000000);
+			//scene.add(helper);
+
+			//helper = new THREE.ArrowHelper(dirB2, offsetPt1, 0.2, 0x000000);
+			//scene.add(helper);
+
+			points3.push({ind: i - 1, pos: offsetPt1, dir1: dirA2, dir2: dirB2, length: offsetPs1.distanceTo(offsetPs2)});
+		}
+
+		const deletePoints = [];
+
+		for ( let i = 0; i < points3.length; i++ )
+		{			
+			const trueDir = (points3[i].dir1.dot(points3[i].dir2) > 0.98) ? true : false;
+			
+			if(!trueDir)
+			{
+				let helper = new THREE.ArrowHelper(points3[i].dir1, points3[i].pos, 0.5, 0x0000ff);
+				scene.add(helper);
+				
+				helper = new THREE.ArrowHelper(points3[i].dir2, points3[i].pos, 0.5, 0xff0000);
+				scene.add(helper);
+
+				const data = {ind: points3[i].ind, pos: points3[i].pos, dir: points3[i].dir1, length: points3[i].length};
+				deletePoints.push(data);
+			}
+		}
+		
+		const arrDelPoints = [];
+		
+		for ( let i = 0; i < deletePoints.length; i++ )
+		{
+			const arrData = [];			
+			
+			arrData.push(deletePoints[i]);
+			
+			let i2 = i;
+			let ind = deletePoints[i].ind;
+			
+			for ( let i2 = i + 1; i2 < deletePoints.length; i2++ )
+			{
+				if(deletePoints[i2].ind !== ind + 1) break;
+				
+				i++;
+				ind++;
+				arrData.push(deletePoints[i2]);
+			}
+			
+			arrDelPoints.push(arrData);
+		}
+		
+		
+		for ( let i = 0; i < arrDelPoints.length; i++ )
+		{
+			arrDelPoints[i].sort((a, b) => { return a.length - b.length; });
+			
+			console.log(777, arrDelPoints[i][0]);
+			
+			const ind = points3.findIndex((o) => o.ind === arrDelPoints[i][0].ind);
+			const ind1 = (arrDelPoints[i][0].ind - 1 < 0) ? points3[points3.length - 1].ind : points3.findIndex((o) => o.ind === arrDelPoints[i][0].ind - 1);
+			const ind2 = points3.findIndex((o) => o.ind === arrDelPoints[i][0].ind + 1);
+			
+			if(ind > -1 && ind1 > -1)
+			{
+				const line1 = { start: points3[ind1].pos, end: points3[ind1].pos.clone().add(points3[ind1].dir1)};
+				
+				//const ind2 = ind + 1;
+				console.log('ind2', ind2);
+				const line2 = { start: points3[ind2].pos, end: points3[ind2].pos.clone().add(points3[ind2].dir1)};
+				
+				const pt = this.intersectionTwoLines_1({line1, line2});
+		
+				points3.splice(ind + 1, 0, {ind: ind + 0.5, pos: new THREE.Vector3( pt.x, 0, pt.z )});
+				
+				points3.splice(ind + 2, 1);
+				points3.splice(ind, 1);
+			}
+		}
+		
+		const points4 = points3.map((p) => p.pos);
+		
+		if(1 === 1)	
+		{
+			const p1 = points4[0];
+			const p2 = points4[points4.length - 1];
+			points4.push(p1);
+			points4.unshift(p2);
+		}		
+		for ( let i = 1; i < points4.length - 1; i++ )
+		{
+			myWarmFloor.myUlitkaWf.crLines_3({points: [points4[ i ], points4[ i + 1 ]], color: 0x000000, addPoints: true, h: 0});			
+		}		
+
+console.log(444, arrDelPoints);
+console.log(points, points3, points4, pointsOffset);
+
+
+
+console.log('----------');
+
+		return pointsOffset;
+	}
+
+
+	offsetForm_4({points, offset}) 
+	{
+		const lines1 = [];
+		
+		let points1 = [...points];
+		points1.push(points1[0]);
+		
+		for ( let i = 0; i < points1.length - 1; i++ ) 
+		{
+			let ptC = points1[ i ];
+			let pt2 = points1[ i + 1 ];
+
+			const offsetPt1 = new THREE.Vector3( ptC.x, 0, ptC.z );
+			const offsetPt2 = new THREE.Vector3( pt2.x, 0, pt2.z );
+
+			lines1.push({start: offsetPt1, end: offsetPt2});
+		}		
+		
+		
+		const pointsOffset = [];
+		
+		const arr = this.offsetLines({points, offset});		
+		const linesOffset = [arr[arr.length - 1], ...arr];
+
+		for ( let i = 0; i < linesOffset.length - 1; i++ ) 
+		{					
+			const pt = this.intersectionTwoLines_1({line1: linesOffset[i], line2: linesOffset[i + 1]});
+
+			pointsOffset.push( new THREE.Vector3( pt.x, 0, pt.z ) );		
+		}
+		
+		const lines2 = [];
+		const points2 = [...pointsOffset];
+		points2.push(points2[0]);		
+		
+		for ( let i = 0; i < points2.length - 1; i++ )
+		{
+			let ptC = points2[ i ];
+			let pt2 = points2[ i + 1 ];
+
+			const offsetPt1 = new THREE.Vector3( ptC.x, 0, ptC.z );
+			const offsetPt2 = new THREE.Vector3( pt2.x, 0, pt2.z );
+			lines2.push({start: offsetPt1, end: offsetPt2});
+			//myWarmFloor.myUlitkaWf.crLines_3({points: [offsetPt1, offsetPt2], color: 0xff0000, addPoints: true, h: 0});			
+		}
+		
+		const points3 = [];
+		
+		for ( let i = 0; i < lines1.length; i++ )
+		{
+			const dir1 = lines1[i].end.clone().sub(lines1[i].start).normalize();			
+			const dir2 = lines2[i].end.clone().sub(lines2[i].start).normalize();	
+
+			points3.push({ind: i, pos: lines2[i].start, dir1, dir2, length: lines1[i].start.distanceTo(lines1[i].end)});
+			
+			myWarmFloor.myUlitkaWf.crLines_3({points: [lines2[i].start, lines2[i].end], color: 0xff0000, addPoints: true, h: 0});
+		}
+
+
+		const deletePoints = [];
+
+		for ( let i = 0; i < points3.length; i++ )
+		{			
+			const trueDir = (points3[i].dir1.dot(points3[i].dir2) > 0.98) ? true : false;
+			
+			if(!trueDir)
+			{
+				let helper = new THREE.ArrowHelper(points3[i].dir1, points3[i].pos, 0.5, 0x0000ff);
+				scene.add(helper);
+				
+				helper = new THREE.ArrowHelper(points3[i].dir2, points3[i].pos, 0.5, 0xff0000);
+				scene.add(helper);
+
+				const data = {ind: points3[i].ind, pos: points3[i].pos, dir: points3[i].dir1, length: points3[i].length};
+				deletePoints.push(data);
+				
+				console.log(444, data);
+			}
+		}
+
+	console.log(555, points3);	
+
+		const closed = (points[0].distanceTo(points[points.length - 1]) > 0.0001) ? false : true;	// закнут контру или нет
+		if(closed) pointsOffset.push( pointsOffset[0].clone() );
+
+console.log('----------', pointsOffset, points);
+
+		return pointsOffset;
+	}
+	
 	
 
 	// смещение массива точек контура, отдаем массив линий (контру должен быть замкнут, последняя точка ровна первой)
@@ -276,7 +672,10 @@ class MyMath
 			const offsetPt1 = new THREE.Vector3( pt1.x - offset * Math.cos( angle - Math.PI / 2 ), 0, pt1.z + offset * Math.sin( angle + Math.PI / 2 ) );
 			const offsetPt2 = new THREE.Vector3( pt2.x - offset * Math.cos( angle - Math.PI / 2 ), 0, pt2.z + offset * Math.sin( angle + Math.PI / 2 ) );
 
-			lines.push({start: offsetPt1, end: offsetPt2});			
+			lines.push({start: offsetPt1, end: offsetPt2});	
+
+			//const line1 = myWarmFloor.myUlitkaWf.crLines_3({points: [offsetPt1, offsetPt2], color: 0x000000, addPoints: true, h: 0});
+			//this.arrLines_1.push(line1);			
 		}
 
 		return lines;

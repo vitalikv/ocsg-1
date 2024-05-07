@@ -21,14 +21,14 @@ class MyGridContourWf
 	{
 		const v = [];
 		
-		if(1===1)
+		if(1===2)
 		{
-			v.push(new THREE.Vector3(-5, 0, 0));	
+			v.push(new THREE.Vector3(-5, 0, -2));	
 			v.push(new THREE.Vector3(-5, 0, 5));
 			v.push(new THREE.Vector3(5, 0, 5));
 			v.push(new THREE.Vector3(5, 0, 0));			
 		}
-		else
+		else if(1===1)
 		{
 			v.push(new THREE.Vector3(-5, 0, 0));	
 			v.push(new THREE.Vector3(-5, 0, 5));
@@ -37,6 +37,16 @@ class MyGridContourWf
 			v.push(new THREE.Vector3(2.5, 0, -5));
 			v.push(new THREE.Vector3(2.5, 0, 0));			
 		}
+		else
+		{
+			v.push(new THREE.Vector3(-5, 0, 0));	
+			v.push(new THREE.Vector3(-5, 0, 5));
+			v.push(new THREE.Vector3(0, 0, 5));
+			v.push(new THREE.Vector3(5, 0, 5));
+			v.push(new THREE.Vector3(5, 0, -5));
+			v.push(new THREE.Vector3(2.5, 0, -5));
+			v.push(new THREE.Vector3(1.7, 0, -2));			
+		}		
 
 		for ( let i = 0; i < v.length; i++ )
 		{
@@ -51,7 +61,7 @@ class MyGridContourWf
 		const pointPos = v[0].clone().sub(v[n + 0]).divideScalar( 2 ).add(v[n + 0]);		
 		const { newPos, dir } = myWarmFloor.myArrowContourWf.setToolObj({startPos: pointPos});
 		
-		myWarmFloor.myJoinContourWf.joinForms({startPos: newPos.clone(), dir, formSteps});
+		//myWarmFloor.myJoinContourWf.joinForms({startPos: newPos.clone(), dir, formSteps});
 		
 		
 	}
@@ -121,7 +131,7 @@ class MyGridContourWf
 			for ( let i = 0; i < points.length; i++ ) arrPos.push(points[i].position.clone());
 		}			
 		
-		const formSteps = myWarmFloor.myUlitkaWf.drawFrom({points: arrPos, offsetStart: -0.2, offsetNext: -0.3});
+		const formSteps = myWarmFloor.myUlitkaWf.drawFrom({points: arrPos, offsetStart: -0.2, offsetNext: -0.4});
 		
 		this.addContour({points});
 

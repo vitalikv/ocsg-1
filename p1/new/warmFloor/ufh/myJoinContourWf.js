@@ -33,7 +33,7 @@ class MyJoinContourWf
 			//break;
 		}
 
-		this.crLine({pointsPos});
+		//this.crLine({pointsPos});
 	}
 	
 	

@@ -10,6 +10,7 @@ class MyUlitkaWf
 	
 	drawFrom({points, offsetStart = -0.2, offsetNext = -0.2})
 	{
+		this.clearForms();
 		points = [...points];		
 		
 		const result = myMath.checkClockWise(points);	// проверяем последовательность построения точек (по часовой стрелке или нет)
@@ -245,11 +246,13 @@ class MyUlitkaWf
 				const form = this.getContour([points[i]], points[i].pO[i2]); 						 
 				
 				if(form[0].id !== form[form.length - 1].id){ continue; }					
+				if(this.detectEqualForm({arrF, points: form})){ continue; }
+				
+				const p = form.map(item => item.pos)
+				if(myMath.checkClockWise(p) <= 0){ continue; }
 				
 				const trueDir = this.getCheckDir(form);
-				if(!trueDir) continue;
-
-				if(this.detectEqualForm({arrF, points: form})){ continue; }
+				if(!trueDir) continue;				
 				
 				arrF.push(form);
 				
@@ -257,7 +260,7 @@ class MyUlitkaWf
 			}
 		}
 		
-		
+		console.log(111, arrF);
 		const newV = [];
 		for ( let i = 0; i < arrF.length; i++ )
 		{
@@ -334,11 +337,64 @@ class MyUlitkaWf
 			const dir = new THREE.Vector3().subVectors( points[i].pos, points[i + 1].pos ).normalize();			
 			
 			trueDir = (dir.dot(points[i].dir) > 0.98) ? true : false;
-			//console.log(points[i].userData.id, points[i].userData.dir, dir, trueDir);
+			if(!trueDir) console.log(points[i].id);
 			
 			if(!trueDir) break;
 		}
-		//console.log('-------');
+		
+		for (let i = 0; i < points.length - 1; i++) 
+		{			
+			if(!points[i].dir) continue;
+			
+			const dir = new THREE.Vector3().subVectors( points[i].pos, points[i + 1].pos ).normalize();			
+			
+			const trueDir2 = (dir.dot(points[i].dir) > 0.98) ? true : false;
+			
+			if(trueDir2) continue;
+			
+			//let helper = new THREE.ArrowHelper(dir, points[i].pos, 0.5, 0x000000);
+			//scene.add(helper);			
+		}		
+		
+		if(!trueDir && points.length > 4 && 1===2)
+		{
+			for (let i = 0; i < points.length - 1; i++) 
+			{			
+				if(!points[i].dir) continue;
+				
+				const dir = new THREE.Vector3().subVectors( points[i].pos, points[i + 1].pos ).normalize();			
+				
+				trueDir = (dir.dot(points[i].dir) > 0.98) ? true : false;
+				
+				if(trueDir) continue;
+				
+				console.log(points, points[i]);
+				
+				if(points[i].pO.length > 2) continue;
+				if(!points[i].pO[0].dir) continue;
+				if(!points[i].pO[1].dir) continue;
+				
+				const a1 = points[i].pO[0].pos;
+				const a2 = a1.clone().add(points[i].pO[0].dir);
+				const b1 = points[i].pO[1].pos;
+				const b2 = b1.clone().add(points[i].pO[1].dir);
+				
+				const posCross = myMath.intersectionTwoLines_2(a1, a2, b1, b2);
+				
+				
+
+				if(posCross)
+				{
+					this.crHelpBox({pos: posCross, size: 0.04, color: 0xff0000})
+					points[i].pO[1].pos = posCross;
+					trueDir = true;
+				}
+			}			
+			
+			console.log('-------');
+		}
+		
+		
 		return trueDir;
 	}
 
