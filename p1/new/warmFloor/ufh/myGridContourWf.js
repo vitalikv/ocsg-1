@@ -28,7 +28,7 @@ class MyGridContourWf
 			v.push(new THREE.Vector3(5, 0, 5));
 			v.push(new THREE.Vector3(5, 0, 0));			
 		}
-		else if(1===1)
+		else if(1===2)
 		{
 			v.push(new THREE.Vector3(-5, 0, 0));	
 			v.push(new THREE.Vector3(-5, 0, 5));

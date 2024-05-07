@@ -228,6 +228,22 @@ class MyMath
 		
 		return point;
 	}
+	
+	
+	intersectionTwoLines_3(a1, a2, b1, b2)
+	{
+		const t1 = DirectEquation(a1.x, a1.z, a2.x, a2.z);
+		const t2 = DirectEquation(b1.x, b1.z, b2.x, b2.z);
+		const f1 = DetMatrix2x2(t1[0], t1[1], t2[0], t2[1]);
+		
+		if(Math.abs(f1) < 0.0001) return null; // паралельны
+		
+		const point = new THREE.Vector3();
+		point.x = DetMatrix2x2(-t1[2], t1[1], -t2[2], t2[1]) / f1;
+		point.z = DetMatrix2x2(t1[0], -t1[2], t2[0], -t2[2]) / f1;		 
+		
+		return point;
+	}	
 
 	// Проверка двух отрезков на пересечение (ориентированная площадь треугольника)
 	checkCrossLine(a, b, c, d)
@@ -351,7 +367,7 @@ class MyMath
 		}		
 		
 		
-		const pointsOffset = [];
+		let pointsOffset = [];
 		
 		const arr = this.offsetLines({points, offset});		
 		const lines2 = [arr[arr.length - 1], ...arr];
@@ -435,7 +451,7 @@ class MyMath
 			const offsetPt0 = new THREE.Vector3( pt1.x, 0, pt1.z );
 			const offsetPt1 = new THREE.Vector3( ptC.x, 0, ptC.z );
 			const offsetPt2 = new THREE.Vector3( pt2.x, 0, pt2.z );
-			myWarmFloor.myUlitkaWf.crLines_3({points: [offsetPt1, offsetPt2], color: 0xff0000, addPoints: true, h: 0});
+			//myWarmFloor.myUlitkaWf.crLines_3({points: [offsetPt1, offsetPt2], color: 0xff0000, addPoints: false, h: 0});
 			
 
 			const dirB1 = offsetPt0.clone().sub(offsetPt1).normalize();
@@ -471,10 +487,10 @@ class MyMath
 			if(!trueDir)
 			{
 				let helper = new THREE.ArrowHelper(points3[i].dir1, points3[i].pos, 0.5, 0x0000ff);
-				scene.add(helper);
+				//scene.add(helper);
 				
 				helper = new THREE.ArrowHelper(points3[i].dir2, points3[i].pos, 0.5, 0xff0000);
-				scene.add(helper);
+				//scene.add(helper);
 
 				const data = {ind: points3[i].ind, pos: points3[i].pos, dir: points3[i].dir1, length: points3[i].length};
 				deletePoints.push(data);
@@ -504,56 +520,103 @@ class MyMath
 			arrDelPoints.push(arrData);
 		}
 		
-		
+		const upIndInArr = ({ind, arr}) =>
+		{
+			for ( let i = ind; i < arr.length; i++ )
+			{
+				arr[i].ind -= 1;
+			}
+		}
+		//console.log(444, arrDelPoints);
 		for ( let i = 0; i < arrDelPoints.length; i++ )
 		{
 			arrDelPoints[i].sort((a, b) => { return a.length - b.length; });
 			
-			console.log(777, arrDelPoints[i][0]);
+			//console.log(777, arrDelPoints[i][0]);
 			
 			const ind = points3.findIndex((o) => o.ind === arrDelPoints[i][0].ind);
-			const ind1 = (arrDelPoints[i][0].ind - 1 < 0) ? points3[points3.length - 1].ind : points3.findIndex((o) => o.ind === arrDelPoints[i][0].ind - 1);
-			const ind2 = points3.findIndex((o) => o.ind === arrDelPoints[i][0].ind + 1);
+			const ind1 = (ind - 1 < 0) ? points3.length - 1 : points3.findIndex((o) => o.ind === ind - 1);
+			const ind2 = (ind + 1 > points3.length - 1) ? 0 : points3.findIndex((o) => o.ind === ind + 1);
 			
-			if(ind > -1 && ind1 > -1)
+			console.log('ind0', ind, 'ind1', ind1, 'ind2', ind2, [...points3]);
+			
+			if(ind > -1)
 			{
 				const line1 = { start: points3[ind1].pos, end: points3[ind1].pos.clone().add(points3[ind1].dir1)};
 				
-				//const ind2 = ind + 1;
-				console.log('ind2', ind2);
+				console.log('delete p', ind, ind + 1);
+				
 				const line2 = { start: points3[ind2].pos, end: points3[ind2].pos.clone().add(points3[ind2].dir1)};
 				
-				const pt = this.intersectionTwoLines_1({line1, line2});
+				const pt = this.intersectionTwoLines_3(line1.start, line1.end, line2.start, line2.end);
 		
-				points3.splice(ind + 1, 0, {ind: ind + 0.5, pos: new THREE.Vector3( pt.x, 0, pt.z )});
+				points3.splice(ind, 1);	// удаляем 1 точку				
+				points3.splice(ind, 1);	// удаляем 2 точку				
 				
-				points3.splice(ind + 2, 1);
-				points3.splice(ind, 1);
+				if(!pt) upIndInArr({ind: ind, arr: points3});
+				else upIndInArr({ind: ind + 1, arr: points3});
+				
+				if(i + 1 < arrDelPoints.length) 
+				{
+					//console.log(888, arrDelPoints[i + 1]);
+					upIndInArr({ind: 0, arr: arrDelPoints[i + 1]});
+				}
+				
+				if(pt)
+				{
+					myWarmFloor.myUlitkaWf.crHelpBox({pos: new THREE.Vector3( pt.x, 0, pt.z ), size: 0.04, color: 0x0000ff})
+					console.log('add p', ind);
+					points3.splice(ind, 0, {ind, pos: new THREE.Vector3( pt.x, 0, pt.z )});	// на место удаленной точки добавляем точку	пересечения					
+				}
+				else
+				{
+					const ind1 = (ind - 1 < 0) ? points3.length - 1 : ind - 1;
+					const ind2 = (ind1 + 1 > points3.length - 1) ? 0 : ind1 + 1;
+
+					const line1 = { start: points3[ind1].pos, end: points3[ind1].pos.clone().add(points3[ind1].dir1)};					
+					const line2 = { start: points3[ind2].pos, end: points3[ind2].pos.clone().add(points3[ind2].dir1)};
+					
+					const pt = this.intersectionTwoLines_3(line1.start, line1.end, line2.start, line2.end);
+
+					if(pt)
+					{
+						points3.splice(ind, 1);	// удаляем 1 точку
+						
+						myWarmFloor.myUlitkaWf.crHelpBox({pos: new THREE.Vector3( pt.x, 0, pt.z ), size: 0.06, color: 0x0000ff})
+						console.log('add p2', ind);
+						points3.splice(ind, 0, {ind: ind, pos: new THREE.Vector3( pt.x, 0, pt.z )});	// на место удаленной точки добавляем точку	пересечения							
+					}
+				}
 			}
 		}
 		
-		const points4 = points3.map((p) => p.pos);
+		let points4 = points3.map((p) => p.pos);
+		let points5 = points3.map((p) => p.pos);
 		
-		if(1 === 1)	
+		if(points3.length > 2)
 		{
-			const p1 = points4[0];
-			const p2 = points4[points4.length - 1];
-			points4.push(p1);
-			points4.unshift(p2);
-		}		
-		for ( let i = 1; i < points4.length - 1; i++ )
-		{
-			myWarmFloor.myUlitkaWf.crLines_3({points: [points4[ i ], points4[ i + 1 ]], color: 0x000000, addPoints: true, h: 0});			
-		}		
+			if(1 === 1)	
+			{
+				const p1 = points4[0];
+				const p2 = points4[points4.length - 1];
+				points4.push(p1);
+				points4.unshift(p2);
+			}		
+			for ( let i = 1; i < points4.length - 1; i++ )
+			{
+				myWarmFloor.myUlitkaWf.crLines_3({points: [points4[ i ], points4[ i + 1 ]], color: 0x000000, addPoints: true, h: 0});			
+			}		
+			
+		}
 
-console.log(444, arrDelPoints);
-console.log(points, points3, points4, pointsOffset);
 
+console.log(points3, pointsOffset);
 
+if(points5.length < 3) points5 = [];
 
 console.log('----------');
 
-		return pointsOffset;
+		return points5;
 	}
 
 

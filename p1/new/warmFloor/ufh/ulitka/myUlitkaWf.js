@@ -27,6 +27,7 @@ class MyUlitkaWf
 			offset = offsetNext;	// смещение от построеного контура
 			//arrFroms = [];
 			if(arrFroms.length > 0) formSteps.push(arrFroms);
+			console.log(arrFroms);
 		}
 		
 		
@@ -52,8 +53,10 @@ class MyUlitkaWf
 		for ( let i = 0; i < oldFormPoints.length; i++ )
 		{
 			const newFormPoints = myMath.offsetForm({points: oldFormPoints[i], offset});
-			const points = this.calcForm(newFormPoints, oldFormPoints[i]);			
-			forms.push(...points);
+			//const points = this.calcForm(newFormPoints, oldFormPoints[i]);			
+			if(newFormPoints.length > 0) forms.push(newFormPoints);
+			
+			console.log();
 			
 			// линии пола после смещения, без оптимизации/обрезки пересечений
 			//const line1 = this.crLines_3({points: newFormPoints, color: 0xff0000, addPoints: false, h: 0});
@@ -252,7 +255,7 @@ class MyUlitkaWf
 				if(myMath.checkClockWise(p) <= 0){ continue; }
 				
 				const trueDir = this.getCheckDir(form);
-				if(!trueDir) continue;				
+				//if(!trueDir) continue;				
 				
 				arrF.push(form);
 				
@@ -260,7 +263,7 @@ class MyUlitkaWf
 			}
 		}
 		
-		console.log(111, arrF);
+		//console.log(111, arrF);
 		const newV = [];
 		for ( let i = 0; i < arrF.length; i++ )
 		{
@@ -337,7 +340,7 @@ class MyUlitkaWf
 			const dir = new THREE.Vector3().subVectors( points[i].pos, points[i + 1].pos ).normalize();			
 			
 			trueDir = (dir.dot(points[i].dir) > 0.98) ? true : false;
-			if(!trueDir) console.log(points[i].id);
+			//if(!trueDir) console.log(points[i].id);
 			
 			if(!trueDir) break;
 		}
@@ -368,7 +371,7 @@ class MyUlitkaWf
 				
 				if(trueDir) continue;
 				
-				console.log(points, points[i]);
+				//console.log(points, points[i]);
 				
 				if(points[i].pO.length > 2) continue;
 				if(!points[i].pO[0].dir) continue;
