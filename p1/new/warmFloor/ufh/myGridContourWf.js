@@ -20,15 +20,24 @@ class MyGridContourWf
 	initTestContour()
 	{
 		const v = [];
-		
-		if(1===2)
+
+		if(1===1)
+		{
+			v.push(new THREE.Vector3(-5, 0, 0));	
+			v.push(new THREE.Vector3(-5, 0, 5));
+			v.push(new THREE.Vector3(5, 0, 5));
+			v.push(new THREE.Vector3(5, 0, 2.5));
+			v.push(new THREE.Vector3(5, 0, 0));	
+			v.push(new THREE.Vector3(0, 0, 0));			
+		}		
+		else if(1===1)
 		{
 			v.push(new THREE.Vector3(-5, 0, -2));	
 			v.push(new THREE.Vector3(-5, 0, 5));
 			v.push(new THREE.Vector3(5, 0, 5));
 			v.push(new THREE.Vector3(5, 0, 0));			
 		}
-		else if(1===2)
+		else if(1===1)
 		{
 			v.push(new THREE.Vector3(-5, 0, 0));	
 			v.push(new THREE.Vector3(-5, 0, 5));
@@ -131,7 +140,7 @@ class MyGridContourWf
 			for ( let i = 0; i < points.length; i++ ) arrPos.push(points[i].position.clone());
 		}			
 		
-		const formSteps = myWarmFloor.myUlitkaWf.drawFrom({points: arrPos, offsetStart: -0.2, offsetNext: -0.4});
+		const formSteps = myWarmFloor.myUlitkaWf.drawFrom({points: arrPos, offsetStart: -0.2, offsetNext: -0.43});
 		
 		this.addContour({points});
 

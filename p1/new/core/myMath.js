@@ -338,6 +338,38 @@ class MyMath
 
 	offsetForm({points, offset}) 
 	{
+		
+		points = [...points];
+		
+		// удаляем соседние паралельные точки
+		const pPar = [];
+		
+		let dirPr = points[0].clone().sub(points[points.length - 1]).normalize();
+		
+		for ( let i = 0; i < points.length; i++ )
+		{
+			let ptC = points[ i ];
+			let pt2 = (i + 1 > points.length - 1) ? points[0] : points[i + 1];		
+
+			const dirPr2 = pt2.clone().sub(ptC).normalize();
+			
+			const trueDir = (dirPr.dot(dirPr2) > 0.999) ? true : false;
+			
+			if(trueDir)
+			{
+				pPar.push(i);
+			}			
+			
+			dirPr = dirPr2;
+		}
+		
+		for ( let i = pPar.length - 1; i >= 0; i-- )
+		{
+			points.splice(pPar[i], 1);
+		}
+		
+		
+		
 		const lines1 = [];
 		
 		let points1 = [...points];
@@ -487,10 +519,10 @@ class MyMath
 			if(!trueDir)
 			{
 				let helper = new THREE.ArrowHelper(points3[i].dir1, points3[i].pos, 0.5, 0x0000ff);
-				//scene.add(helper);
+				scene.add(helper);
 				
 				helper = new THREE.ArrowHelper(points3[i].dir2, points3[i].pos, 0.5, 0xff0000);
-				//scene.add(helper);
+				scene.add(helper);
 
 				const data = {ind: points3[i].ind, pos: points3[i].pos, dir: points3[i].dir1, length: points3[i].length};
 				deletePoints.push(data);
@@ -530,6 +562,7 @@ class MyMath
 		//console.log(444, arrDelPoints);
 		for ( let i = 0; i < arrDelPoints.length; i++ )
 		{
+			if(points3.length < 3) break;
 			arrDelPoints[i].sort((a, b) => { return a.length - b.length; });
 			
 			//console.log(777, arrDelPoints[i][0]);
@@ -554,7 +587,7 @@ class MyMath
 				points3.splice(ind, 1);	// удаляем 2 точку				
 				
 				if(!pt) upIndInArr({ind: ind, arr: points3});
-				else upIndInArr({ind: ind + 1, arr: points3});
+				else upIndInArr({ind: ind + 0, arr: points3});
 				
 				if(i + 1 < arrDelPoints.length) 
 				{
@@ -564,7 +597,7 @@ class MyMath
 				
 				if(pt)
 				{
-					myWarmFloor.myUlitkaWf.crHelpBox({pos: new THREE.Vector3( pt.x, 0, pt.z ), size: 0.04, color: 0x0000ff})
+					//myWarmFloor.myUlitkaWf.crHelpBox({pos: new THREE.Vector3( pt.x, 0, pt.z ), size: 0.06, color: 0x0000ff})
 					console.log('add p', ind);
 					points3.splice(ind, 0, {ind, pos: new THREE.Vector3( pt.x, 0, pt.z )});	// на место удаленной точки добавляем точку	пересечения					
 				}
@@ -583,7 +616,7 @@ class MyMath
 						points3.splice(ind, 1);	// удаляем 1 точку
 						
 						myWarmFloor.myUlitkaWf.crHelpBox({pos: new THREE.Vector3( pt.x, 0, pt.z ), size: 0.06, color: 0x0000ff})
-						console.log('add p2', ind);
+						console.log('add p22222', ind);
 						points3.splice(ind, 0, {ind: ind, pos: new THREE.Vector3( pt.x, 0, pt.z )});	// на место удаленной точки добавляем точку	пересечения							
 					}
 				}
@@ -595,22 +628,23 @@ class MyMath
 		
 		if(points3.length > 2)
 		{
+			console.log('points3------------', points4.length, points3, pointsOffset);
+			
 			if(1 === 1)	
 			{
-				const p1 = points4[0];
-				const p2 = points4[points4.length - 1];
-				points4.push(p1);
-				points4.unshift(p2);
+				points4.push(points4[0]);
 			}		
-			for ( let i = 1; i < points4.length - 1; i++ )
+			for ( let i = 0; i < points4.length - 1; i++ )
 			{
-				myWarmFloor.myUlitkaWf.crLines_3({points: [points4[ i ], points4[ i + 1 ]], color: 0x000000, addPoints: true, h: 0});			
+				myWarmFloor.myUlitkaWf.crLines_3({points: [points4[ i ], points4[ i + 1 ]], color: 0x000000, addPoints: true, h: 0});
+
+//if(points3.length === 3) myWarmFloor.myUlitkaWf.crHelpBox({pos: points4[ i ], size: 0.06, color: 0x0000ff})				
 			}		
 			
 		}
 
 
-console.log(points3, pointsOffset);
+
 
 if(points5.length < 3) points5 = [];
 
