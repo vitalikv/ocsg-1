@@ -5,7 +5,7 @@ class MyUlitkaWf
 	arrPoints_1 = [];
 	arrLines_1 = [];
 	arrLines_2 = []; // потом удалить
-	
+	arrArrowHelp_1 = [];
 	
 	
 	drawFrom({points, offsetStart = -0.2, offsetNext = -0.2})
@@ -52,11 +52,10 @@ class MyUlitkaWf
 		
 		for ( let i = 0; i < oldFormPoints.length; i++ )
 		{
-			const newFormPoints = myMath.offsetForm({points: oldFormPoints[i], offset});
+			const newFormPoints = this.offsetForm({points: oldFormPoints[i], offset});
+			//const newFormPoints = myMath.offsetForm({points: oldFormPoints[i], offset});
 			//const points = this.calcForm(newFormPoints, oldFormPoints[i]);			
 			if(newFormPoints.length > 0) forms.push(newFormPoints);
-			
-			console.log();
 			
 			// линии пола после смещения, без оптимизации/обрезки пересечений
 			//const line1 = this.crLines_3({points: newFormPoints, color: 0xff0000, addPoints: false, h: 0});
@@ -65,6 +64,235 @@ class MyUlitkaWf
 		
 		return forms;
 	}
+
+
+	offsetForm({points, offset}) 
+	{
+		
+		points = [...points];
+		
+		// удаляем соседние паралельные точки, чтобы оставались только точки с углами
+		const pPar = [];
+		
+		let dirPr = points[0].clone().sub(points[points.length - 1]).normalize();
+		
+		for ( let i = 0; i < points.length; i++ )
+		{
+			let ptC = points[ i ];
+			let pt2 = (i + 1 > points.length - 1) ? points[0] : points[i + 1];		
+
+			const dirPr2 = pt2.clone().sub(ptC).normalize();
+			
+			const trueDir = (dirPr.dot(dirPr2) > 0.999) ? true : false;
+			
+			if(trueDir)
+			{
+				pPar.push(i);
+			}			
+			
+			dirPr = dirPr2;
+		}
+		
+		for ( let i = pPar.length - 1; i >= 0; i-- )
+		{
+			points.splice(pPar[i], 1);
+		}
+			
+		
+		
+
+		
+		const pointsOffset = [];
+		
+		const arr = myMath.offsetLines({points, offset});	// массив линий со смещением		
+		const lines = [arr[arr.length - 1], ...arr];
+
+		for ( let i = 0; i < lines.length - 1; i++ ) 
+		{			
+			const pt = myMath.intersectionTwoLines_1({line1: lines[i], line2: lines[i + 1]});
+			pointsOffset.push( new THREE.Vector3( pt.x, 0, pt.z ) );
+			
+			//this.crLines_3({points: [lines[i].start, lines[i].end], color: 0x0000ff, addPoints: true, h: 0});			
+		}
+		
+
+		const points1 = [...points, points[0]];
+		const points2 = [...pointsOffset, pointsOffset[0]];			
+		
+		// получаем массив точек, с направлением линии (старой и новой)
+		const points3 = [];
+		
+		for ( let i = 0; i < points2.length - 1; i++ )
+		{
+			let psC = points1[ i ];
+			let ps2 = points1[ i + 1 ];
+
+			const offsetPs1 = new THREE.Vector3( psC.x, 0, psC.z );
+			const offsetPs2 = new THREE.Vector3( ps2.x, 0, ps2.z );
+			const dir1 = offsetPs2.clone().sub(offsetPs1).normalize();			
+
+			let ptC = points2[ i ];
+			let pt2 = points2[ i + 1 ];
+
+			const offsetPt1 = new THREE.Vector3( ptC.x, 0, ptC.z );
+			const offsetPt2 = new THREE.Vector3( pt2.x, 0, pt2.z );
+			const dir2 = offsetPt2.clone().sub(offsetPt1).normalize();
+			
+			const line1 = this.crLines_3({points: [offsetPt1, offsetPt2], color: 0xff0000, addPoints: false, h: 0});
+			this.arrLines_1.push(line1);
+			
+			points3.push({ind: i, pos: offsetPt1, dir1, dir2, length: offsetPs1.distanceTo(offsetPs2)});
+		}
+
+		// находим точки у которых после смещения неправельное направление
+		const deletePoints = [];
+
+		for ( let i = 0; i < points3.length; i++ )
+		{			
+			const trueDir = (points3[i].dir1.dot(points3[i].dir2) > 0.98) ? true : false;
+			
+			if(!trueDir)
+			{
+				let helper = new THREE.ArrowHelper(points3[i].dir1, points3[i].pos, 0.5, 0x0000ff);				
+				scene.add(helper);
+				this.arrArrowHelp_1.push(helper);
+				
+				helper = new THREE.ArrowHelper(points3[i].dir2, points3[i].pos, 0.5, 0xff0000);
+				scene.add(helper);
+				this.arrArrowHelp_1.push(helper);
+
+				const data = {ind: points3[i].ind, pos: points3[i].pos, dir: points3[i].dir1, length: points3[i].length};
+				deletePoints.push(data);
+			}
+		}
+		
+		// если точки с неправельным направлением соседние, то объединяем в один массив 
+		const arrDelPoints = [];
+		
+		for ( let i = 0; i < deletePoints.length; i++ )
+		{
+			const arrData = [];			
+			
+			arrData.push(deletePoints[i]);
+			
+			let i2 = i;
+			let ind = deletePoints[i].ind;
+			
+			for ( let i2 = i + 1; i2 < deletePoints.length; i2++ )
+			{
+				if(deletePoints[i2].ind !== ind + 1) break;
+				
+				i++;
+				ind++;
+				arrData.push(deletePoints[i2]);
+			}
+			
+			arrDelPoints.push(arrData);
+		}
+		
+
+		console.log(444, arrDelPoints.map((arr) => arr.map((p) => p.ind)));
+		for ( let i = 0; i < arrDelPoints.length; i++ )
+		{
+			if(points3.length < 3) break;
+			arrDelPoints[i].sort((a, b) => { return a.length - b.length; });
+			
+			//console.log(777, arrDelPoints[i][0]);
+			
+			const ind = points3.findIndex((o) => o.ind === arrDelPoints[i][0].ind);
+			const ind1 = (ind - 1 < 0) ? points3.length - 1 : ind - 1;
+			const ind2 = (ind + 1 > points3.length - 1) ? 0 : ind + 1;
+			
+			console.log('ind0', ind, 'ind1', ind1, 'ind2', ind2, points3.map((p) => p.ind));
+			
+			if(ind > -1)
+			{
+				console.log('delete p', ind, ind + 1);
+				
+				let pt = null;
+				let stop = false;
+				
+				if(points3[ind1].dir1 && points3[ind2].dir1)
+				{
+					const line1 = { start: points3[ind1].pos, end: points3[ind1].pos.clone().add(points3[ind1].dir1)};
+					const line2 = { start: points3[ind2].pos, end: points3[ind2].pos.clone().add(points3[ind2].dir1)};
+					
+					pt = myMath.intersectionTwoLines_3(line1.start, line1.end, line2.start, line2.end);					
+				}
+				else
+				{
+					stop = true;
+				}
+		
+				points3.splice(ind, 1);	// удаляем 1 точку				
+				points3.splice(ind, 1);	// удаляем 2 точку				
+
+				if(stop) continue;
+				
+				if(pt)
+				{
+					//this.crHelpBox({pos: new THREE.Vector3( pt.x, 0, pt.z ), size: 0.06, color: 0x0000ff})
+					console.log('add p', ind);
+					points3.splice(ind, 0, {ind, pos: new THREE.Vector3( pt.x, 0, pt.z )});	// на место удаленной точки добавляем точку	пересечения					
+				}
+				else
+				{
+					const ind1 = (ind - 1 < 0) ? points3.length - 1 : ind - 1;
+					const ind2 = (ind1 + 1 > points3.length - 1) ? 0 : ind1 + 1;
+
+					const line1 = { start: points3[ind1].pos, end: points3[ind1].pos.clone().add(points3[ind1].dir1)};					
+					const line2 = { start: points3[ind2].pos, end: points3[ind2].pos.clone().add(points3[ind2].dir1)};
+					
+					const pt = myMath.intersectionTwoLines_3(line1.start, line1.end, line2.start, line2.end);
+
+					if(pt)
+					{
+						points3.splice(ind, 1);	// удаляем 1 точку						
+						
+						const box = this.crHelpBox({pos: new THREE.Vector3( pt.x, 0, pt.z ), size: 0.06, color: 0x0000ff});
+						this.arrPoints_1.push(box);
+						
+						console.log('add p22222', ind);
+						points3.splice(ind, 0, {ind: ind, pos: new THREE.Vector3( pt.x, 0, pt.z )});	// на место удаленной точки добавляем точку	пересечения	
+						
+					}
+				}
+				
+				console.log(points3.map((p) => p.ind));
+			}
+		}
+		
+		let points4 = points3.map((p) => p.pos);
+		let points5 = points3.map((p) => p.pos);
+		
+		if(points3.length > 2)
+		{
+			console.log('points3------------', points4.length, points3, pointsOffset);
+			
+			if(1 === 1)	
+			{
+				points4.push(points4[0]);
+			}		
+			for ( let i = 0; i < points4.length - 1; i++ )
+			{
+				const line1 = this.crLines_3({points: [points4[ i ], points4[ i + 1 ]], color: 0x000000, addPoints: true, h: 0});
+				this.arrLines_1.push(line1);
+//if(points3.length === 3) this.crHelpBox({pos: points4[ i ], size: 0.06, color: 0x0000ff})				
+			}		
+			
+		}
+
+
+
+
+if(points5.length < 3) points5 = [];
+
+console.log('----------');
+
+		return points5;
+	}
+
+
 
 	
 	calcForm(arrPos, arrOldPos)
@@ -388,7 +616,9 @@ class MyUlitkaWf
 
 				if(posCross)
 				{
-					this.crHelpBox({pos: posCross, size: 0.04, color: 0xff0000})
+					const box = this.crHelpBox({pos: posCross, size: 0.04, color: 0xff0000});
+					this.arrPoints_1.push(box);
+					
 					points[i].pO[1].pos = posCross;
 					trueDir = true;
 				}
@@ -503,10 +733,16 @@ class MyUlitkaWf
 		{
 			this.arrLines_2[i].geometry.dispose();
 			scene.remove(this.arrLines_2[i]);			
-		}		
+		}
+
+		for ( let i = 0; i < this.arrArrowHelp_1.length; i++ )
+		{
+			scene.remove(this.arrArrowHelp_1[i]);			
+		}			
 
 		this.arrLines_1 = [];
-		this.arrLines_2 = []; 		
+		this.arrLines_2 = [];
+		this.arrArrowHelp_1 = [];
 	}
 }
 
