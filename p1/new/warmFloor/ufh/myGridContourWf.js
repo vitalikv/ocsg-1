@@ -44,8 +44,20 @@ class MyGridContourWf
 			v.push(new THREE.Vector3(5, 0, 5));
 			v.push(new THREE.Vector3(5, 0, -5));
 			v.push(new THREE.Vector3(2.5, 0, -5));
-			v.push(new THREE.Vector3(0.6475390424566161, 0, 0));			
+			v.push(new THREE.Vector3(0.7517190655837835, 0, -0.2221889142065283));			
 		}
+		else if(1===2)
+		{
+			v.push(new THREE.Vector3(-5, 0, 0));	
+			v.push(new THREE.Vector3(-5, 0, 5));
+			v.push(new THREE.Vector3(0, 0, 5));
+			v.push(new THREE.Vector3(5, 0, 5));
+			v.push(new THREE.Vector3(5, 0, -5));
+			v.push(new THREE.Vector3(2.5, 0, -5));
+			//v.push(new THREE.Vector3(1.7, 0, -2));
+			v.push(new THREE.Vector3(1.6780482293039576, 0, -0.1951205692354955));			
+		}
+
 		else
 		{
 			v.push(new THREE.Vector3(-5, 0, 0));	
@@ -55,8 +67,11 @@ class MyGridContourWf
 			v.push(new THREE.Vector3(5, 0, -5));
 			v.push(new THREE.Vector3(2.5, 0, -5));
 			//v.push(new THREE.Vector3(1.7, 0, -2));
-			v.push(new THREE.Vector3(2, 0, -1));			
-		}		
+			v.push(new THREE.Vector3(1.6780482293039576, 0, -0.1951205692354955));
+			v.push(new THREE.Vector3(-0.5, 0, -0.1951205692354955));
+			v.push(new THREE.Vector3(-0.5393915499814187, 0, -4.953702639159886));
+			v.push(new THREE.Vector3(-5, 0, -5));
+		}			
 
 		for ( let i = 0; i < v.length; i++ )
 		{
