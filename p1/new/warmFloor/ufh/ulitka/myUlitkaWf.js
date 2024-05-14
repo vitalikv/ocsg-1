@@ -57,7 +57,7 @@ class MyUlitkaWf
 			const newFormPoints = this.offsetForm({count, points: oldFormPoints[i], offset});
 			//const newFormPoints = myMath.offsetForm({points: oldFormPoints[i], offset});
 			//const points = this.calcForm(newFormPoints, oldFormPoints[i]);			
-			if(newFormPoints.length > 0) forms.push(newFormPoints);
+			if(newFormPoints.length > 0) forms.push(...newFormPoints);
 			
 			// линии пола после смещения, без оптимизации/обрезки пересечений
 			//const line1 = this.crLines_3({points: newFormPoints, color: 0xff0000, addPoints: false, h: 0});
@@ -141,8 +141,8 @@ class MyUlitkaWf
 			
 			if(count === 5)
 			{
-				this.crLines_3({points: [lines[i].start, lines[i].end], color: 0xff0000, addPoints: true, h: 1});
-				this.crLines_3({points: [lines[i2].start, lines[i2].end], color: 0x0000ff, addPoints: true, h: 1});						
+				//this.crLines_3({points: [lines[i].start, lines[i].end], color: 0xff0000, addPoints: true, h: 1});
+				//this.crLines_3({points: [lines[i2].start, lines[i2].end], color: 0x0000ff, addPoints: true, h: 1});						
 			}
 			
 			
@@ -213,9 +213,43 @@ console.log(3222, points2[ i + 1 ]);
 			
 			points3.push({ind: i, pos: offsetPt1, dir1, dir2, length: offsetPs1.distanceTo(offsetPs2), newP});
 		}
-			
 
+
+		let forms = [];
+		
 		if(1===1)
+		{
+			let arrPos = points3.map((p) => p.pos);
+			const arrLine = [];
+			
+			const dir = new THREE.Vector3()
+			
+			for ( let i = 0; i < arrPos.length - 1; i++ )
+			{
+				//const dir = new THREE.Vector3().subVectors( arrOldPos[i], arrOldPos[i + 1] ).normalize();
+				arrLine.push({start: arrPos[i], end: arrPos[i + 1], startId: i, endId: i + 1, dir, crossLines: [], crossPoints: []});
+			}
+			//const dir = new THREE.Vector3().subVectors( arrOldPos[arrOldPos.length - 1], arrOldPos[0] ).normalize();
+			arrLine.push({start: arrPos[arrPos.length - 1], end: arrPos[0], startId: arrPos.length - 1, endId: 0, dir, crossLines: [], crossPoints: []});
+			
+			
+			const arrPos2 = this.calcCrossLine({arrLine});
+			
+			for ( let i = 0; i < arrPos2.length; i++ )
+			{
+				this.crHelpBox({pos: arrPos2[ i ], size: 0.06, color: 0x0000ff})
+			}
+			
+			const points = this.calcPath_2({arrLine, arrPos, arrPos2});
+			
+			forms = this.calcForms_2(points, arrPos2.length > 0);
+
+			console.log(999999999999, forms)
+			
+		}
+		
+
+		if(1===2)
 		{
 			// находим точки у которых после смещения неправельное направление
 			const deletePoints = [];
@@ -338,31 +372,44 @@ console.log(3222, points2[ i + 1 ]);
 			}
 			
 		}
+
 		
-		let points4 = points3.map((p) => p.pos);
-		let points5 = points3.map((p) => p.pos);
+		let points5 = [];
 		
-		if(points3.length > 2)
+		if(forms.length > 0)
 		{
-			console.log('points3------------', points4.length, points3, pointsOffset);
-			
-			if(1 === 1)	
+			points5 = forms;		
+		}
+		else
+		{
+			//points4 = points3.map((p) => p.pos);
+			//points5 = points3.map((p) => p.pos);			
+		}
+
+		
+		if(forms.length > 0)
+		{			
+			for ( let i = 0; i < forms.length; i++ )
 			{
-				points4.push(points4[0]);
-			}		
-			for ( let i = 0; i < points4.length - 1; i++ )
-			{
-				const line1 = this.crLines_3({points: [points4[ i ], points4[ i + 1 ]], color: 0x000000, addPoints: true, h: 0});
-				this.arrLines_1.push(line1);
-//if(points3.length === 3) this.crHelpBox({pos: points4[ i ], size: 0.06, color: 0x0000ff})				
-			}		
+				let points4 = [...forms[i]];
+				if(1 === 1)	
+				{
+					points4.push(points4[0]);
+				}		
+				for ( let i = 0; i < points4.length - 1; i++ )
+				{
+					const line1 = this.crLines_3({points: [points4[ i ], points4[ i + 1 ]], color: 0x000000, addPoints: true, h: 0});
+					this.arrLines_1.push(line1);
+	//if(points3.length === 3) this.crHelpBox({pos: points4[ i ], size: 0.06, color: 0x0000ff})				
+				}						
+			}
 			
 		}
 
 
 
 
-if(points5.length < 3) points5 = [];
+
 
 console.log('----------');
 
@@ -542,6 +589,93 @@ console.log('----------');
 	}
 
 
+	// собираем точки отрезков и точки пересечения отрезков в один массив и выстраиваем в упорядочанном порядке
+	calcPath_2({arrLine, arrPos, arrPos2})
+	{
+		const indexOffset = arrPos.length;
+		arrPos = [...arrPos, ...arrPos2];
+		
+		const points = [];
+		
+		// выстраиваем последовательность точек, чтобы шли по порядку 
+		for ( let i = 0; i < arrLine.length; i++ )
+		{
+			const dir = arrLine[i].dir;
+			
+			points.push({pos: arrLine[i].start, id: arrLine[i].startId, dir, p: []});	// начальная точка отрезка
+			
+			// точки пересечение отрезков
+			if(arrLine[i].crossPoints.length > 0)
+			{
+				const arrDist = [];
+				const firstPointPos = arrLine[i].start;
+				for ( let i2 = 0; i2 < arrLine[i].crossPoints.length; i2++ )
+				{
+					const id = arrLine[i].crossPoints[i2] + indexOffset;
+					const p1 = arrPos[id];
+					const dist = p1.distanceTo(arrLine[i].start);
+					arrDist.push({dist, pos: p1, id });
+				}
+				
+				arrDist.sort((a, b) => { return a.dist - b.dist; });
+				
+				for ( let i2 = 0; i2 < arrDist.length; i2++ )
+				{
+					points.push({pos: arrDist[i2].pos, id: arrDist[i2].id, p: []});
+				}
+			}
+			
+			points.push({pos: arrLine[i].end, id: arrLine[i].endId, p: []});	// конечная точка отрезка
+		}
+		
+		// добавлем информацию о соседних точек (id)
+		for ( let i = 0; i < points.length - 1; i++ )
+		{			
+			const pId1 = (i === 0) ? points[points.length - 1].id : points[i - 1].id;
+			const pId2 = points[i + 1].id;
+			
+			//if(pId1 !== points[i].id) points[i].p.push(pId1);
+			if(pId2 !== points[i].id) points[i].p.push(pId2);
+		}
+		
+		const ind = points.length - 1;
+		//if(points[ind].id !== points[ind - 1].id) points[ind].p.push(points[ind - 1].id);
+		if(points[ind].id !== points[0].id) points[ind].p.push(points[0].id);		
+		
+		// убираем повторяющиеся точки (с одинаковым id), чтобы были только уникальные точки
+		const points2 = [];
+		for ( let i = 0; i < points.length; i++ )
+		{
+			const ind = points2.findIndex((o) => o.id === points[i].id);
+			
+			if(ind === -1) points2.push(points[i]);		// еще такого элемента в массиве не было
+			else
+			{	
+				// элемент повторился, значит точка пересекалась с отрезком, добавлем к массиву соседних точек, еще соседние точки
+				points2[ind].p.push(...points[i].p);	
+				if(points[i].dir) points2[ind].dir = points[i].dir;
+			}
+		}
+
+
+		for ( let i = 0; i < points2.length; i++ )
+		{
+			const pO = [];
+			for ( let i2 = 0; i2 < points2[i].p.length; i2++ )
+			{
+				const id = points2[i].p[i2];
+				const ind = points2.findIndex((o) => o.id === id);
+				pO.push(points2[ind]);
+			}
+			points2[i].pO = pO;
+		}				
+		
+		//console.log(points2);
+		
+		return points2;
+	}
+
+
 	// получаем массив оптимизированных контуров
 	calcForms(points)
 	{		
@@ -550,7 +684,7 @@ console.log('----------');
 		for ( let i = 0; i < points.length; i++ )
 		{			
 			for ( let i2 = 0; i2 < points[i].pO.length; i2++ )
-			{						
+			{			
 				const form = this.getContour([points[i]], points[i].pO[i2]); 						 
 				
 				if(form[0].id !== form[form.length - 1].id){ continue; }					
@@ -559,7 +693,7 @@ console.log('----------');
 				const p = form.map(item => item.pos)
 				if(myMath.checkClockWise(p) <= 0){ continue; }
 				
-				const trueDir = this.getCheckDir(form);
+				//const trueDir = this.getCheckDir(form);
 				//if(!trueDir) continue;				
 				
 				arrF.push(form);
@@ -584,6 +718,62 @@ console.log('----------');
 		
 		return newV;
 	}
+
+
+	// получаем массив оптимизированных контуров
+	calcForms_2(points, crossP)
+	{		
+		const arrF = [];
+		
+		if(crossP)
+		{
+			for ( let i = 0; i < points.length; i++ )
+			{			
+				for ( let i2 = 0; i2 < points[i].pO.length; i2++ )
+				{	
+					if(points[i].pO.length !== 2) continue;
+					const form = this.getContour_2([points[i]], points[i].pO[i2], 0); 						 
+					console.log('-------------');
+					if(form[0].id !== form[form.length - 1].id){ continue; }					
+					if(this.detectEqualForm({arrF, points: form})){ continue; }
+									
+					const p = form.map(item => item.pos)
+					if(myMath.checkClockWise(p) <= 0){ continue; }
+					
+					//const trueDir = this.getCheckDir(form);
+					//if(!trueDir) continue;				
+					
+					arrF.push(form);
+					
+					break; 
+				}
+			}
+			
+		}
+		else
+		{
+			
+			if(points.length > 2) arrF.push([...points, points[0]]);
+			
+		}
+		
+		//console.log(111, arrF);
+		const newV = [];
+		for ( let i = 0; i < arrF.length; i++ )
+		{
+			const v = [];
+			
+			for ( let i2 = 0; i2 < arrF[i].length - 1; i2++ )
+			{
+				v.push(arrF[i][i2].pos.clone());
+			}
+			
+			newV.push(v);
+		}
+		
+		return newV;
+	}
+
 
 	// ищем замкнутый контур помещения
 	getContour(arr, point)
@@ -628,6 +818,64 @@ console.log('----------');
 				if(arr[0].id !== arrD[i][1].id) { return this.getContour(arr, arrD[i][1]); }
 				else { arr[arr.length] = arrD[i][1]; break; }						
 			}
+		}
+		
+		return arr;
+	}
+
+
+	// ищем замкнутый контур помещения
+	getContour_2(arr, point, count)
+	{
+		var p2 = arr[arr.length - 1];
+		arr[arr.length] = point;		
+		
+		var dir1 = new THREE.Vector3().subVectors( p2.pos, point.pos ).normalize();	
+		
+		var arrD = [];
+		var n = 0;
+		for ( var i = 0; i < point.pO.length; i++ )
+		{
+			if(point.p[i].id === p2.id){ continue; }		
+			//if(point.pO[i].pO.length < 2){ continue; }
+			
+			const pS = point.pO[i];
+			var dir2 = new THREE.Vector3().subVectors( pS.pos, point.pos ).normalize();
+			
+			arrD[n] = {};
+			arrD[n].pO = pS;
+			
+			var d = (pS.pos.x - p2.pos.x) * (point.pos.z - p2.pos.z) - (pS.pos.z - p2.pos.z) * (point.pos.x - p2.pos.x);
+			
+			var angle = dir1.angleTo( dir2 );
+			
+			if(d > 0){ angle *= -1; }
+			
+			arrD[n].rad = angle;
+			
+			let rot1 = THREE.Math.radToDeg(Math.atan2(dir1.x, dir1.z));
+			let rot2 = THREE.Math.radToDeg(Math.atan2(dir2.x, dir2.z));
+			const dot = dir1.dot(dir2);
+			//let rot1 = Math.atan2(dir1.x, dir1.z);
+			//let rot2 = Math.atan2(dir2.x, dir2.z);			
+			let dergree = rot1 - rot2;
+			if(dot < 0){ dergree += 180;  }
+			dergree = Math.abs(dergree);			
+			arrD[n].dergree = dergree;
+			
+			if(!this.isNumeric(angle)) { return arr; }
+			
+			n++;
+		}	
+		
+		
+		if(arrD.length > 0)
+		{ 
+			arrD.sort(function (a, b) { return a.dergree - b.dergree; });
+			//console.log(33333333, [...arr], [...arrD]);
+			if(arr[0].id !== arrD[0].pO.id) { return this.getContour_2(arr, arrD[0].pO, count + 1); }
+			else { arr[arr.length] = arrD[0].pO; }						
+
 		}
 		
 		return arr;

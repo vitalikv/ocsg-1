@@ -67,7 +67,8 @@ class MyGridContourWf
 			v.push(new THREE.Vector3(5, 0, -5));
 			v.push(new THREE.Vector3(2.5, 0, -5));
 			//v.push(new THREE.Vector3(1.7, 0, -2));
-			v.push(new THREE.Vector3(1.6780482293039576, 0, -0.1951205692354955));
+			//v.push(new THREE.Vector3(1.6780482293039576, 0, -0.1951205692354955));
+			v.push(new THREE.Vector3(1.1536019059981846, 0, -0.7049989416654985));
 			v.push(new THREE.Vector3(-0.5, 0, -0.1951205692354955));
 			v.push(new THREE.Vector3(-0.5393915499814187, 0, -4.953702639159886));
 			v.push(new THREE.Vector3(-5, 0, -5));
