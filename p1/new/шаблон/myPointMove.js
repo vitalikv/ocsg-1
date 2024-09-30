@@ -4,6 +4,7 @@ class MyArrowContourWf
 {
 	isDown = false;
 	isMove = false;
+	offset = new THREE.Vector3();
 	toolObj = null;	
 	actObj = null;
 	

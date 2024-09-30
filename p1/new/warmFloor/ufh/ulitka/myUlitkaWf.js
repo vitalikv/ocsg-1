@@ -26,7 +26,7 @@ class MyUlitkaWf
 		{
 			arrFroms = this.loopFroms({count, oldFormPoints: arrFroms, offset});
 			offset = offsetNext;	// смещение от построеного контура
-			//if(count === 4) arrFroms = [];
+			if(count === 0) arrFroms = [];
 			count++;
 			if(arrFroms.length > 0) formSteps.push(arrFroms);
 			console.log(arrFroms);
@@ -116,33 +116,58 @@ class MyUlitkaWf
 			const dir1 = lines[i].start.clone().sub(lines[i].end).normalize();
 			const dir2 = lines[i2].end.clone().sub(lines[i2].start).normalize();			
 			
+			
 			let rot1 = THREE.Math.radToDeg(Math.atan2(dir1.x, dir1.z));
 			let rot2 = THREE.Math.radToDeg(Math.atan2(dir2.x, dir2.z));
 			//if(rot1 <= 0) rot1 = Math.abs(rot1) + 180;
 			//if(rot2 <= 0) rot2 = Math.abs(rot2) + 180;
-			let dergree = rot1 - rot2;
+			const dot = dir2.dot(dir1);
+			let dergree = THREE.Math.radToDeg(dir1.angleTo( dir2 ));
+			 
 
-			if(i === -1)
+			if(i > -1)
 			{
+				
+				//const dir1 = lines[i].start.clone().sub(lines[i].end).normalize();
 				let helper = new THREE.ArrowHelper(dir1, lines[i].end, 1, 0xff0000);
-				scene.add(helper);
+				//scene.add(helper);
 
 				helper = new THREE.ArrowHelper(dir2, lines[i].end, 1, 0xff0000);
-				scene.add(helper);				
-			}
+				//scene.add(helper);	
 
+
+				const norm1 = myMath.calcNormal2D({p1: lines[i].start, p2: lines[i].end, reverse: true});				
+				const norm2 = myMath.calcNormal2D({p1: lines[i2].start, p2: lines[i2].end, reverse: true});				
 				
-			if(dergree < 0){ dergree += 180;  }
-			dergree = Math.abs(dergree);
+				let l1 = {};
+				l1.start = lines[i].end.clone().sub(lines[i].start).divideScalar( 2 ).add(lines[i].start);
+				l1.end = l1.start.clone().add(norm1.clone().multiplyScalar( 10 ));
+				
+				let l2 = {};
+				l2.start = lines[i2].end.clone().sub(lines[i2].start).divideScalar( 2 ).add(lines[i2].start);
+				l2.end = l2.start.clone().add(norm2.clone().multiplyScalar( 10 ));				
+				
+				const cross = myMath.checkCrossLine(l1.start, l1.end, l2.start, l2.end);
+				
+				if(!cross) 
+				{
+					dergree = 360 - dergree;
+					const helper1 = new THREE.ArrowHelper(norm1, l1.start, 1, 0x0000ff);
+					const helper2 = new THREE.ArrowHelper(norm2, l2.start, 1, 0x0000ff);
+					scene.add(helper1); this.arrArrowHelp_1.push(helper1);
+					scene.add(helper2); this.arrArrowHelp_1.push(helper2);					
+				}
+			}
 			
 			const newP = (i + 1 !== i2) ? true : false;
 			
-			console.log('dergree', i, i2, newP, dergree);
+			console.log('dergree', i, i2, dot, '--', dergree);
 			
-			if(count === 5)
+			//if(dergree > 0) this.crHelpBox({pos: lines[i].end, size: 0.46, color: 0x0000ff})
+			if(count > -1 && 1===2)
 			{
-				//this.crLines_3({points: [lines[i].start, lines[i].end], color: 0xff0000, addPoints: true, h: 1});
-				//this.crLines_3({points: [lines[i2].start, lines[i2].end], color: 0x0000ff, addPoints: true, h: 1});						
+				this.crLines_3({points: [lines[i].start, lines[i].end], color: 0xff0000, addPoints: true, h: 1});
+				this.crLines_3({points: [lines[i2].start, lines[i2].end], color: 0x0000ff, addPoints: true, h: 1});						
 			}
 			
 			
@@ -181,7 +206,7 @@ class MyUlitkaWf
 			//this.crLines_3({points: [lines[i].start, lines[i].end], color: 0x0000ff, addPoints: true, h: 0});			
 		}
 		
-console.log(pointsOffset)
+
 		const points1 = [...points, points[0]];
 		const points2 = [...pointsOffset, pointsOffset[0]];			
 		
@@ -201,13 +226,13 @@ console.log(pointsOffset)
 
 			let ptC = points2[ i ].pos;
 			let pt2 = points2[ i + 1 ].pos;
-console.log(3222, points2[ i + 1 ]);
+
 			const offsetPt1 = new THREE.Vector3( ptC.x, 0, ptC.z );
 			const offsetPt2 = new THREE.Vector3( pt2.x, 0, pt2.z );
 			const dir2 = offsetPt2.clone().sub(offsetPt1).normalize();
 			
-			//const line1 = this.crLines_3({points: [offsetPt1, offsetPt2], color: 0xff0000, addPoints: false, h: 0});
-			//this.arrLines_1.push(line1);
+			const line1 = this.crLines_3({points: [offsetPt1, offsetPt2], color: 0xff0000, addPoints: false, h: 0});
+			this.arrLines_1.push(line1);
 			
 			const newP  = points2[ i ].newP;
 			
@@ -240,7 +265,7 @@ console.log(3222, points2[ i + 1 ]);
 				this.crHelpBox({pos: arrPos2[ i ], size: 0.06, color: 0x0000ff})
 			}
 			
-			const points = this.calcPath_2({arrLine, arrPos, arrPos2});
+			const points = this.calcPath({arrLine, arrPos, arrPos2});
 			
 			forms = this.calcForms_2(points, arrPos2.length > 0);
 
@@ -398,7 +423,7 @@ console.log(3222, points2[ i + 1 ]);
 				}		
 				for ( let i = 0; i < points4.length - 1; i++ )
 				{
-					const line1 = this.crLines_3({points: [points4[ i ], points4[ i + 1 ]], color: 0x000000, addPoints: true, h: 0});
+					const line1 = this.crLines_3({points: [points4[ i ], points4[ i + 1 ]], color: 0x000000, addPoints: true, h: 1});
 					this.arrLines_1.push(line1);
 	//if(points3.length === 3) this.crHelpBox({pos: points4[ i ], size: 0.06, color: 0x0000ff})				
 				}						
@@ -724,16 +749,16 @@ console.log('----------');
 	calcForms_2(points, crossP)
 	{		
 		const arrF = [];
-		
+		//crossP = true;
 		if(crossP)
 		{
 			for ( let i = 0; i < points.length; i++ )
 			{			
 				for ( let i2 = 0; i2 < points[i].pO.length; i2++ )
 				{	
-					if(points[i].pO.length !== 2) continue;
+					//if(points[i].pO.length !== 2) continue;
 					const form = this.getContour_2([points[i]], points[i].pO[i2], 0); 						 
-					console.log('-------------');
+					console.log('------------');
 					if(form[0].id !== form[form.length - 1].id){ continue; }					
 					if(this.detectEqualForm({arrF, points: form})){ continue; }
 									
@@ -836,7 +861,7 @@ console.log('----------');
 		var n = 0;
 		for ( var i = 0; i < point.pO.length; i++ )
 		{
-			if(point.p[i].id === p2.id){ continue; }		
+			if(point.pO[i].id === p2.id){ continue; }		
 			//if(point.pO[i].pO.length < 2){ continue; }
 			
 			const pS = point.pO[i];
@@ -853,14 +878,31 @@ console.log('----------');
 			
 			arrD[n].rad = angle;
 			
-			let rot1 = THREE.Math.radToDeg(Math.atan2(dir1.x, dir1.z));
-			let rot2 = THREE.Math.radToDeg(Math.atan2(dir2.x, dir2.z));
-			const dot = dir1.dot(dir2);
-			//let rot1 = Math.atan2(dir1.x, dir1.z);
-			//let rot2 = Math.atan2(dir2.x, dir2.z);			
-			let dergree = rot1 - rot2;
-			if(dot < 0){ dergree += 180;  }
-			dergree = Math.abs(dergree);			
+
+			let dergree = THREE.Math.radToDeg(dir1.angleTo( dir2 ));
+			 
+
+			if(1 === 1)
+			{
+				const norm1 = myMath.calcNormal2D({p1: p2.pos, p2: point.pos, reverse: true});				
+				const norm2 = myMath.calcNormal2D({p1: point.pos, p2: pS.pos, reverse: true});				
+				
+				let l1 = {};
+				l1.start = point.pos.clone().sub(p2.pos).divideScalar( 2 ).add(p2.pos);
+				l1.end = l1.start.clone().add(norm1.clone().multiplyScalar( 10 ));
+				
+				let l2 = {};
+				l2.start = pS.pos.clone().sub(point.pos).divideScalar( 2 ).add(point.pos);
+				l2.end = l2.start.clone().add(norm2.clone().multiplyScalar( 10 ));				
+				
+				const cross = myMath.checkCrossLine(l1.start, l1.end, l2.start, l2.end);
+				
+				if(!cross) 
+				{
+					dergree = 360 - dergree;					
+				}
+			}
+			
 			arrD[n].dergree = dergree;
 			
 			if(!this.isNumeric(angle)) { return arr; }
@@ -869,10 +911,10 @@ console.log('----------');
 		}	
 		
 		
-		if(arrD.length > 0)
+		if(arrD.length > 0 && count < 10)
 		{ 
 			arrD.sort(function (a, b) { return a.dergree - b.dergree; });
-			//console.log(33333333, [...arr], [...arrD]);
+			console.log(33333333, [...arr]);
 			if(arr[0].id !== arrD[0].pO.id) { return this.getContour_2(arr, arrD[0].pO, count + 1); }
 			else { arr[arr.length] = arrD[0].pO; }						
 
@@ -1012,6 +1054,7 @@ console.log('----------');
 		
 		for ( let i = 0; i < points.length; i++ )
 		{
+			points[i] = points[i].clone();
 			points[i].y = h;
 		}		
 		
