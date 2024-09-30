@@ -12,9 +12,9 @@ class MyArrowContourWf
 	
 	constructor()
 	{
-		this.toolObj = this.crPoint({pos: new THREE.Vector3()});
+		//this.toolObj = this.crPoint({pos: new THREE.Vector3()});
 		
-		this.helpLines = this.testLines();
+		//this.helpLines = this.testLines();
 	}
 	
 	crPoint({pos})
@@ -75,8 +75,11 @@ class MyArrowContourWf
 	{
 		let rayhit = null;		
 		
-		const ray = rayIntersect( event, this.toolObj, 'one' );
-		if(ray.length > 0) { rayhit = ray[0]; }
+		if(this.toolObj)
+		{
+			const ray = rayIntersect( event, this.toolObj, 'one' );
+			if(ray.length > 0) { rayhit = ray[0]; }			
+		}
 
 		return rayhit;
 	}
