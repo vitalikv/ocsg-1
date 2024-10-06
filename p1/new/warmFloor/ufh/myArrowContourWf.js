@@ -12,9 +12,9 @@ class MyArrowContourWf
 	
 	constructor()
 	{
-		//this.toolObj = this.crPoint({pos: new THREE.Vector3()});
+		this.toolObj = this.crPoint({pos: new THREE.Vector3()});
 		
-		//this.helpLines = this.testLines();
+		this.helpLines = this.testLines();
 	}
 	
 	crPoint({pos})

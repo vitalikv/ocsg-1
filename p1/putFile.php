@@ -142,6 +142,7 @@ new/warmFloor/createObj/mpl/troinik/myMplTroinikPR.js
 new/warmFloor/createObj/mpl/ugol/myMplUgolP.js
 new/warmFloor/createObj/mpl/ugol/myMplUgolPR.js
 new/warmFloor/generator/myGeneratorWf.js
+new/widgets/blocks/myCalcBlocks.js
 ';
 
 $arrF = array();

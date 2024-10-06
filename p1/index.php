@@ -255,6 +255,8 @@
 	<script src="<?=$path?>new/warmFloor/createObj/mpl/ugol/myMplUgolPR.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/warmFloor/generator/myGeneratorWf.js?<?=$vrs?>"></script>
 	
+	<script src="<?=$path?>new/widgets/blocks/myCalcBlocks.js?<?=$vrs?>"></script>
+	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		
 		
