@@ -53,6 +53,8 @@ class MyStartProject
 
 		if(this.name === 'new') await loadFile({});
 		else await loadFile({local: infProject.settings.load.file});
+		
+		myCalcBlocks.init();
 	}
 	
 	setCamera()

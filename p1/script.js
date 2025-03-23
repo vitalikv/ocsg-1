@@ -1156,7 +1156,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myHouse = new MyHouse();
 	myWarmFloor = new MyWarmFloor();
 	
-	//myCalcBlocks = new MyCalcBlocks();
+	myCalcBlocks = new MyCalcBlocks();
 	
 	myStartProject = new MyStartProject();
 	startInitProject();
@@ -1170,11 +1170,11 @@ document.addEventListener("DOMContentLoaded", ()=>
 // запуск проекта при открытии страницы
 async function startInitProject()
 {
-	await myStartProject.init({name: 'new'});	// new - пустой проект 
+	await myStartProject.init({name: ''});	// new - пустой проект 
 
 	if(1===2) if(myStartProject.detectShowStartWind()) windUI.showWin();	// меню пользователя
 	
-	if(1===1) myPanelTop2.addPaidPanel({panel: 'otop'});	// панель для платных пользователей	
+	if(1===2) myPanelTop2.addPaidPanel({panel: 'otop'});	// панель для платных пользователей	
 	
 	if(1===2) myPanelR.myTabsR.activeTab({id: 0});	// вклад при старте
 	
@@ -1183,23 +1183,12 @@ async function startInitProject()
 	if(1===2) myWarmFloor.myGeneratorWf.init();	// генератор отопления
 	
 	if(1===2) myWarmFloor.myGridWf.initTest(); 	// сетка для теплого пола
-	if(1===1) myWarmFloor.myGridContourWf.initTestContour();	// тепл.пол улитка
+	if(1===2) myWarmFloor.myGridContourWf.initTestContour();	// тепл.пол улитка
 	
 }
 
 
-function testSss()
-{
-	var svgline = createSvgLine({count: 1, x1: 400, y1: 700, x2: 800, y2: 700, display: "block"})[0]; 
-	upSvgLinePosScene({el: [svgline]});
-	updateSvgLine({el: svgline});
-
-	var svgline2 = createSvgPath({count: 1, arrS: [new THREE.Vector2(420, 710), new THREE.Vector2(400, 700), new THREE.Vector2(420, 690)], stroke_width: "2px", display: "block"})[0];
-	upSvgPathPosScene({el: [svgline2]});  
-
-	console.log(55555, svgline);
-	console.log(55555, svgline2); 
-}	
+	
 	
 
 
