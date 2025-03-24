@@ -92,59 +92,86 @@ class MyCalcBlocks
 	
 	test({level})
 	{
-		
-		const gArrBloks = [];
-		
-		const posY = myLevels.getLevelPos0({lastId: 0, newId: 0});
+		//const posY = myLevels.getLevelPos0({lastId: 0, newId: 0});
 		
 		const wall = level.wall;
-		const y = level.height;
+		const levelHeight = level.height;
+		
+		
+		// outside - наружные
+		// inside - внутренние
+		// single - отдельные
+		const arrW = { outside: [], inside: [], single: [] };
+		
+		for ( let i = 0; i < wall.length; i++ )
+		{
+			const room = myHouse.myRoom.detectCommonZone_1( wall[i] );
+			
+			if(room.length === 0)
+			{
+				arrW.single.push({wall: wall[i], side: 1});
+			}
+			
+			if(room.length === 1)
+			{
+				let side = 0;
+				for ( let i2 = 0; i2 < room[0].userData.room.w.length; i2++ ) 
+				{ 
+					if(room[0].userData.room.w[i2] == wall[i]) { side = room[0].userData.room.s[i2]; break; } 
+				}					
+				
+				arrW.outside.push({wall: wall[i], side});
+				//console.log(wall[i].userData.wall.v);
+			}
+		}
+		
+
+		if(arrW.single.length > 0) this.caclColumn({data: arrW.single, levelHeight, type: 'single'});
+		if(arrW.outside.length > 0) this.caclColumn({data: arrW.outside, levelHeight, type: 'outside'});
+
+		renderCamera();
+	}
+	
+	caclColumn({data, levelHeight, type})
+	{
+		const gArrBloks = [];
 		
 		const { dlina, h, offset, z } = this.blockParams;
 		let countY = 0;			
 		
-		for (let i = 0; i < y; i += h + offset) 
+		for (let i = 0; i < levelHeight; i += h + offset) 
 		{
-			const startX = countY % 2 === 0 ? dlina / 2 : 0;
-			const endX = countY % 2 === 0 ? 0 : dlina / 2;
-			//const startX = dlina / 2;
-			//const endX = 0;
+			const startX = countY % 2 === 0 ? dlina / 2 : 0;	// т.к. у блока центр по центру, вначале мы его смещаем
+			const endX = countY % 2 === 0 ? 0 : dlina / 2;		// нужно знать, чтобы не строить лишние блоке в ряде
 			
 			if(countY < 2222) 
 			{
-				this.caclRow({wall, posY, gArrBloks, currentY: i, startX, endX});
+				this.caclRow({data, gArrBloks, levelHeight, currentY: i, startX, endX, type});
 			}
 			
 			countY++;
-		}
-		
-		
-
+		}		
 	}
 	
-	caclRow({wall, posY, gArrBloks, currentY, startX, endX})
+	caclRow({data, gArrBloks, levelHeight, currentY, startX, endX, type})
 	{
 		
-		let posStart = null;
-		let startD = true;
+		let posStart = null;		// позиция от которой начинается строиться блок на соседней стене
+		let offsetJoint = true;		// добавляем смещение цемента по горизонтали
 		
-		for ( let i = 0; i < wall.length; i++ )
-		{			
-			wall[i].visible = false;			
+		for ( let i = 0; i < data.length; i++ )
+		{	
+			const wall = data[i].wall;
+			let side = data[i].side;
 			
-			const p = wall[i].userData.wall.p;
+			wall.visible = false;			
 			
-			const pos1c = new THREE.Vector3(p[0].position.x, p[0].position.y - posY, p[0].position.z);
-			const pos2c = new THREE.Vector3(p[1].position.x, p[1].position.y - posY, p[1].position.z);
-			const dir = pos2c.clone().sub(pos1c).normalize();
-				
-			
-			const result = this.getPosWallV({ wall: wall[i] });
+			const result = this.getPosWallV({ wall, side });
+			side = result.side;
+			const dir = result.pos2.clone().sub(result.pos1).normalize();
 			const normal = myMath.calcNormal2D({p1: result.pos2, p2: result.pos1, reverse: false});
 			const normal2 = myMath.calcNormal2D({p1: result.pos2, p2: result.pos1, reverse: true});
-			//this.createBlock({pos: result.pos1});
-			//this.createBlock({pos: result.pos2});
-
+			
 			
 			if(!posStart)
 			{
@@ -152,52 +179,59 @@ class MyCalcBlocks
 			}
 			else
 			{
-				//this.helpBox({pos: result.pos1, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x000000});
-				
+				// создаем математический объект/точку от которой начинается стена
 				const tempObject = new THREE.Object3D();
-				tempObject.position.copy(result.pos1); // Устанавливаем позицию
-				tempObject.lookAt(normal2.clone().add(result.pos1)); // Устанавливаем направление				
+				tempObject.position.copy(result.pos1); 
+				tempObject.lookAt(normal2.clone().add(result.pos1)); 				
 				tempObject.updateMatrixWorld();		
 				
+				// posStart - позиция (крайняя точка) последнего блока соседней стены
+				// relativePosition.x - локальная точка от старта стены
 				const relativePosition = new THREE.Vector3();
 				tempObject.worldToLocal(relativePosition.copy(posStart));
 				
+				// wPosition - получаем глобальную позицию стартовой позиции для построения блока с учетом
+				// где был построен последний блок + смещение на цемент (если нужно)
 				const wPosition = new THREE.Vector3();
 				const { offset } = this.blockParams;
-				const offsetX = (startD) ? 0 : offset;
+				const offsetX = (offsetJoint) ? 0 : offset;
 				tempObject.localToWorld(wPosition.set(relativePosition.x + offsetX, 0, 0));
 				
-				this.helpBox({pos: wPosition, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x000000});
+				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x000000});
 				result.pos1 = wPosition;
-				posStart = result.pos1;
+				posStart = result.pos1.clone();
 			}
 			
-			const x = result.pos1.distanceTo(result.pos2);
-			const y = wall[i].userData.wall.height_1;			
+			this.helpBox({pos: result.pos2, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x000000});
 			
-			const answer = this.rowBlockes({x, y, posStart, dir, normal, currentY, startX, endX});
+			const x = result.pos1.distanceTo(result.pos2);
+			const y = levelHeight;			
+			
+			
+			const answer = this.rowBlockes({x, y, posStart, dir, normal, currentY, startX, endX, type, side});
 			let arrBloks = answer.arrBloks;
-			const delLast = answer.delLast;
-			startD = delLast;
+			const delLastBlock = answer.delLastBlock;
+			offsetJoint = delLastBlock;
 			
 			if(1===1)
 			{
 				const {dlina, z} = this.blockParams;
+				const z2 = (side === 0) ? z : -z;
 				
-				const x = 1;
 				const geometry = createGeometryCube(dlina * 2, y + 1, z * 2);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
 				const obj = new THREE.Mesh( geometry, material ); 
 				
 				obj.position.copy(result.pos1.clone().sub(dir.clone().multiplyScalar(dlina)));
-				obj.position.add(normal.clone().multiplyScalar(z/2));
+				obj.position.add(normal.clone().multiplyScalar(z2/2));
 				
-				const rad = Math.atan2(dir.z, dir.x);
+				const rad = Math.atan2(dir.z, -dir.x);
 				obj.rotateY(rad);
 
 				scene.add(obj);	
 
 				arrBloks = this.cutBlockes({obj, w: arrBloks});
+				
 				
 				obj.visible = false;
 			}
@@ -205,17 +239,20 @@ class MyCalcBlocks
 			if(1===1)
 			{
 				const {dlina, z, offset} = this.blockParams;
+				const z2 = (side === 0) ? z : -z;
 				
-				const x = 1;
 				const geometry = createGeometryCube(dlina * 2, y + 1, z * 2);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
 				const obj = new THREE.Mesh( geometry, material ); 
 				
 				obj.position.copy(result.pos2.clone().add(dir.clone().multiplyScalar(dlina)));
-				if(delLast) obj.position.sub(dir.clone().multiplyScalar(z + offset));
-				obj.position.add(normal.clone().multiplyScalar(z/2));
+				if(type === 'outside')
+				{
+					if(delLastBlock) obj.position.sub(dir.clone().multiplyScalar(z + offset));
+				}				
+				obj.position.add(normal.clone().multiplyScalar(z2/2));
 				
-				const rad = Math.atan2(dir.z, dir.x);
+				const rad = Math.atan2(dir.z, -dir.x);
 				obj.rotateY(rad);
 
 				scene.add(obj);	
@@ -223,11 +260,14 @@ class MyCalcBlocks
 				arrBloks = this.cutBlockes({obj, w: arrBloks});
 				
 				obj.visible = false;
+				
+				//if(type === 'single') obj.visible = true;
 			}			
 
 			if(1===1)
 			{
 				const {dlina, h, z} = this.blockParams;
+				const z2 = (side === 0) ? z : -z;
 				
 				const geometry = createGeometryCube(x + dlina * 2, h * 2, z * 2);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
@@ -235,11 +275,11 @@ class MyCalcBlocks
 				
 				const posC1 = result.pos2.clone().sub(result.pos1).divideScalar(2).add(result.pos1);
 				posC1.add(new THREE.Vector3(0, y, 0));
-				posC1.add(normal.clone().multiplyScalar(z/2));
+				posC1.add(normal.clone().multiplyScalar(z2/2));
 				
 				obj.position.copy(posC1);
 				
-				const rad = Math.atan2(dir.z, dir.x);
+				const rad = Math.atan2(dir.z, -dir.x);
 				obj.rotateY(rad);
 
 				scene.add(obj);	
@@ -267,45 +307,45 @@ class MyCalcBlocks
 				//break;
 			}
 			
-			if(i > -1)
+			posStart = null;
+			
+			if(type === 'outside' && 1===1)
 			{
-				const obj = arrBloks[arrBloks.length - 1];
-				//this.helpBox({pos: obj.position.clone().add(new THREE.Vector3(0, 0, 0))});
+				// получаем последний блок в ряде				
+				const obj = arrBloks[arrBloks.length - 1];	
 				
-
 				const tempObject = new THREE.Object3D();
-				tempObject.position.copy(p[0].position); // Устанавливаем позицию
-				tempObject.lookAt(normal2.clone().add(p[0].position)); // Устанавливаем направление				
+				tempObject.position.copy(result.pos1); 
+				const rad = Math.atan2(-dir.z, dir.x);
+				tempObject.rotateY(rad);					
+				//tempObject.lookAt(normal2.clone().add(result.pos1)); 				
 				tempObject.updateMatrixWorld();				
 				
+				// находим 2 крайнии точки
 				const globalPositions = this.getArrPosWorldObj({obj});
 				const arr2 = [];
 				
+				// находим относительное положение точек от стартового положения построение блоков
 				globalPositions.forEach(pos => 
 				{
 					const relativePosition = new THREE.Vector3();
 					tempObject.worldToLocal(relativePosition.set(pos.x, tempObject.position.y, pos.z));
 					
-					if(delLast)
-					{
-						if(relativePosition.z > 0)
-						{
-							arr2.push({dist: relativePosition.x, pos});
-						}						
-					}
-					else
-					{
-						if(relativePosition.z < 0)
-						{
-							arr2.push({dist: relativePosition.x, pos});
-						}						
-					}
-					
+					arr2.push({dist: relativePosition.z, pos});
 				});
+
+				// 
+				if(side === 0)
+				{
+					if(!delLastBlock) arr2.sort(function (a, b) { return a.dist - b.dist; });
+					else arr2.sort(function (a, b) { return b.dist - a.dist; });					
+				}				
+				if(side === 1)
+				{
+					if(!delLastBlock) arr2.sort(function (a, b) { return b.dist - a.dist; });
+					else arr2.sort(function (a, b) { return a.dist - b.dist; });					
+				}				
 				
-				arr2.sort(function (a, b) { return b.dist - a.dist; });
-				
-				posStart = null;
 				
 				if(arr2.length > 0)
 				{
@@ -313,7 +353,7 @@ class MyCalcBlocks
 					
 					posStart = arr2[0].pos.clone();	
 
-					const { dlina, h, offset, z } = this.blockParams;
+					const { dlina } = this.blockParams;
 					startX = dlina / 2;
 					endX = 0;					
 				}
@@ -323,23 +363,28 @@ class MyCalcBlocks
 				
 	}
 	
-	rowBlockes({x, y, posStart, dir, normal, currentY, startX, endX})
+	rowBlockes({x, y, posStart, dir, normal, currentY, startX, endX, type, side})
 	{		
 		const { dlina, h, offset, z } = this.blockParams;
+		const z2 = (side === 0) ? z : -z;
 		
 		const arrBloks = [];
 		
 		const n1 = (x + endX)/(dlina + offset);
 		const n2 = Math.ceil(n1);
-		const delLast = (1 - (n2 - n1) < 0.5) ? true : false;
-		let sumDlina = 0;
+		const delLastBlock = (1 - (n2 - n1) < 0.5) ? true : false;
+		
 		
 		for (let i2 = 0; i2 <= x + endX; i2 += dlina + offset) 
 		{
-			if(i2 > ((x + endX) - (dlina + offset)) && delLast) break;
+			if(type === 'outside')
+			{
+				// если последний блок выступающий за пределы стены, выступает больше чем на половину, то не содаем его
+				if(i2 > ((x + endX) - (dlina + offset)) && delLastBlock) break;
+			}			
 			
 			const pos = posStart.clone().add(dir.clone().multiplyScalar(i2).add(dir.clone().multiplyScalar(startX)).add(new THREE.Vector3(0, currentY, 0)));
-			pos.add(normal.clone().multiplyScalar(z/2));
+			pos.add(normal.clone().multiplyScalar(z2/2));
 			
 			const block = this.createBlock({pos});
 			const volume = this.calculateMeshVolume(block.geometry);
@@ -348,15 +393,13 @@ class MyCalcBlocks
 			block.userData.upVolume = volume;
 			block.userData.percentage = 100;
 			
-			const rad = Math.atan2(dir.z, dir.x);
+			const rad = Math.atan2(dir.z, -dir.x);
 			block.rotateY(rad);
 			
 			arrBloks.push(block);
-			
-			sumDlina = i2 - offset;
 		}		
 
-		return { arrBloks, delLast, sumDlina };
+		return { arrBloks, delLastBlock };
 	}
 	
 	cutBlockes({obj, w})
@@ -464,31 +507,49 @@ class MyCalcBlocks
 	}
 
 
-	getPosWallV({ wall }) 
+	getPosWallV({ wall, side }) 
 	{
-		const v = wall.userData.wall.v;
-		
+		const v = wall.userData.wall.v;		
 		wall.updateMatrixWorld();
-		const pos1 = wall.localToWorld( v[0].clone() );
-		const pos2 = wall.localToWorld( v[6].clone() );
-		
-		const pos3 = wall.localToWorld( v[10].clone() );
-		const pos4 = wall.localToWorld( v[4].clone() );	
-
-		const dist1 = pos1.distanceTo(pos2);
-		const dist2 = pos3.distanceTo(pos4);
 		
 		const data = {};
 		
-		if(dist1 > dist2)
+		console.log(side);
+		if(side === 0)
 		{
-			data.pos1 = pos1;
-			data.pos2 = pos2;
+			data.pos1 = wall.localToWorld( v[0].clone() );
+			data.pos2 = wall.localToWorld( v[6].clone() );
+			data.side = side;
 		}
+		if(side === 1)
+		{
+			data.pos1 = wall.localToWorld( v[4].clone() );
+			data.pos2 = wall.localToWorld( v[10].clone() );
+			data.side = side;
+		}		
 		else
 		{
-			data.pos1 = pos3;
-			data.pos2 = pos4;			
+			const pos1 = wall.localToWorld( v[0].clone() );
+			const pos2 = wall.localToWorld( v[6].clone() );
+			
+			const pos3 = wall.localToWorld( v[4].clone() );
+			const pos4 = wall.localToWorld( v[10].clone() );	
+
+			const dist1 = pos1.distanceTo(pos2);
+			const dist2 = pos3.distanceTo(pos4);
+			
+			if(dist1 > dist2)
+			{
+				data.pos1 = pos1;
+				data.pos2 = pos2;
+				data.side = 0;
+			}
+			else
+			{
+				data.pos1 = pos3;
+				data.pos2 = pos4;
+				data.side = 1;
+			}			
 		}
 		
 		return data;
@@ -545,27 +606,31 @@ class MyCalcBlocks
 	getArrPosWorldObj({obj})
 	{
 		// Вычисляем boundingBox в локальных координатах
-		const boundingBox = new THREE.Box3().setFromObject(obj);
-
+		//const boundingBox = new THREE.Box3().setFromObject(obj);
+		obj.geometry.computeBoundingBox();
+		const boundingBox = obj.geometry.boundingBox;
+		
 		// Создаем массив для хранения глобальных позиций вершин boundingBox
 		const globalPositions = [];
 
-		// Получаем 8 вершин boundingBox
+	
+		
 		const vertices = [
 			new THREE.Vector3(boundingBox.min.x, boundingBox.min.y, boundingBox.min.z), // 0
-			new THREE.Vector3(boundingBox.max.x, boundingBox.min.y, boundingBox.min.z), // 1
+			//new THREE.Vector3(boundingBox.max.x, boundingBox.min.y, boundingBox.min.z), // 1
 			//new THREE.Vector3(boundingBox.min.x, boundingBox.max.y, boundingBox.min.z), // 2
 			//new THREE.Vector3(boundingBox.max.x, boundingBox.max.y, boundingBox.min.z), // 3
 			new THREE.Vector3(boundingBox.min.x, boundingBox.min.y, boundingBox.max.z), // 4
-			new THREE.Vector3(boundingBox.max.x, boundingBox.min.y, boundingBox.max.z), // 5
+			//new THREE.Vector3(boundingBox.max.x, boundingBox.min.y, boundingBox.max.z), // 5
 			//new THREE.Vector3(boundingBox.min.x, boundingBox.max.y, boundingBox.max.z), // 6
 			//new THREE.Vector3(boundingBox.max.x, boundingBox.max.y, boundingBox.max.z), // 7
 		];
 
 		// Преобразуем каждую вершину в глобальные координаты
+		obj.updateMatrixWorld();
 		vertices.forEach(vertex => 
 		{
-			//vertex.applyMatrix4(obj.matrixWorld); // Применяем мировую матрицу объекта
+			vertex.applyMatrix4(obj.matrixWorld); // Применяем мировую матрицу объекта
 			globalPositions.push(vertex.clone()); // Сохраняем глобальную позицию
 		});	
 
