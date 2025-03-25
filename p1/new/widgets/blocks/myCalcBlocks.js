@@ -105,8 +105,9 @@ class MyCalcBlocks
 		
 		for ( let i = 0; i < wall.length; i++ )
 		{
-			const room = myHouse.myRoom.detectCommonZone_1( wall[i] );
 			
+			const room = myHouse.myRoom.detectCommonZone_1( wall[i] );
+			//console.log(wall[i].userData.wall.p[0].userData.id, wall[i].userData.wall.p[1].userData.id)
 			if(room.length === 0)
 			{
 				arrW.single.push({wall: wall[i], side: 1});
@@ -120,17 +121,81 @@ class MyCalcBlocks
 					if(room[0].userData.room.w[i2] == wall[i]) { side = room[0].userData.room.s[i2]; break; } 
 				}					
 				
-				arrW.outside.push({wall: wall[i], side});
-				//console.log(wall[i].userData.wall.v);
+				arrW.outside.push({wall: wall[i], side, array: [wall[i].userData.wall.p[0].userData.id, wall[i].userData.wall.p[1].userData.id]});
 			}
 		}
 		
+		if(arrW.outside.length > 0)
+		{
+			const newArr = this.sortChains(arrW.outside);
+			arrW.outside.length = 0;
+			let pStart = 0;
+			
+			// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
+			newArr.unshift(newArr[newArr.length - 1]);
+			for ( let i = 1; i < newArr.length; i++ )
+			{
+				const array = newArr[i].array;
+				const wall = newArr[i].wall;
+				const side = newArr[i].side;
+				
+				const array2 = newArr[i-1].array;
+				if(array2[1] !== array[0])
+				{
+					pStart = (pStart === 0) ? 1 : 0;
+				}				
+				
+				arrW.outside.push({wall, side, pStart});
+				
+				console.log(array, pStart, array2[1], array[0]);
+			}			
+		}
 
 		if(arrW.single.length > 0) this.caclColumn({data: arrW.single, levelHeight, type: 'single'});
 		if(arrW.outside.length > 0) this.caclColumn({data: arrW.outside, levelHeight, type: 'outside'});
 
 		renderCamera();
 	}
+
+	
+	/* сортируем массив, чтобы array шел последовательно 
+	входные данные
+	const arrayObjects = [
+		{ array: [2, 3], side: 1 },
+		{ array: [3, 5], side: 1 },
+		{ array: [7, 2], side: 1 },
+		{ array: [7, 5], side: 1 }
+	];
+	ответ
+	[
+		{ array: [2, 3], side: 1 }, // last=3 → ищем 3 в следующих
+		{ array: [3, 5], side: 1 }, // перемещён на позицию 1 (т.к. [3,5] содержит 3)
+		{ array: [7, 5], side: 1 }, // last=5 → ищем 5 в следующих
+		{ array: [7, 2], side: 1 }  // перемещён на позицию 2 (т.к. [7,5] содержит 5)
+	] */
+	sortChains(arr) {
+		const result = [...arr];
+		
+		for (let i = 0; i < result.length - 1; i++) {
+			const currentArray = result[i].array;
+			const lastValue = currentArray[currentArray.length - 1];
+			
+			// Ищем первый массив после текущего, где есть совпадение с lastValue
+			for (let j = i + 1; j < result.length; j++) {
+				const nextArray = result[j].array;
+				
+				if (nextArray.includes(lastValue)) {
+					// Перемещаем найденный массив на позицию i+1
+					const [movedItem] = result.splice(j, 1);
+					result.splice(i + 1, 0, movedItem);
+					break;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
 	
 	caclColumn({data, levelHeight, type})
 	{
@@ -144,7 +209,7 @@ class MyCalcBlocks
 			const startX = countY % 2 === 0 ? dlina / 2 : 0;	// т.к. у блока центр по центру, вначале мы его смещаем
 			const endX = countY % 2 === 0 ? 0 : dlina / 2;		// нужно знать, чтобы не строить лишние блоке в ряде
 			
-			if(countY < 2222) 
+			if(countY < 2) 
 			{
 				this.caclRow({data, gArrBloks, levelHeight, currentY: i, startX, endX, type});
 			}
@@ -163,15 +228,23 @@ class MyCalcBlocks
 		{	
 			const wall = data[i].wall;
 			let side = data[i].side;
+			const pStart = data[i].pStart;
 			
 			wall.visible = false;			
 			
-			const result = this.getPosWallV({ wall, side });
+			const result = this.getPosWallV({ wall, side, pStart });
 			side = result.side;
 			const dir = result.pos2.clone().sub(result.pos1).normalize();
 			const normal = myMath.calcNormal2D({p1: result.pos2, p2: result.pos1, reverse: false});
 			const normal2 = myMath.calcNormal2D({p1: result.pos2, p2: result.pos1, reverse: true});
 			
+			
+			if(i === -1)
+			{
+				console.log(result.pos1.distanceTo(result.pos2));
+				this.helpBox({pos: result.pos1, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x000000});
+				this.helpBox({pos: result.pos2.clone().add(new THREE.Vector3(0, 0.2 + i * 0.2, 0)), size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x00ff00});
+			}
 			
 			if(!posStart)
 			{
@@ -201,14 +274,13 @@ class MyCalcBlocks
 				result.pos1 = wPosition;
 				posStart = result.pos1.clone();
 			}
-			
-			this.helpBox({pos: result.pos2, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x000000});
+
 			
 			const x = result.pos1.distanceTo(result.pos2);
 			const y = levelHeight;			
 			
 			
-			const answer = this.rowBlockes({x, y, posStart, dir, normal, currentY, startX, endX, type, side});
+			const answer = this.rowBlockes({x, y, posStart, dir, normal, currentY, startX, endX, type, side, pStart});
 			let arrBloks = answer.arrBloks;
 			const delLastBlock = answer.delLastBlock;
 			offsetJoint = delLastBlock;
@@ -264,7 +336,7 @@ class MyCalcBlocks
 				//if(type === 'single') obj.visible = true;
 			}			
 
-			if(1===1)
+			if(1===2)
 			{
 				const {dlina, h, z} = this.blockParams;
 				const z2 = (side === 0) ? z : -z;
@@ -349,7 +421,7 @@ class MyCalcBlocks
 				
 				if(arr2.length > 0)
 				{
-					this.helpBox({pos: arr2[0].pos, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0xff0000});
+					//if(i === 1) this.helpBox({pos: arr2[0].pos, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0xff0000});
 					
 					posStart = arr2[0].pos.clone();	
 
@@ -363,16 +435,18 @@ class MyCalcBlocks
 				
 	}
 	
-	rowBlockes({x, y, posStart, dir, normal, currentY, startX, endX, type, side})
+	rowBlockes({x, y, posStart, dir, normal, currentY, startX, endX, type, side, pStart})
 	{		
 		const { dlina, h, offset, z } = this.blockParams;
-		const z2 = (side === 0) ? z : -z;
+		let z2 = (side === 0) ? z : -z;
+		if (pStart !== 0) z2 *= -1;
 		
 		const arrBloks = [];
 		
 		const n1 = (x + endX)/(dlina + offset);
-		const n2 = Math.ceil(n1);
-		const delLastBlock = (1 - (n2 - n1) < 0.5) ? true : false;
+		let n2 = Math.ceil(n1);
+		const dl_1 = 1 - (n2 - n1);	// длина последнего блока от 0 до 1
+		let delLastBlock = (dl_1 < 0.5) ? true : false;
 		
 		
 		for (let i2 = 0; i2 <= x + endX; i2 += dlina + offset) 
@@ -385,7 +459,26 @@ class MyCalcBlocks
 			
 			const pos = posStart.clone().add(dir.clone().multiplyScalar(i2).add(dir.clone().multiplyScalar(startX)).add(new THREE.Vector3(0, currentY, 0)));
 			pos.add(normal.clone().multiplyScalar(z2/2));
-			
+		}
+
+		const count = Math.ceil((x - dlina/2)/(dlina + offset));
+		const count2 = Math.ceil(x/(dlina + offset));
+		
+		delLastBlock = false;
+		if(count !== count2) delLastBlock = true;
+		console.log(222, delLastBlock, (x - dlina/2)/(dlina + offset));
+		for (let i = 0; i < count; i++)
+		{
+			const step = i * (dlina + offset);
+			const pos = posStart.clone().add(dir.clone().multiplyScalar(step));
+			pos.add(dir.clone().multiplyScalar(startX - dlina/2));	
+			pos.add(new THREE.Vector3(0, currentY, 0));			
+			this.helpBox({pos, size: new THREE.Vector3(0.03, 0.03, 0.03), color: 0x0000ff});
+
+
+			pos.add(dir.clone().multiplyScalar(dlina/2));
+			pos.add(normal.clone().multiplyScalar(z2/2));
+
 			const block = this.createBlock({pos});
 			const volume = this.calculateMeshVolume(block.geometry);
 			
@@ -396,8 +489,8 @@ class MyCalcBlocks
 			const rad = Math.atan2(dir.z, -dir.x);
 			block.rotateY(rad);
 			
-			arrBloks.push(block);
-		}		
+			arrBloks.push(block);			
+		}
 
 		return { arrBloks, delLastBlock };
 	}
@@ -507,33 +600,41 @@ class MyCalcBlocks
 	}
 
 
-	getPosWallV({ wall, side }) 
+	getPosWallV({ wall, side, pStart }) 
 	{
 		const v = wall.userData.wall.v;		
 		wall.updateMatrixWorld();
 		
 		const data = {};
 		
-		console.log(side);
+		console.log(side, pStart);
+		const n1 = (pStart === 0) ? 0 : 6;
+		const n2 = (pStart === 0) ? 6 : 0;
+
+		const n3 = (pStart === 0) ? 4 : 10;
+		const n4 = (pStart === 0) ? 10 : 4;
+		
 		if(side === 0)
 		{
-			data.pos1 = wall.localToWorld( v[0].clone() );
-			data.pos2 = wall.localToWorld( v[6].clone() );
+			data.pos1 = wall.localToWorld( v[n1].clone() );
+			data.pos2 = wall.localToWorld( v[n2].clone() );
 			data.side = side;
+			console.log('ppp', n1, n2);
 		}
 		if(side === 1)
 		{
-			data.pos1 = wall.localToWorld( v[4].clone() );
-			data.pos2 = wall.localToWorld( v[10].clone() );
+			data.pos1 = wall.localToWorld( v[n3].clone() );
+			data.pos2 = wall.localToWorld( v[n4].clone() );
 			data.side = side;
+			console.log('ppp', n3, n4);
 		}		
 		else
 		{
-			const pos1 = wall.localToWorld( v[0].clone() );
-			const pos2 = wall.localToWorld( v[6].clone() );
+			const pos1 = wall.localToWorld( v[n1].clone() );
+			const pos2 = wall.localToWorld( v[n2].clone() );
 			
-			const pos3 = wall.localToWorld( v[4].clone() );
-			const pos4 = wall.localToWorld( v[10].clone() );	
+			const pos3 = wall.localToWorld( v[n3].clone() );
+			const pos4 = wall.localToWorld( v[n4].clone() );	
 
 			const dist1 = pos1.distanceTo(pos2);
 			const dist2 = pos3.distanceTo(pos4);
