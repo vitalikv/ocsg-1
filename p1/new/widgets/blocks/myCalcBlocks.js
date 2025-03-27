@@ -208,17 +208,18 @@ class MyCalcBlocks
 		{
 			const startX = countY % 2 === 0 ? dlina / 2 : 0;	// т.к. у блока центр по центру, вначале мы его смещаем
 			const endX = countY % 2 === 0 ? 0 : dlina / 2;		// нужно знать, чтобы не строить лишние блоке в ряде
+			const delLastBlock = countY % 2 === 0 ? false : true;
 			
-			if(countY < 2) 
+			if(countY < 2222) 
 			{
-				this.caclRow({data, gArrBloks, levelHeight, currentY: i, startX, endX, type});
+				this.caclRow({data, gArrBloks, levelHeight, currentY: i, startX, endX, type, delLastBlock});
 			}
 			
 			countY++;
 		}		
 	}
 	
-	caclRow({data, gArrBloks, levelHeight, currentY, startX, endX, type})
+	caclRow({data, gArrBloks, levelHeight, currentY, startX, endX, type, delLastBlock})
 	{
 		
 		let posStart = null;		// позиция от которой начинается строиться блок на соседней стене
@@ -251,7 +252,7 @@ class MyCalcBlocks
 				posStart = result.pos1;
 			}
 			else
-			{
+			{ this.helpBox({pos: posStart, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x000000});
 				// создаем математический объект/точку от которой начинается стена
 				const tempObject = new THREE.Object3D();
 				tempObject.position.copy(result.pos1); 
@@ -282,14 +283,15 @@ class MyCalcBlocks
 			
 			const answer = this.rowBlockes({x, y, posStart, dir, normal, currentY, startX, endX, type, side, pStart});
 			let arrBloks = answer.arrBloks;
-			const delLastBlock = answer.delLastBlock;
+			//const delLastBlock = answer.delLastBlock;
 			offsetJoint = delLastBlock;
 			
 			if(1===1)
 			{
 				const {dlina, z} = this.blockParams;
-				const z2 = (side === 0) ? z : -z;
-				
+				let z2 = (side === 0) ? z : -z;
+				if (pStart !== 0) z2 *= -1;
+		
 				const geometry = createGeometryCube(dlina * 2, y + 1, z * 2);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
 				const obj = new THREE.Mesh( geometry, material ); 
@@ -303,15 +305,14 @@ class MyCalcBlocks
 				scene.add(obj);	
 
 				arrBloks = this.cutBlockes({obj, w: arrBloks});
-				
-				
 				obj.visible = false;
 			}
 			
 			if(1===1)
 			{
 				const {dlina, z, offset} = this.blockParams;
-				const z2 = (side === 0) ? z : -z;
+				let z2 = (side === 0) ? z : -z;
+				if (pStart !== 0) z2 *= -1;
 				
 				const geometry = createGeometryCube(dlina * 2, y + 1, z * 2);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
@@ -328,18 +329,18 @@ class MyCalcBlocks
 				obj.rotateY(rad);
 
 				scene.add(obj);	
-
-				arrBloks = this.cutBlockes({obj, w: arrBloks});
 				
+				arrBloks = this.cutBlockes({obj, w: arrBloks});				
 				obj.visible = false;
 				
 				//if(type === 'single') obj.visible = true;
 			}			
 
-			if(1===2)
+			if(1===1)
 			{
 				const {dlina, h, z} = this.blockParams;
-				const z2 = (side === 0) ? z : -z;
+				let z2 = (side === 0) ? z : -z;
+				if (pStart !== 0) z2 *= -1;
 				
 				const geometry = createGeometryCube(x + dlina * 2, h * 2, z * 2);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
@@ -421,6 +422,7 @@ class MyCalcBlocks
 				
 				if(arr2.length > 0)
 				{
+					if (pStart !== 0) arr2.reverse();
 					//if(i === 1) this.helpBox({pos: arr2[0].pos, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0xff0000});
 					
 					posStart = arr2[0].pos.clone();	
@@ -442,38 +444,17 @@ class MyCalcBlocks
 		if (pStart !== 0) z2 *= -1;
 		
 		const arrBloks = [];
-		
-		const n1 = (x + endX)/(dlina + offset);
-		let n2 = Math.ceil(n1);
-		const dl_1 = 1 - (n2 - n1);	// длина последнего блока от 0 до 1
-		let delLastBlock = (dl_1 < 0.5) ? true : false;
-		
-		
-		for (let i2 = 0; i2 <= x + endX; i2 += dlina + offset) 
-		{
-			if(type === 'outside')
-			{
-				// если последний блок выступающий за пределы стены, выступает больше чем на половину, то не содаем его
-				if(i2 > ((x + endX) - (dlina + offset)) && delLastBlock) break;
-			}			
-			
-			const pos = posStart.clone().add(dir.clone().multiplyScalar(i2).add(dir.clone().multiplyScalar(startX)).add(new THREE.Vector3(0, currentY, 0)));
-			pos.add(normal.clone().multiplyScalar(z2/2));
-		}
 
-		const count = Math.ceil((x - dlina/2)/(dlina + offset));
+		const count1 = Math.ceil((x - dlina)/(dlina + offset));
 		const count2 = Math.ceil(x/(dlina + offset));
 		
-		delLastBlock = false;
-		if(count !== count2) delLastBlock = true;
-		console.log(222, delLastBlock, (x - dlina/2)/(dlina + offset));
-		for (let i = 0; i < count; i++)
+		for (let i = 0; i < count2; i++)
 		{
 			const step = i * (dlina + offset);
 			const pos = posStart.clone().add(dir.clone().multiplyScalar(step));
 			pos.add(dir.clone().multiplyScalar(startX - dlina/2));	
 			pos.add(new THREE.Vector3(0, currentY, 0));			
-			this.helpBox({pos, size: new THREE.Vector3(0.03, 0.03, 0.03), color: 0x0000ff});
+			//this.helpBox({pos, size: new THREE.Vector3(0.03, 0.03, 0.03), color: 0x0000ff});
 
 
 			pos.add(dir.clone().multiplyScalar(dlina/2));
@@ -492,11 +473,12 @@ class MyCalcBlocks
 			arrBloks.push(block);			
 		}
 
-		return { arrBloks, delLastBlock };
+		return { arrBloks };
 	}
 	
 	cutBlockes({obj, w})
 	{
+		const w2 = [];
 		obj.updateMatrixWorld();
 		let objBSP = new ThreeBSP( obj );
 		
@@ -515,9 +497,13 @@ class MyCalcBlocks
 			//wall.geometry.computeVertexNormals();	
 			w[i].geometry.computeFaceNormals();	
 			//boxUnwrapUVs(w[i].geometry);
+			
+			if(w[i].geometry.vertices.length === 0) continue;
+			
+			w2.push(w[i]);
 		}
 
-		return w;
+		return w2;
 	}
 	
 	
@@ -607,7 +593,7 @@ class MyCalcBlocks
 		
 		const data = {};
 		
-		console.log(side, pStart);
+		//console.log(side, pStart);
 		const n1 = (pStart === 0) ? 0 : 6;
 		const n2 = (pStart === 0) ? 6 : 0;
 
@@ -619,14 +605,14 @@ class MyCalcBlocks
 			data.pos1 = wall.localToWorld( v[n1].clone() );
 			data.pos2 = wall.localToWorld( v[n2].clone() );
 			data.side = side;
-			console.log('ppp', n1, n2);
+			//console.log('ppp', n1, n2);
 		}
 		if(side === 1)
 		{
 			data.pos1 = wall.localToWorld( v[n3].clone() );
 			data.pos2 = wall.localToWorld( v[n4].clone() );
 			data.side = side;
-			console.log('ppp', n3, n4);
+			//console.log('ppp', n3, n4);
 		}		
 		else
 		{
