@@ -110,7 +110,7 @@ class MyCalcBlocks
 			//console.log(wall[i].userData.wall.p[0].userData.id, wall[i].userData.wall.p[1].userData.id)
 			if(room.length === 0)
 			{
-				arrW.single.push({wall: wall[i], side: 1});
+				arrW.single.push({wall: wall[i], side: 0, pStart: 0});
 			}
 			
 			if(room.length === 1)
@@ -207,19 +207,18 @@ class MyCalcBlocks
 		for (let i = 0; i < levelHeight; i += h + offset) 
 		{
 			const startX = countY % 2 === 0 ? dlina / 2 : 0;	// т.к. у блока центр по центру, вначале мы его смещаем
-			const endX = countY % 2 === 0 ? 0 : dlina / 2;		// нужно знать, чтобы не строить лишние блоке в ряде
-			const delLastBlock = countY % 2 === 0 ? false : true;
+			let delLastBlock = countY % 2 === 0 ? false : true;
 			
-			if(countY < 2222) 
+			if(countY === 1) 
 			{
-				this.caclRow({data, gArrBloks, levelHeight, currentY: i, startX, endX, type, delLastBlock});
+				this.caclRow({data, gArrBloks, levelHeight, currentY: i, startX, type, delLastBlock});
 			}
 			
 			countY++;
 		}		
 	}
 	
-	caclRow({data, gArrBloks, levelHeight, currentY, startX, endX, type, delLastBlock})
+	caclRow({data, gArrBloks, levelHeight, currentY, startX, type, delLastBlock})
 	{
 		
 		let posStart = null;		// позиция от которой начинается строиться блок на соседней стене
@@ -239,14 +238,16 @@ class MyCalcBlocks
 			const normal = myMath.calcNormal2D({p1: result.pos2, p2: result.pos1, reverse: false});
 			const normal2 = myMath.calcNormal2D({p1: result.pos2, p2: result.pos1, reverse: true});
 			
+			let x = result.pos1.distanceTo(result.pos2);
 			
-			if(i === -1)
+			if(type === 'single2')
 			{
+				console.log(wall.userData.wall.p[0].userData.id, wall.userData.wall.p[1].userData.id);
 				console.log(result.pos1.distanceTo(result.pos2));
 				this.helpBox({pos: result.pos1, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x000000});
 				this.helpBox({pos: result.pos2.clone().add(new THREE.Vector3(0, 0.2 + i * 0.2, 0)), size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x00ff00});
 			}
-			
+
 			if(!posStart)
 			{
 				posStart = result.pos1;
@@ -271,22 +272,50 @@ class MyCalcBlocks
 				const offsetX = (offsetJoint) ? 0 : offset;
 				tempObject.localToWorld(wPosition.set(relativePosition.x + offsetX, 0, 0));
 				
-				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x000000});
+				
 				result.pos1 = wPosition;
 				posStart = result.pos1.clone();
+				
+				if(1===1)
+				{
+					//const tempObject = this.helpBox({pos: new THREE.Vector3(), size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});
+					const tempObject = new THREE.Object3D();
+					tempObject.lookAt(normal2);
+					tempObject.position.copy(result.pos1); 					 				
+					tempObject.updateMatrixWorld();		
+										
+					const pos2 = tempObject.worldToLocal(new THREE.Vector3().copy(result.pos4));
+					const posGlobal2 = tempObject.localToWorld(new THREE.Vector3(pos2.x, 0, 0));
+					
+					
+					
+					//this.helpBox({pos: result.pos1, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x00ff00});
+					//this.helpBox({pos: pos2, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
+					
+					
+					const dist = result.pos1.distanceTo(result.pos2);
+					if(dist < pos2.x)
+					{
+						result.pos2 = posGlobal2;
+					}
+					
+					console.log(wall.userData.wall.p[0].userData.id, wall.userData.wall.p[1].userData.id);
+					console.log(x, dist, pos2.x);
+				}
 			}
 
+			this.helpBox({pos: result.pos1, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
+			this.helpBox({pos: result.pos2, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});			
 			
-			const x = result.pos1.distanceTo(result.pos2);
+			x = result.pos1.distanceTo(result.pos2);
 			const y = levelHeight;			
 			
 			
-			const answer = this.rowBlockes({x, y, posStart, dir, normal, currentY, startX, endX, type, side, pStart});
+			const answer = this.rowBlockes({x, y, posStart, dir, normal, normal2, currentY, startX, type, side, pStart});
 			let arrBloks = answer.arrBloks;
-			//const delLastBlock = answer.delLastBlock;
 			offsetJoint = delLastBlock;
 			
-			if(1===1)
+			if(1===2)
 			{
 				const {dlina, z} = this.blockParams;
 				let z2 = (side === 0) ? z : -z;
@@ -319,10 +348,7 @@ class MyCalcBlocks
 				const obj = new THREE.Mesh( geometry, material ); 
 				
 				obj.position.copy(result.pos2.clone().add(dir.clone().multiplyScalar(dlina)));
-				if(type === 'outside')
-				{
-					if(delLastBlock) obj.position.sub(dir.clone().multiplyScalar(z + offset));
-				}				
+				if(delLastBlock) obj.position.sub(dir.clone().multiplyScalar(z + offset));				
 				obj.position.add(normal.clone().multiplyScalar(z2/2));
 				
 				const rad = Math.atan2(dir.z, -dir.x);
@@ -336,7 +362,7 @@ class MyCalcBlocks
 				//if(type === 'single') obj.visible = true;
 			}			
 
-			if(1===1)
+			if(1===2)
 			{
 				const {dlina, h, z} = this.blockParams;
 				let z2 = (side === 0) ? z : -z;
@@ -382,16 +408,17 @@ class MyCalcBlocks
 			
 			posStart = null;
 			
-			if(type === 'outside' && 1===1)
+			if(1===1)
 			{
 				// получаем последний блок в ряде				
 				const obj = arrBloks[arrBloks.length - 1];	
 				
 				const tempObject = new THREE.Object3D();
 				tempObject.position.copy(result.pos1); 
-				const rad = Math.atan2(-dir.z, dir.x);
-				tempObject.rotateY(rad);					
-				//tempObject.lookAt(normal2.clone().add(result.pos1)); 				
+				//const rad = Math.atan2(-dir.z, dir.x);
+				//const rad = Math.atan2(dir.z, -dir.x);
+				//tempObject.rotateY(rad);					
+				tempObject.lookAt(normal2.clone().add(result.pos1)); 				
 				tempObject.updateMatrixWorld();				
 				
 				// находим 2 крайнии точки
@@ -423,21 +450,21 @@ class MyCalcBlocks
 				if(arr2.length > 0)
 				{
 					if (pStart !== 0) arr2.reverse();
-					//if(i === 1) this.helpBox({pos: arr2[0].pos, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0xff0000});
+					//if(i === 1) this.helpBox({pos: arr2[0].pos, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x0000ff});					
 					
 					posStart = arr2[0].pos.clone();	
 
 					const { dlina } = this.blockParams;
-					startX = dlina / 2;
-					endX = 0;					
+					startX = dlina / 2;						
 				}
 			}
+
 		}
 
 				
 	}
 	
-	rowBlockes({x, y, posStart, dir, normal, currentY, startX, endX, type, side, pStart})
+	rowBlockes({x, y, posStart, dir, normal, normal2, currentY, startX, type, side, pStart})
 	{		
 		const { dlina, h, offset, z } = this.blockParams;
 		let z2 = (side === 0) ? z : -z;
@@ -445,8 +472,13 @@ class MyCalcBlocks
 		
 		const arrBloks = [];
 
-		const count1 = Math.ceil((x - dlina)/(dlina + offset));
-		const count2 = Math.ceil(x/(dlina + offset));
+		//const count1 = Math.ceil((x - dlina)/(dlina + offset));
+		let count2 = Math.ceil(x/(dlina + offset));
+		
+		if(type === 'single' && startX === 0)
+		{
+			//count2 = Math.ceil((x + dlina/2)/(dlina + offset));
+		}
 		
 		for (let i = 0; i < count2; i++)
 		{
@@ -468,7 +500,8 @@ class MyCalcBlocks
 			block.userData.percentage = 100;
 			
 			const rad = Math.atan2(dir.z, -dir.x);
-			block.rotateY(rad);
+			//block.rotateY(rad);
+			block.lookAt(normal2.clone().add(pos));
 			
 			arrBloks.push(block);			
 		}
@@ -593,7 +626,7 @@ class MyCalcBlocks
 		
 		const data = {};
 		
-		//console.log(side, pStart);
+		console.log({p:[wall.userData.wall.p[0].userData.id, wall.userData.wall.p[1].userData.id]}, side, pStart);
 		const n1 = (pStart === 0) ? 0 : 6;
 		const n2 = (pStart === 0) ? 6 : 0;
 
@@ -604,6 +637,8 @@ class MyCalcBlocks
 		{
 			data.pos1 = wall.localToWorld( v[n1].clone() );
 			data.pos2 = wall.localToWorld( v[n2].clone() );
+			data.pos3 = wall.localToWorld( v[n3].clone() );
+			data.pos4 = wall.localToWorld( v[n4].clone() );			
 			data.side = side;
 			//console.log('ppp', n1, n2);
 		}
@@ -611,10 +646,12 @@ class MyCalcBlocks
 		{
 			data.pos1 = wall.localToWorld( v[n3].clone() );
 			data.pos2 = wall.localToWorld( v[n4].clone() );
+			data.pos3 = wall.localToWorld( v[n1].clone() );
+			data.pos4 = wall.localToWorld( v[n2].clone() );			
 			data.side = side;
 			//console.log('ppp', n3, n4);
 		}		
-		else
+		else if(1===2)
 		{
 			const pos1 = wall.localToWorld( v[n1].clone() );
 			const pos2 = wall.localToWorld( v[n2].clone() );
@@ -720,6 +757,8 @@ class MyCalcBlocks
 			vertex.applyMatrix4(obj.matrixWorld); // Применяем мировую матрицу объекта
 			globalPositions.push(vertex.clone()); // Сохраняем глобальную позицию
 		});	
+		
+		//this.helpBox({pos: globalPositions[0].clone().add(new THREE.Vector3(0, 0.5, 0)), size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0xff0000});
 
 		return globalPositions;
 	}
