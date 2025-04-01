@@ -6,7 +6,7 @@ class MyCalcBlocks
 	listPathImgs = {};
 	geometry;
 	material;
-	blockParams = {dlina: 0.6, h: 0.3, z: 0.32, offset: 0.01};
+	blockParams = {dlina: 0.6, h: 0.3, z: 0.3, offset: 0.01};
 	
 	constructor()
 	{
@@ -209,7 +209,7 @@ class MyCalcBlocks
 			const startX = countY % 2 === 0 ? dlina / 2 : 0;	// т.к. у блока центр по центру, вначале мы его смещаем
 			let delLastBlock = countY % 2 === 0 ? false : true;
 			
-			if(countY === 1) 
+			if(countY === 0) 
 			{
 				this.caclRow({data, gArrBloks, levelHeight, currentY: i, startX, type, delLastBlock});
 			}
@@ -222,7 +222,9 @@ class MyCalcBlocks
 	{
 		
 		let posStart = null;		// позиция от которой начинается строиться блок на соседней стене
-		let offsetJoint = true;		// добавляем смещение цемента по горизонтали
+		let offsetJoint = false;		// добавляем смещение цемента по горизонтали
+		let lines = [];
+		
 		
 		for ( let i = 0; i < data.length; i++ )
 		{	
@@ -230,7 +232,16 @@ class MyCalcBlocks
 			let side = data[i].side;
 			const pStart = data[i].pStart;
 			
+			
+			if(i < 33)
+			{
+				const resultP = this.getPosWallV({ wall, side, pStart });
+				lines.push({pos: [resultP.pos1, resultP.pos2, resultP.pos3, resultP.pos4], v: resultP.v});				
+			}
+			
+			
 			wall.visible = false;			
+			continue;
 			
 			const result = this.getPosWallV({ wall, side, pStart });
 			side = result.side;
@@ -238,26 +249,32 @@ class MyCalcBlocks
 			const normal = myMath.calcNormal2D({p1: result.pos2, p2: result.pos1, reverse: false});
 			const normal2 = myMath.calcNormal2D({p1: result.pos2, p2: result.pos1, reverse: true});
 			
+			if(i > -1)
+			{
+				result.pos1 = this.getWallIn1({wall, ind: 0, side, pStart, offsetD: delLastBlock});
+				result.pos2 = this.getWallIn2({wall, ind: 1, side, pStart, offsetD: !delLastBlock});
+				posStart = result.pos1;
+				const { dlina } = this.blockParams;
+				startX = dlina / 2;
+			}
+			
+			//if(i===1) this.getWallIn1({wall, ind: 0, side, pStart, offsetD: !delLastBlock});
+			
 			let x = result.pos1.distanceTo(result.pos2);
 			
-			if(type === 'single2')
-			{
-				console.log(wall.userData.wall.p[0].userData.id, wall.userData.wall.p[1].userData.id);
-				console.log(result.pos1.distanceTo(result.pos2));
-				this.helpBox({pos: result.pos1, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x000000});
-				this.helpBox({pos: result.pos2.clone().add(new THREE.Vector3(0, 0.2 + i * 0.2, 0)), size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x00ff00});
-			}
 
+			console.log(wall.userData.wall.p[0].userData.id, wall.userData.wall.p[1].userData.id);
+			
 			if(!posStart)
 			{
 				posStart = result.pos1;
 			}
-			else
-			{ this.helpBox({pos: posStart, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x000000});
+			else if(1===2)
+			{ //this.helpBox({pos: posStart, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x000000});
 				// создаем математический объект/точку от которой начинается стена
 				const tempObject = new THREE.Object3D();
-				tempObject.position.copy(result.pos1); 
-				tempObject.lookAt(normal2.clone().add(result.pos1)); 				
+				tempObject.lookAt(normal2);
+				tempObject.position.copy(result.pos1);				
 				tempObject.updateMatrixWorld();		
 				
 				// posStart - позиция (крайняя точка) последнего блока соседней стены
@@ -272,10 +289,30 @@ class MyCalcBlocks
 				const offsetX = (offsetJoint) ? 0 : offset;
 				tempObject.localToWorld(wPosition.set(relativePosition.x + offsetX, 0, 0));
 				
+				//result.pos1 = wPosition;
 				
-				result.pos1 = wPosition;
+				if(1===1)
+				{
+					const pos2 = tempObject.worldToLocal(new THREE.Vector3().copy(result.pos3));
+					const posGlobal2 = tempObject.localToWorld(new THREE.Vector3(pos2.x + offsetX, 0, 0));
+
+					if(offsetJoint && pos2.x < 0)
+					{
+						result.pos1 = posGlobal2;
+						
+						//this.helpBox({pos: posGlobal2, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x0000ff});						
+					}
+					if(!offsetJoint && pos2.x > 0)
+					{
+						result.pos1 = posGlobal2;
+						
+						//this.helpBox({pos: posGlobal2, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x0000ff});						
+					}					
+				}
+				
+				
 				posStart = result.pos1.clone();
-				
+
 				if(1===1)
 				{
 					//const tempObject = this.helpBox({pos: new THREE.Vector3(), size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});
@@ -288,24 +325,24 @@ class MyCalcBlocks
 					const posGlobal2 = tempObject.localToWorld(new THREE.Vector3(pos2.x, 0, 0));
 					
 					
-					
-					//this.helpBox({pos: result.pos1, size: new THREE.Vector3(0.05, 0.05, 0.05), color: 0x00ff00});
-					//this.helpBox({pos: pos2, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
-					
-					
 					const dist = result.pos1.distanceTo(result.pos2);
-					if(dist < pos2.x)
+					if(offsetJoint && dist > pos2.x)
 					{
 						result.pos2 = posGlobal2;
 					}
-					
-					console.log(wall.userData.wall.p[0].userData.id, wall.userData.wall.p[1].userData.id);
-					console.log(x, dist, pos2.x);
+					if(!offsetJoint && dist < pos2.x)
+					{
+						result.pos2 = posGlobal2;						
+					}				
 				}
+				
 			}
+			
+			
+			
 
-			this.helpBox({pos: result.pos1, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
-			this.helpBox({pos: result.pos2, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});			
+			//this.helpBox({pos: result.pos1, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
+			//this.helpBox({pos: result.pos2, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});			
 			
 			x = result.pos1.distanceTo(result.pos2);
 			const y = levelHeight;			
@@ -337,7 +374,7 @@ class MyCalcBlocks
 				obj.visible = false;
 			}
 			
-			if(1===1)
+			if(1===2)
 			{
 				const {dlina, z, offset} = this.blockParams;
 				let z2 = (side === 0) ? z : -z;
@@ -348,7 +385,8 @@ class MyCalcBlocks
 				const obj = new THREE.Mesh( geometry, material ); 
 				
 				obj.position.copy(result.pos2.clone().add(dir.clone().multiplyScalar(dlina)));
-				if(delLastBlock) obj.position.sub(dir.clone().multiplyScalar(z + offset));				
+				//if(delLastBlock) obj.position.sub(dir.clone().multiplyScalar(z + offset));
+				if(delLastBlock) obj.position.sub(dir.clone().multiplyScalar(offset));
 				obj.position.add(normal.clone().multiplyScalar(z2/2));
 				
 				const rad = Math.atan2(dir.z, -dir.x);
@@ -460,8 +498,77 @@ class MyCalcBlocks
 			}
 
 		}
-
+		
+		if(1===1)
+		{
+			const lines2 = this.showLines({lines});
+			//lines2.length = 0;
+			for (let i = 0; i < lines2.length; i++)
+			{
+				const result = lines2[i];
 				
+				const wallDlina = result.pos[0].distanceTo(result.pos[1]);
+				
+				const answer = this.rowBlockes2({x: wallDlina, posStart: result.pos[0], dir: result.dir, currentY: 0, normal: result.normal});
+				let arrBloks = answer.arrBloks;
+				
+				
+				if(1===1)
+				{
+					const dir = result.dir;
+					const normal = result.cut1.normal;
+					const dir2 = result.cut1.dir;
+					const pos = result.cut1.pos;
+					
+					const {dlina, z} = this.blockParams;
+					//let z2 = (side === 0) ? z : -z;
+					//if (pStart !== 0) z2 *= -1;
+					let z2 = z;
+			
+					const geometry = createGeometryCube(dlina * 2, 1, z * 2);
+					const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
+					const obj = new THREE.Mesh( geometry, material ); 
+					
+					obj.lookAt(normal);
+					obj.position.copy(pos.clone().sub(dir2.clone().multiplyScalar(dlina)));
+					obj.position.add(normal.clone().multiplyScalar(z2/2));
+					
+					scene.add(obj);	
+
+					arrBloks = this.cutBlockes({obj, w: arrBloks});
+					obj.visible = false;
+				}
+
+				if(1===1)
+				{
+					const dir = result.dir;
+					const normal = result.cut2.normal;
+					const dir2 = result.cut2.dir;
+					const pos = result.cut2.pos;
+					
+					const {dlina, z} = this.blockParams;
+					//let z2 = (side === 0) ? z : -z;
+					//if (pStart !== 0) z2 *= -1;
+					let z2 = z;
+			
+					const geometry = createGeometryCube(dlina * 2, 1, z * 2);
+					const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
+					const obj = new THREE.Mesh( geometry, material ); 
+					
+					obj.lookAt(normal);
+					obj.position.copy(pos.clone().sub(dir2.clone().multiplyScalar(dlina)));
+					obj.position.add(normal.clone().multiplyScalar(z2/2));
+
+					scene.add(obj);	
+
+					arrBloks = this.cutBlockes({obj, w: arrBloks});
+					obj.visible = false;
+				}				
+			
+			}
+			
+		}
+		
 	}
 	
 	rowBlockes({x, y, posStart, dir, normal, normal2, currentY, startX, type, side, pStart})
@@ -473,7 +580,9 @@ class MyCalcBlocks
 		const arrBloks = [];
 
 		//const count1 = Math.ceil((x - dlina)/(dlina + offset));
-		let count2 = Math.ceil(x/(dlina + offset));
+		const dd = (startX === 0) ? dlina/2 : 0;
+		
+		let count2 = Math.ceil((x + dd)/(dlina + offset));
 		
 		if(type === 'single' && startX === 0)
 		{
@@ -626,7 +735,7 @@ class MyCalcBlocks
 		
 		const data = {};
 		
-		console.log({p:[wall.userData.wall.p[0].userData.id, wall.userData.wall.p[1].userData.id]}, side, pStart);
+		//console.log({p:[wall.userData.wall.p[0].userData.id, wall.userData.wall.p[1].userData.id]}, side, pStart);
 		const n1 = (pStart === 0) ? 0 : 6;
 		const n2 = (pStart === 0) ? 6 : 0;
 
@@ -675,6 +784,8 @@ class MyCalcBlocks
 				data.side = 1;
 			}			
 		}
+		
+		data.v = [v[n1].clone(), v[n2].clone(), v[n3].clone(), v[n4].clone()];
 		
 		return data;
 	}
@@ -763,6 +874,260 @@ class MyCalcBlocks
 		return globalPositions;
 	}
 
+
+
+	getWallIn1({wall, ind, side, pStart, offsetD})
+	{
+		const arrW = wall.userData.wall.p[ind].w;
+		
+		const arrW2 = [];
+		
+		for (let i = 0; i < arrW.length; i++)
+		{
+			if(arrW[i] === wall) continue;
+			
+			arrW2.push(arrW[i]);
+		}
+		
+		const arrL = [];
+		const lines = [];
+		
+		const result = this.getPosWallV({ wall, side, pStart });
+		
+		let fd = false;
+		
+		if(1===1)
+		{
+			
+			
+			this.helpBox({pos: result.pos1, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
+			this.helpBox({pos: result.pos2, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});
+			this.helpBox({pos: result.pos3, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
+			this.helpBox({pos: result.pos4, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});			
+
+			const normal2 = myMath.calcNormal2D({p1: result.pos2, p2: result.pos1, reverse: true});
+			const tempObject = new THREE.Object3D();
+			tempObject.lookAt(normal2);
+			tempObject.position.copy(result.pos1);				
+			tempObject.updateMatrixWorld();
+			const pos3 = tempObject.worldToLocal(new THREE.Vector3().copy(result.pos3));
+			
+			if(pos3.x < 0)
+			{
+				arrL.push([result.pos1, result.pos2]);
+				arrL.push([result.pos3, result.pos4]);	
+				fd = true;
+			}
+			else
+			{				
+				arrL.push([result.pos3, result.pos4]);
+				arrL.push([result.pos1, result.pos2]);
+			}
+			
+			if(!offsetD) arrL.reverse();
+		}
+		
+		if(!offsetD) fd = !fd;
+		
+		for (let i = 0; i < arrW2.length; i++)
+		{
+			const result2 = this.getPosWallV({ wall: arrW2[i], side: 0, pStart: 0 });
+			
+			this.helpBox({pos: result2.pos1, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
+			this.helpBox({pos: result2.pos3, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});
+
+
+			if(Math.abs(result2.pos2.length() - arrL[0][0].length()) < 0.001)
+			{
+				arrL.push([arrL[0][0], result2.pos1]);
+				arrL.push([arrL[1][0], result2.pos3]);							
+			}
+			else
+			{				
+				arrL.push([arrL[0][0], result2.pos3]);
+				arrL.push([arrL[1][0], result2.pos1]);
+			}
+		}
+
+		for (let i2 = 0; i2 < arrL.length; i2++)
+		{
+			if(i2 === 1 || i2 === 2) {}
+			else continue;
+			//continue;
+			//const dir = arrL[i2][1].clone().sub(arrL[i2][0]);
+			const v = [arrL[i2][0], arrL[i2][1]];
+			this.helpLine({v});
+			lines.push(v);
+		}
+		
+		if(1===1 && lines.length === 2)
+		{
+			const line1 = [arrL[1][0], arrL[1][1]];
+			const line2 = [arrL[2][0], arrL[2][1]];
+			//this.helpLine({v: line2});
+			const crossP = myMath.getIntersection(line1[0], line1[1], line2[0], line2[1]);
+			
+			if(crossP)
+			{
+				
+				
+				lines.push([arrL[1][0], crossP]);
+				
+				//this.helpLine({v: [arrL[1][0], crossP]});
+				//this.helpLine({v: [arrL[0][0], arrL[0][1]]});
+				
+				
+				
+				if(fd)
+				{
+					const normal2 = myMath.calcNormal2D({p1: result.pos2, p2: result.pos1, reverse: true});
+					const tempObject = new THREE.Object3D();
+					tempObject.lookAt(normal2);
+					tempObject.position.copy(result.pos1);				
+					tempObject.updateMatrixWorld();
+					const pos3 = tempObject.worldToLocal(new THREE.Vector3().copy(crossP));
+					
+					if(pos3.x < 0)
+					{
+						const wPosition = new THREE.Vector3();
+						tempObject.localToWorld(wPosition.set(pos3.x, 0, 0));
+						console.log(999999999, pos3.x)
+						result.pos1 = wPosition;						
+					}
+				}
+				else
+				{
+					//this.helpBox({pos: crossP, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000})
+					result.pos1 = crossP;
+				}
+				
+				this.helpBox({pos: crossP, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x000000});
+			}
+			
+		}
+		
+		return result.pos1;
+	}
+	
+	
+	getWallIn2({wall, ind, side, pStart, offsetD})
+	{
+		const arrW = wall.userData.wall.p[ind].w;
+		
+		const arrW2 = [];
+		
+		for (let i = 0; i < arrW.length; i++)
+		{
+			if(arrW[i] === wall) continue;
+			
+			arrW2.push(arrW[i]);
+		}
+		
+		const arrL = [];
+		const lines = [];
+		const result = this.getPosWallV({ wall, side, pStart });
+		
+		if(1===1)
+		{
+			//this.helpBox({pos: result.pos1, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
+			//this.helpBox({pos: result.pos2, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});
+			//this.helpBox({pos: result.pos3, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
+			//this.helpBox({pos: result.pos4, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});			
+
+			const normal2 = myMath.calcNormal2D({p1: result.pos2, p2: result.pos1, reverse: true});
+			const tempObject = new THREE.Object3D();
+			tempObject.lookAt(normal2);
+			tempObject.position.copy(result.pos1);				
+			tempObject.updateMatrixWorld();
+			const pos1 = tempObject.worldToLocal(new THREE.Vector3().copy(result.pos2));
+			const pos2 = tempObject.worldToLocal(new THREE.Vector3().copy(result.pos4));
+			
+			if(pos1.x > pos2.x)
+			{
+				arrL.push([result.pos1, result.pos2]);
+				arrL.push([result.pos3, result.pos4]);				
+			}
+			else
+			{				
+				arrL.push([result.pos3, result.pos4]);
+				arrL.push([result.pos1, result.pos2]);
+			}
+			
+			if(offsetD) arrL.reverse();
+		}
+		
+		for (let i = 0; i < arrW2.length; i++)
+		{
+			const result2 = this.getPosWallV({ wall: arrW2[i], side: 0, pStart: 0 });
+			
+			//this.helpBox({pos: result2.pos2, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
+			//this.helpBox({pos: result2.pos4, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});
+
+
+			if(Math.abs(result2.pos1.length() - arrL[0][1].length()) < 0.001)
+			{
+				arrL.push([arrL[0][1], result2.pos2]);
+				arrL.push([arrL[1][1], result2.pos4]);							
+			}
+			else
+			{				
+				arrL.push([arrL[0][1], result2.pos4]);
+				arrL.push([arrL[1][1], result2.pos2]);
+			}
+		}
+
+		for (let i2 = 0; i2 < arrL.length; i2++)
+		{
+			if(i2 === 1 || i2 === 2) {}
+			else continue;
+			//continue;
+			//const dir = arrL[i2][1].clone().sub(arrL[i2][0]);
+			const v = [arrL[i2][0], arrL[i2][1]];
+			//this.helpLine({v});
+			lines.push(v);
+		}
+		
+		if(1===1 && lines.length === 2)
+		{
+			const line1 = [arrL[1][0], arrL[1][1]];
+			const line2 = [arrL[2][0], arrL[2][1]];
+			//this.helpLine({v: line2});
+			const crossP = myMath.getIntersection(line1[0], line1[1], line2[0], line2[1]);
+			
+			if(crossP)
+			{				
+				lines.push([arrL[1][0], crossP]);
+				
+				//this.helpLine({v: [arrL[1][0], crossP]});
+				//this.helpLine({v: [arrL[0][0], arrL[0][1]]});
+				
+				
+				if(!offsetD)
+				{
+					const normal2 = myMath.calcNormal2D({p1: result.pos2, p2: result.pos1, reverse: true});
+					const tempObject = new THREE.Object3D();
+					tempObject.lookAt(normal2);
+					tempObject.position.copy(result.pos4);				
+					tempObject.updateMatrixWorld();
+					const pos3 = tempObject.worldToLocal(new THREE.Vector3().copy(crossP));
+					const wPosition = new THREE.Vector3();
+					tempObject.localToWorld(wPosition.set(pos3.x, 0, 0));
+					
+					result.pos2 = wPosition;
+				}
+				else
+				{
+					result.pos2 = crossP;
+				}
+				
+				//this.helpBox({pos: result.pos2, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x0000ff});				
+			}
+			
+		}
+		
+		return result.pos2;
+	}
+	
 	helpBox({size = new THREE.Vector3(0.1, 0.1, 0.1), pos, color = 0x00ff00})
 	{
 		const geometry = createGeometryCube(size.x, size.y, size.z);
@@ -773,6 +1138,232 @@ class MyCalcBlocks
 
 		return obj;
 	}
+	
+	helpLine({v, color = 0x00ff00})
+	{
+		const pipeSpline = new THREE.CatmullRomCurve3(v);
+		pipeSpline.curveType = 'catmullrom';
+		pipeSpline.tension = 0;
+		 
+		let length = 0;
+			
+		for(let i = 0; i < v.length - 1; i++) { length += v[i].distanceTo(v[i + 1]); }		
+		
+		const params = { extrusionSegments: Math.round(length * 30), radiusSegments: 10, diameter: 0.01, closed: false };
+		
+		const geometry = new THREE.TubeBufferGeometry( pipeSpline, params.extrusionSegments, params.diameter, params.radiusSegments, params.closed );	
+		geometry.computeFaceNormals();
+		geometry.computeVertexNormals();			
+
+		const matDef = new THREE.MeshLambertMaterial({ color, transparent: true, depthTest: false });
+		
+		const line = new THREE.Mesh( geometry, matDef );	
+		scene.add( line );		
+	}
+
+	arrowHelper({dir, pos, length = 0.5, color = 0xff0000})
+	{
+		const arrowHelper = new THREE.ArrowHelper( dir, pos, length, color );
+		scene.add( arrowHelper );
+	}
+
+	showLines({lines})
+	{
+		
+		const { dlina, z } = this.blockParams;
+		
+		const lines2 = [];
+		
+		for ( let i = 0; i < lines.length; i++ )
+		{
+			const pos = lines[i].pos;
+			const v = lines[i].v;
+			
+			//this.helpBox({pos: pos[0], size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
+			//this.helpBox({pos: pos[1], size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0xff0000});
+			
+			this.helpLine({v: [pos[0], pos[1]], color: 0x00ff00});
+			
+			const dir = pos[1].clone().sub(pos[0]).normalize();
+			const posC = pos[1].clone().sub(pos[0]).multiplyScalar(0.5).add(pos[0]);
+			const normal = myMath.calcNormal2D({p1: pos[1], p2: pos[0], reverse: false});
+			const posN = posC.clone().add(normal.clone().multiplyScalar(-0.2));
+			this.arrowHelper({dir, pos: posN});
+			
+			const posZ = posC.clone().add(normal.clone().multiplyScalar(z));
+			const offsetZ = posZ.clone().sub(posC);
+			//this.helpBox({pos: posZ, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x0000ff});
+			
+			const pos2 = [pos[0].clone().add(offsetZ), pos[1].clone().add(offsetZ)];
+			this.helpLine({v: pos2, color: 0x0000ff});
+			
+			
+			const data = {pos: [pos[0].clone(), pos[1].clone()], dir, normal, posDef: pos[0]};
+			data.cut1 = {pos: pos[0], normal, dir};
+			data.cut2 = {pos: pos[1], normal, dir: dir.clone().negate()};
+			
+			lines2.push(data);
+			
+			lines[i].pos2 = pos2;
+			lines[i].dir = dir;
+			lines[i].normal = normal;
+			lines[i].posDef = pos;
+		}
+				
+		
+		for ( let i = 1; i < lines.length; i++ )
+		{
+			let line1 = lines[i - 1].pos;
+			let line2 = lines[i].pos;
+			const dir1 = lines[i - 1].dir;
+			const dir2 = lines[i].dir;
+			
+			
+			const getAngleBetweenVectors2D = (v2, v1) => 
+			{
+				const angleRad = Math.atan2(v1.x * v2.z - v1.z * v2.x, v1.x * v2.x + v1.z * v2.z);
+				
+				return THREE.Math.radToDeg(angleRad);
+			}
+
+			const angle = getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			//console.log(angle);
+			
+			if(angle < 0)
+			{
+				line1 = lines[i - 1].pos2;
+				line2 = lines[i].pos2;
+			}
+			
+			let crossP = myMath.getIntersection(line1[0], line1[1], line2[0], line2[1]);
+			if(!crossP) continue;
+			
+
+			if(angle < 0)
+			{
+				const pos = lines[i].pos;
+				const normal = myMath.calcNormal2D({p1: pos[1], p2: pos[0], reverse: true});
+				const o = new THREE.Object3D();
+				o.lookAt(normal);
+				o.position.copy(pos[0]);				
+				o.updateMatrixWorld();
+				const posLocal = o.worldToLocal(new THREE.Vector3().copy(crossP.clone()));
+				const wPosition = new THREE.Vector3();
+				o.localToWorld(wPosition.set(posLocal.x, 0, 0));
+
+				crossP = wPosition;
+			}			
+			
+			//this.helpBox({pos: posP1, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});
+			
+			lines2[i].pos[0] = crossP;
+			lines2[i].cut1.dir = (angle < 0) ? lines[i - 1].normal.clone().negate() : lines[i - 1].normal.clone();
+			lines2[i].cut1.normal = lines[i - 1].dir.clone().negate();
+			lines2[i].cut1.pos = (angle < 0) ? lines[i - 1].posDef[3].clone() : lines[i - 1].posDef[1].clone();
+		}		
+
+
+		for ( let i = 1; i < lines.length; i++ )
+		{
+			let line1 = lines[i - 1].pos;
+			let line2 = lines[i].pos2;
+			const dir1 = lines[i - 1].dir;
+			const dir2 = lines[i].dir;			
+			
+			const getAngleBetweenVectors2D = (v2, v1) => 
+			{
+				const angleRad = Math.atan2(v1.x * v2.z - v1.z * v2.x, v1.x * v2.x + v1.z * v2.z);
+				
+				return THREE.Math.radToDeg(angleRad);
+			}
+
+			const angle = getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			console.log(angle);			
+
+			if(angle < 0)
+			{
+				line1 = lines[i - 1].pos2;
+				line2 = lines[i].pos;
+			}
+			
+			let crossP = myMath.getIntersection(line1[0], line1[1], line2[0], line2[1]);
+			if(!crossP) continue;			
+			
+			if(angle < 0)
+			{
+				const pos = lines[i - 1].pos;
+				const normal = myMath.calcNormal2D({p1: pos[1], p2: pos[0], reverse: true});
+				const o = new THREE.Object3D();
+				o.lookAt(normal);
+				o.position.copy(pos[0]);				
+				o.updateMatrixWorld();
+				const posLocal = o.worldToLocal(new THREE.Vector3().copy(crossP.clone()));
+				const wPosition = new THREE.Vector3();
+				o.localToWorld(wPosition.set(posLocal.x, 0, 0));
+
+				crossP = wPosition;
+			}	
+
+			//this.helpBox({pos: posP2, size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
+			
+			lines2[i - 1].pos[1] = crossP;
+			
+			lines2[i - 1].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
+			lines2[i - 1].cut2.normal = lines[i].dir.clone().negate();	
+			lines2[i - 1].cut2.pos = (angle < 0) ? lines[i - 1].posDef[1].clone() : lines[i - 1].posDef[3].clone();
+		}
+		
+		//lines2.length = 0;
+		for ( let i = 0; i < lines2.length; i++ )
+		{
+			const pos1 = lines2[i].pos[0];
+			const pos2 = lines2[i].pos[1];
+			this.helpBox({pos: pos1, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});
+			this.helpBox({pos: pos2, size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
+		}
+		
+		return lines2;
+	}
+	
+	rowBlockes2({x, posStart, dir, currentY, normal})
+	{		
+		const { dlina, h, offset, z } = this.blockParams;
+		let z2 = z;
+		
+		const arrBloks = [];
+		
+		let count2 = Math.ceil(x/(dlina + offset));
+		
+		
+		for (let i = 0; i < count2; i++)
+		{
+			const step = i * (dlina + offset);
+			const pos = posStart.clone().add(dir.clone().multiplyScalar(step));
+			//pos.add(dir.clone().multiplyScalar(startX - dlina/2));	
+			pos.add(new THREE.Vector3(0, currentY, 0));			
+			//this.helpBox({pos, size: new THREE.Vector3(0.03, 0.03, 0.03), color: 0x0000ff});
+
+
+			pos.add(dir.clone().multiplyScalar(dlina/2));
+			pos.add(normal.clone().multiplyScalar(z2/2));
+
+			const block = this.createBlock({pos});
+			const volume = this.calculateMeshVolume(block.geometry);
+			
+			block.userData.originalVolume = volume;
+			block.userData.upVolume = volume;
+			block.userData.percentage = 100;
+			
+			const rad = Math.atan2(dir.z, -dir.x);
+			block.rotateY(rad);
+			//block.lookAt(normal2.clone().add(pos));
+			
+			arrBloks.push(block);			
+		}
+
+		return { arrBloks };
+	}
+		
 }
 
 

@@ -848,6 +848,34 @@ console.log('----------', pointsOffset, points);
 		return res;
 	}
 
+
+	//--- gpt
+	
+	
+	// точка пересечение двух прямых
+	getIntersection(p1, p2, p3, p4, epsilon = 1e-12) {
+		// Векторы направления для каждой прямой
+		const d1 = new THREE.Vector3().subVectors(p2, p1); // Вектор для прямой 1
+		const d2 = new THREE.Vector3().subVectors(p4, p3); // Вектор для прямой 2
+
+		// Разница между точками, образующими прямые
+		const denom = d1.x * d2.z - d1.z * d2.x;
+
+		// Проверяем, параллельны ли прямые с учётом погрешности
+		if (Math.abs(denom) < epsilon) {
+			return null; // Прямые параллельны, пересечения нет
+		}
+
+		// Находим параметр t для прямой 1
+		const t1 = ((p3.x - p1.x) * d2.z - (p3.z - p1.z) * d2.x) / denom;
+
+		// Вычисляем точку пересечения
+		const intersection = new THREE.Vector3().addScaledVector(d1, t1).add(p1);
+
+		return intersection;
+	}
+  
+  
 }
 
 
