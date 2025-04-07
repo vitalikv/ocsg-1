@@ -110,7 +110,7 @@ class MyCalcBlocks
 			//console.log(wall[i].userData.wall.p[0].userData.id, wall[i].userData.wall.p[1].userData.id)
 			if(room.length === 0)
 			{
-				arrW.single.push({wall: wall[i], side: 0, pStart: 0});
+				arrW.single.push({wall: wall[i], side: 0, array: [wall[i].userData.wall.p[0].userData.id, wall[i].userData.wall.p[1].userData.id]});
 			}
 			
 			if(room.length === 1)
@@ -125,6 +125,50 @@ class MyCalcBlocks
 			}
 		}
 		
+		if(arrW.single.length > 0)
+		{
+			const result = this.findUniqueEdgeElements(arrW.single);		
+			
+			
+			const firstElem = result[0].item;
+			const reverseWall = (firstElem.array[0] === result[0].nums[0]) ? 0 : 1;
+			//console.log(999, result);
+			
+			arrW.single = this.moveElementToFirstPosition({data: arrW.single, elementToMove: firstElem})
+			
+			//console.log(333, reverseWall, firstElem.array[0], result[0].nums[0]);
+			
+			const newArr = this.sortChains(arrW.single);
+			arrW.single.length = 0;
+			let pStart = reverseWall;
+			let side = reverseWall;
+			
+			// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
+			// решено, теперь знаем если стартовая точка не имеет связей (она одна), то pStart = 0
+			// решение только для не замкнутой стены, для замкнутой, нужно доробатывать
+			newArr.push(newArr[0]);
+			for ( let i = 0; i < newArr.length - 1; i++ )
+			{
+				const array = newArr[i].array;
+				const wall = newArr[i].wall;
+				//const side = newArr[i].side;
+				
+				arrW.single.push({wall, side, pStart});
+				
+				const array2 = newArr[i+1].array;
+				
+				console.log(array, pStart, array2[0], array[1]);
+				
+				
+				if(!(array2[0] === array[1] || array2[1] === array[0]))
+				{
+					pStart = (pStart === 0) ? 1 : 0;
+					side = pStart;
+				}
+			}			
+		}
+		
+		
 		if(arrW.outside.length > 0)
 		{
 			const newArr = this.sortChains(arrW.outside);
@@ -132,22 +176,24 @@ class MyCalcBlocks
 			let pStart = 0;
 			
 			// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
-			newArr.unshift(newArr[newArr.length - 1]);
-			for ( let i = 1; i < newArr.length; i++ )
+			newArr.push(newArr[0]);
+			for ( let i = 0; i < newArr.length - 1; i++ )
 			{
 				const array = newArr[i].array;
 				const wall = newArr[i].wall;
 				const side = newArr[i].side;
 				
-				const array2 = newArr[i-1].array;
-				if(array2[1] !== array[0])
-				{
-					pStart = (pStart === 0) ? 1 : 0;
-				}				
-				
 				arrW.outside.push({wall, side, pStart});
 				
-				console.log(array, pStart, array2[1], array[0]);
+				const array2 = newArr[i+1].array;
+				
+				//console.log(array, pStart, array2[0], array[1]);
+				
+				
+				if(!(array2[0] === array[1] || array2[1] === array[0]))
+				{
+					pStart = (pStart === 0) ? 1 : 0;
+				}
 			}			
 		}
 
@@ -173,27 +219,147 @@ class MyCalcBlocks
 		{ array: [7, 5], side: 1 }, // last=5 → ищем 5 в следующих
 		{ array: [7, 2], side: 1 }  // перемещён на позицию 2 (т.к. [7,5] содержит 5)
 	] */
-	sortChains(arr) {
-		const result = [...arr];
-		
-		for (let i = 0; i < result.length - 1; i++) {
-			const currentArray = result[i].array;
-			const lastValue = currentArray[currentArray.length - 1];
-			
-			// Ищем первый массив после текущего, где есть совпадение с lastValue
-			for (let j = i + 1; j < result.length; j++) {
-				const nextArray = result[j].array;
-				
-				if (nextArray.includes(lastValue)) {
-					// Перемещаем найденный массив на позицию i+1
-					const [movedItem] = result.splice(j, 1);
-					result.splice(i + 1, 0, movedItem);
+	sortChains(arr) 
+	{
+		if (arr.length === 0) return [];
+
+		const result = [arr[0]];
+		const remaining = [...arr.slice(1)];
+
+		while (remaining.length > 0) 
+		{
+			let found = false;
+			const lastArray = result[result.length - 1].array;
+
+			// Ищем следующий элемент, который имеет общее число с последним в результате
+			for (let i = 0; i < remaining.length; i++) 
+			{
+				const currentArray = remaining[i].array;
+
+				if (lastArray.some(num => currentArray.includes(num))) 
+				{
+					result.push(remaining[i]);
+					remaining.splice(i, 1);
+					found = true;
 					break;
 				}
 			}
+
+			// Если не нашли связь, прерываем цикл
+			if (!found) break;
 		}
-		
+
 		return result;
+	}
+	
+	// найти элементы массива, у которых числа в свойстве array либо не встречаются в других элементах, либо встречаются только один раз во всех других элементах
+	// возвращает объекты с информацией о найденных элементах и числах, которые делают их уникальными
+	/*
+	входные данные
+	[
+		{ array: [1, 3], side: 1 },    
+		{ array: [3, 5], side: 1 }, 
+		{ array: [41, 5], side: 1 },   
+		{ array: [40, 41], side: 1 },  
+		{ array: [45, 40], side: 1 },
+		{ array: [45, 35], side: 1 }, 
+		{ array: [35, 36], side: 1 },  
+		{ array: [36, 77], side: 1 },   
+	]
+	ответ
+	[
+	  {
+		item: { array: [1, 3], side: 1 },
+		nums: [1] // 1 уникален (встречается только здесь), 3 встречается еще в [3, 5]
+	  },
+	  {
+		item: { array: [36, 77], side: 1 },
+		nums: [77] // 77 уникален (встречается только здесь), 36 встречается еще в [35, 36]
+	  }
+	]	
+	*/
+	findUniqueEdgeElements(elements) 
+	{
+		// Создаем карту для подсчета встречаемости каждого числа
+		const numberCounts = new Map();
+
+		// Подсчитываем вхождения каждого числа во всех массивах
+		elements.forEach(({ array }) => 
+		{
+			array.forEach(num => { numberCounts.set(num, (numberCounts.get(num) || 0) + 1); });
+		});
+
+		// Обрабатываем элементы и собираем результат
+		return elements.reduce((result, item) => 
+		{
+			const [num1, num2] = item.array;
+
+			// Количество вхождений каждого числа в других элементах
+			const count1 = numberCounts.get(num1) - 1; // исключаем текущий элемент
+			const count2 = numberCounts.get(num2) - 1;
+
+			// Условие 1: оба числа не встречаются в других элементах
+			const bothUnique = count1 === 0 && count2 === 0;
+
+			// Условие 2: только одно число встречается в других элементах (ровно 1 раз)
+			const oneShared = (count1 === 0 && count2 === 1) || (count1 === 1 && count2 === 0);
+
+			if (bothUnique || oneShared) 
+			{
+				// Определяем уникальные числа
+				const uniqueNums = [];
+				if (count1 === 0) uniqueNums.push(num1);
+				if (count2 === 0) uniqueNums.push(num2);
+
+				// Добавляем в результат
+				result.push({
+					item: item,
+					nums: uniqueNums.length ? uniqueNums : [num1, num2] // если оба уникальны
+				});
+			}
+
+			return result;
+		}, []);
+	}
+
+	
+	// сдвинуть элементы массива так, чтобы определенный элемент стал первым, а остальные сохранили свою последовательность
+	/*
+	входные данные
+	const data = [
+	  { array: [2, 3], side: 1 },    
+	  { array: [3, 5], side: 1 }, 
+	  { array: [41, 5], side: 1 },   
+	  { array: [40, 41], side: 1 },  
+	  { array: [45, 40], side: 1 },
+	  { array: [45, 35], side: 1 }, 
+	  { array: [35, 36], side: 1 },  
+	  { array: [36, 2], side: 1 },   
+	];
+	ответ ( запрос -> moveElementToFirstPosition({data, elementToMove: { array: [45, 35], side: 1 }}) )
+	[
+	  { array: [45, 35], side: 1 },
+	  { array: [35, 36], side: 1 },
+	  { array: [36, 2], side: 1 },
+	  { array: [2, 3], side: 1 },
+	  { array: [3, 5], side: 1 },
+	  { array: [41, 5], side: 1 },
+	  { array: [40, 41], side: 1 },
+	  { array: [45, 40], side: 1 }
+	]	
+	*/
+	moveElementToFirstPosition({data, elementToMove}) 
+	{
+		// Находим индекс элемента, который нужно переместить в начало
+		const index = data.findIndex(item => 
+		item.array[0] === elementToMove.array[0] && 
+		item.array[1] === elementToMove.array[1]
+		);
+
+		if (index === -1) return data; // если элемент не найден, возвращаем исходный массив
+
+		// Создаем новый массив: элементы после индекса + элементы до индекса
+		return [...data.slice(index), ...data.slice(0, index)];
 	}
 	
 	
@@ -227,7 +393,7 @@ class MyCalcBlocks
 			
 			if(countY < 2) 
 			{
-				this.crBloksRow({lines2, currentY: i, delLastBlock});
+				this.crBloksRow({lines2, currentY: i, levelHeight, delLastBlock});
 			}
 			
 			countY++;
@@ -243,10 +409,10 @@ class MyCalcBlocks
 		{	
 			const wall = data[i].wall;
 			const side = data[i].side;
-			const pStart = data[i].pStart;
+			const pStart = data[i].pStart;			
 			
 			const resultP = this.getPosWallV({ wall, side, pStart });
-			lines.push({pos: [resultP.pos1, resultP.pos2, resultP.pos3, resultP.pos4]});
+			lines.push({pos: [resultP.pos1, resultP.pos2], side, pStart});
 
 			wall.visible = false;
 		}
@@ -257,7 +423,7 @@ class MyCalcBlocks
 	}
 	
 	
-	crBloksRow({lines2, currentY, delLastBlock})
+	crBloksRow({lines2, currentY, levelHeight, delLastBlock})
 	{
 		const ind = delLastBlock ? 1 : 0;
 		
@@ -285,7 +451,7 @@ class MyCalcBlocks
 				//if (pStart !== 0) z2 *= -1;
 				let z2 = z;
 		
-				const geometry = createGeometryCube(dlina * 2, 1.5, z * 10);
+				const geometry = createGeometryCube(dlina * 2, levelHeight + 1, z * 10);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
 				const obj = new THREE.Mesh( geometry, material ); 
 				
@@ -299,6 +465,7 @@ class MyCalcBlocks
 				obj.visible = false;
 			}
 
+			// обрезаем конец стены
 			if(1===1)
 			{
 				const dir = result.dir;
@@ -312,7 +479,7 @@ class MyCalcBlocks
 				//if (pStart !== 0) z2 *= -1;
 				let z2 = z;
 		
-				const geometry = createGeometryCube(dlina * 2, 1.5, z * 10);
+				const geometry = createGeometryCube(dlina * 2, levelHeight + 1, z * 10);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
 				const obj = new THREE.Mesh( geometry, material ); 
 				
@@ -1219,29 +1386,47 @@ class MyCalcBlocks
 		
 		for ( let i = 0; i < lines.length; i++ )
 		{
-			const pos = lines[i].pos;
+			let side = lines[i].side;
+			const pStart = lines[i].pStart;
 			
+			const pos = lines[i].pos;	// 1-ая линия			
 			//this.helpLine({v: [pos[0], pos[1]], color: 0x00ff00});
-			
+			//if(i === 3) this.helpBox({pos: pos[0], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
 			const dir = pos[1].clone().sub(pos[0]).normalize();
 			const posC = pos[1].clone().sub(pos[0]).multiplyScalar(0.5).add(pos[0]);
 			const normal = myMath.calcNormal2D({p1: pos[1], p2: pos[0], reverse: false});
+			
+			//console.log(side, pStart);
+			if(pStart === 1)
+			{
+				side = (side === 0) ? 1 : 0;				
+				lines[i].side = side;
+			}
+			
+			if(side === 1)
+			{
+				//dir.negate();
+				normal.negate();
+			}
+			
 			const posN = posC.clone().add(normal.clone().multiplyScalar(-0.2));
 			this.arrowHelper({dir, pos: posN});
 			
 			const posZ = posC.clone().add(normal.clone().multiplyScalar(z));
 			const offsetZ = posZ.clone().sub(posC);
 			
-			const pos2 = [pos[0].clone().add(offsetZ), pos[1].clone().add(offsetZ)];
+			const pos2 = [pos[0].clone().add(offsetZ), pos[1].clone().add(offsetZ)];	// 2-ая линия
 			//this.helpLine({v: pos2, color: 0x0000ff});
 			
-			
+			// для 1-ого ряда
 			const data = {pos: [pos[0].clone(), pos[1].clone()], dir, normal};
 			data.cut1 = {pos: pos[0], normal, dir};
 			data.cut2 = {pos: pos[1], normal, dir: dir.clone().negate()};
 			data.offset = {start: 0, end: 0};
 
-			const data2 = {pos: [pos[0].clone(), pos[1].clone()], dir, normal};
+			// для 2-ого ряда 
+			const posStart2 = pos[0].clone().sub(dir.clone().multiplyScalar(dlina/2));	// смещаем на пол блока назад
+			const data2 = {pos: [posStart2.clone(), pos[1].clone()], dir, normal};
 			data2.cut1 = {pos: pos[0], normal, dir};
 			data2.cut2 = {pos: pos[1], normal, dir: dir.clone().negate()};
 			data2.offset = {start: 0, end: 0};
@@ -1260,14 +1445,26 @@ class MyCalcBlocks
 		this.calcPosEnd_2({lines, lines2, offsetZ: 0});
 		this.calcPosStart_2({lines, lines2, offsetZ: offset});					
 		
+		// смещаем 2-ой ряд, так чтобы блоки относительно 1-ого были смещены на половину длины блока
+		for ( let i = 1; i < lines2.length; i++ )
+		{
+			const pos1 = lines2[i][0].pos[0];
+			const pos2 = lines2[i][1].pos[0];
+			const dir = lines2[i][1].dir;
+			
+			const dist = pos1.distanceTo(pos2);
+			
+			const posStart2 = pos2.clone().sub(dir.clone().multiplyScalar(dist - offset/1 - dlina/2));
+			lines2[i][1].pos[0] = posStart2;			
+		}
 		
 		//lines2.length = 0;
 		for ( let i = 0; i < lines2.length; i++ )
 		{
 			const pos1 = lines2[i][0].pos[0];
 			const pos2 = lines2[i][0].pos[1];
-			this.helpBox({pos: pos1, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});
-			this.helpBox({pos: pos2, size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
+			//this.helpBox({pos: pos1, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});
+			//this.helpBox({pos: pos2, size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
 		}
 		
 		return lines2;
@@ -1325,6 +1522,7 @@ class MyCalcBlocks
 			const line4 = lines[i].pos2;	
 			const dir1 = lines[i - 1].dir;
 			const dir2 = lines[i].dir;
+			const side = lines[i].side;
 			
 			let crossP = line3[0].clone();
 			
@@ -1333,7 +1531,15 @@ class MyCalcBlocks
 			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
 			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
 			
-			const angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			let angle = 0;
+			if(side === 0)
+			{
+				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			}
+			else
+			{
+				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
+			}
 			
 			const arrCr = [];
 			
@@ -1395,6 +1601,7 @@ class MyCalcBlocks
 			const line4 = lines[i].pos2;	
 			const dir1 = lines[i - 1].dir;
 			const dir2 = lines[i].dir;
+			const side = lines[i - 1].side;
 			
 			let crossP = line1[1].clone();
 			
@@ -1403,7 +1610,16 @@ class MyCalcBlocks
 			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
 			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
 			
-			const angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			
+			let angle = 0;
+			if(side === 0)
+			{
+				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			}
+			else
+			{
+				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
+			}
 			
 			const arrCr = [];
 			
@@ -1495,6 +1711,7 @@ class MyCalcBlocks
 			const line4 = lines[i].pos2;	
 			const dir1 = lines[i - 1].dir;
 			const dir2 = lines[i].dir;
+			const side = lines[i].side;
 			
 			let crossP = line3[0].clone();
 			
@@ -1503,7 +1720,15 @@ class MyCalcBlocks
 			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
 			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
 			
-			const angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			let angle = 0;
+			if(side === 0)
+			{
+				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			}
+			else
+			{
+				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
+			}
 			
 			const arrCr = [];
 			
@@ -1541,7 +1766,7 @@ class MyCalcBlocks
 				o.localToWorld(wPosition.set(arrLocal[0].pos.x, 0, 0));
 				
 				crossP = wPosition;
-				this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
 			}
 			
 			lines2[i][1].pos[0] = crossP;
@@ -1565,6 +1790,7 @@ class MyCalcBlocks
 			const line4 = lines[i].pos2;	
 			const dir1 = lines[i - 1].dir;
 			const dir2 = lines[i].dir;
+			const side = lines[i].side;
 			
 			let crossP = line1[1].clone();
 			
@@ -1573,7 +1799,15 @@ class MyCalcBlocks
 			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
 			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
 			
-			const angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			let angle = 0;
+			if(side === 0)
+			{
+				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			}
+			else
+			{
+				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
+			}
 			
 			const arrCr = [];
 			
@@ -1611,7 +1845,7 @@ class MyCalcBlocks
 				o.localToWorld(wPosition.set(arrLocal[0].pos.x, 0, 0));
 				
 				crossP = wPosition;
-				this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
 			}
 
 			lines2[i - 1][1].pos[1] = crossP;	
