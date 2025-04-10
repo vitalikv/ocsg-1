@@ -127,9 +127,10 @@ class MyCalcBlocks
 		
 		if(arrW.single.length > 0)
 		{
+			console.log('single - отдельные');
+			
 			const result = this.findUniqueEdgeElements(arrW.single);		
-			
-			
+		
 			const firstElem = result[0].item;
 			const reverseWall = (firstElem.array[0] === result[0].nums[0]) ? 0 : 1;
 			//console.log(999, result);
@@ -171,6 +172,8 @@ class MyCalcBlocks
 		
 		if(arrW.outside.length > 0)
 		{
+			console.log('outside - наружные');
+			
 			const newArr = this.sortChains(arrW.outside);
 			arrW.outside.length = 0;
 			let pStart = 0;
@@ -187,7 +190,7 @@ class MyCalcBlocks
 				
 				const array2 = newArr[i+1].array;
 				
-				//console.log(array, pStart, array2[0], array[1]);
+				console.log(array, pStart, array2[0], array[1]);
 				
 				
 				if(!(array2[0] === array[1] || array2[1] === array[0]))
@@ -369,7 +372,7 @@ class MyCalcBlocks
 		
 		const { dlina, h, offset, z } = this.blockParams;					
 
-		const lines2 = this.calcWalls({data});
+		const lines2 = this.calcWalls({data, type});
 		
 		let countY = 0;			
 		
@@ -387,7 +390,7 @@ class MyCalcBlocks
 	}
 	
 	
-	calcWalls({data})
+	calcWalls({data, type})
 	{
 		const lines = [];		
 		
@@ -403,7 +406,8 @@ class MyCalcBlocks
 			wall.visible = false;
 		}
 		
-		const lines2 = this.showLines({lines});
+		const lines2 = this.showLines({lines, type});
+		
 
 		return lines2;
 	}
@@ -896,7 +900,7 @@ class MyCalcBlocks
 		scene.add( arrowHelper );
 	}
 
-	showLines({lines})
+	showLines({lines, type})
 	{
 		console.log('Расчет');
 		
@@ -940,15 +944,15 @@ class MyCalcBlocks
 			
 			// для 1-ого ряда
 			const data = {pos: [pos[0].clone(), pos[1].clone()], dir, normal};
-			data.cut1 = {pos: pos[0], normal, dir};
-			data.cut2 = {pos: pos[1], normal, dir: dir.clone().negate()};
+			data.cut1 = {pos: pos[0].clone(), normal, dir};
+			data.cut2 = {pos: pos[1].clone(), normal, dir: dir.clone().negate()};
 			data.offset = {start: 0, end: 0};
 
 			// для 2-ого ряда 
 			const posStart2 = pos[0].clone().sub(dir.clone().multiplyScalar(dlina/2));	// смещаем на пол блока назад
 			const data2 = {pos: [posStart2.clone(), pos[1].clone()], dir, normal};
-			data2.cut1 = {pos: pos[0], normal, dir};
-			data2.cut2 = {pos: pos[1], normal, dir: dir.clone().negate()};
+			data2.cut1 = {pos: pos[0].clone(), normal, dir};
+			data2.cut2 = {pos: pos[1].clone(), normal, dir: dir.clone().negate()};
 			data2.offset = {start: 0, end: 0};
 			
 			lines2.push([data, data2]);
@@ -958,7 +962,8 @@ class MyCalcBlocks
 			lines[i].normal = normal;
 		}
 				
-
+		//const lines1 = (type === 'outside') ? [lines[lines.length - 1], ...lines, lines[0]] : lines;
+		
 		this.calcPosEnd_1({lines, lines2, offsetZ: offset});		// вычисляем конец построение стены (не доходит до конца стены)
 		this.calcPosStart_1({lines, lines2, offsetZ: 0});			// вычисляем начало построение стены (без смещение блока)			
 
@@ -976,6 +981,18 @@ class MyCalcBlocks
 			
 			const posStart2 = pos2.clone().sub(dir.clone().multiplyScalar(dist - offset/1 - dlina/2));
 			lines2[i][1].pos[0] = posStart2;			
+		}
+		
+		// обрезаем первый и последний блок для замкнутых внешних стен
+		if(type === 'outside' && lines2.length > 0)
+		{
+			// 1-ый ряд
+			this.offsetPosStart_1({lines: [lines[lines.length - 1], lines[0]], lines2, offsetZ: 0});
+			this.offsetPosEnd_1({lines: [lines[lines.length - 1], lines[0]], lines2, offsetZ: offset});
+			
+			// 2-ой ряд
+			this.offsetPosStart_2({lines: [lines[lines.length - 1], lines[0]], lines2, offsetZ: offset});
+			this.offsetPosEnd_2({lines: [lines[lines.length - 1], lines[0]], lines2, offsetZ: 0});			
 		}
 		
 		//lines2.length = 0;
@@ -1080,13 +1097,13 @@ class MyCalcBlocks
 			
 			const arrLocal = [];
 			
-			for ( let i = 0; i < arrCr.length; i++ )
+			for ( let i2 = 0; i2 < arrCr.length; i2++ )
 			{
-				if(!arrCr[i]) continue;
-				const posLocal = o.worldToLocal(arrCr[i].clone());
-				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i]});
+				if(!arrCr[i2]) continue;
+				const posLocal = o.worldToLocal(arrCr[i2].clone());
+				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i2]});
 				
-				//this.helpBox({pos: arrCr[i], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+				//this.helpBox({pos: arrCr[i2], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
 			}
 
 			arrLocal.sort(function (a, b) { return a.dist - b.dist; });
@@ -1160,13 +1177,13 @@ class MyCalcBlocks
 			
 			const arrLocal = [];
 			
-			for ( let i = 0; i < arrCr.length; i++ )
+			for ( let i2 = 0; i2 < arrCr.length; i2++ )
 			{
-				if(!arrCr[i]) continue;
-				const posLocal = o.worldToLocal(arrCr[i].clone());
-				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i]});
+				if(!arrCr[i2]) continue;
+				const posLocal = o.worldToLocal(arrCr[i2].clone());
+				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i2]});
 				
-				//this.helpBox({pos: arrCr[i], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+				//this.helpBox({pos: arrCr[i2], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
 			}
 
 			arrLocal.sort(function (a, b) { return b.dist - a.dist; });
@@ -1184,37 +1201,7 @@ class MyCalcBlocks
 			lines2[i - 1][0].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
 			lines2[i - 1][0].cut2.normal = lines[i].dir.clone().negate();	
 			lines2[i - 1][0].cut2.pos = (angle < 0) ? cross1.clone() : cross3.clone();	
-			lines2[i - 1][0].offset.end = offsetZ;
-			
-			if(1===2)
-			{
-				normal = myMath.calcNormal2D({p1: line1[0], p2: line1[1], reverse: true});
-				o = new THREE.Object3D();
-				o.lookAt(normal);
-				o.position.copy(crossP);				
-				o.updateMatrixWorld();
-
-				const arrLocal_2 = [];
-				
-				for ( let i = 1; i < arrLocal.length; i++ )
-				{
-					const posLocal = o.worldToLocal(arrLocal[i].posOrignal.clone());
-					arrLocal_2.push({dist: posLocal.x, pos: posLocal});
-					
-					//this.helpBox({pos: arrCr[i], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
-				}
-
-				arrLocal_2.sort(function (a, b) { return a.dist - b.dist; });
-				
-				if(arrLocal_2.length > 0)
-				{				
-					const wPosition = new THREE.Vector3();
-					o.localToWorld(wPosition.set(arrLocal_2[0].pos.x, 0, 0));
-					
-					//crossP = wPosition;
-					//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
-				}							
-			}
+			lines2[i - 1][0].offset.end = offsetZ;			
 		}
 				
 	}
@@ -1269,13 +1256,13 @@ class MyCalcBlocks
 			
 			const arrLocal = [];
 			
-			for ( let i = 0; i < arrCr.length; i++ )
+			for ( let i2 = 0; i2 < arrCr.length; i2++ )
 			{
-				if(!arrCr[i]) continue;
-				const posLocal = o.worldToLocal(arrCr[i].clone());
-				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i]});
+				if(!arrCr[i2]) continue;
+				const posLocal = o.worldToLocal(arrCr[i2].clone());
+				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i2]});
 				
-				//this.helpBox({pos: arrCr[i], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+				//this.helpBox({pos: arrCr[i2], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
 			}
 
 			arrLocal.sort(function (a, b) { return a.dist - b.dist; });
@@ -1348,13 +1335,13 @@ class MyCalcBlocks
 			
 			const arrLocal = [];
 			
-			for ( let i = 0; i < arrCr.length; i++ )
+			for ( let i2 = 0; i2 < arrCr.length; i2++ )
 			{
-				if(!arrCr[i]) continue;
-				const posLocal = o.worldToLocal(arrCr[i].clone());
-				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i]});
+				if(!arrCr[i2]) continue;
+				const posLocal = o.worldToLocal(arrCr[i2].clone());
+				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i2]});
 				
-				//this.helpBox({pos: arrCr[i], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+				//this.helpBox({pos: arrCr[i2], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
 			}
 
 			arrLocal.sort(function (a, b) { return b.dist - a.dist; });
@@ -1375,6 +1362,319 @@ class MyCalcBlocks
 			lines2[i - 1][1].offset.end = offsetZ;
 		}
 				
+	}
+	
+
+	offsetPosStart_1({lines, lines2, offsetZ = 0})
+	{
+		
+		for ( let i = 1; i < lines.length; i++ )
+		{
+			const line1 = lines[i - 1].pos;
+			const line2 = lines[i - 1].pos2;
+			const line3 = lines[i].pos;
+			const line4 = lines[i].pos2;	
+			const dir1 = lines[i - 1].dir;
+			const dir2 = lines[i].dir;
+			const side = lines[i].side;
+			
+			let crossP = line3[0].clone();
+			
+			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
+			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
+			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
+			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
+			
+			let angle = 0;
+			if(side === 0)
+			{
+				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			}
+			else
+			{
+				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
+			}
+			
+			const arrCr = [];
+			
+			if(angle < 0)
+			{
+				arrCr.push(cross2, cross3);
+			}
+			else				
+			{
+				arrCr.push(cross1, cross4);
+			}
+
+			let normal = myMath.calcNormal2D({p1: line3[1], p2: line3[0], reverse: true});
+			let o = new THREE.Object3D();
+			o.lookAt(normal);
+			o.position.copy(line3[0]);				
+			o.updateMatrixWorld();
+			
+			const arrLocal = [];
+			
+			for ( let i2 = 0; i2 < arrCr.length; i2++ )
+			{
+				if(!arrCr[i2]) continue;
+				const posLocal = o.worldToLocal(arrCr[i2].clone());
+				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i2]});
+				
+				//this.helpBox({pos: arrCr[i2], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+			}
+
+			arrLocal.sort(function (a, b) { return a.dist - b.dist; });
+			
+			if(arrLocal.length > 0)
+			{				
+				const wPosition = new THREE.Vector3();
+				o.localToWorld(wPosition.set(arrLocal[0].pos.x, 0, 0));
+				
+				crossP = wPosition;
+				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+			}
+
+			const n = 0;
+			lines2[n][0].pos[0] = crossP;
+			lines2[n][0].cut1.dir = (angle < 0) ? lines[i - 1].normal.clone().negate() : lines[i - 1].normal.clone();
+			lines2[n][0].cut1.normal = lines[i - 1].dir.clone().negate();
+			lines2[n][0].cut1.pos = (angle < 0) ? cross3.clone() : cross1.clone();
+			lines2[n][0].offset.start = offsetZ;
+		}
+	}
+	
+	offsetPosEnd_1({lines, lines2, offsetZ = 0})
+	{
+		for ( let i = 1; i < lines.length; i++ )
+		{
+			const line1 = lines[i - 1].pos;
+			const line2 = lines[i - 1].pos2;
+			const line3 = lines[i].pos;
+			const line4 = lines[i].pos2;	
+			const dir1 = lines[i - 1].dir;
+			const dir2 = lines[i].dir;
+			const side = lines[i - 1].side;
+			
+			let crossP = line1[1].clone();
+			
+			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
+			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
+			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
+			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
+			
+			
+			let angle = 0;
+			if(side === 0)
+			{
+				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			}
+			else
+			{
+				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
+			}
+			
+			const arrCr = [];
+			
+			if(angle < 0)
+			{
+				arrCr.push(cross1, cross2);
+			}
+			else				
+			{
+				arrCr.push(cross3, cross4);
+			}
+
+			let normal = myMath.calcNormal2D({p1: line1[1], p2: line1[0], reverse: true});
+			let o = new THREE.Object3D();
+			o.lookAt(normal);
+			o.position.copy(line1[0]);				
+			o.updateMatrixWorld();
+			
+			const arrLocal = [];
+			
+			for ( let i2 = 0; i2 < arrCr.length; i2++ )
+			{
+				if(!arrCr[i2]) continue;
+				const posLocal = o.worldToLocal(arrCr[i2].clone());
+				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i2]});
+				
+				//this.helpBox({pos: arrCr[i2], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+			}
+
+			arrLocal.sort(function (a, b) { return b.dist - a.dist; });
+			
+			if(arrLocal.length > 0)
+			{				
+				const wPosition = new THREE.Vector3();
+				o.localToWorld(wPosition.set(arrLocal[0].pos.x, 0, 0));
+				
+				crossP = wPosition;
+				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+			}
+
+			const n = lines2.length - 1;
+			lines2[n][0].pos[1] = crossP;	
+			lines2[n][0].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
+			lines2[n][0].cut2.normal = lines[i].dir.clone().negate();	
+			lines2[n][0].cut2.pos = (angle < 0) ? cross1.clone() : cross3.clone();	
+			lines2[n][0].offset.end = offsetZ;
+		}
+				
+	}
+	
+	offsetPosStart_2({lines, lines2, offsetZ = 0})
+	{
+		for ( let i = 1; i < lines.length; i++ )
+		{
+			const line1 = lines[i - 1].pos;
+			const line2 = lines[i - 1].pos2;
+			const line3 = lines[i].pos;
+			const line4 = lines[i].pos2;	
+			const dir1 = lines[i - 1].dir;
+			const dir2 = lines[i].dir;
+			const side = lines[i].side;
+			
+			let crossP = line3[0].clone();
+			
+			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
+			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
+			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
+			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
+			
+			let angle = 0;
+			if(side === 0)
+			{
+				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			}
+			else
+			{
+				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
+			}
+			
+			const arrCr = [];
+			
+			if(angle < 0)
+			{
+				arrCr.push(cross1, cross4);
+			}
+			else				
+			{
+				arrCr.push(cross2, cross3);
+			}
+
+			let normal = myMath.calcNormal2D({p1: line3[1], p2: line3[0], reverse: true});
+			let o = new THREE.Object3D();
+			o.lookAt(normal);
+			o.position.copy(line3[0]);				
+			o.updateMatrixWorld();
+			
+			const arrLocal = [];
+			
+			for ( let i2 = 0; i2 < arrCr.length; i2++ )
+			{
+				if(!arrCr[i2]) continue;
+				const posLocal = o.worldToLocal(arrCr[i2].clone());
+				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i2]});
+				
+				//this.helpBox({pos: arrCr[i2], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+			}
+
+			arrLocal.sort(function (a, b) { return a.dist - b.dist; });
+			
+			if(arrLocal.length > 0)
+			{				
+				const wPosition = new THREE.Vector3();
+				o.localToWorld(wPosition.set(arrLocal[0].pos.x, 0, 0));
+				
+				crossP = wPosition;
+				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+			}
+			
+			const n = 0;
+			lines2[n][1].pos[0] = crossP;
+			lines2[n][1].cut1.dir = (angle < 0) ? lines[i - 1].normal.clone().negate() : lines[i - 1].normal.clone();
+			lines2[n][1].cut1.normal = lines[i - 1].dir.clone().negate();
+			lines2[n][1].cut1.pos = (angle < 0) ? cross4.clone() : cross2.clone();
+			lines2[n][1].offset.start = offsetZ;
+		}
+				
+	}
+	
+	offsetPosEnd_2({lines, lines2, offsetZ = 0})
+	{
+		for ( let i = 1; i < lines.length; i++ )
+		{
+			const line1 = lines[i - 1].pos;
+			const line2 = lines[i - 1].pos2;
+			const line3 = lines[i].pos;
+			const line4 = lines[i].pos2;	
+			const dir1 = lines[i - 1].dir;
+			const dir2 = lines[i].dir;
+			const side = lines[i].side;
+			
+			let crossP = line1[1].clone();
+			
+			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
+			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
+			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
+			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
+			
+			let angle = 0;
+			if(side === 0)
+			{
+				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			}
+			else
+			{
+				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
+			}
+			
+			const arrCr = [];
+			
+			if(angle < 0)
+			{
+				arrCr.push(cross3, cross4);
+			}
+			else				
+			{
+				arrCr.push(cross1, cross2);
+			}
+
+			let normal = myMath.calcNormal2D({p1: line1[1], p2: line1[0], reverse: true});
+			let o = new THREE.Object3D();
+			o.lookAt(normal);
+			o.position.copy(line1[0]);				
+			o.updateMatrixWorld();
+			
+			const arrLocal = [];
+			
+			for ( let i2 = 0; i2 < arrCr.length; i2++ )
+			{
+				if(!arrCr[i2]) continue;
+				const posLocal = o.worldToLocal(arrCr[i2].clone());
+				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i2]});
+				
+				//this.helpBox({pos: arrCr[i2], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+			}
+
+			arrLocal.sort(function (a, b) { return b.dist - a.dist; });
+			
+			if(arrLocal.length > 0)
+			{				
+				const wPosition = new THREE.Vector3();
+				o.localToWorld(wPosition.set(arrLocal[0].pos.x, 0, 0));
+				
+				crossP = wPosition;
+				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
+			}
+
+			const n = lines2.length - 1;
+			lines2[n][1].pos[1] = crossP;	
+			lines2[n][1].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
+			lines2[n][1].cut2.normal = lines[i].dir.clone().negate();	
+			lines2[n][1].cut2.pos = (angle < 0) ? cross4.clone() : cross2.clone();
+			lines2[n][1].offset.end = offsetZ;
+		}				
 	}
 	
 	
