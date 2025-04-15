@@ -88,16 +88,9 @@ class MyCalcBlocks
 	
 	//---
 	
-
-	
-	test({level})
+	// получаем массив стен по типу
+	getArrTypeWalls({wall})
 	{
-		//const posY = myLevels.getLevelPos0({lastId: 0, newId: 0});
-		
-		const wall = level.wall;
-		const levelHeight = level.height;
-		
-		
 		// outside - наружные
 		// inside - внутренние
 		// single - отдельные
@@ -124,10 +117,27 @@ class MyCalcBlocks
 				arrW.outside.push({wall: wall[i], side, array: [wall[i].userData.wall.p[0].userData.id, wall[i].userData.wall.p[1].userData.id]});
 			}
 		}
+
+		return arrW;
+	}
+	
+	
+	test({level})
+	{
+		//const posY = myLevels.getLevelPos0({lastId: 0, newId: 0});
 		
-		if(arrW.single.length > 0)
+		const wall = level.wall;
+		const levelHeight = level.height;
+		
+		
+		const arrW = this.getArrTypeWalls({wall});
+		
+		const arrW2 = { outside: [], inside: [], single: [] };
+		
+		
+		while(arrW.single.length > 0)
 		{
-			console.log('single - отдельные');
+			console.log('single - отдельные', arrW.single.length);
 			
 			const result = this.findUniqueEdgeElements(arrW.single);		
 		
@@ -140,44 +150,82 @@ class MyCalcBlocks
 			//console.log(333, reverseWall, firstElem.array[0], result[0].nums[0]);
 			
 			const newArr = this.sortChains(arrW.single);
-			arrW.single.length = 0;
+			
+			// удаляем из общего массива полученный кусок стен
+			for ( let i = 0; i < newArr.length; i++ )
+			{
+				const index = arrW.single.indexOf(newArr[i]);
+				if (index !== -1) 
+				{
+					arrW.single.splice(index, 1);
+				}
+			}
+			
+			//arrW.single.length = 0;
 			let pStart = reverseWall;
 			let side = reverseWall;
 			
-			// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
-			// решено, теперь знаем если стартовая точка не имеет связей (она одна), то pStart = 0
-			// решение только для не замкнутой стены, для замкнутой, нужно доробатывать
-			newArr.push(newArr[0]);
-			for ( let i = 0; i < newArr.length - 1; i++ )
+			if(newArr.length > 0)
 			{
-				const array = newArr[i].array;
-				const wall = newArr[i].wall;
-				//const side = newArr[i].side;
+				const ind = arrW2.single.length;
+				arrW2.single[ind] = [];
 				
-				arrW.single.push({wall, side, pStart});
-				
-				const array2 = newArr[i+1].array;
-				
-				console.log(array, pStart, array2[0], array[1]);
-				
-				
-				if(!(array2[0] === array[1] || array2[1] === array[0]))
+				// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
+				// решено, теперь знаем если стартовая точка не имеет связей (она одна), то pStart = 0
+				// решение только для не замкнутой стены, для замкнутой, нужно доробатывать
+				if(newArr.length > 0)
 				{
-					pStart = (pStart === 0) ? 1 : 0;
-					side = pStart;
+					newArr.push(newArr[0]);
+					for ( let i = 0; i < newArr.length - 1; i++ )
+					{
+						const array = newArr[i].array;
+						const wall = newArr[i].wall;
+						//const side = newArr[i].side;
+						
+						arrW2.single[ind].push({wall, side, pStart});
+						
+						const array2 = newArr[i+1].array;
+						
+						console.log(array, pStart, array2[0], array[1]);
+						
+						
+						if(!(array2[0] === array[1] || array2[1] === array[0]))
+						{
+							pStart = (pStart === 0) ? 1 : 0;
+							side = pStart;
+						}
+					}					
 				}
-			}			
+				else
+				{
+					arrW2.single[ind].push({wall, side: 0, pStart: 0});
+				}
+			}
 		}
+		console.log('single - отдельные', arrW2.single);
 		
 		
-		if(arrW.outside.length > 0)
+		while(arrW.outside.length > 0)
 		{
 			console.log('outside - наружные');
 			
 			const newArr = this.sortChains(arrW.outside);
-			arrW.outside.length = 0;
-			let pStart = 0;
+
+			// удаляем из общего массива полученный кусок стен
+			for ( let i = 0; i < newArr.length; i++ )
+			{
+				const index = arrW.outside.indexOf(newArr[i]);
+				if (index !== -1) 
+				{
+					arrW.outside.splice(index, 1);
+				}
+			}
 			
+			let pStart = 0;
+
+			const ind = arrW2.outside.length;
+			arrW2.outside[ind] = [];
+				
 			// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
 			newArr.push(newArr[0]);
 			for ( let i = 0; i < newArr.length - 1; i++ )
@@ -186,7 +234,7 @@ class MyCalcBlocks
 				const wall = newArr[i].wall;
 				const side = newArr[i].side;
 				
-				arrW.outside.push({wall, side, pStart});
+				arrW2.outside[ind].push({wall, side, pStart});
 				
 				const array2 = newArr[i+1].array;
 				
@@ -200,8 +248,17 @@ class MyCalcBlocks
 			}			
 		}
 
-		if(arrW.single.length > 0) this.caclColumn({data: arrW.single, levelHeight, type: 'single'});
-		if(arrW.outside.length > 0) this.caclColumn({data: arrW.outside, levelHeight, type: 'outside'});
+		for ( let i = 0; i < arrW2.single.length; i++ )
+		{
+			this.caclColumn({data: arrW2.single[i], levelHeight, type: 'single'});
+		}			
+
+		
+		for ( let i = 0; i < arrW2.outside.length; i++ )
+		{
+			this.caclColumn({data: arrW2.outside[i], levelHeight, type: 'outside'});
+		}			
+	
 
 		renderCamera();
 	}
@@ -430,7 +487,6 @@ class MyCalcBlocks
 			// обрезаем начало стены
 			if(1===1)
 			{
-				const dir = result.dir;
 				const normal = result.cut1.normal;
 				const dir2 = result.cut1.dir;
 				const pos = result.cut1.pos;
@@ -458,7 +514,6 @@ class MyCalcBlocks
 			// обрезаем конец стены
 			if(1===1)
 			{
-				const dir = result.dir;
 				const normal = result.cut2.normal;
 				const dir2 = result.cut2.dir;
 				const pos = result.cut2.pos;
@@ -915,7 +970,6 @@ class MyCalcBlocks
 			
 			const pos = lines[i].pos;	// 1-ая линия			
 			//this.helpLine({v: [pos[0], pos[1]], color: 0x00ff00});
-			//if(i === 3) this.helpBox({pos: pos[0], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
 			const dir = pos[1].clone().sub(pos[0]).normalize();
 			const posC = pos[1].clone().sub(pos[0]).multiplyScalar(0.5).add(pos[0]);
 			const normal = myMath.calcNormal2D({p1: pos[1], p2: pos[0], reverse: false});
@@ -943,10 +997,10 @@ class MyCalcBlocks
 			//this.helpLine({v: pos2, color: 0x0000ff});
 			
 			// для 1-ого ряда
-			const data = {pos: [pos[0].clone(), pos[1].clone()], dir, normal};
-			data.cut1 = {pos: pos[0].clone(), normal, dir};
-			data.cut2 = {pos: pos[1].clone(), normal, dir: dir.clone().negate()};
-			data.offset = {start: 0, end: 0};
+			const data1 = {pos: [pos[0].clone(), pos[1].clone()], dir, normal};
+			data1.cut1 = {pos: pos[0].clone(), normal, dir};
+			data1.cut2 = {pos: pos[1].clone(), normal, dir: dir.clone().negate()};
+			data1.offset = {start: 0, end: 0};
 
 			// для 2-ого ряда 
 			const posStart2 = pos[0].clone().sub(dir.clone().multiplyScalar(dlina/2));	// смещаем на пол блока назад
@@ -955,23 +1009,59 @@ class MyCalcBlocks
 			data2.cut2 = {pos: pos[1].clone(), normal, dir: dir.clone().negate()};
 			data2.offset = {start: 0, end: 0};
 			
-			lines2.push([data, data2]);
+			lines2.push([data1, data2]);
 			
 			lines[i].pos2 = pos2;
 			lines[i].dir = dir;
+			lines[i].cross = {};
 			lines[i].normal = normal;
 		}
+		
+		this.setDataLines({lines, lines2, type});
 				
 		//const lines1 = (type === 'outside') ? [lines[lines.length - 1], ...lines, lines[0]] : lines;
 		
-		this.calcPosEnd_1({lines, lines2, offsetZ: offset});		// вычисляем конец построение стены (не доходит до конца стены)
-		this.calcPosStart_1({lines, lines2, offsetZ: 0});			// вычисляем начало построение стены (без смещение блока)			
+		this.calcPosStart_1({lines, lines2});			// вычисляем начало построение стены (без смещение блока)	
+		this.calcPosEnd_1({lines, lines2});		// вычисляем конец построение стены (не доходит до конца стены)				
 
-		this.calcPosEnd_2({lines, lines2, offsetZ: 0});
-		this.calcPosStart_2({lines, lines2, offsetZ: offset});					
+		this.calcPosStart_2({lines, lines2});	
+		this.calcPosEnd_2({lines, lines2});
 		
+		
+		// зазор для первых и последних блоков		
+		if(type === 'outside') 
+		{			
+			for ( let i = 0; i < lines2.length; i++ )
+			{			
+				lines2[i][0].offset.end = offset;
+				lines2[i][1].offset.start = offset;
+			}			
+		}
+		else
+		{
+			for ( let i = 0; i < lines2.length; i++ )
+			{			
+				if(i < lines2.length - 1) lines2[i][0].offset.end = offset;
+				if(i > 1) lines2[i][1].offset.start = offset;
+			}				
+		}
+								
+		
+		// обрезаем первый и последний блок для замкнутых внешних стен
+		if(type === 'outside' && lines2.length > 0)
+		{
+			// 1-ый ряд
+			this.calcPosStart_1({lines: [lines[lines.length - 1], lines[0]], lines2, ind: 0});
+			this.calcPosEnd_1({lines: [lines[lines.length - 1], lines[0]], lines2, ind: lines2.length - 1});
+			
+			// 2-ой ряд
+			this.calcPosStart_2({lines: [lines[lines.length - 1], lines[0]], lines2, ind: 0});
+			this.calcPosEnd_2({lines: [lines[lines.length - 1], lines[0]], lines2, ind: lines2.length - 1});			
+		}
+		
+
 		// смещаем 2-ой ряд, так чтобы блоки относительно 1-ого были смещены на половину длины блока
-		for ( let i = 1; i < lines2.length; i++ )
+		for ( let i = 0; i < lines2.length; i++ )
 		{
 			const pos1 = lines2[i][0].pos[0];
 			const pos2 = lines2[i][1].pos[0];
@@ -983,17 +1073,24 @@ class MyCalcBlocks
 			lines2[i][1].pos[0] = posStart2;			
 		}
 		
-		// обрезаем первый и последний блок для замкнутых внешних стен
-		if(type === 'outside' && lines2.length > 0)
+		
+		// для 1-ого ряда, если угол между стенами почти прямой (150гр)
+		for ( let i = 1; i < lines2.length; i++ )
 		{
-			// 1-ый ряд
-			this.offsetPosStart_1({lines: [lines[lines.length - 1], lines[0]], lines2, offsetZ: 0});
-			this.offsetPosEnd_1({lines: [lines[lines.length - 1], lines[0]], lines2, offsetZ: offset});
+			const angle = lines2[i][0].cut1.angle;
 			
-			// 2-ой ряд
-			this.offsetPosStart_2({lines: [lines[lines.length - 1], lines[0]], lines2, offsetZ: offset});
-			this.offsetPosEnd_2({lines: [lines[lines.length - 1], lines[0]], lines2, offsetZ: 0});			
-		}
+			if(!this.checkIs150degree({angle})) continue;
+			
+			console.log(angle);
+			lines2[i - 1][0].cut2.dir = lines2[i][0].cut1.dir.clone().negate();
+			lines2[i - 1][0].cut2.normal = lines2[i][0].cut1.normal.clone();
+			lines2[i - 1][0].cut2.pos = lines2[i][0].cut1.pos.clone();	
+
+			lines2[i][1].cut1.dir = lines2[i - 1][1].cut2.dir.clone().negate();
+			lines2[i][1].cut1.normal = lines2[i - 1][1].cut2.normal.clone();
+			lines2[i][1].cut1.pos = lines2[i - 1][1].cut2.pos.clone();			
+		}		
+		
 		
 		//lines2.length = 0;
 		for ( let i = 0; i < lines2.length; i++ )
@@ -1046,9 +1143,59 @@ class MyCalcBlocks
 		return { arrBloks };
 	}
 
+	setDataLines({lines, lines2, type})
+	{
+		if(type === 'outside')
+		{
+			lines.push(lines[0]);
+		}
+		
+		for ( let i = 1; i < lines.length; i++ )
+		{
+			const line1 = lines[i - 1].pos;		// зеленая линия 
+			const line2 = lines[i - 1].pos2;	// синия линия
+			const line3 = lines[i].pos;			// зеленая линия
+			const line4 = lines[i].pos2;		// синия линия
+			const dir1 = lines[i - 1].dir;
+			const dir2 = lines[i].dir;
+			const side1 = lines[i - 1].side;
+			const side2 = lines[i].side;
+			
+			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
+			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
+			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
+			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
+			
+			let angle = 0;
+
+			if(side1 === 0) angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			else angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
+			
+			//if(side2 === 0) angle[1] = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
+			//else angle[1] = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
+			
+			lines[i - 1].cross = {cross1, cross2, cross3, cross4};
+			lines[i - 1].angle = angle;
+
+			
+			lines2[i - 1][0].cut2.angle = angle;
+			lines2[i - 1][1].cut2.angle = angle;
+			
+			const n1 = (type === 'outside' && i === lines.length - 1) ? 0 : i;
+			lines2[n1][0].cut1.angle = angle;
+			lines2[n1][1].cut1.angle = angle;			
+		}
+		
+		console.log(lines2);
+
+		if(type === 'outside')
+		{
+			lines.pop();
+		}		
+	}
 
 	// вычисляем начало построение стены (без смещение блока)
-	calcPosStart_1({lines, lines2, offsetZ = 0})
+	calcPosStart_1({lines, lines2, ind = undefined})
 	{
 		
 		for ( let i = 1; i < lines.length; i++ )
@@ -1057,37 +1204,18 @@ class MyCalcBlocks
 			const line2 = lines[i - 1].pos2;
 			const line3 = lines[i].pos;
 			const line4 = lines[i].pos2;	
-			const dir1 = lines[i - 1].dir;
-			const dir2 = lines[i].dir;
-			const side = lines[i].side;
 			
 			let crossP = line3[0].clone();
 			
-			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
-			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
-			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
-			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
+			const {cross1, cross2, cross3, cross4} = lines[i - 1].cross;			
+			const angle = lines[i - 1].angle;
 			
-			let angle = 0;
-			if(side === 0)
-			{
-				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
-			}
-			else
-			{
-				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
-			}
+			if(this.checkIs150degree({angle})) continue;
 			
 			const arrCr = [];
 			
-			if(angle < 0)
-			{
-				arrCr.push(cross2, cross3);
-			}
-			else				
-			{
-				arrCr.push(cross1, cross4);
-			}
+			if(angle < 0) arrCr.push(cross2, cross3);
+			else arrCr.push(cross1, cross4);
 
 			let normal = myMath.calcNormal2D({p1: line3[1], p2: line3[0], reverse: true});
 			let o = new THREE.Object3D();
@@ -1108,6 +1236,7 @@ class MyCalcBlocks
 
 			arrLocal.sort(function (a, b) { return a.dist - b.dist; });
 			
+			
 			if(arrLocal.length > 0)
 			{				
 				const wPosition = new THREE.Vector3();
@@ -1116,58 +1245,37 @@ class MyCalcBlocks
 				crossP = wPosition;
 				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
 			}
-
 			
-			lines2[i][0].pos[0] = crossP;
-			lines2[i][0].cut1.dir = (angle < 0) ? lines[i - 1].normal.clone().negate() : lines[i - 1].normal.clone();
-			lines2[i][0].cut1.normal = lines[i - 1].dir.clone().negate();
-			lines2[i][0].cut1.pos = (angle < 0) ? cross3.clone() : cross1.clone();
-			lines2[i][0].offset.start = offsetZ;
+			const n = (ind !== undefined) ? ind : i;
+			lines2[n][0].pos[0] = crossP;
+			lines2[n][0].cut1.dir = (angle < 0) ? lines[i - 1].normal.clone().negate() : lines[i - 1].normal.clone();
+			lines2[n][0].cut1.normal = lines[i - 1].dir.clone().negate();
+			lines2[n][0].cut1.pos = (angle < 0) ? cross3.clone() : cross1.clone();
 		}
 	}
 	
 
 	// вычисляем конец построение стены (не доходит до конца стены)
-	calcPosEnd_1({lines, lines2, offsetZ = 0})
+	calcPosEnd_1({lines, lines2, ind = undefined})
 	{
 		for ( let i = 1; i < lines.length; i++ )
 		{
 			const line1 = lines[i - 1].pos;
 			const line2 = lines[i - 1].pos2;
 			const line3 = lines[i].pos;
-			const line4 = lines[i].pos2;	
-			const dir1 = lines[i - 1].dir;
-			const dir2 = lines[i].dir;
-			const side = lines[i - 1].side;
-			
+			const line4 = lines[i].pos2;
+
 			let crossP = line1[1].clone();
 			
-			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
-			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
-			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
-			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
+			const {cross1, cross2, cross3, cross4} = lines[i - 1].cross;
+			const angle = lines[i - 1].angle;
 			
-			
-			let angle = 0;
-			if(side === 0)
-			{
-				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
-			}
-			else
-			{
-				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
-			}
+			if(this.checkIs150degree({angle})) continue;
 			
 			const arrCr = [];
 			
-			if(angle < 0)
-			{
-				arrCr.push(cross1, cross2);
-			}
-			else				
-			{
-				arrCr.push(cross3, cross4);
-			}
+			if(angle < 0) arrCr.push(cross1, cross2);
+			else arrCr.push(cross3, cross4);
 
 			let normal = myMath.calcNormal2D({p1: line1[1], p2: line1[0], reverse: true});
 			let o = new THREE.Object3D();
@@ -1196,57 +1304,40 @@ class MyCalcBlocks
 				crossP = wPosition;
 				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
 			}
-
-			lines2[i - 1][0].pos[1] = crossP;	
-			lines2[i - 1][0].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
-			lines2[i - 1][0].cut2.normal = lines[i].dir.clone().negate();	
-			lines2[i - 1][0].cut2.pos = (angle < 0) ? cross1.clone() : cross3.clone();	
-			lines2[i - 1][0].offset.end = offsetZ;			
+			
+			
+			const n = (ind !== undefined) ? ind : i - 1;
+			lines2[n][0].pos[1] = crossP;	
+			lines2[n][0].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
+			lines2[n][0].cut2.normal = lines[i].dir.clone().negate();	
+			lines2[n][0].cut2.pos = (angle < 0) ? cross1.clone() : cross3.clone();	
 		}
 				
 	}
 	
 	
 	// вычисляем начало построение стены (со смещением блока, 2-ой ряд)
-	calcPosStart_2({lines, lines2, offsetZ = 0})
+	calcPosStart_2({lines, lines2, ind = undefined})
 	{
 		for ( let i = 1; i < lines.length; i++ )
 		{
 			const line1 = lines[i - 1].pos;
 			const line2 = lines[i - 1].pos2;
 			const line3 = lines[i].pos;
-			const line4 = lines[i].pos2;	
-			const dir1 = lines[i - 1].dir;
-			const dir2 = lines[i].dir;
-			const side = lines[i].side;
+			const line4 = lines[i].pos2;
 			
 			let crossP = line3[0].clone();
 			
-			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
-			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
-			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
-			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
+			const {cross1, cross2, cross3, cross4} = lines[i - 1].cross;			
+			const angle = lines[i - 1].angle;
 			
-			let angle = 0;
-			if(side === 0)
-			{
-				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
-			}
-			else
-			{
-				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
-			}
+			if(this.checkIs150degree({angle})) continue;
 			
 			const arrCr = [];
 			
-			if(angle < 0)
-			{
-				arrCr.push(cross1, cross4);
-			}
-			else				
-			{
-				arrCr.push(cross2, cross3);
-			}
+			if(angle < 0) arrCr.push(cross1, cross4);
+			else arrCr.push(cross2, cross3);
+						
 
 			let normal = myMath.calcNormal2D({p1: line3[1], p2: line3[0], reverse: true});
 			let o = new THREE.Object3D();
@@ -1276,331 +1367,18 @@ class MyCalcBlocks
 				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
 			}
 			
-			lines2[i][1].pos[0] = crossP;
-			lines2[i][1].cut1.dir = (angle < 0) ? lines[i - 1].normal.clone().negate() : lines[i - 1].normal.clone();
-			lines2[i][1].cut1.normal = lines[i - 1].dir.clone().negate();
-			lines2[i][1].cut1.pos = (angle < 0) ? cross4.clone() : cross2.clone();
-			lines2[i][1].offset.start = offsetZ;
-		}
-				
-	}
-	
-	
-	// вычисляем конец построение стены (до конца стены)
-	calcPosEnd_2({lines, lines2, offsetZ = 0})
-	{
-		for ( let i = 1; i < lines.length; i++ )
-		{
-			const line1 = lines[i - 1].pos;
-			const line2 = lines[i - 1].pos2;
-			const line3 = lines[i].pos;
-			const line4 = lines[i].pos2;	
-			const dir1 = lines[i - 1].dir;
-			const dir2 = lines[i].dir;
-			const side = lines[i].side;
-			
-			let crossP = line1[1].clone();
-			
-			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
-			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
-			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
-			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
-			
-			let angle = 0;
-			if(side === 0)
-			{
-				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
-			}
-			else
-			{
-				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
-			}
-			
-			const arrCr = [];
-			
-			if(angle < 0)
-			{
-				arrCr.push(cross3, cross4);
-			}
-			else				
-			{
-				arrCr.push(cross1, cross2);
-			}
-
-			let normal = myMath.calcNormal2D({p1: line1[1], p2: line1[0], reverse: true});
-			let o = new THREE.Object3D();
-			o.lookAt(normal);
-			o.position.copy(line1[0]);				
-			o.updateMatrixWorld();
-			
-			const arrLocal = [];
-			
-			for ( let i2 = 0; i2 < arrCr.length; i2++ )
-			{
-				if(!arrCr[i2]) continue;
-				const posLocal = o.worldToLocal(arrCr[i2].clone());
-				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i2]});
-				
-				//this.helpBox({pos: arrCr[i2], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
-			}
-
-			arrLocal.sort(function (a, b) { return b.dist - a.dist; });
-			
-			if(arrLocal.length > 0)
-			{				
-				const wPosition = new THREE.Vector3();
-				o.localToWorld(wPosition.set(arrLocal[0].pos.x, 0, 0));
-				
-				crossP = wPosition;
-				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
-			}
-
-			lines2[i - 1][1].pos[1] = crossP;	
-			lines2[i - 1][1].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
-			lines2[i - 1][1].cut2.normal = lines[i].dir.clone().negate();	
-			lines2[i - 1][1].cut2.pos = (angle < 0) ? cross4.clone() : cross2.clone();
-			lines2[i - 1][1].offset.end = offsetZ;
-		}
-				
-	}
-	
-
-	offsetPosStart_1({lines, lines2, offsetZ = 0})
-	{
-		
-		for ( let i = 1; i < lines.length; i++ )
-		{
-			const line1 = lines[i - 1].pos;
-			const line2 = lines[i - 1].pos2;
-			const line3 = lines[i].pos;
-			const line4 = lines[i].pos2;	
-			const dir1 = lines[i - 1].dir;
-			const dir2 = lines[i].dir;
-			const side = lines[i].side;
-			
-			let crossP = line3[0].clone();
-			
-			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
-			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
-			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
-			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
-			
-			let angle = 0;
-			if(side === 0)
-			{
-				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
-			}
-			else
-			{
-				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
-			}
-			
-			const arrCr = [];
-			
-			if(angle < 0)
-			{
-				arrCr.push(cross2, cross3);
-			}
-			else				
-			{
-				arrCr.push(cross1, cross4);
-			}
-
-			let normal = myMath.calcNormal2D({p1: line3[1], p2: line3[0], reverse: true});
-			let o = new THREE.Object3D();
-			o.lookAt(normal);
-			o.position.copy(line3[0]);				
-			o.updateMatrixWorld();
-			
-			const arrLocal = [];
-			
-			for ( let i2 = 0; i2 < arrCr.length; i2++ )
-			{
-				if(!arrCr[i2]) continue;
-				const posLocal = o.worldToLocal(arrCr[i2].clone());
-				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i2]});
-				
-				//this.helpBox({pos: arrCr[i2], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
-			}
-
-			arrLocal.sort(function (a, b) { return a.dist - b.dist; });
-			
-			if(arrLocal.length > 0)
-			{				
-				const wPosition = new THREE.Vector3();
-				o.localToWorld(wPosition.set(arrLocal[0].pos.x, 0, 0));
-				
-				crossP = wPosition;
-				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
-			}
-
-			const n = 0;
-			lines2[n][0].pos[0] = crossP;
-			lines2[n][0].cut1.dir = (angle < 0) ? lines[i - 1].normal.clone().negate() : lines[i - 1].normal.clone();
-			lines2[n][0].cut1.normal = lines[i - 1].dir.clone().negate();
-			lines2[n][0].cut1.pos = (angle < 0) ? cross3.clone() : cross1.clone();
-			lines2[n][0].offset.start = offsetZ;
-		}
-	}
-	
-	offsetPosEnd_1({lines, lines2, offsetZ = 0})
-	{
-		for ( let i = 1; i < lines.length; i++ )
-		{
-			const line1 = lines[i - 1].pos;
-			const line2 = lines[i - 1].pos2;
-			const line3 = lines[i].pos;
-			const line4 = lines[i].pos2;	
-			const dir1 = lines[i - 1].dir;
-			const dir2 = lines[i].dir;
-			const side = lines[i - 1].side;
-			
-			let crossP = line1[1].clone();
-			
-			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
-			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
-			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
-			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
-			
-			
-			let angle = 0;
-			if(side === 0)
-			{
-				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
-			}
-			else
-			{
-				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
-			}
-			
-			const arrCr = [];
-			
-			if(angle < 0)
-			{
-				arrCr.push(cross1, cross2);
-			}
-			else				
-			{
-				arrCr.push(cross3, cross4);
-			}
-
-			let normal = myMath.calcNormal2D({p1: line1[1], p2: line1[0], reverse: true});
-			let o = new THREE.Object3D();
-			o.lookAt(normal);
-			o.position.copy(line1[0]);				
-			o.updateMatrixWorld();
-			
-			const arrLocal = [];
-			
-			for ( let i2 = 0; i2 < arrCr.length; i2++ )
-			{
-				if(!arrCr[i2]) continue;
-				const posLocal = o.worldToLocal(arrCr[i2].clone());
-				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i2]});
-				
-				//this.helpBox({pos: arrCr[i2], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
-			}
-
-			arrLocal.sort(function (a, b) { return b.dist - a.dist; });
-			
-			if(arrLocal.length > 0)
-			{				
-				const wPosition = new THREE.Vector3();
-				o.localToWorld(wPosition.set(arrLocal[0].pos.x, 0, 0));
-				
-				crossP = wPosition;
-				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
-			}
-
-			const n = lines2.length - 1;
-			lines2[n][0].pos[1] = crossP;	
-			lines2[n][0].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
-			lines2[n][0].cut2.normal = lines[i].dir.clone().negate();	
-			lines2[n][0].cut2.pos = (angle < 0) ? cross1.clone() : cross3.clone();	
-			lines2[n][0].offset.end = offsetZ;
-		}
-				
-	}
-	
-	offsetPosStart_2({lines, lines2, offsetZ = 0})
-	{
-		for ( let i = 1; i < lines.length; i++ )
-		{
-			const line1 = lines[i - 1].pos;
-			const line2 = lines[i - 1].pos2;
-			const line3 = lines[i].pos;
-			const line4 = lines[i].pos2;	
-			const dir1 = lines[i - 1].dir;
-			const dir2 = lines[i].dir;
-			const side = lines[i].side;
-			
-			let crossP = line3[0].clone();
-			
-			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
-			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
-			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
-			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
-			
-			let angle = 0;
-			if(side === 0)
-			{
-				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
-			}
-			else
-			{
-				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
-			}
-			
-			const arrCr = [];
-			
-			if(angle < 0)
-			{
-				arrCr.push(cross1, cross4);
-			}
-			else				
-			{
-				arrCr.push(cross2, cross3);
-			}
-
-			let normal = myMath.calcNormal2D({p1: line3[1], p2: line3[0], reverse: true});
-			let o = new THREE.Object3D();
-			o.lookAt(normal);
-			o.position.copy(line3[0]);				
-			o.updateMatrixWorld();
-			
-			const arrLocal = [];
-			
-			for ( let i2 = 0; i2 < arrCr.length; i2++ )
-			{
-				if(!arrCr[i2]) continue;
-				const posLocal = o.worldToLocal(arrCr[i2].clone());
-				arrLocal.push({dist: posLocal.x, pos: posLocal, posOrignal: arrCr[i2]});
-				
-				//this.helpBox({pos: arrCr[i2], size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
-			}
-
-			arrLocal.sort(function (a, b) { return a.dist - b.dist; });
-			
-			if(arrLocal.length > 0)
-			{				
-				const wPosition = new THREE.Vector3();
-				o.localToWorld(wPosition.set(arrLocal[0].pos.x, 0, 0));
-				
-				crossP = wPosition;
-				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
-			}
-			
-			const n = 0;
+			const n = (ind !== undefined) ? ind : i;
 			lines2[n][1].pos[0] = crossP;
 			lines2[n][1].cut1.dir = (angle < 0) ? lines[i - 1].normal.clone().negate() : lines[i - 1].normal.clone();
 			lines2[n][1].cut1.normal = lines[i - 1].dir.clone().negate();
 			lines2[n][1].cut1.pos = (angle < 0) ? cross4.clone() : cross2.clone();
-			lines2[n][1].offset.start = offsetZ;
 		}
 				
 	}
 	
-	offsetPosEnd_2({lines, lines2, offsetZ = 0})
+	
+	// вычисляем конец построение стены (до конца стены, 2-ой ряд)
+	calcPosEnd_2({lines, lines2, ind = undefined})
 	{
 		for ( let i = 1; i < lines.length; i++ )
 		{
@@ -1608,37 +1386,18 @@ class MyCalcBlocks
 			const line2 = lines[i - 1].pos2;
 			const line3 = lines[i].pos;
 			const line4 = lines[i].pos2;	
-			const dir1 = lines[i - 1].dir;
-			const dir2 = lines[i].dir;
-			const side = lines[i].side;
 			
 			let crossP = line1[1].clone();
 			
-			const cross1 = myMath.getIntersection(line1[0], line1[1], line3[0], line3[1]);
-			const cross2 = myMath.getIntersection(line2[0], line2[1], line3[0], line3[1]);
-			const cross3 = myMath.getIntersection(line2[0], line2[1], line4[0], line4[1]);
-			const cross4 = myMath.getIntersection(line1[0], line1[1], line4[0], line4[1]);
+			const {cross1, cross2, cross3, cross4} = lines[i - 1].cross;			
+			const angle = lines[i - 1].angle;	
 			
-			let angle = 0;
-			if(side === 0)
-			{
-				angle = this.getAngleBetweenVectors2D(dir2, dir1.clone().negate());
-			}
-			else
-			{
-				angle = this.getAngleBetweenVectors2D(dir1, dir2.clone().negate());
-			}
+			if(this.checkIs150degree({angle})) continue;
 			
 			const arrCr = [];
 			
-			if(angle < 0)
-			{
-				arrCr.push(cross3, cross4);
-			}
-			else				
-			{
-				arrCr.push(cross1, cross2);
-			}
+			if(angle < 0) arrCr.push(cross3, cross4);
+			else arrCr.push(cross1, cross2);
 
 			let normal = myMath.calcNormal2D({p1: line1[1], p2: line1[0], reverse: true});
 			let o = new THREE.Object3D();
@@ -1668,15 +1427,17 @@ class MyCalcBlocks
 				//this.helpBox({pos: wPosition, size: new THREE.Vector3(0.14, 0.05, 0.14), color: 0x000000});
 			}
 
-			const n = lines2.length - 1;
+			const n = (ind !== undefined) ? ind : i - 1;
 			lines2[n][1].pos[1] = crossP;	
 			lines2[n][1].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
 			lines2[n][1].cut2.normal = lines[i].dir.clone().negate();	
 			lines2[n][1].cut2.pos = (angle < 0) ? cross4.clone() : cross2.clone();
-			lines2[n][1].offset.end = offsetZ;
-		}				
+		}
+				
 	}
 	
+
+
 	
 	// получаем угол от 0 до 180 и от 0 до -180
 	getAngleBetweenVectors2D(v2, v1) 
@@ -1685,7 +1446,12 @@ class MyCalcBlocks
 		
 		return THREE.Math.radToDeg(angleRad);
 	}
-			
+	
+
+	checkIs150degree({angle})
+	{
+		return (Math.abs(angle) > 120) ? true : false;
+	}
 }
 
 
