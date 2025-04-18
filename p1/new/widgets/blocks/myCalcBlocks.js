@@ -439,19 +439,33 @@ class MyCalcBlocks
 		{
 			let delLastBlock = countY % 2 === 0 ? false : true;
 			
-			if(countY < 2) 
+			if(countY < 222) 
 			{
 				this.crBloksRow({lines2, currentY: i, levelHeight, delLastBlock});
 			}
 			
 			countY++;
-		}		
+		}
+
+		for (let i = 0; i < lines2.length; i++)
+		{
+			const arrO = this.setCutWD({arrO: lines2[i][0].arrO});
+			
+			let arrBloks = lines2[i][0].arrBloks;
+			
+			for (let i2 = 0; i2 < arrO.length; i2++)
+			{
+				arrBloks = this.cutBlockes({obj: arrO[i2], w: arrBloks});
+			}
+		}
 	}
 	
 	
 	calcWalls({data, type})
 	{
 		const lines = [];		
+		
+		
 		
 		for ( let i = 0; i < data.length; i++ )
 		{	
@@ -460,8 +474,11 @@ class MyCalcBlocks
 			const pStart = data[i].pStart;			
 			const width = wall.userData.wall.width;
 			
+			const arrO = [];
+			if(wall.userData.wall.arrO) arrO.push(...wall.userData.wall.arrO);
+			
 			const resultP = this.getPosWallV({ wall, side, pStart });
-			lines.push({pos: [resultP.pos1, resultP.pos2], side, pStart, width});
+			lines.push({pos: [resultP.pos1, resultP.pos2], side, pStart, width, arrO});
 
 			wall.visible = false;
 		}
@@ -540,6 +557,8 @@ class MyCalcBlocks
 				arrBloks = this.cutBlockes({obj, w: arrBloks});
 				obj.visible = false;
 			}						
+		
+			lines2[i][0].arrBloks.push(...arrBloks);
 		}		
 
 	}
@@ -971,6 +990,7 @@ class MyCalcBlocks
 			let side = lines[i].side;
 			const pStart = lines[i].pStart;
 			const width = lines[i].width;
+			const arrO = lines[i].arrO;
 			
 			const pos = lines[i].pos;	// 1-ая линия			
 			//this.helpLine({v: [pos[0], pos[1]], color: 0x00ff00});
@@ -1006,6 +1026,8 @@ class MyCalcBlocks
 			data1.cut2 = {pos: pos[1].clone(), normal, dir: dir.clone().negate()};
 			data1.offset = {start: 0, end: 0};
 			data1.width = width;
+			data1.arrO = arrO;
+			data1.arrBloks = [];
 			
 			// для 2-ого ряда 
 			const posStart2 = pos[0].clone().sub(dir.clone().multiplyScalar(dlina/2));	// смещаем на пол блока назад
@@ -1445,8 +1467,7 @@ class MyCalcBlocks
 			const n1 = (type === 'outside' && i === lines2.length - 1) ? 0 : i;
 			
 			const angle = lines2[n1][0].cut1.angle;
-			
-			console.log(lines2[i - 1][0].width !== lines2[n1][0].width, lines2[i - 1][0].width, lines2[n1][0].width);
+
 			if(lines2[i - 1][0].width !== lines2[n1][0].width) continue;			
 
 			if(Math.abs(Math.abs(angle) - 180) > 0.0001) continue;
@@ -1454,6 +1475,7 @@ class MyCalcBlocks
 			
 			lines2[i - 1][0].pos[1] = lines2[n1][0].pos[1];
 			lines2[i - 1][0].cut2 = lines2[n1][0].cut2;
+			lines2[i - 1][0].arrO.push(...lines2[n1][0].arrO);
 
 			lines2[i - 1][1].pos[1] = lines2[n1][1].pos[1];
 			lines2[i - 1][1].cut2 = lines2[n1][1].cut2;
@@ -1513,6 +1535,36 @@ class MyCalcBlocks
 	checkIs150degree({angle})
 	{
 		return (Math.abs(angle) > 120) ? true : false;
+	}
+	
+	
+	setCutWD({arrO})
+	{
+		const arr = [];
+		
+		for ( let i = 0; i < arrO.length; i++ )
+		{
+			const obj = new THREE.Mesh();
+			obj.geometry = arrO[i].geometry.clone();
+			
+			const minZ = arrO[i].userData.door.form.v.minZ;
+			const maxZ = arrO[i].userData.door.form.v.maxZ;
+			
+			const v = obj.geometry.vertices;
+			
+			for ( let i2 = 0; i2 < minZ.length; i2++ ) { v[minZ[i2]].z -= 3.2; }
+			for ( let i2 = 0; i2 < maxZ.length; i2++ ) { v[maxZ[i2]].z += 3.2; }
+			
+			obj.material = arrO[i].material.clone();
+			obj.position.copy( arrO[i].position );
+			obj.rotation.copy( arrO[i].rotation );
+			//scene.add(obj);
+			
+			console.log(111, obj);
+			arr.push(obj);
+		}
+
+		return arr;
 	}
 }
 
