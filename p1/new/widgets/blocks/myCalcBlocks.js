@@ -210,7 +210,9 @@ class MyCalcBlocks
 			console.log('outside - наружные');
 			
 			const newArr = this.sortChains(arrW.outside);
-
+			
+			const reverseWall = (newArr[0].array[0] === newArr[1].array[1]) ? 1 : 0;
+			
 			// удаляем из общего массива полученный кусок стен
 			for ( let i = 0; i < newArr.length; i++ )
 			{
@@ -221,7 +223,7 @@ class MyCalcBlocks
 				}
 			}
 			
-			let pStart = 0;
+			let pStart = reverseWall;
 
 			const ind = arrW2.outside.length;
 			arrW2.outside[ind] = [];
@@ -456,9 +458,10 @@ class MyCalcBlocks
 			const wall = data[i].wall;
 			const side = data[i].side;
 			const pStart = data[i].pStart;			
+			const width = wall.userData.wall.width;
 			
 			const resultP = this.getPosWallV({ wall, side, pStart });
-			lines.push({pos: [resultP.pos1, resultP.pos2], side, pStart});
+			lines.push({pos: [resultP.pos1, resultP.pos2], side, pStart, width});
 
 			wall.visible = false;
 		}
@@ -967,6 +970,7 @@ class MyCalcBlocks
 		{
 			let side = lines[i].side;
 			const pStart = lines[i].pStart;
+			const width = lines[i].width;
 			
 			const pos = lines[i].pos;	// 1-ая линия			
 			//this.helpLine({v: [pos[0], pos[1]], color: 0x00ff00});
@@ -1001,7 +1005,8 @@ class MyCalcBlocks
 			data1.cut1 = {pos: pos[0].clone(), normal, dir};
 			data1.cut2 = {pos: pos[1].clone(), normal, dir: dir.clone().negate()};
 			data1.offset = {start: 0, end: 0};
-
+			data1.width = width;
+			
 			// для 2-ого ряда 
 			const posStart2 = pos[0].clone().sub(dir.clone().multiplyScalar(dlina/2));	// смещаем на пол блока назад
 			const data2 = {pos: [posStart2.clone(), pos[1].clone()], dir, normal};
@@ -1027,6 +1032,23 @@ class MyCalcBlocks
 		this.calcPosStart_2({lines, lines2});	
 		this.calcPosEnd_2({lines, lines2});
 		
+
+		// обрезаем первый и последний блок для замкнутых внешних стен
+		if(type === 'outside' && lines2.length > 0)
+		{
+			// 1-ый ряд
+			this.calcPosStart_1({lines: [lines[lines.length - 1], lines[0]], lines2, ind: 0});
+			this.calcPosEnd_1({lines: [lines[lines.length - 1], lines[0]], lines2, ind: lines2.length - 1});
+			
+			// 2-ой ряд
+			this.calcPosStart_2({lines: [lines[lines.length - 1], lines[0]], lines2, ind: 0});
+			this.calcPosEnd_2({lines: [lines[lines.length - 1], lines[0]], lines2, ind: lines2.length - 1});			
+		}
+
+		
+		// прямые соседнии участки линий объединяем в одну
+		this.upDirLines({lines2, type});
+		
 		
 		// зазор для первых и последних блоков		
 		if(type === 'outside') 
@@ -1045,21 +1067,11 @@ class MyCalcBlocks
 				if(i > 1) lines2[i][1].offset.start = offset;
 			}				
 		}
-								
 		
-		// обрезаем первый и последний блок для замкнутых внешних стен
-		if(type === 'outside' && lines2.length > 0)
-		{
-			// 1-ый ряд
-			this.calcPosStart_1({lines: [lines[lines.length - 1], lines[0]], lines2, ind: 0});
-			this.calcPosEnd_1({lines: [lines[lines.length - 1], lines[0]], lines2, ind: lines2.length - 1});
-			
-			// 2-ой ряд
-			this.calcPosStart_2({lines: [lines[lines.length - 1], lines[0]], lines2, ind: 0});
-			this.calcPosEnd_2({lines: [lines[lines.length - 1], lines[0]], lines2, ind: lines2.length - 1});			
-		}
 		
-
+		this.upCutLinesForAngle({lines2, type});
+		
+		
 		// смещаем 2-ой ряд, так чтобы блоки относительно 1-ого были смещены на половину длины блока
 		for ( let i = 0; i < lines2.length; i++ )
 		{
@@ -1072,33 +1084,16 @@ class MyCalcBlocks
 			const posStart2 = pos2.clone().sub(dir.clone().multiplyScalar(dist - offset/1 - dlina/2));
 			lines2[i][1].pos[0] = posStart2;			
 		}
-		
-		
-		// для 1-ого ряда, если угол между стенами почти прямой (150гр)
-		for ( let i = 1; i < lines2.length; i++ )
-		{
-			const angle = lines2[i][0].cut1.angle;
-			
-			if(!this.checkIs150degree({angle})) continue;
-			
-			console.log(angle);
-			lines2[i - 1][0].cut2.dir = lines2[i][0].cut1.dir.clone().negate();
-			lines2[i - 1][0].cut2.normal = lines2[i][0].cut1.normal.clone();
-			lines2[i - 1][0].cut2.pos = lines2[i][0].cut1.pos.clone();	
 
-			lines2[i][1].cut1.dir = lines2[i - 1][1].cut2.dir.clone().negate();
-			lines2[i][1].cut1.normal = lines2[i - 1][1].cut2.normal.clone();
-			lines2[i][1].cut1.pos = lines2[i - 1][1].cut2.pos.clone();			
-		}		
-		
 		
 		//lines2.length = 0;
 		for ( let i = 0; i < lines2.length; i++ )
 		{
 			const pos1 = lines2[i][0].pos[0];
 			const pos2 = lines2[i][0].pos[1];
-			//this.helpBox({pos: pos1, size: new THREE.Vector3(0.1, 0.05, 0.1), color: 0x00ff00});
-			//this.helpBox({pos: pos2, size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
+
+			this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x00ff00});
+			this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1 + (0.1 * (i + 1)), 0)), size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
 		}
 		
 		return lines2;
@@ -1437,7 +1432,74 @@ class MyCalcBlocks
 	}
 	
 
+	// прямые соседнии участки линий объединяем в одну
+	upDirLines({lines2, type})
+	{
+		if(type === 'outside')
+		{
+			lines2.push(lines2[0]);
+		}
+		
+		for ( let i = 1; i < lines2.length; i++ )
+		{
+			const n1 = (type === 'outside' && i === lines2.length - 1) ? 0 : i;
+			
+			const angle = lines2[n1][0].cut1.angle;
+			
+			console.log(lines2[i - 1][0].width !== lines2[n1][0].width, lines2[i - 1][0].width, lines2[n1][0].width);
+			if(lines2[i - 1][0].width !== lines2[n1][0].width) continue;			
 
+			if(Math.abs(Math.abs(angle) - 180) > 0.0001) continue;
+			console.log(angle, Math.abs(angle));
+			
+			lines2[i - 1][0].pos[1] = lines2[n1][0].pos[1];
+			lines2[i - 1][0].cut2 = lines2[n1][0].cut2;
+
+			lines2[i - 1][1].pos[1] = lines2[n1][1].pos[1];
+			lines2[i - 1][1].cut2 = lines2[n1][1].cut2;
+			
+			lines2.splice(i, 1);
+			i--;
+		}
+ 		
+		if(type === 'outside')
+		{
+			lines2.pop();
+		}		
+	}
+	
+	
+	// для 1-ого ряда, если угол между стенами почти прямой (150гр)
+	upCutLinesForAngle({lines2, type})
+	{
+		if(type === 'outside')
+		{
+			lines2.push(lines2[0]);
+		}
+		
+		for ( let i = 1; i < lines2.length; i++ )
+		{
+			const n1 = (type === 'outside' && i === lines2.length - 1) ? 0 : i;
+
+			const angle = lines2[n1][0].cut1.angle;
+
+			if(!this.checkIs150degree({angle})) continue;
+
+			console.log(angle);
+			lines2[i - 1][0].cut2.dir = lines2[n1][0].cut1.dir.clone().negate();
+			lines2[i - 1][0].cut2.normal = lines2[n1][0].cut1.normal.clone();
+			lines2[i - 1][0].cut2.pos = lines2[n1][0].cut1.pos.clone();  
+
+			lines2[n1][1].cut1.dir = lines2[i - 1][1].cut2.dir.clone().negate();
+			lines2[n1][1].cut1.normal = lines2[i - 1][1].cut2.normal.clone();
+			lines2[n1][1].cut1.pos = lines2[i - 1][1].cut2.pos.clone();      
+		}    
+
+		if(type === 'outside')
+		{
+			lines2.pop();
+		}		
+	}
 	
 	// получаем угол от 0 до 180 и от 0 до -180
 	getAngleBetweenVectors2D(v2, v1) 
