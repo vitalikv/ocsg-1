@@ -2,7 +2,6 @@
 // автоматическая расчет кол-во блоков/кирпичей
 class MyCalcBlocks
 {
-	arrB = [];
 	listPathImgs = {};
 	geometry;
 	material;
@@ -446,12 +445,13 @@ class MyCalcBlocks
 			
 			countY++;
 		}
-
+		
+		// обрезаем блоки под окна/двери
 		for (let i = 0; i < lines2.length; i++)
 		{
-			const arrO = this.setCutWD({arrO: lines2[i][0].arrO});
+			const arrO = this.setCutWD({arrO: lines2[i].arrO});
 			
-			let arrBloks = lines2[i][0].arrBloks;
+			let arrBloks = lines2[i].arrBloks;
 			
 			for (let i2 = 0; i2 < arrO.length; i2++)
 			{
@@ -464,8 +464,6 @@ class MyCalcBlocks
 	calcWalls({data, type})
 	{
 		const lines = [];		
-		
-		
 		
 		for ( let i = 0; i < data.length; i++ )
 		{	
@@ -489,7 +487,7 @@ class MyCalcBlocks
 		return lines2;
 	}
 	
-	
+	// обрезаем блоки в начале/конце и под высоту этажа
 	crBloksRow({lines2, currentY, levelHeight, delLastBlock})
 	{
 		const ind = delLastBlock ? 1 : 0;
@@ -497,7 +495,7 @@ class MyCalcBlocks
 		//lines2.length = 0;
 		for (let i = 0; i < lines2.length; i++)
 		{
-			const result = lines2[i][ind];
+			const result = lines2[i].row[ind];
 			
 			const wallDlina = result.pos[0].distanceTo(result.pos[1]);
 			
@@ -513,9 +511,6 @@ class MyCalcBlocks
 				const offsetZ = result.offset.start;
 				
 				const {dlina, z} = this.blockParams;
-				//let z2 = (side === 0) ? z : -z;
-				//if (pStart !== 0) z2 *= -1;
-				let z2 = z;
 		
 				const geometry = createGeometryCube(dlina * 2, levelHeight + 1, z * 10);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
@@ -523,12 +518,12 @@ class MyCalcBlocks
 				
 				obj.lookAt(normal);
 				obj.position.copy(pos.clone().sub(dir2.clone().multiplyScalar(dlina - offsetZ)));
-				obj.position.add(normal.clone().multiplyScalar(z2/10));
+				obj.position.add(normal.clone().multiplyScalar(z/10));
 				
-				scene.add(obj);	
+				//scene.add(obj);	
+				//obj.visible = false;
 
 				arrBloks = this.cutBlockes({obj, w: arrBloks});
-				obj.visible = false;
 			}
 
 			// обрезаем конец стены
@@ -540,9 +535,6 @@ class MyCalcBlocks
 				const offsetZ = result.offset.end;
 				
 				const {dlina, z} = this.blockParams;
-				//let z2 = (side === 0) ? z : -z;
-				//if (pStart !== 0) z2 *= -1;
-				let z2 = z;
 		
 				const geometry = createGeometryCube(dlina * 2, levelHeight + 1, z * 10);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
@@ -550,15 +542,42 @@ class MyCalcBlocks
 				
 				obj.lookAt(normal);
 				obj.position.copy(pos.clone().sub(dir2.clone().multiplyScalar(dlina - offsetZ)));
-				obj.position.add(normal.clone().multiplyScalar(z2/10));
+				obj.position.add(normal.clone().multiplyScalar(z/10));
 
-				scene.add(obj);	
+				//scene.add(obj);	
+				//obj.visible = false;
+				
+				arrBloks = this.cutBlockes({obj, w: arrBloks});				
+			}
 
+			
+			if(1===1)
+			{
+				const dir = result.dir;
+				const normal = result.normal;
+				
+				const {h, z} = this.blockParams;
+				
+				const geometry = createGeometryCube(wallDlina * 2, h * 2, z * 2);
+				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
+				const obj = new THREE.Mesh( geometry, material ); 
+				
+				const posC1 = result.pos[1].clone().sub(result.pos[0]).divideScalar(2).add(result.pos[0]);
+				posC1.add(new THREE.Vector3(0, levelHeight, 0));
+				posC1.add(normal.clone().multiplyScalar((z/2) * 2));
+				
+				obj.position.copy(posC1);
+				
+				const rad = Math.atan2(dir.z, -dir.x);
+				obj.rotateY(rad);
+
+				//scene.add(obj);	
+				//obj.visible = false;
+				
 				arrBloks = this.cutBlockes({obj, w: arrBloks});
-				obj.visible = false;
-			}						
+			}			
 		
-			lines2[i][0].arrBloks.push(...arrBloks);
+			lines2[i].arrBloks.push(...arrBloks);
 		}		
 
 	}
@@ -580,36 +599,7 @@ class MyCalcBlocks
 			
 			x = result.pos1.distanceTo(result.pos2);
 			const y = levelHeight;			
-			
-			
-			
 
-			if(1===2)
-			{
-				const {dlina, h, z} = this.blockParams;
-				let z2 = (side === 0) ? z : -z;
-				if (pStart !== 0) z2 *= -1;
-				
-				const geometry = createGeometryCube(x + dlina * 2, h * 2, z * 2);
-				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
-				const obj = new THREE.Mesh( geometry, material ); 
-				
-				const posC1 = result.pos2.clone().sub(result.pos1).divideScalar(2).add(result.pos1);
-				posC1.add(new THREE.Vector3(0, y, 0));
-				posC1.add(normal.clone().multiplyScalar(z2/2));
-				
-				obj.position.copy(posC1);
-				
-				const rad = Math.atan2(dir.z, -dir.x);
-				obj.rotateY(rad);
-
-				scene.add(obj);	
-
-				arrBloks = this.cutBlockes({obj, w: arrBloks});
-				
-				obj.visible = false;
-			}
-			
 			
 			for (let i2 = 0; i2 < arrBloks.length; i2++)
 			{
@@ -618,23 +608,12 @@ class MyCalcBlocks
 			}
 		
 			gArrBloks.push(arrBloks);
-			
-			this.arrB.push(...arrBloks);
-			
-			if(i > 0) 
-			{
-				//this.intersectBlockes({arr: [gArrBloks[i - 1], gArrBloks[i]]});
-				
-				//break;
-			}
-			
-
 		}
 		
 		
 	}
 	
-	rowBlockes({x, y, posStart, dir, normal, normal2, currentY, startX, type, side, pStart})
+	rowBlockes1({x, y, posStart, dir, normal, normal2, currentY, startX, type, side, pStart})
 	{		
 		const { dlina, h, offset, z } = this.blockParams;
 		let z2 = (side === 0) ? z : -z;
@@ -1025,9 +1004,6 @@ class MyCalcBlocks
 			data1.cut1 = {pos: pos[0].clone(), normal, dir};
 			data1.cut2 = {pos: pos[1].clone(), normal, dir: dir.clone().negate()};
 			data1.offset = {start: 0, end: 0};
-			data1.width = width;
-			data1.arrO = arrO;
-			data1.arrBloks = [];
 			
 			// для 2-ого ряда 
 			const posStart2 = pos[0].clone().sub(dir.clone().multiplyScalar(dlina/2));	// смещаем на пол блока назад
@@ -1036,7 +1012,7 @@ class MyCalcBlocks
 			data2.cut2 = {pos: pos[1].clone(), normal, dir: dir.clone().negate()};
 			data2.offset = {start: 0, end: 0};
 			
-			lines2.push([data1, data2]);
+			lines2.push({row: [data1, data2], width, arrO, arrBloks: []});
 			
 			lines[i].pos2 = pos2;
 			lines[i].dir = dir;
@@ -1077,16 +1053,16 @@ class MyCalcBlocks
 		{			
 			for ( let i = 0; i < lines2.length; i++ )
 			{			
-				lines2[i][0].offset.end = offset;
-				lines2[i][1].offset.start = offset;
+				lines2[i].row[0].offset.end = offset;
+				lines2[i].row[1].offset.start = offset;
 			}			
 		}
 		else
 		{
 			for ( let i = 0; i < lines2.length; i++ )
 			{			
-				if(i < lines2.length - 1) lines2[i][0].offset.end = offset;
-				if(i > 1) lines2[i][1].offset.start = offset;
+				if(i < lines2.length - 1) lines2[i].row[0].offset.end = offset;
+				if(i > 1) lines2[i].row[1].offset.start = offset;
 			}				
 		}
 		
@@ -1097,22 +1073,22 @@ class MyCalcBlocks
 		// смещаем 2-ой ряд, так чтобы блоки относительно 1-ого были смещены на половину длины блока
 		for ( let i = 0; i < lines2.length; i++ )
 		{
-			const pos1 = lines2[i][0].pos[0];
-			const pos2 = lines2[i][1].pos[0];
-			const dir = lines2[i][1].dir;
+			const pos1 = lines2[i].row[0].pos[0];
+			const pos2 = lines2[i].row[1].pos[0];
+			const dir = lines2[i].row[1].dir;
 			
 			const dist = pos1.distanceTo(pos2);
 			
 			const posStart2 = pos2.clone().sub(dir.clone().multiplyScalar(dist - offset/1 - dlina/2));
-			lines2[i][1].pos[0] = posStart2;			
+			lines2[i].row[1].pos[0] = posStart2;			
 		}
 
 		
 		//lines2.length = 0;
 		for ( let i = 0; i < lines2.length; i++ )
 		{
-			const pos1 = lines2[i][0].pos[0];
-			const pos2 = lines2[i][0].pos[1];
+			const pos1 = lines2[i].row[0].pos[0];
+			const pos2 = lines2[i].row[0].pos[1];
 
 			this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x00ff00});
 			this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1 + (0.1 * (i + 1)), 0)), size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
@@ -1195,12 +1171,12 @@ class MyCalcBlocks
 			lines[i - 1].angle = angle;
 
 			
-			lines2[i - 1][0].cut2.angle = angle;
-			lines2[i - 1][1].cut2.angle = angle;
+			lines2[i - 1].row[0].cut2.angle = angle;
+			lines2[i - 1].row[1].cut2.angle = angle;
 			
 			const n1 = (type === 'outside' && i === lines.length - 1) ? 0 : i;
-			lines2[n1][0].cut1.angle = angle;
-			lines2[n1][1].cut1.angle = angle;			
+			lines2[n1].row[0].cut1.angle = angle;
+			lines2[n1].row[1].cut1.angle = angle;			
 		}
 		
 		console.log(lines2);
@@ -1264,10 +1240,10 @@ class MyCalcBlocks
 			}
 			
 			const n = (ind !== undefined) ? ind : i;
-			lines2[n][0].pos[0] = crossP;
-			lines2[n][0].cut1.dir = (angle < 0) ? lines[i - 1].normal.clone().negate() : lines[i - 1].normal.clone();
-			lines2[n][0].cut1.normal = lines[i - 1].dir.clone().negate();
-			lines2[n][0].cut1.pos = (angle < 0) ? cross3.clone() : cross1.clone();
+			lines2[n].row[0].pos[0] = crossP;
+			lines2[n].row[0].cut1.dir = (angle < 0) ? lines[i - 1].normal.clone().negate() : lines[i - 1].normal.clone();
+			lines2[n].row[0].cut1.normal = lines[i - 1].dir.clone().negate();
+			lines2[n].row[0].cut1.pos = (angle < 0) ? cross3.clone() : cross1.clone();
 		}
 	}
 	
@@ -1324,10 +1300,10 @@ class MyCalcBlocks
 			
 			
 			const n = (ind !== undefined) ? ind : i - 1;
-			lines2[n][0].pos[1] = crossP;	
-			lines2[n][0].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
-			lines2[n][0].cut2.normal = lines[i].dir.clone().negate();	
-			lines2[n][0].cut2.pos = (angle < 0) ? cross1.clone() : cross3.clone();	
+			lines2[n].row[0].pos[1] = crossP;	
+			lines2[n].row[0].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
+			lines2[n].row[0].cut2.normal = lines[i].dir.clone().negate();	
+			lines2[n].row[0].cut2.pos = (angle < 0) ? cross1.clone() : cross3.clone();	
 		}
 				
 	}
@@ -1385,10 +1361,10 @@ class MyCalcBlocks
 			}
 			
 			const n = (ind !== undefined) ? ind : i;
-			lines2[n][1].pos[0] = crossP;
-			lines2[n][1].cut1.dir = (angle < 0) ? lines[i - 1].normal.clone().negate() : lines[i - 1].normal.clone();
-			lines2[n][1].cut1.normal = lines[i - 1].dir.clone().negate();
-			lines2[n][1].cut1.pos = (angle < 0) ? cross4.clone() : cross2.clone();
+			lines2[n].row[1].pos[0] = crossP;
+			lines2[n].row[1].cut1.dir = (angle < 0) ? lines[i - 1].normal.clone().negate() : lines[i - 1].normal.clone();
+			lines2[n].row[1].cut1.normal = lines[i - 1].dir.clone().negate();
+			lines2[n].row[1].cut1.pos = (angle < 0) ? cross4.clone() : cross2.clone();
 		}
 				
 	}
@@ -1445,10 +1421,10 @@ class MyCalcBlocks
 			}
 
 			const n = (ind !== undefined) ? ind : i - 1;
-			lines2[n][1].pos[1] = crossP;	
-			lines2[n][1].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
-			lines2[n][1].cut2.normal = lines[i].dir.clone().negate();	
-			lines2[n][1].cut2.pos = (angle < 0) ? cross4.clone() : cross2.clone();
+			lines2[n].row[1].pos[1] = crossP;	
+			lines2[n].row[1].cut2.dir = (angle < 0) ? lines[i].normal.clone().negate() : lines[i].normal.clone();
+			lines2[n].row[1].cut2.normal = lines[i].dir.clone().negate();	
+			lines2[n].row[1].cut2.pos = (angle < 0) ? cross4.clone() : cross2.clone();
 		}
 				
 	}
@@ -1466,19 +1442,20 @@ class MyCalcBlocks
 		{
 			const n1 = (type === 'outside' && i === lines2.length - 1) ? 0 : i;
 			
-			const angle = lines2[n1][0].cut1.angle;
+			const angle = lines2[n1].row[0].cut1.angle;
 
-			if(lines2[i - 1][0].width !== lines2[n1][0].width) continue;			
+			if(lines2[i - 1].width !== lines2[n1].width) continue;			
 
 			if(Math.abs(Math.abs(angle) - 180) > 0.0001) continue;
 			console.log(angle, Math.abs(angle));
 			
-			lines2[i - 1][0].pos[1] = lines2[n1][0].pos[1];
-			lines2[i - 1][0].cut2 = lines2[n1][0].cut2;
-			lines2[i - 1][0].arrO.push(...lines2[n1][0].arrO);
-
-			lines2[i - 1][1].pos[1] = lines2[n1][1].pos[1];
-			lines2[i - 1][1].cut2 = lines2[n1][1].cut2;
+			lines2[i - 1].row[0].pos[1] = lines2[n1].row[0].pos[1];
+			lines2[i - 1].row[0].cut2 = lines2[n1].row[0].cut2;
+			
+			lines2[i - 1].row[1].pos[1] = lines2[n1].row[1].pos[1];
+			lines2[i - 1].row[1].cut2 = lines2[n1].row[1].cut2;
+			
+			lines2[i - 1].arrO.push(...lines2[n1].arrO);
 			
 			lines2.splice(i, 1);
 			i--;
@@ -1503,18 +1480,18 @@ class MyCalcBlocks
 		{
 			const n1 = (type === 'outside' && i === lines2.length - 1) ? 0 : i;
 
-			const angle = lines2[n1][0].cut1.angle;
+			const angle = lines2[n1].row[0].cut1.angle;
 
 			if(!this.checkIs150degree({angle})) continue;
 
 			console.log(angle);
-			lines2[i - 1][0].cut2.dir = lines2[n1][0].cut1.dir.clone().negate();
-			lines2[i - 1][0].cut2.normal = lines2[n1][0].cut1.normal.clone();
-			lines2[i - 1][0].cut2.pos = lines2[n1][0].cut1.pos.clone();  
+			lines2[i - 1].row[0].cut2.dir = lines2[n1].row[0].cut1.dir.clone().negate();
+			lines2[i - 1].row[0].cut2.normal = lines2[n1].row[0].cut1.normal.clone();
+			lines2[i - 1].row[0].cut2.pos = lines2[n1].row[0].cut1.pos.clone();  
 
-			lines2[n1][1].cut1.dir = lines2[i - 1][1].cut2.dir.clone().negate();
-			lines2[n1][1].cut1.normal = lines2[i - 1][1].cut2.normal.clone();
-			lines2[n1][1].cut1.pos = lines2[i - 1][1].cut2.pos.clone();      
+			lines2[n1].row[1].cut1.dir = lines2[i - 1].row[1].cut2.dir.clone().negate();
+			lines2[n1].row[1].cut1.normal = lines2[i - 1].row[1].cut2.normal.clone();
+			lines2[n1].row[1].cut1.pos = lines2[i - 1].row[1].cut2.pos.clone();      
 		}    
 
 		if(type === 'outside')
