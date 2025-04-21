@@ -327,7 +327,7 @@ class MyCalcBlocks
 		
 		for ( let i = 0; i < arrW2.outside.length; i++ )
 		{
-			//this.caclColumn({data: arrW2.outside[i], levelHeight, type: 'outside'});
+			this.caclColumn({data: arrW2.outside[i], levelHeight, type: 'outside'});
 		}			
 
 
@@ -592,7 +592,11 @@ findObjectsUntilRepetition(arrayObjects) {
 			if(wall.userData.wall.arrO) arrO.push(...wall.userData.wall.arrO);
 			
 			const resultP = this.getPosWallV({ wall, side, pStart });
-			lines.push({pos: [resultP.pos1, resultP.pos2], side, pStart, width, arrO});
+			
+			const p = wall.userData.wall.p;
+			const posP = [p[0].position.clone(), p[1].position.clone()];
+			
+			lines.push({pos: [resultP.pos1, resultP.pos2], posP, side, pStart, width, arrO});
 
 			wall.visible = false;
 		}
@@ -1064,12 +1068,52 @@ findObjectsUntilRepetition(arrayObjects) {
 			const arrO = lines[i].arrO;
 			
 			const pos = lines[i].pos;	// 1-ая линия			
-			this.helpLine({v: [pos[0], pos[1]], color: 0x00ff00});
+			//this.helpLine({v: [pos[0], pos[1]], color: 0x00ff00});
 			const dir = pos[1].clone().sub(pos[0]).normalize();
 			const posC = pos[1].clone().sub(pos[0]).multiplyScalar(0.5).add(pos[0]);
 			const normal = myMath.calcNormal2D({p1: pos[1], p2: pos[0], reverse: false});
 			
-			this.helpLine({v: [pos[0], pos[1]], color: 0x000000});
+			const posP = lines[i].posP;
+			let posL1 = [];
+			let posL2 = [];
+			if(1===1)
+			{
+				let p1 = posP[0];
+				let p2 = posP[1];			
+				
+				if(pStart === 1)
+				{
+					p2 = posP[0];
+					p1 = posP[1];					
+				}
+
+				this.helpLine({v: [p1, p2], color: 0xffffff});
+				
+				const dir = p2.clone().sub(p1).normalize();
+				const posC = p2.clone().sub(p1).multiplyScalar(0.5).add(p1);
+				const normal = myMath.calcNormal2D({p1: p1, p2: p2, reverse: false});
+				
+				if(side === 1 && pStart === 1 || side === 0 && pStart === 0)
+				{
+					normal.negate();				
+				}				
+				
+				const posN = posC.clone().add(normal.clone().multiplyScalar(-0.3));
+				this.arrowHelper({dir, pos: posN, color: 0x000000});
+
+				const z1 = (type === 'outside') ? -width : -z;
+				const posZ1 = posC.clone().add(normal.clone().multiplyScalar(z1/2));
+				const offsetZ1 = posZ1.clone().sub(posC);				
+				posL1 = [p1.clone().add(offsetZ1), p2.clone().add(offsetZ1)];	// 1-ая линия
+				//this.helpLine({v: posL1, color: 0x00ff00});	
+				
+				const z2 = (type === 'outside') ? (z - (width - z)) : z;
+				const posZ2 = posC.clone().add(normal.clone().multiplyScalar(z2/2));
+				const offsetZ2 = posZ2.clone().sub(posC);				
+				posL2 = [p1.clone().add(offsetZ2), p2.clone().add(offsetZ2)];	// 2-ая линия
+				//this.helpLine({v: posL2, color: 0x0000ff});				
+			}
+			
 			
 			//console.log(side, pStart);
 			if(pStart === 1)
@@ -1091,24 +1135,25 @@ findObjectsUntilRepetition(arrayObjects) {
 			const offsetZ = posZ.clone().sub(posC);
 			
 			const pos2 = [pos[0].clone().add(offsetZ), pos[1].clone().add(offsetZ)];	// 2-ая линия
-			this.helpLine({v: pos2, color: 0x0000ff});
+			//this.helpLine({v: pos2, color: 0x0000ff});
 			
 			// для 1-ого ряда
-			const data1 = {pos: [pos[0].clone(), pos[1].clone()], dir, normal};
-			data1.cut1 = {pos: pos[0].clone(), normal, dir};
-			data1.cut2 = {pos: pos[1].clone(), normal, dir: dir.clone().negate()};
+			const data1 = {pos: [posL1[0].clone(), posL1[1].clone()], dir, normal};
+			data1.cut1 = {pos: posL1[0].clone(), normal, dir};
+			data1.cut2 = {pos: posL1[1].clone(), normal, dir: dir.clone().negate()};
 			data1.offset = {start: 0, end: 0};
 			
 			// для 2-ого ряда 
-			const posStart2 = pos[0].clone().sub(dir.clone().multiplyScalar(dlina/2));	// смещаем на пол блока назад
-			const data2 = {pos: [posStart2.clone(), pos[1].clone()], dir, normal};
-			data2.cut1 = {pos: pos[0].clone(), normal, dir};
-			data2.cut2 = {pos: pos[1].clone(), normal, dir: dir.clone().negate()};
+			const posStart2 = posL1[0].clone().sub(dir.clone().multiplyScalar(dlina/2));	// смещаем на пол блока назад
+			const data2 = {pos: [posStart2.clone(), posL1[1].clone()], dir, normal};
+			data2.cut1 = {pos: posL1[0].clone(), normal, dir};
+			data2.cut2 = {pos: posL1[1].clone(), normal, dir: dir.clone().negate()};
 			data2.offset = {start: 0, end: 0};
 			
-			lines2.push({row: [data1, data2], width, arrO, arrBloks: []});
+			lines2.push({row: [data1, data2], width, arrO, angle: 0, arrBloks: []});
 			
-			lines[i].pos2 = pos2;
+			lines[i].pos = posL1;
+			lines[i].pos2 = posL2;
 			lines[i].dir = dir;
 			lines[i].cross = {};
 			lines[i].normal = normal;
@@ -1263,14 +1308,9 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			lines[i - 1].cross = {cross1, cross2, cross3, cross4};
 			lines[i - 1].angle = angle;
-
-			
-			lines2[i - 1].row[0].cut2.angle = angle;
-			lines2[i - 1].row[1].cut2.angle = angle;
 			
 			const n1 = (type === 'outside' && i === lines.length - 1) ? 0 : i;
-			lines2[n1].row[0].cut1.angle = angle;
-			lines2[n1].row[1].cut1.angle = angle;			
+			lines2[n1].angle = angle;			
 		}
 		
 		console.log(lines2);
@@ -1536,7 +1576,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		{
 			const n1 = (type === 'outside' && i === lines2.length - 1) ? 0 : i;
 			
-			const angle = lines2[n1].row[0].cut1.angle;
+			const angle = lines2[n1].angle;
 
 			if(lines2[i - 1].width !== lines2[n1].width) continue;			
 
@@ -1574,7 +1614,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		{
 			const n1 = (type === 'outside' && i === lines2.length - 1) ? 0 : i;
 
-			const angle = lines2[n1].row[0].cut1.angle;
+			const angle = lines2[n1].angle;
 
 			if(!this.checkIs150degree({angle})) continue;
 
@@ -1605,6 +1645,7 @@ findObjectsUntilRepetition(arrayObjects) {
 
 	checkIs150degree({angle})
 	{
+		//return false;
 		return (Math.abs(angle) > 120) ? true : false;
 	}
 	
