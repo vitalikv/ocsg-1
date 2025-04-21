@@ -12,6 +12,8 @@ class MyCalcBlocks
 		this.listPathImgs.kirpich = infProject.path+'img/widgets/blocks/one_kirpich.jpg';
 		this.listPathImgs.block = infProject.path+'img/widgets/blocks/block_1.jpg';
 		
+		//this.listPathImgs.kirpich = this.listPathImgs.block;
+		
 		const {dlina, h, z} = this.blockParams;
 		this.geometry = createGeometryCube(dlina, h, z);
 		//this.geometry = new THREE.BufferGeometry().fromGeometry(this.geometry);
@@ -23,8 +25,8 @@ class MyCalcBlocks
 	
 	init()
 	{
-		
 		this.test({level: myLevels.levels[0]});
+		//this.test({level: myLevels.levels[1]});
 	}
 	
 	createBlock({pos})
@@ -115,6 +117,12 @@ class MyCalcBlocks
 				
 				arrW.outside.push({wall: wall[i], side, array: [wall[i].userData.wall.p[0].userData.id, wall[i].userData.wall.p[1].userData.id]});
 			}
+			
+			if(room.length === 2)
+			{
+				arrW.inside.push({wall: wall[i], side: 0, array: [wall[i].userData.wall.p[0].userData.id, wall[i].userData.wall.p[1].userData.id]});
+				console.log([wall[i].userData.wall.p[0].userData.id, wall[i].userData.wall.p[1].userData.id]);
+			}
 		}
 
 		return arrW;
@@ -144,7 +152,7 @@ class MyCalcBlocks
 			const reverseWall = (firstElem.array[0] === result[0].nums[0]) ? 0 : 1;
 			//console.log(999, result);
 			
-			arrW.single = this.moveElementToFirstPosition({data: arrW.single, elementToMove: firstElem})
+			arrW.single = this.moveElementToFirstPosition({data: arrW.single, elementToMove: firstElem});
 			
 			//console.log(333, reverseWall, firstElem.array[0], result[0].nums[0]);
 			
@@ -249,6 +257,68 @@ class MyCalcBlocks
 			}			
 		}
 
+
+		while(arrW.inside.length > 0)
+		{
+			console.log('inside - внутренние');
+
+			const result = this.findUniqueEdgeElements(arrW.inside);
+			
+			const firstElem = result[0].item;
+			
+			arrW.inside = this.moveElementToFirstPosition({data: arrW.inside, elementToMove: firstElem});
+			
+			const newArr1 = this.findObjectsUntilRepetition(arrW.inside);
+			
+			const newArr = this.sortChains(newArr1);
+			
+			let reverseWall = 0;
+			if(newArr.length > 1)
+			{
+				reverseWall = (newArr[0].array[0] === newArr[1].array[1]) ? 1 : 0;
+			}
+			
+			
+			// удаляем из общего массива полученный кусок стен
+			for ( let i = 0; i < newArr.length; i++ )
+			{
+				const index = arrW.inside.indexOf(newArr[i]);
+				if (index !== -1) 
+				{
+					arrW.inside.splice(index, 1);
+				}
+			}
+			
+			let pStart = reverseWall;
+			let side = reverseWall;
+			
+			const ind = arrW2.inside.length;
+			arrW2.inside[ind] = [];
+				
+			// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
+			newArr.push(newArr[0]);
+			for ( let i = 0; i < newArr.length - 1; i++ )
+			{
+				const array = newArr[i].array;
+				const wall = newArr[i].wall;
+				//const side = newArr[i].side;
+				
+				arrW2.inside[ind].push({wall, side, pStart});
+				
+				const array2 = newArr[i+1].array;
+				
+				console.log(array, pStart, array2[0], array[1]);
+				
+				
+				if(!(array2[0] === array[1] || array2[1] === array[0]))
+				{
+					pStart = (pStart === 0) ? 1 : 0;
+					side = pStart;					
+				}
+			}			
+		}
+
+
 		for ( let i = 0; i < arrW2.single.length; i++ )
 		{
 			this.caclColumn({data: arrW2.single[i], levelHeight, type: 'single'});
@@ -257,9 +327,14 @@ class MyCalcBlocks
 		
 		for ( let i = 0; i < arrW2.outside.length; i++ )
 		{
-			this.caclColumn({data: arrW2.outside[i], levelHeight, type: 'outside'});
+			//this.caclColumn({data: arrW2.outside[i], levelHeight, type: 'outside'});
 		}			
-	
+
+
+		for ( let i = 0; i < arrW2.inside.length; i++ )
+		{
+			this.caclColumn({data: arrW2.inside[i], levelHeight, type: 'inside'});
+		}	
 
 		renderCamera();
 	}
@@ -362,9 +437,12 @@ class MyCalcBlocks
 			// Условие 1: оба числа не встречаются в других элементах
 			const bothUnique = count1 === 0 && count2 === 0;
 
-			// Условие 2: только одно число встречается в других элементах (ровно 1 раз)
-			const oneShared = (count1 === 0 && count2 === 1) || (count1 === 1 && count2 === 0);
-
+			//Условие 2: только одно число встречается в других элементах (ровно 1 раз)
+			//const oneShared = (count1 === 0 && count2 === 1) || (count1 === 1 && count2 === 0);
+			
+			// Условие 3: только одно число НЕ встречается в других элементах
+			const oneShared = (count1 === 0) || (count2 === 0);
+		
 			if (bothUnique || oneShared) 
 			{
 				// Определяем уникальные числа
@@ -422,7 +500,45 @@ class MyCalcBlocks
 		// Создаем новый массив: элементы после индекса + элементы до индекса
 		return [...data.slice(index), ...data.slice(0, index)];
 	}
-	
+
+
+findObjectsUntilRepetition(arrayObjects) {
+    // Объект для подсчета количества вхождений каждого числа
+    const countMap = {};
+
+    // Результирующий массив
+    const result = [];
+
+    // Проходим по каждому объекту в массиве
+    for (const obj of arrayObjects) {
+        const currentArray = obj.array;
+
+        // Проверяем каждое число в текущем массиве
+        let shouldStop = false; // Флаг для определения, нужно ли остановить проверку
+
+        for (const num of currentArray) {
+            // Увеличиваем счетчик для числа
+            countMap[num] = (countMap[num] || 0) + 1;
+
+            // Если число встречается больше 2 раз, устанавливаем флаг и выходим из цикла
+            if (countMap[num] > 2) {
+                shouldStop = true;
+                break;
+            }
+        }
+
+        // Если флаг установлен, значит, найдено число с более чем 2 вхождениями
+        if (shouldStop) {
+            break; // Останавливаем проверку
+        }
+
+        // Добавляем текущий объект в результирующий массив
+        result.push(obj);
+    }
+
+    // Возвращаем результирующий массив
+    return result;
+}
 	
 	caclColumn({data, levelHeight, type})
 	{
@@ -438,7 +554,7 @@ class MyCalcBlocks
 		{
 			let delLastBlock = countY % 2 === 0 ? false : true;
 			
-			if(countY < 222) 
+			if(countY === 0) 
 			{
 				this.crBloksRow({lines2, currentY: i, levelHeight, delLastBlock});
 			}
@@ -550,7 +666,7 @@ class MyCalcBlocks
 				arrBloks = this.cutBlockes({obj, w: arrBloks});				
 			}
 
-			
+			// обрезаем вверх стены
 			if(1===1)
 			{
 				const dir = result.dir;
@@ -802,30 +918,6 @@ class MyCalcBlocks
 			data.side = side;
 			//console.log('ppp', n3, n4);
 		}		
-		else if(1===2)
-		{
-			const pos1 = wall.localToWorld( v[n1].clone() );
-			const pos2 = wall.localToWorld( v[n2].clone() );
-			
-			const pos3 = wall.localToWorld( v[n3].clone() );
-			const pos4 = wall.localToWorld( v[n4].clone() );	
-
-			const dist1 = pos1.distanceTo(pos2);
-			const dist2 = pos3.distanceTo(pos4);
-			
-			if(dist1 > dist2)
-			{
-				data.pos1 = pos1;
-				data.pos2 = pos2;
-				data.side = 0;
-			}
-			else
-			{
-				data.pos1 = pos3;
-				data.pos2 = pos4;
-				data.side = 1;
-			}			
-		}
 		
 		data.v = [v[n1].clone(), v[n2].clone(), v[n3].clone(), v[n4].clone()];
 		
@@ -972,10 +1064,12 @@ class MyCalcBlocks
 			const arrO = lines[i].arrO;
 			
 			const pos = lines[i].pos;	// 1-ая линия			
-			//this.helpLine({v: [pos[0], pos[1]], color: 0x00ff00});
+			this.helpLine({v: [pos[0], pos[1]], color: 0x00ff00});
 			const dir = pos[1].clone().sub(pos[0]).normalize();
 			const posC = pos[1].clone().sub(pos[0]).multiplyScalar(0.5).add(pos[0]);
 			const normal = myMath.calcNormal2D({p1: pos[1], p2: pos[0], reverse: false});
+			
+			this.helpLine({v: [pos[0], pos[1]], color: 0x000000});
 			
 			//console.log(side, pStart);
 			if(pStart === 1)
@@ -997,7 +1091,7 @@ class MyCalcBlocks
 			const offsetZ = posZ.clone().sub(posC);
 			
 			const pos2 = [pos[0].clone().add(offsetZ), pos[1].clone().add(offsetZ)];	// 2-ая линия
-			//this.helpLine({v: pos2, color: 0x0000ff});
+			this.helpLine({v: pos2, color: 0x0000ff});
 			
 			// для 1-ого ряда
 			const data1 = {pos: [pos[0].clone(), pos[1].clone()], dir, normal};
@@ -1536,8 +1630,7 @@ class MyCalcBlocks
 			obj.position.copy( arrO[i].position );
 			obj.rotation.copy( arrO[i].rotation );
 			//scene.add(obj);
-			
-			console.log(111, obj);
+
 			arr.push(obj);
 		}
 
