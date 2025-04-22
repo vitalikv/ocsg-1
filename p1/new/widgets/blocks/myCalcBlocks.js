@@ -275,7 +275,8 @@ class MyCalcBlocks
 			let reverseWall = 0;
 			if(newArr.length > 1)
 			{
-				reverseWall = (newArr[0].array[0] === newArr[1].array[1]) ? 1 : 0;
+				//reverseWall = (newArr[0].array[0] === newArr[1].array[1]) ? 1 : 0;
+				reverseWall = (newArr[0].array[1] !== newArr[1].array[0] && newArr[0].array[1] !== newArr[1].array[1]) ? 1 : 0;
 			}
 			
 			
@@ -295,7 +296,7 @@ class MyCalcBlocks
 			const ind = arrW2.inside.length;
 			arrW2.inside[ind] = [];
 				
-			// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
+			
 			newArr.push(newArr[0]);
 			for ( let i = 0; i < newArr.length - 1; i++ )
 			{
@@ -318,7 +319,8 @@ class MyCalcBlocks
 			}			
 		}
 
-
+		this.arrW2 = arrW2;
+		
 		for ( let i = 0; i < arrW2.single.length; i++ )
 		{
 			this.caclColumn({data: arrW2.single[i], levelHeight, type: 'single'});
@@ -554,7 +556,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		{
 			let delLastBlock = countY % 2 === 0 ? false : true;
 			
-			if(countY === 0) 
+			if(countY < 1) 
 			{
 				this.crBloksRow({lines2, currentY: i, levelHeight, delLastBlock});
 			}
@@ -593,10 +595,10 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			const resultP = this.getPosWallV({ wall, side, pStart });
 			
-			const p = wall.userData.wall.p;
-			const posP = [p[0].position.clone(), p[1].position.clone()];
+			const points = wall.userData.wall.p;
+			const posP = [points[0].position.clone(), points[1].position.clone()];			
 			
-			lines.push({pos: [resultP.pos1, resultP.pos2], posP, side, pStart, width, arrO});
+			lines.push({pos: [resultP.pos1, resultP.pos2], posP, side, pStart, width, arrO, wall});
 
 			wall.visible = false;
 		}
@@ -1066,6 +1068,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			const pStart = lines[i].pStart;
 			const width = lines[i].width;
 			const arrO = lines[i].arrO;
+			const wall = lines[i].wall;
 			
 			const pos = lines[i].pos;	// 1-ая линия			
 			//this.helpLine({v: [pos[0], pos[1]], color: 0x00ff00});
@@ -1073,49 +1076,25 @@ findObjectsUntilRepetition(arrayObjects) {
 			const posC = pos[1].clone().sub(pos[0]).multiplyScalar(0.5).add(pos[0]);
 			const normal = myMath.calcNormal2D({p1: pos[1], p2: pos[0], reverse: false});
 			
-			const posP = lines[i].posP;
-			let posL1 = [];
-			let posL2 = [];
-			if(1===1)
+			
+			const result = this.calcLineWall({posP: lines[i].posP, pStart, side, width, z, type, show: true});
+			let posL1 = result.posL1;
+			let posL2 = result.posL2;
+			
+			if(type !== 'outside' && i === 0 && 1===1)					
 			{
-				let p1 = posP[0];
-				let p2 = posP[1];			
-				
-				if(pStart === 1)
-				{
-					p2 = posP[0];
-					p1 = posP[1];					
-				}
-
-				this.helpLine({v: [p1, p2], color: 0xffffff});
-				
-				const dir = p2.clone().sub(p1).normalize();
-				const posC = p2.clone().sub(p1).multiplyScalar(0.5).add(p1);
-				const normal = myMath.calcNormal2D({p1: p1, p2: p2, reverse: false});
-				
-				if(side === 1 && pStart === 1 || side === 0 && pStart === 0)
-				{
-					normal.negate();				
-				}				
-				
-				const posN = posC.clone().add(normal.clone().multiplyScalar(-0.3));
-				this.arrowHelper({dir, pos: posN, color: 0x000000});
-
-				const z1 = (type === 'outside') ? -width : -z;
-				const posZ1 = posC.clone().add(normal.clone().multiplyScalar(z1/2));
-				const offsetZ1 = posZ1.clone().sub(posC);				
-				posL1 = [p1.clone().add(offsetZ1), p2.clone().add(offsetZ1)];	// 1-ая линия
-				//this.helpLine({v: posL1, color: 0x00ff00});	
-				
-				const z2 = (type === 'outside') ? (z - (width - z)) : z;
-				const posZ2 = posC.clone().add(normal.clone().multiplyScalar(z2/2));
-				const offsetZ2 = posZ2.clone().sub(posC);				
-				posL2 = [p1.clone().add(offsetZ2), p2.clone().add(offsetZ2)];	// 2-ая линия
-				//this.helpLine({v: posL2, color: 0x0000ff});				
+				const cross = this.calcW2({wall, ind: 0, lines: [posL1, posL2], width, z, pStart});
+				if(cross.pos1) posL1[0] = cross.pos1;
+				if(cross.pos2) posL2[0] = cross.pos2;
+			}			
+			if(type !== 'outside' && i === lines.length - 1 && 1===1)					
+			{				
+				const cross = this.calcW2({wall, ind: 1, lines: [posL1, posL2], width, z, pStart});
+				if(cross.pos1) posL1[1] = cross.pos1;
+				if(cross.pos2) posL2[1] = cross.pos2;
 			}
 			
 			
-			//console.log(side, pStart);
 			if(pStart === 1)
 			{
 				side = (side === 0) ? 1 : 0;				
@@ -1150,7 +1129,9 @@ findObjectsUntilRepetition(arrayObjects) {
 			data2.cut2 = {pos: posL1[1].clone(), normal, dir: dir.clone().negate()};
 			data2.offset = {start: 0, end: 0};
 			
-			lines2.push({row: [data1, data2], width, arrO, angle: 0, arrBloks: []});
+			const points = wall.userData.wall.p;
+			const pIds = [points[0].userData.id, points[1].userData.id];
+			lines2.push({row: [data1, data2], width, arrO, angle: 0, arrBloks: [], pIds});
 			
 			lines[i].pos = posL1;
 			lines[i].pos2 = posL2;
@@ -1229,8 +1210,13 @@ findObjectsUntilRepetition(arrayObjects) {
 			const pos1 = lines2[i].row[0].pos[0];
 			const pos2 = lines2[i].row[0].pos[1];
 
+			const pIds = lines2[i].pIds;
+			if(pIds[0] === 98 || pIds[0] === 97 && pIds[1] === 98 || pIds[1] === 97)
+			{
 			this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x00ff00});
-			this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1 + (0.1 * (i + 1)), 0)), size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
+			this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1 + (0.1 * (i + 1)), 0)), size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});	
+			}
+
 		}
 		
 		return lines2;
@@ -1274,7 +1260,161 @@ findObjectsUntilRepetition(arrayObjects) {
 
 		return { arrBloks };
 	}
+	
+	
+	// вычисляем стартовые/конечные точки у стены, у которой есть соседние стены (внутренние стены) 
+	calcW2({wall, ind, lines, width, z, pStart})
+	{		
+		const points = wall.userData.wall.p;
+		
+		if(ind === 0)
+		{
+			ind = (pStart === 0) ? 0 : 1;
+		}
+		else if(ind === 1)		
+		{
+			ind = (pStart === 0) ? 1 : 0;
+		}	
+		
+		const walls = points[ind].w;
+		
+		const w2 = [];
+		for ( let i = 0; i < walls.length; i++ )
+		{
+			if(wall !== walls[i]) w2.push(walls[i]);
+		}
+		
+		const linesW = [];
 
+
+			
+		for ( let i = 0; i < w2.length; i++ )
+		{
+			const points2 = w2[i].userData.wall.p;
+			const posP = [points2[0].position.clone(), points2[1].position.clone()];
+			
+			let type = '';
+			let pStart2 = 0;
+			if(ind === 0 && points2[0] === points[0]) pStart2 = (pStart === 0) ? 1 : 0;
+			if(ind === 1 && points2[0] === points[1]) pStart2 = (pStart === 0) ? 1 : 0;
+			let side = pStart2;
+			
+			for ( let i2 = 1110; i2 < this.arrW2.outside.length; i2++ )
+			{
+				const outside = this.arrW2.outside[i2];
+				
+				for ( let i3 = 0; i3 < outside.length; i3++ )
+				{
+					if(w2[i] === outside[i3].wall) 
+					{
+						console.log(2222, outside[i3]);
+						break;
+					}
+				}
+				
+			}
+			
+			const room = myHouse.myRoom.detectCommonZone_1( w2[i] );
+			
+			if(room.length === 0) { type = 'single'; }
+			if(room.length === 1) { type = 'outside'; }
+			if(room.length === 2) { type = 'inside'; }	
+			
+			if(type === 'outside')
+			{
+				for ( let i2 = 0; i2 < room[0].userData.room.w.length; i2++ ) 
+				{ 
+					if(room[0].userData.room.w[i2] == w2[i]) { side = room[0].userData.room.s[i2]; break; } 
+				}
+			}
+			
+			//console.log('ind', ind, wall.userData.wall.p, pStart, pStart2, side, points[ind].userData.id, [points2[0].userData.id, points2[1].userData.id]);
+			
+			width = w2[i].userData.wall.width;
+			
+			const {posL1, posL2} = this.calcLineWall({posP, pStart: pStart2, side, width, z, type, show: true});
+			
+			linesW.push(posL1, posL2);			
+		}
+
+		
+		const getPos = ({v1, v2}) =>
+		{
+			let crossPos = null;
+			
+			for ( let i = 0; i < linesW.length; i++ )
+			{
+				const cross = myMath.checkCrossLine(v1, v2, linesW[i][0], linesW[i][1]);
+				if(!cross) continue;
+				
+				const pos = myMath.getIntersection(v1, v2, linesW[i][0], linesW[i][1]);
+				
+				if(pos) 
+				{
+					crossPos = pos;
+					break;
+				}
+			}
+
+			return crossPos;
+		};
+		
+		const pos1 = getPos({v1: lines[0][0], v2: lines[0][1]});
+		const pos2 = getPos({v1: lines[1][0], v2: lines[1][1]});
+		
+		if(pos1) this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x00ff00});
+		if(pos2) this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
+				
+				
+		console.log({pos1, pos2});	
+		
+		return {pos1, pos2};
+	}
+	
+	
+	// получаем позиции 2-х линий
+	calcLineWall({posP, pStart, side, width, z, type, show = false})
+	{
+		let p1 = posP[0];
+		let p2 = posP[1];			
+		
+		if(pStart === 1)
+		{
+			p2 = posP[0];
+			p1 = posP[1];					
+		}
+
+		//this.helpLine({v: [p1, p2], color: 0xffffff});
+		
+		const dir = p2.clone().sub(p1).normalize();
+		const posC = p2.clone().sub(p1).multiplyScalar(0.5).add(p1);
+		const normal = myMath.calcNormal2D({p1: p1, p2: p2, reverse: false});
+		
+		if(side === 1 && pStart === 1 || side === 0 && pStart === 0)
+		{
+			normal.negate();				
+		}				
+		
+		const posN = posC.clone().add(normal.clone().multiplyScalar(-0.3));
+		this.arrowHelper({dir, pos: posN, color: 0x000000});
+
+		const z1 = (type === 'outside') ? -width : -z;
+		const posZ1 = posC.clone().add(normal.clone().multiplyScalar(z1/2));
+		const offsetZ1 = posZ1.clone().sub(posC);				
+		const posL1 = [p1.clone().add(offsetZ1), p2.clone().add(offsetZ1)];	// 1-ая линия
+		if(show) this.helpLine({v: posL1, color: 0x00ff00});	
+		
+		const z2 = (type === 'outside') ? (z - (width - z)) : z;
+		const posZ2 = posC.clone().add(normal.clone().multiplyScalar(z2/2));
+		const offsetZ2 = posZ2.clone().sub(posC);				
+		const posL2 = [p1.clone().add(offsetZ2), p2.clone().add(offsetZ2)];	// 2-ая линия
+		if(show) this.helpLine({v: posL2, color: 0x0000ff});	
+
+		
+		return {posL1, posL2};
+	}
+	
+	
 	setDataLines({lines, lines2, type})
 	{
 		if(type === 'outside')
