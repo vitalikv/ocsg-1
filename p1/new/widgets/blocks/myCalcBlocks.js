@@ -5,7 +5,7 @@ class MyCalcBlocks
 	listPathImgs = {};
 	geometry;
 	material;
-	blockParams = {dlina: 0.6, h: 0.3, z: 0.4, offset: 0.01};
+	blockParams = {dlina: 0.6, h: 0.3, z: 0.3, offset: 0.01};
 	
 	constructor()
 	{
@@ -556,7 +556,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		{
 			let delLastBlock = countY % 2 === 0 ? false : true;
 			
-			if(countY < 1) 
+			if(countY === 0) 
 			{
 				this.crBloksRow({lines2, currentY: i, levelHeight, delLastBlock});
 			}
@@ -630,7 +630,7 @@ findObjectsUntilRepetition(arrayObjects) {
 				const normal = result.cut1.normal;
 				const dir2 = result.cut1.dir;
 				const pos = result.cut1.pos;
-				const offsetZ = result.offset.start;
+				const offsetZ = 0;
 				
 				const {dlina, z} = this.blockParams;
 		
@@ -654,7 +654,7 @@ findObjectsUntilRepetition(arrayObjects) {
 				const normal = result.cut2.normal;
 				const dir2 = result.cut2.dir;
 				const pos = result.cut2.pos;
-				const offsetZ = result.offset.end;
+				const offsetZ = 0;
 				
 				const {dlina, z} = this.blockParams;
 		
@@ -1077,7 +1077,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			const normal = myMath.calcNormal2D({p1: pos[1], p2: pos[0], reverse: false});
 			
 			
-			const result = this.calcLineWall({posP: lines[i].posP, pStart, side, width, z, type, show: true});
+			const result = this.calcLineWall({posP: lines[i].posP, pStart, side, width, z, type, show: false});
 			let posL1 = result.posL1;
 			let posL2 = result.posL2;
 			
@@ -1085,13 +1085,13 @@ findObjectsUntilRepetition(arrayObjects) {
 			{
 				const cross = this.calcW2({wall, ind: 0, lines: [posL1, posL2], width, z, pStart});
 				if(cross.pos1) posL1[0] = cross.pos1;
-				if(cross.pos2) posL2[0] = cross.pos2;
+				if(cross.pos2) posL2[0] = cross.pos2;				
 			}			
 			if(type !== 'outside' && i === lines.length - 1 && 1===1)					
 			{				
 				const cross = this.calcW2({wall, ind: 1, lines: [posL1, posL2], width, z, pStart});
 				if(cross.pos1) posL1[1] = cross.pos1;
-				if(cross.pos2) posL2[1] = cross.pos2;
+				if(cross.pos2) posL2[1] = cross.pos2;				
 			}
 			
 			
@@ -1120,14 +1120,12 @@ findObjectsUntilRepetition(arrayObjects) {
 			const data1 = {pos: [posL1[0].clone(), posL1[1].clone()], dir, normal};
 			data1.cut1 = {pos: posL1[0].clone(), normal, dir};
 			data1.cut2 = {pos: posL1[1].clone(), normal, dir: dir.clone().negate()};
-			data1.offset = {start: 0, end: 0};
 			
 			// для 2-ого ряда 
 			const posStart2 = posL1[0].clone().sub(dir.clone().multiplyScalar(dlina/2));	// смещаем на пол блока назад
 			const data2 = {pos: [posStart2.clone(), posL1[1].clone()], dir, normal};
 			data2.cut1 = {pos: posL1[0].clone(), normal, dir};
 			data2.cut2 = {pos: posL1[1].clone(), normal, dir: dir.clone().negate()};
-			data2.offset = {start: 0, end: 0};
 			
 			const points = wall.userData.wall.p;
 			const pIds = [points[0].userData.id, points[1].userData.id];
@@ -1151,7 +1149,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		this.calcPosEnd_2({lines, lines2});
 		
 
-		// обрезаем первый и последний блок для замкнутых внешних стен
+		// расчитываем обрезаку первого и последнего блока для замкнутых внешних стен
 		if(type === 'outside' && lines2.length > 0)
 		{
 			// 1-ый ряд
@@ -1164,33 +1162,31 @@ findObjectsUntilRepetition(arrayObjects) {
 		}
 
 		
-		// прямые соседнии участки линий объединяем в одну
+		// прямые соседнии участки линий объединяем в одну (прямая стена из нескольких точек)
 		this.upDirLines({lines2, type});
-		
-		
-		// зазор для первых и последних блоков		
-		if(type === 'outside') 
-		{			
-			for ( let i = 0; i < lines2.length; i++ )
-			{			
-				lines2[i].row[0].offset.end = offset;
-				lines2[i].row[1].offset.start = offset;
-			}			
-		}
-		else
-		{
-			for ( let i = 0; i < lines2.length; i++ )
-			{			
-				if(i < lines2.length - 1) lines2[i].row[0].offset.end = offset;
-				if(i > 1) lines2[i].row[1].offset.start = offset;
-			}				
-		}
-		
 		
 		this.upCutLinesForAngle({lines2, type});
 		
 		
-		// смещаем 2-ой ряд, так чтобы блоки относительно 1-ого были смещены на половину длины блока
+		// зазор/кладка для первых и последних блоков		
+		for ( let i = 0; i < lines2.length; i++ )
+		{			
+			const dir = lines2[i].row[0].dir;
+			lines2[i].row[0].cut2.pos.sub(dir.clone().multiplyScalar(offset));
+			lines2[i].row[1].cut1.pos.add(dir.clone().multiplyScalar(offset));	
+
+			if(type === 'inside')
+			{
+				lines2[i].row[0].pos[0].add(dir.clone().multiplyScalar(offset));
+				lines2[i].row[1].pos[0].add(dir.clone().multiplyScalar(offset));
+				
+				lines2[i].row[0].cut1.pos.add(dir.clone().multiplyScalar(offset));
+				lines2[i].row[1].cut2.pos.sub(dir.clone().multiplyScalar(offset));					
+			}			
+		}			
+
+		
+		// смещаем 2-ой ряд, так чтобы блоки относительно 1-ого были смещены на половину длины блока (+кладка)
 		for ( let i = 0; i < lines2.length; i++ )
 		{
 			const pos1 = lines2[i].row[0].pos[0];
@@ -1199,8 +1195,10 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			const dist = pos1.distanceTo(pos2);
 			
-			const posStart2 = pos2.clone().sub(dir.clone().multiplyScalar(dist - offset/1 - dlina/2));
-			lines2[i].row[1].pos[0] = posStart2;			
+			const offset2 = (type === 'single') ? 0 : offset;
+			
+			const posStart2 = pos2.clone().sub(dir.clone().multiplyScalar(dist - offset2 - dlina/2));
+			lines2[i].row[1].pos[0] = posStart2;
 		}
 
 		
@@ -1213,10 +1211,11 @@ findObjectsUntilRepetition(arrayObjects) {
 			const pIds = lines2[i].pIds;
 			if(pIds[0] === 98 || pIds[0] === 97 && pIds[1] === 98 || pIds[1] === 97)
 			{
-			this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x00ff00});
-			this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1 + (0.1 * (i + 1)), 0)), size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});	
+	
 			}
 
+			this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.03, 0.03, 0.03), color: 0x00ff00});
+			this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1 + (0.1 * (i + 1)), 0)), size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
 		}
 		
 		return lines2;
@@ -1332,7 +1331,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			width = w2[i].userData.wall.width;
 			
-			const {posL1, posL2} = this.calcLineWall({posP, pStart: pStart2, side, width, z, type, show: true});
+			const {posL1, posL2} = this.calcLineWall({posP, pStart: pStart2, side, width, z, type, show: false});
 			
 			linesW.push(posL1, posL2);			
 		}
@@ -1362,8 +1361,8 @@ findObjectsUntilRepetition(arrayObjects) {
 		const pos1 = getPos({v1: lines[0][0], v2: lines[0][1]});
 		const pos2 = getPos({v1: lines[1][0], v2: lines[1][1]});
 		
-		if(pos1) this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x00ff00});
-		if(pos2) this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
+		//if(pos1) this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x00ff00});
+		//if(pos2) this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
 				
 				
 		console.log({pos1, pos2});	
