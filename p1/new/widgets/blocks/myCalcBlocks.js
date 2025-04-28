@@ -5,7 +5,7 @@ class MyCalcBlocks
 	listPathImgs = {};
 	geometry;
 	material;
-	blockParams = {dlina: 0.6, h: 0.3, z: 0.3, offset: 0.01};
+	blockParams = {dlina: 0.6, h: 0.3, z: 0.4, offset: 0.01};
 	
 	constructor()
 	{
@@ -175,7 +175,7 @@ class MyCalcBlocks
 			if(newArr.length > 0)
 			{
 				const ind = arrW2.single.length;
-				arrW2.single[ind] = [];
+				arrW2.single[ind] = {data: [], lines2: null};
 				
 				// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
 				// решено, теперь знаем если стартовая точка не имеет связей (она одна), то pStart = 0
@@ -189,7 +189,7 @@ class MyCalcBlocks
 						const wall = newArr[i].wall;
 						//const side = newArr[i].side;
 						
-						arrW2.single[ind].push({wall, side, pStart});
+						arrW2.single[ind].data.push({wall, side, pStart});
 						
 						const array2 = newArr[i+1].array;
 						
@@ -205,7 +205,7 @@ class MyCalcBlocks
 				}
 				else
 				{
-					arrW2.single[ind].push({wall, side: 0, pStart: 0});
+					arrW2.single[ind].data.push({wall, side, pStart});
 				}
 			}
 		}
@@ -233,7 +233,7 @@ class MyCalcBlocks
 			let pStart = reverseWall;
 
 			const ind = arrW2.outside.length;
-			arrW2.outside[ind] = [];
+			arrW2.outside[ind] = {data: [], lines2: null};
 				
 			// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
 			newArr.push(newArr[0]);
@@ -243,7 +243,7 @@ class MyCalcBlocks
 				const wall = newArr[i].wall;
 				const side = newArr[i].side;
 				
-				arrW2.outside[ind].push({wall, side, pStart});
+				arrW2.outside[ind].data.push({wall, side, pStart});
 				
 				const array2 = newArr[i+1].array;
 				
@@ -294,7 +294,7 @@ class MyCalcBlocks
 			let side = reverseWall;
 			
 			const ind = arrW2.inside.length;
-			arrW2.inside[ind] = [];
+			arrW2.inside[ind] = {data: [], lines2: null};
 				
 			
 			newArr.push(newArr[0]);
@@ -304,7 +304,7 @@ class MyCalcBlocks
 				const wall = newArr[i].wall;
 				//const side = newArr[i].side;
 				
-				arrW2.inside[ind].push({wall, side, pStart});
+				arrW2.inside[ind].data.push({wall, side, pStart});
 				
 				const array2 = newArr[i+1].array;
 				
@@ -321,23 +321,54 @@ class MyCalcBlocks
 
 		this.arrW2 = arrW2;
 		
-		for ( let i = 0; i < arrW2.single.length; i++ )
-		{
-			this.caclColumn({data: arrW2.single[i], levelHeight, type: 'single'});
-		}			
-
 		
 		for ( let i = 0; i < arrW2.outside.length; i++ )
 		{
-			this.caclColumn({data: arrW2.outside[i], levelHeight, type: 'outside'});
+			const lines2 = this.calcWalls({data: arrW2.outside[i].data, type: 'outside', showLines: false});		
+			arrW2.outside[i].lines2 = lines2;	
 		}			
 
 
 		for ( let i = 0; i < arrW2.inside.length; i++ )
 		{
-			this.caclColumn({data: arrW2.inside[i], levelHeight, type: 'inside'});
-		}	
+			const lines2 = this.calcWalls({data: arrW2.inside[i].data, type: 'inside', showLines: true});		
+			arrW2.inside[i].lines2 = lines2;
+		}
 
+
+		for ( let i = 0; i < arrW2.single.length; i++ )
+		{
+			const lines2 = this.calcWalls({data: arrW2.single[i].data, type: 'single'});		
+			arrW2.single[i].lines2 = lines2;			
+		}		
+
+
+		this.showResult({levelHeight});
+	}
+	
+	
+	showResult({levelHeight})
+	{
+		const arrW2 = this.arrW2;
+		
+		for ( let i = 0; i < arrW2.outside.length; i++ )
+		{
+			this.crDomByTypes({lines2: arrW2.outside[i].lines2, levelHeight});
+		}			
+
+
+		for ( let i = 0; i < arrW2.inside.length; i++ )
+		{
+			this.crDomByTypes({lines2: arrW2.inside[i].lines2, levelHeight});
+		}
+
+
+		for ( let i = 0; i < arrW2.single.length; i++ )
+		{
+			this.crDomByTypes({lines2: arrW2.single[i].lines2, levelHeight, type: 'single'});
+		}
+
+		
 		renderCamera();
 	}
 
@@ -541,45 +572,9 @@ findObjectsUntilRepetition(arrayObjects) {
     // Возвращаем результирующий массив
     return result;
 }
-	
-	caclColumn({data, levelHeight, type})
-	{
-		const gArrBloks = [];
-		
-		const { dlina, h, offset, z } = this.blockParams;					
 
-		const lines2 = this.calcWalls({data, type});
-		
-		let countY = 0;			
-		
-		for (let i = 0; i < levelHeight; i += h + offset) 
-		{
-			let delLastBlock = countY % 2 === 0 ? false : true;
-			
-			if(countY === 0) 
-			{
-				this.crBloksRow({lines2, currentY: i, levelHeight, delLastBlock});
-			}
-			
-			countY++;
-		}
-		
-		// обрезаем блоки под окна/двери
-		for (let i = 0; i < lines2.length; i++)
-		{
-			const arrO = this.setCutWD({arrO: lines2[i].arrO});
-			
-			let arrBloks = lines2[i].arrBloks;
-			
-			for (let i2 = 0; i2 < arrO.length; i2++)
-			{
-				arrBloks = this.cutBlockes({obj: arrO[i2], w: arrBloks});
-			}
-		}
-	}
-	
-	
-	calcWalls({data, type})
+
+	calcWalls({data, type, showLines = false})
 	{
 		const lines = [];		
 		
@@ -603,12 +598,50 @@ findObjectsUntilRepetition(arrayObjects) {
 			wall.visible = false;
 		}
 		
-		const lines2 = this.showLines({lines, type});
+		const lines2 = this.showLines({lines, type, showLines});
 		
 
 		return lines2;
 	}
 	
+
+	
+	crDomByTypes({lines2, levelHeight})
+	{
+		const gArrBloks = [];
+		
+		const { h, offset } = this.blockParams;					
+		
+		let countY = 0;			
+		
+		for (let i = 0; i < levelHeight; i += h + offset) 
+		{
+			let delLastBlock = countY % 2 === 0 ? false : true;
+			
+			if(countY < 2) 
+			{
+				this.crBloksRow({lines2, currentY: i, levelHeight, delLastBlock});
+			}
+			
+			countY++;
+		}
+		
+		// обрезаем блоки под окна/двери
+		for (let i = 0; i < lines2.length; i++)
+		{
+			const arrO = this.setCutWD({arrO: lines2[i].arrO});
+			
+			let arrBloks = lines2[i].arrBloks;
+			
+			for (let i2 = 0; i2 < arrO.length; i2++)
+			{
+				arrBloks = this.cutBlockes({obj: arrO[i2], w: arrBloks});
+			}
+		}
+	}
+	
+	
+
 	// обрезаем блоки в начале/конце и под высоту этажа
 	crBloksRow({lines2, currentY, levelHeight, delLastBlock})
 	{
@@ -1054,7 +1087,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		scene.add( arrowHelper );
 	}
 
-	showLines({lines, type})
+	showLines({lines, type, showLines = false})
 	{
 		console.log('Расчет');
 		
@@ -1131,6 +1164,12 @@ findObjectsUntilRepetition(arrayObjects) {
 			const pIds = [points[0].userData.id, points[1].userData.id];
 			lines2.push({row: [data1, data2], width, arrO, angle: 0, arrBloks: [], pIds});
 			
+			if(type === 'outside22')
+			{
+				this.helpLine({v: posL1, color: 0x00ff00});
+				this.helpLine({v: posL2, color: 0x0000ff});
+			}
+			
 			lines[i].pos = posL1;
 			lines[i].pos2 = posL2;
 			lines[i].dir = dir;
@@ -1170,8 +1209,29 @@ findObjectsUntilRepetition(arrayObjects) {
 		
 		// зазор/кладка для первых и последних блоков		
 		for ( let i = 0; i < lines2.length; i++ )
-		{			
+		{	
 			const dir = lines2[i].row[0].dir;
+			
+			if(type === 'single')
+			{
+				if(i === 0)
+				{
+					lines2[i].row[0].cut2.pos.sub(dir.clone().multiplyScalar(offset));
+				}
+				else if(i === lines2.length - 1)
+				{
+					lines2[i].row[1].cut1.pos.add(dir.clone().multiplyScalar(offset));
+				}
+				else
+				{
+					lines2[i].row[0].cut2.pos.sub(dir.clone().multiplyScalar(offset));
+					lines2[i].row[1].cut1.pos.add(dir.clone().multiplyScalar(offset));						
+				}
+				
+				continue;
+			}
+			
+			
 			lines2[i].row[0].cut2.pos.sub(dir.clone().multiplyScalar(offset));
 			lines2[i].row[1].cut1.pos.add(dir.clone().multiplyScalar(offset));	
 
@@ -1214,9 +1274,27 @@ findObjectsUntilRepetition(arrayObjects) {
 	
 			}
 
-			this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.03, 0.03, 0.03), color: 0x00ff00});
-			this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1 + (0.1 * (i + 1)), 0)), size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
+			//this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.03, 0.03, 0.03), color: 0x00ff00});
+			//this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1 + (0.1 * (i + 1)), 0)), size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
 		}
+
+		if(showLines)
+		{
+			for (let i = 0; i < lines2.length; i++)
+			{
+				if(1===1)
+				{
+					const result = lines2[i].row[0];
+
+			const posZ = result.normal.clone().multiplyScalar(z);
+
+			
+					this.helpLine({v: [result.pos[0], result.pos[1]], color: 0x00ff00});
+					this.helpLine({v: [result.pos[0].clone().add(posZ), result.pos[1].clone().add(posZ)], color: 0xff0000});					
+				}				
+			}			
+		}
+
 		
 		return lines2;
 	}
@@ -1365,7 +1443,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		//if(pos2) this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
 				
 				
-		console.log({pos1, pos2});	
+		//console.log({pos1, pos2});	
 		
 		return {pos1, pos2};
 	}
