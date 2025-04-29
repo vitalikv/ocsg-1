@@ -1114,17 +1114,42 @@ findObjectsUntilRepetition(arrayObjects) {
 			let posL1 = result.posL1;
 			let posL2 = result.posL2;
 			
+			let posCut1 = null;
+			let posCut2 = null;
+			let normalCut1 = null;
+			let normalCut2 = null;
+			let dirCut1 = null;
+			let dirCut2 = null;
+			
 			if(type !== 'outside' && i === 0 && 1===1)					
 			{
 				const cross = this.calcW2({wall, ind: 0, lines: [posL1, posL2], width, z, pStart});
 				if(cross.pos1) posL1[0] = cross.pos1;
-				if(cross.pos2) posL2[0] = cross.pos2;				
+				if(cross.pos2) posL2[0] = cross.pos2;
+
+				if(cross.posCut) posCut1 = cross.posCut;
+				
+				const newP = (posCut1) ? posCut1 : posL1[0];
+				normalCut1 = posL2[0].clone().sub(newP).normalize();
+				
+				dirCut1 = myMath.calcNormal2D({p1: newP, p2: posL2[0], reverse: false});
+				
+				this.arrowHelper({dir: normalCut1, pos: posL1[0].clone().add(new THREE.Vector3(0, 2, 0)), color: 0x000000});
 			}			
 			if(type !== 'outside' && i === lines.length - 1 && 1===1)					
 			{				
 				const cross = this.calcW2({wall, ind: 1, lines: [posL1, posL2], width, z, pStart});
 				if(cross.pos1) posL1[1] = cross.pos1;
-				if(cross.pos2) posL2[1] = cross.pos2;				
+				if(cross.pos2) posL2[1] = cross.pos2;
+
+				if(cross.posCut) posCut2 = cross.posCut;
+				
+				const newP = (posCut2) ? posCut2 : posL1[1];
+				normalCut2 = posL2[1].clone().sub(newP).normalize();
+				
+				dirCut2 = myMath.calcNormal2D({p1: newP, p2: posL2[1], reverse: true});
+				
+				this.arrowHelper({dir: normalCut2, pos: posL1[1].clone().add(new THREE.Vector3(0, 2, 0)), color: 0x000000});				
 			}
 			
 			
@@ -1151,14 +1176,14 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			// для 1-ого ряда
 			const data1 = {pos: [posL1[0].clone(), posL1[1].clone()], dir, normal};
-			data1.cut1 = {pos: posL1[0].clone(), normal, dir};
-			data1.cut2 = {pos: posL1[1].clone(), normal, dir: dir.clone().negate()};
+			data1.cut1 = {pos: (posCut1) ? posCut1 : posL1[0].clone(), normal: (normalCut1) ? normalCut1 : normal, dir: (dirCut1) ? dirCut1 : dir};
+			data1.cut2 = {pos: (posCut2) ? posCut2 : posL1[1].clone(), normal: (normalCut2) ? normalCut2 : normal, dir: (dirCut2) ? dirCut2 : dir.clone().negate()};
 			
 			// для 2-ого ряда 
 			const posStart2 = posL1[0].clone().sub(dir.clone().multiplyScalar(dlina/2));	// смещаем на пол блока назад
 			const data2 = {pos: [posStart2.clone(), posL1[1].clone()], dir, normal};
-			data2.cut1 = {pos: posL1[0].clone(), normal, dir};
-			data2.cut2 = {pos: posL1[1].clone(), normal, dir: dir.clone().negate()};
+			data2.cut1 = {pos: (posCut1) ? posCut1 : posL1[0].clone(), normal: (normalCut1) ? normalCut1 : normal, dir: (dirCut1) ? dirCut1 : dir};
+			data2.cut2 = {pos: (posCut2) ? posCut2 : posL1[1].clone(), normal: (normalCut2) ? normalCut2 : normal, dir: (dirCut2) ? dirCut2 : dir.clone().negate()};
 			
 			const points = wall.userData.wall.p;
 			const pIds = [points[0].userData.id, points[1].userData.id];
@@ -1344,6 +1369,7 @@ findObjectsUntilRepetition(arrayObjects) {
 	{		
 		const points = wall.userData.wall.p;
 		
+		
 		if(ind === 0)
 		{
 			ind = (pStart === 0) ? 0 : 1;
@@ -1351,7 +1377,9 @@ findObjectsUntilRepetition(arrayObjects) {
 		else if(ind === 1)		
 		{
 			ind = (pStart === 0) ? 1 : 0;
-		}	
+		}
+
+		console.log(333, ind, points[ind].userData.id, [points[0].userData.id, points[1].userData.id]);
 		
 		const walls = points[ind].w;
 		
@@ -1362,7 +1390,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		}
 		
 		const linesW = [];
-
+		let isMin = false;
 
 			
 		for ( let i = 0; i < w2.length; i++ )
@@ -1376,9 +1404,9 @@ findObjectsUntilRepetition(arrayObjects) {
 			if(ind === 1 && points2[0] === points[1]) pStart2 = (pStart === 0) ? 1 : 0;
 			let side = pStart2;
 			
-			for ( let i2 = 1110; i2 < this.arrW2.outside.length; i2++ )
+			for ( let i2 = 2222; i2 < this.arrW2.outside.length; i2++ )
 			{
-				const outside = this.arrW2.outside[i2];
+				const outside = this.arrW2.outside[i2].data;
 				
 				for ( let i3 = 0; i3 < outside.length; i3++ )
 				{
@@ -1403,6 +1431,8 @@ findObjectsUntilRepetition(arrayObjects) {
 				{ 
 					if(room[0].userData.room.w[i2] == w2[i]) { side = room[0].userData.room.s[i2]; break; } 
 				}
+				
+				isMin = true;
 			}
 			
 			//console.log('ind', ind, wall.userData.wall.p, pStart, pStart2, side, points[ind].userData.id, [points2[0].userData.id, points2[1].userData.id]);
@@ -1411,41 +1441,110 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			const {posL1, posL2} = this.calcLineWall({posP, pStart: pStart2, side, width, z, type, show: false});
 			
-			linesW.push(posL1, posL2);			
+			linesW.push(posL1, posL2);
+		}
+
+
+		for ( let i = 0; i < this.arrW2.inside.length; i++ )
+		{
+			const inside = this.arrW2.inside[i].lines2;
+			if(!inside) continue;
+			
+			for ( let i2 = 0; i2 < inside.length; i2++ )
+			{
+				if(points[ind].userData.id === inside[i2].pIds[0] || points[ind].userData.id === inside[i2].pIds[1])
+				{
+					//console.log(2222, points[ind].userData.id, inside[i2].pIds);
+					isMin = true;
+				}
+				
+			}
+			
 		}
 
 		
-		const getPos = ({v1, v2}) =>
+
+		
+		const getPos2 = ({v1, v2}) =>
 		{
-			let crossPos = null;
+			const crossPos = [];			
 			
 			for ( let i = 0; i < linesW.length; i++ )
 			{
-				const cross = myMath.checkCrossLine(v1, v2, linesW[i][0], linesW[i][1]);
-				if(!cross) continue;
-				
 				const pos = myMath.getIntersection(v1, v2, linesW[i][0], linesW[i][1]);
 				
-				if(pos) 
-				{
-					crossPos = pos;
-					break;
-				}
+				if(pos) crossPos.push(pos);
 			}
+			
+			const arrL = [];
+			
+			for ( let i = 0; i < crossPos.length; i++ )
+			{
+				const dist1 = v1.distanceTo(crossPos[i]);
+				const dist2 = v2.distanceTo(crossPos[i]);
+				
+				if(dist1 < dist2) arrL.push({p1: crossPos[i], p2: v2});
+				else arrL.push({p1: crossPos[i], p2: v1});
+			}
+			
+			const arrD = [];
+			
+			for ( let i = 0; i < arrL.length; i++ )
+			{
+				const dist = arrL[i].p1.distanceTo(arrL[i].p2);
+				arrD.push({dist, pos: arrL[i].p1});
+				
+				//if(isMin) this.helpLine({v: [arrL[i].p1.clone().add(new THREE.Vector3(0, i * 0.1 + 0.1, 0)), arrL[i].p2.clone().add(new THREE.Vector3(0, i * 0.1 + 0.1, 0))], color: 0x000000});
+			}
+			
+			if(isMin) arrD.sort(function (a, b) { return a.dist - b.dist; });
+			else arrD.sort(function (a, b) { return b.dist - a.dist; });
 
-			return crossPos;
-		};
+			const pos = (arrD.length > 0) ? arrD[0].pos : null;
+			
+			return pos;
+		};		
 		
-		const pos1 = getPos({v1: lines[0][0], v2: lines[0][1]});
-		const pos2 = getPos({v1: lines[1][0], v2: lines[1][1]});
 		
-		//if(pos1) this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x00ff00});
-		//if(pos2) this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
+		let pos1 = getPos2({v1: lines[0][0], v2: lines[0][1]});
+		const pos2 = getPos2({v1: lines[1][0], v2: lines[1][1]});
+		
+		if(pos1) this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x00ff00});
+		if(pos2) this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
+		
+		const posCut = pos1.clone();
+	
+		const pos3 = myMath.mathProjectPointOnLine2D({A: lines[0][0], B: lines[0][1], C: pos2});
+		pos3.y = lines[0][0].y;
+	
+		if(ind === 0)
+		{
+			const dist1 = pos1.distanceTo(lines[0][1]);
+			const dist2 = pos3.distanceTo(lines[0][1]);
+			
+			if(dist1 < dist2) 
+			{
+				this.helpBox({pos: pos3.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
 				
+				pos1 = pos3;
+			}				
+		}
+		if(ind === 1)
+		{
+			const dist1 = pos1.distanceTo(lines[0][0]);
+			const dist2 = pos3.distanceTo(lines[0][0]);
+			
+			if(dist1 < dist2) 
+			{
+				this.helpBox({pos: pos3.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
 				
-		//console.log({pos1, pos2});	
+				pos1 = pos3;
+			}				
+		}		
 		
-		return {pos1, pos2};
+		console.log(555, ind);	
+		
+		return {pos1, pos2, posCut};
 	}
 	
 	
