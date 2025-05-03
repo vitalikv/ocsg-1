@@ -3,8 +3,8 @@
 class MyCalcBlocks
 {
 	listPathImgs = {};
-	geometry;
 	material;
+	arrTypeG = [];
 	blockParams = {dlina: 0.6, h: 0.3, z: 0.4, offset: 0.01};
 	
 	constructor()
@@ -14,8 +14,6 @@ class MyCalcBlocks
 		
 		//this.listPathImgs.kirpich = this.listPathImgs.block;
 		
-		const {dlina, h, z} = this.blockParams;
-		this.geometry = createGeometryCube(dlina, h, z);
 		//this.geometry = new THREE.BufferGeometry().fromGeometry(this.geometry);
 
 		
@@ -25,13 +23,56 @@ class MyCalcBlocks
 	
 	init()
 	{
+		console.log(myLevels.levels);
+		
 		this.test({level: myLevels.levels[0]});
 		//this.test({level: myLevels.levels[1]});
 	}
 	
-	createBlock({pos})
+	
+	// получаем уникальную ширину от всех стен (чтобы сделать блоки)
+	getUniqueBlocksWidth()
+	{
+		const arrWidth = [];
+		
+		for ( let i = 0; i < myLevels.levels.length; i++ )
+		{
+			const walls = myLevels.levels[i].wall;
+			
+			const arr = walls.filter(wall => wall.userData.wall.width2 !== undefined).map(wall => wall.userData.wall.width2);
+			
+			arrWidth.push(...arr);			
+		}
+		
+		const uniqueValues = [...new Set(arrWidth)];
+		
+		return uniqueValues;
+	}
+	
+	
+	// создаем геометрии блоков по ширине
+	createGeometryByWidth({arrUniqueWidth})
+	{
+		const {dlina, h} = this.blockParams;
+		const arr = [];
+				
+		arrUniqueWidth.push(0.4);
+		
+		for ( let i = 0; i < arrUniqueWidth.length; i++ )
+		{
+			const width = arrUniqueWidth[i];
+			const geometry = createGeometryCube(dlina, h, width);
+			
+			arr.push({width, geometry});
+		}
+
+		return arr;
+	}
+	
+	
+	createBlock({pos, geometry})
 	{ 
-		const obj = new THREE.Mesh( this.geometry, this.material ); 
+		const obj = new THREE.Mesh( geometry, this.material ); 
 		obj.position.copy(pos);
 		scene.add(obj);
 
@@ -208,8 +249,7 @@ class MyCalcBlocks
 					arrW2.single[ind].data.push({wall, side, pStart});
 				}
 			}
-		}
-		console.log('single - отдельные', arrW2.single);
+		}		
 		
 		
 		while(arrW.outside.length > 0)
@@ -321,6 +361,11 @@ class MyCalcBlocks
 
 		this.arrW2 = arrW2;
 		
+		this.setUserWidthForWall(0.4);
+		
+		const arrUniqueWidth = this.getUniqueBlocksWidth();
+		this.arrTypeG = this.createGeometryByWidth({arrUniqueWidth});		
+		console.log(777, this.arrTypeG);		
 		
 		for ( let i = 0; i < arrW2.outside.length; i++ )
 		{
@@ -574,6 +619,38 @@ findObjectsUntilRepetition(arrayObjects) {
 }
 
 
+	setUserWidthForWall(width = null)
+	{
+		const setWidth = (data) =>
+		{
+			for ( let i = 0; i < data.length; i++ )
+			{	
+				const wall = data[i].wall;		
+				wall.userData.wall.width2 = (width) ? width : wall.userData.wall.width;
+			}					
+		}
+		
+		const arrW2 = this.arrW2;
+		
+		for ( let i = 0; i < arrW2.outside.length; i++ )
+		{		
+			setWidth(arrW2.outside[i].data);	
+		}			
+
+
+		for ( let i = 0; i < arrW2.inside.length; i++ )
+		{		
+			setWidth(arrW2.inside[i].data);
+		}
+
+
+		for ( let i = 0; i < arrW2.single.length; i++ )
+		{		
+			setWidth(arrW2.single[i].data);			
+		}		
+	}
+	
+	
 	calcWalls({data, type, showLines = false})
 	{
 		const lines = [];		
@@ -583,7 +660,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			const wall = data[i].wall;
 			const side = data[i].side;
 			const pStart = data[i].pStart;			
-			const width = wall.userData.wall.width;
+			const width = wall.userData.wall.width2;
 			
 			const arrO = [];
 			if(wall.userData.wall.arrO) arrO.push(...wall.userData.wall.arrO);
@@ -618,7 +695,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		{
 			let delLastBlock = countY % 2 === 0 ? false : true;
 			
-			if(countY < 2) 
+			if(countY < 2222) 
 			{
 				this.crBloksRow({lines2, currentY: i, levelHeight, delLastBlock});
 			}
@@ -654,8 +731,11 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			const wallDlina = result.pos[0].distanceTo(result.pos[1]);
 			
-			const answer = this.rowBlockes2({x: wallDlina, posStart: result.pos[0], dir: result.dir, currentY, normal: result.normal});
+			const answer = this.rowBlockes2({x: wallDlina, posStart: result.pos[0], dir: result.dir, currentY, normal: result.normal, z: lines2[i].width});
 			let arrBloks = answer.arrBloks;
+			
+			const z = lines2[i].width;
+			const {dlina, h} = this.blockParams;
 			
 			// обрезаем начало стены
 			if(1===1)
@@ -664,8 +744,6 @@ findObjectsUntilRepetition(arrayObjects) {
 				const dir2 = result.cut1.dir;
 				const pos = result.cut1.pos;
 				const offsetZ = 0;
-				
-				const {dlina, z} = this.blockParams;
 		
 				const geometry = createGeometryCube(dlina * 2, levelHeight + 1, z * 10);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
@@ -688,8 +766,6 @@ findObjectsUntilRepetition(arrayObjects) {
 				const dir2 = result.cut2.dir;
 				const pos = result.cut2.pos;
 				const offsetZ = 0;
-				
-				const {dlina, z} = this.blockParams;
 		
 				const geometry = createGeometryCube(dlina * 2, levelHeight + 1, z * 10);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
@@ -710,8 +786,6 @@ findObjectsUntilRepetition(arrayObjects) {
 			{
 				const dir = result.dir;
 				const normal = result.normal;
-				
-				const {h, z} = this.blockParams;
 				
 				const geometry = createGeometryCube(wallDlina * 2, h * 2, z * 2);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
@@ -768,53 +842,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		
 	}
 	
-	rowBlockes1({x, y, posStart, dir, normal, normal2, currentY, startX, type, side, pStart})
-	{		
-		const { dlina, h, offset, z } = this.blockParams;
-		let z2 = (side === 0) ? z : -z;
-		if (pStart !== 0) z2 *= -1;
-		
-		const arrBloks = [];
 
-		//const count1 = Math.ceil((x - dlina)/(dlina + offset));
-		const dd = (startX === 0) ? dlina/2 : 0;
-		
-		let count2 = Math.ceil((x + dd)/(dlina + offset));
-		
-		if(type === 'single' && startX === 0)
-		{
-			//count2 = Math.ceil((x + dlina/2)/(dlina + offset));
-		}
-		
-		for (let i = 0; i < count2; i++)
-		{
-			const step = i * (dlina + offset);
-			const pos = posStart.clone().add(dir.clone().multiplyScalar(step));
-			pos.add(dir.clone().multiplyScalar(startX - dlina/2));	
-			pos.add(new THREE.Vector3(0, currentY, 0));			
-			//this.helpBox({pos, size: new THREE.Vector3(0.03, 0.03, 0.03), color: 0x0000ff});
-
-
-			pos.add(dir.clone().multiplyScalar(dlina/2));
-			pos.add(normal.clone().multiplyScalar(z2/2));
-
-			const block = this.createBlock({pos});
-			const volume = this.calculateMeshVolume(block.geometry);
-			
-			block.userData.originalVolume = volume;
-			block.userData.upVolume = volume;
-			block.userData.percentage = 100;
-			
-			const rad = Math.atan2(dir.z, -dir.x);
-			//block.rotateY(rad);
-			block.lookAt(normal2.clone().add(pos));
-			
-			arrBloks.push(block);			
-		}
-
-		return { arrBloks };
-	}
-	
 	cutBlockes({obj, w})
 	{
 		const w2 = [];
@@ -1103,16 +1131,16 @@ findObjectsUntilRepetition(arrayObjects) {
 			const arrO = lines[i].arrO;
 			const wall = lines[i].wall;
 			
-			const pos = lines[i].pos;	// 1-ая линия			
-			//this.helpLine({v: [pos[0], pos[1]], color: 0x00ff00});
+			const pos = lines[i].pos;	// 1-ая линия						
 			const dir = pos[1].clone().sub(pos[0]).normalize();
 			const posC = pos[1].clone().sub(pos[0]).multiplyScalar(0.5).add(pos[0]);
 			const normal = myMath.calcNormal2D({p1: pos[1], p2: pos[0], reverse: false});
 			
 			
-			const result = this.calcLineWall({posP: lines[i].posP, pStart, side, width, z, type, show: false});
-			let posL1 = result.posL1;
-			let posL2 = result.posL2;
+			const result = this.calcLineWall({posP: lines[i].posP, pStart, side, width, z: width, type, show: false});
+			let posL1 = result.posL1;	// 1-ая линия
+			let posL2 = result.posL2;	// 2-ая линия
+			//this.helpLine({v: posL1, color: 0x00ff00});
 			
 			let posCut1 = null;
 			let posCut2 = null;
@@ -1123,7 +1151,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			if(type !== 'outside' && i === 0 && 1===1)					
 			{
-				const cross = this.calcW2({wall, ind: 0, lines: [posL1, posL2], width, z, pStart});
+				const cross = this.calcW2({wall, ind: 0, lines: [posL1, posL2], z: width, pStart});
 				if(cross.pos1) posL1[0] = cross.pos1;
 				if(cross.pos2) posL2[0] = cross.pos2;
 
@@ -1138,7 +1166,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			}			
 			if(type !== 'outside' && i === lines.length - 1 && 1===1)					
 			{				
-				const cross = this.calcW2({wall, ind: 1, lines: [posL1, posL2], width, z, pStart});
+				const cross = this.calcW2({wall, ind: 1, lines: [posL1, posL2], z: width, pStart});
 				if(cross.pos1) posL1[1] = cross.pos1;
 				if(cross.pos2) posL2[1] = cross.pos2;
 
@@ -1168,12 +1196,6 @@ findObjectsUntilRepetition(arrayObjects) {
 			const posN = posC.clone().add(normal.clone().multiplyScalar(-0.2));
 			this.arrowHelper({dir, pos: posN});
 			
-			const posZ = posC.clone().add(normal.clone().multiplyScalar(z));
-			const offsetZ = posZ.clone().sub(posC);
-			
-			const pos2 = [pos[0].clone().add(offsetZ), pos[1].clone().add(offsetZ)];	// 2-ая линия
-			//this.helpLine({v: pos2, color: 0x0000ff});
-			
 			// для 1-ого ряда
 			const data1 = {pos: [posL1[0].clone(), posL1[1].clone()], dir, normal};
 			data1.cut1 = {pos: (posCut1) ? posCut1 : posL1[0].clone(), normal: (normalCut1) ? normalCut1 : normal, dir: (dirCut1) ? dirCut1 : dir};
@@ -1187,13 +1209,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			const points = wall.userData.wall.p;
 			const pIds = [points[0].userData.id, points[1].userData.id];
-			lines2.push({row: [data1, data2], width, arrO, angle: 0, arrBloks: [], pIds});
-			
-			if(type === 'outside22')
-			{
-				this.helpLine({v: posL1, color: 0x00ff00});
-				this.helpLine({v: posL2, color: 0x0000ff});
-			}
+			lines2.push({row: [data1, data2], width, arrO, angle: 0, arrBloks: [], pIds});			
 			
 			lines[i].pos = posL1;
 			lines[i].pos2 = posL2;
@@ -1324,9 +1340,27 @@ findObjectsUntilRepetition(arrayObjects) {
 		return lines2;
 	}
 	
-	rowBlockes2({x, posStart, dir, currentY, normal})
+	
+	getGeometryByWidth({width})
+	{
+		let geometry = null;
+		
+		for ( let i = 0; i < this.arrTypeG.length; i++ )
+		{
+			if(this.arrTypeG[i].width === width)
+			{
+				geometry = this.arrTypeG[i].geometry;				
+				break;
+			}
+		}
+
+		return geometry;
+	}
+	
+	
+	rowBlockes2({x, posStart, dir, currentY, normal, z})
 	{		
-		const { dlina, h, offset, z } = this.blockParams;
+		const { dlina, h, offset } = this.blockParams;
 		let z2 = z;
 		
 		const arrBloks = [];
@@ -1345,8 +1379,9 @@ findObjectsUntilRepetition(arrayObjects) {
 
 			pos.add(dir.clone().multiplyScalar(dlina/2));
 			pos.add(normal.clone().multiplyScalar(z2/2));
-
-			const block = this.createBlock({pos});
+			
+			const geometry = this.getGeometryByWidth({width: z});
+			const block = this.createBlock({pos, geometry});
 			const volume = this.calculateMeshVolume(block.geometry);
 			
 			block.userData.originalVolume = volume;
@@ -1365,7 +1400,7 @@ findObjectsUntilRepetition(arrayObjects) {
 	
 	
 	// вычисляем стартовые/конечные точки у стены, у которой есть соседние стены (внутренние стены) 
-	calcW2({wall, ind, lines, width, z, pStart})
+	calcW2({wall, ind, lines, z, pStart})
 	{		
 		const points = wall.userData.wall.p;
 		
@@ -1378,11 +1413,10 @@ findObjectsUntilRepetition(arrayObjects) {
 		{
 			ind = (pStart === 0) ? 1 : 0;
 		}
-
-		console.log(333, ind, points[ind].userData.id, [points[0].userData.id, points[1].userData.id]);
 		
 		const walls = points[ind].w;
 		
+		// находим соседнии стены
 		const w2 = [];
 		for ( let i = 0; i < walls.length; i++ )
 		{
@@ -1403,21 +1437,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			if(ind === 0 && points2[0] === points[0]) pStart2 = (pStart === 0) ? 1 : 0;
 			if(ind === 1 && points2[0] === points[1]) pStart2 = (pStart === 0) ? 1 : 0;
 			let side = pStart2;
-			
-			for ( let i2 = 2222; i2 < this.arrW2.outside.length; i2++ )
-			{
-				const outside = this.arrW2.outside[i2].data;
-				
-				for ( let i3 = 0; i3 < outside.length; i3++ )
-				{
-					if(w2[i] === outside[i3].wall) 
-					{
-						console.log(2222, outside[i3]);
-						break;
-					}
-				}
-				
-			}
+
 			
 			const room = myHouse.myRoom.detectCommonZone_1( w2[i] );
 			
@@ -1429,7 +1449,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			{
 				for ( let i2 = 0; i2 < room[0].userData.room.w.length; i2++ ) 
 				{ 
-					if(room[0].userData.room.w[i2] == w2[i]) { side = room[0].userData.room.s[i2]; break; } 
+					//if(room[0].userData.room.w[i2] == w2[i]) { side = room[0].userData.room.s[i2]; break; } 
 				}
 				
 				isMin = true;
@@ -1437,9 +1457,9 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			//console.log('ind', ind, wall.userData.wall.p, pStart, pStart2, side, points[ind].userData.id, [points2[0].userData.id, points2[1].userData.id]);
 			
-			width = w2[i].userData.wall.width;
+			const width = w2[i].userData.wall.width2;
 			
-			const {posL1, posL2} = this.calcLineWall({posP, pStart: pStart2, side, width, z, type, show: false});
+			const {posL1, posL2} = this.calcLineWall({posP, pStart: pStart2, side, width, z: width, type, show: false});
 			
 			linesW.push(posL1, posL2);
 		}
@@ -1540,13 +1560,30 @@ findObjectsUntilRepetition(arrayObjects) {
 				
 				pos1 = pos3;
 			}				
-		}		
-		
-		console.log(555, ind);	
+		}			
 		
 		return {pos1, pos2, posCut};
 	}
 	
+	
+	getLines2FromArrW2({wall})
+	{
+		let wall_1 = null;
+		
+		for ( let i = 0; i < this.arrW2.outside.length; i++ )
+		{
+			const outside = this.arrW2.outside[i].data;
+			
+			for ( let i2 = 0; i2 < outside.length; i2++ )
+			{
+				if(wall === outside[i2].wall) 
+				{
+					console.log(2222, outside[i3]);
+					break;
+				}
+			}			
+		}		
+	}
 	
 	// получаем позиции 2-х линий
 	calcLineWall({posP, pStart, side, width, z, type, show = false})
@@ -1972,22 +2009,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		
 		for ( let i = 0; i < arrO.length; i++ )
 		{
-			const obj = new THREE.Mesh();
-			obj.geometry = arrO[i].geometry.clone();
-			
-			const minZ = arrO[i].userData.door.form.v.minZ;
-			const maxZ = arrO[i].userData.door.form.v.maxZ;
-			
-			const v = obj.geometry.vertices;
-			
-			for ( let i2 = 0; i2 < minZ.length; i2++ ) { v[minZ[i2]].z -= 3.2; }
-			for ( let i2 = 0; i2 < maxZ.length; i2++ ) { v[maxZ[i2]].z += 3.2; }
-			
-			obj.material = arrO[i].material.clone();
-			obj.position.copy( arrO[i].position );
-			obj.rotation.copy( arrO[i].rotation );
-			//scene.add(obj);
-
+			const obj = createCloneWD_BSP( arrO[i] );
 			arr.push(obj);
 		}
 
