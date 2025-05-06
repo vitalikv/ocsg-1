@@ -10,25 +10,38 @@ class MyPanelTop2
 	{
 		this.container = document.querySelector('[nameId="wrapP1"]');
 		
-		this.divP = this.crDivP();
+		let list = [];
+		if(panel && panel === 'otop') list = ['plan', 'otop'];
+		if(panel && panel === 'calcBlock') list = ['plan', 'calcBlock'];
+		
+		this.divP = this.crDivP({list});
 		this.container.append(this.divP);
 		
-		myPanelWF.addPaidContent();
 		
 		this.initEvent();
 		
 		if(panel && panel === 'otop') 
 		{
+			myPanelWF.addPaidContent();
+			
 			this.showPanelROtop();
 			myPanelWF.showTabOtop();
 		}
+		
+		if(panel && panel === 'calcBlock') 
+		{
+			myPanelWidgetsBlocks.addPaidContent();
+			
+			this.showPanelRWBlocks();
+			myPanelWidgetsBlocks.showTab();
+		}		
 	}
 
 	// верхняя панель с режимами (теплый пол, отопление и т.д.)
-	crDivP()
+	crDivP({list})
 	{
 		const div = document.createElement('div');
-		div.innerHTML = this.html();
+		div.innerHTML = this.html({list});
 		return div.children[0];	
 	}		
 	
@@ -36,13 +49,20 @@ class MyPanelTop2
 	{
 		const btnPl = this.divP.querySelector('[nameId="plan"]');
 		const btnOt = this.divP.querySelector('[nameId="otop"]');
+		const btnCalcBlock = this.divP.querySelector('[nameId="calcBlock"]');
 		
-		btnPl.onmousedown = () => { myPanelWF.showHidePanel({show: false}); myPanelR.divPanel_1.style.display = ''; }
-		btnOt.onmousedown = () => { this.showPanelROtop(); }			
+		btnPl.onmousedown = () => 
+		{ 
+			myPanelWF.showHidePanel({show: false});
+			myPanelWidgetsBlocks.showHidePanel({show: false});
+			myPanelR.divPanel_1.style.display = ''; 
+		}
+		if(btnOt) btnOt.onmousedown = () => { this.showPanelROtop(); }
+		if(btnCalcBlock) btnCalcBlock.onmousedown = () => { this.showPanelRWBlocks(); }
 	}
 
 
-	html()
+	html({list})
 	{
 		const css1 = 
 		`position: relative;
@@ -68,10 +88,18 @@ class MyPanelTop2
 		cursor: pointer;
 		user-select: none;`;		
 		
+		
+		let divs = ``;
+		for ( let i = 0; i < list.length; i++ )
+		{
+			if(list[i] === 'plan') divs += `<div nameId="plan" style="${cssTab}">планировка</div>`;
+			if(list[i] === 'otop') divs += `<div nameId="otop" style="${cssTab}">отопление</div>`;
+			if(list[i] === 'calcBlock') divs += `<div nameId="calcBlock" style="${cssTab}">расчет блоков</div>`;
+		}
+		
 		const html = 
 		`<div ui_1="" style="${css1}">			
-			<div nameId="plan" style="${cssTab}">планировка</div>
-			<div nameId="otop" style="${cssTab}">отопление</div>
+			${divs}
 		</div>`;
 
 		return html;
@@ -83,6 +111,12 @@ class MyPanelTop2
 		myPanelR.divPanel_1.style.display = 'none'; 
 		myPanelWF.showHidePanel({show: true});
 	}
+	
+	showPanelRWBlocks()
+	{
+		myPanelR.divPanel_1.style.display = 'none'; 
+		myPanelWidgetsBlocks.showHidePanel({show: true});
+	}	
 }
 
 

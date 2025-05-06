@@ -1080,6 +1080,7 @@ let windDivSubs;
 let myPanelR;
 let myCatalogList;
 let myPanelWF;
+let myPanelWidgetsBlocks;
 
 let myCookie;
 let myTexture;
@@ -1146,7 +1147,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myCatalogList = new MyCatalogList();
 	switchCamera = new SwitchCamera();	
 	myPanelWF = new MyPanelWF();	
-	
+	myPanelWidgetsBlocks = new MyPanelWidgetsBlocks();
 	
 	myTexture = new MyTexture();
 	
@@ -1170,12 +1171,16 @@ document.addEventListener("DOMContentLoaded", ()=>
 // запуск проекта при открытии страницы
 async function startInitProject()
 {
+			infProject.settings.load.file = 'demo/3.json';
+			infProject.settings.save.file = 't/fileJson9.json';
+			
 	await myStartProject.init({name: ''});	// new - пустой проект 
 
 	if(1===2) if(myStartProject.detectShowStartWind()) windUI.showWin();	// меню пользователя
 	
-	if(1===2) myPanelTop2.addPaidPanel({panel: 'otop'});	// панель для платных пользователей	
-	
+	if(1===2) myPanelTop2.addPaidPanel({panel: 'otop'});	// панель для платных пользователей (отопление)	
+	if(1===1) myPanelTop2.addPaidPanel({panel: 'calcBlock'});	// панель для платных пользователей (расчет блоков)	
+		
 	if(1===2) myPanelR.myTabsR.activeTab({id: 0});	// вклад при старте
 	
 	if(1===2) myWarmFloor.myObjsWfInit.myTestObjsWf.showObjs();		// загрузка объектов отопления

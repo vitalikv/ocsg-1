@@ -6,6 +6,9 @@ class MyCalcBlocks
 	material;
 	arrTypeG = [];
 	blockParams = {dlina: 0.6, h: 0.3, z: 0.4, offset: 0.01};
+	arrW2 = { outside: [], inside: [], single: [] };
+	isAllLevel = true;
+	isUserSize = true;
 	
 	constructor()
 	{
@@ -23,12 +26,53 @@ class MyCalcBlocks
 	
 	init()
 	{
-		console.log(myLevels.levels);
+		this.clearResult();
 		
-		this.test({level: myLevels.levels[0]});
-		//this.test({level: myLevels.levels[1]});
+		const result = myPanelR.myLevelVisible.getModeCheckBox();
+		
+		
+		const allLevel = this.getCalcAllLevel();
+		console.log(1111, allLevel);
+		
+		if(allLevel)
+		{
+			this.test({level: myLevels.levels[0]});
+			this.test({level: myLevels.levels[1]});			
+		}
+		else
+		{
+			this.test({level: myLevels.levels[0]});
+		}
 	}
 	
+	setCalcAllLevel({value})
+	{
+		this.isAllLevel = value;
+	}
+
+	getCalcAllLevel()
+	{
+		return this.isAllLevel;
+	}
+	
+	setUserSize({value})
+	{
+		this.isUserSize = value;
+	}
+
+	getUserSize()
+	{
+		return this.isUserSize;
+	}
+
+	setParamsUserSize(params)
+	{
+		this.blockParams.dlina = params.length/1000;
+		this.blockParams.h = params.height/1000;
+		this.blockParams.z = params.width/1000;
+		
+		console.log(this.blockParams);
+	}
 	
 	// получаем уникальную ширину от всех стен (чтобы сделать блоки)
 	getUniqueBlocksWidth()
@@ -55,8 +99,6 @@ class MyCalcBlocks
 	{
 		const {dlina, h} = this.blockParams;
 		const arr = [];
-				
-		arrUniqueWidth.push(0.4);
 		
 		for ( let i = 0; i < arrUniqueWidth.length; i++ )
 		{
@@ -361,7 +403,8 @@ class MyCalcBlocks
 
 		this.arrW2 = arrW2;
 		
-		this.setUserWidthForWall(0.4);
+		let userZ = (this.getUserSize()) ? this.blockParams.z : null;
+		this.setUserWidthForWall(userZ);
 		
 		const arrUniqueWidth = this.getUniqueBlocksWidth();
 		this.arrTypeG = this.createGeometryByWidth({arrUniqueWidth});		
@@ -672,7 +715,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			lines.push({pos: [resultP.pos1, resultP.pos2], posP, side, pStart, width, arrO, wall});
 
-			wall.visible = false;
+			//wall.visible = false;
 		}
 		
 		const lines2 = this.showLines({lines, type, showLines});
@@ -682,11 +725,9 @@ findObjectsUntilRepetition(arrayObjects) {
 	}
 	
 
-	
+	// создаем стены по типу (наружные, внутренние, отдельные)
 	crDomByTypes({lines2, levelHeight})
 	{
-		const gArrBloks = [];
-		
 		const { h, offset } = this.blockParams;					
 		
 		let countY = 0;			
@@ -714,6 +755,8 @@ findObjectsUntilRepetition(arrayObjects) {
 			{
 				arrBloks = this.cutBlockes({obj: arrO[i2], w: arrBloks});
 			}
+			
+			lines2[i].arrBloks = arrBloks;
 		}
 	}
 	
@@ -2014,6 +2057,76 @@ findObjectsUntilRepetition(arrayObjects) {
 		}
 
 		return arr;
+	}
+
+	
+	// скрываем/показываем стены, которые учавствуют в расчетах
+	showHideWalls(visible)
+	{
+		const setVisible = (obj) =>
+		{
+			for ( let i = 0; i < obj.length; i++ )
+			{	
+				obj[i].visible = visible;					
+			}					
+		}
+		
+		for ( let i = 0; i < myLevels.levels.length; i++ )
+		{		
+			setVisible(myLevels.levels[i].wall);
+			setVisible(myLevels.levels[i].floor);
+			setVisible(myLevels.levels[i].door);
+			setVisible(myLevels.levels[i].window);
+			setVisible(myLevels.levels[i].roof);
+			setVisible(myLevels.levels[i].obj);
+			console.log(myLevels.levels[i])
+		}
+
+		renderCamera();
+	}
+	
+	
+	clearResult()
+	{
+		const arr = [];
+		
+		const getBlocks = (lines2) =>
+		{
+			for ( let i = 0; i < lines2.length; i++ )
+			{			
+				arr.push(...lines2[i].arrBloks);
+			}					
+		}
+		
+		const arrW2 = this.arrW2;
+		
+		for ( let i = 0; i < arrW2.outside.length; i++ )
+		{		
+			getBlocks(arrW2.outside[i].lines2);	
+		}			
+
+
+		for ( let i = 0; i < arrW2.inside.length; i++ )
+		{		
+			getBlocks(arrW2.inside[i].lines2);
+		}
+
+
+		for ( let i = 0; i < arrW2.single.length; i++ )
+		{		
+			getBlocks(arrW2.single[i].lines2);			
+		}
+		
+		
+		for ( let i = 0; i < arr.length; i++ )
+		{		
+			disposeNode( arr[i] );
+			scene.remove( arr[i] );
+		}
+		
+		this.arrW2 = { outside: [], inside: [], single: [] };
+		
+		renderCamera();		
 	}
 }
 
