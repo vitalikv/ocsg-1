@@ -86,6 +86,17 @@ class MyLevelVisible
 		this.checkBox3.onmousedown = () => { this.switchShowAllRoofs(); }
 	}
 	
+	// получаем состояние всех CheckBox в каком находятся
+	getStateCheckBox()
+	{
+		const data = {};
+		data.showAllLevel = this.showAllLevel;
+		data.wallTransparent = this.wallTransparent;
+		data.showAllRoofs = this.showAllRoofs;
+		
+		return data;
+	}
+	
 	switchShowAllLevel({value} = {value: undefined})
 	{
 		this.showAllLevel = (value !== undefined) ? value : !this.showAllLevel;

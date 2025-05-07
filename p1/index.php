@@ -257,6 +257,7 @@
 	<script src="<?=$path?>new/warmFloor/generator/myGeneratorWf.js?<?=$vrs?>"></script>
 	
 	<script src="<?=$path?>new/widgets/blocks/myCalcBlocks.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/widgets/blocks/myBlocksMode.js?<?=$vrs?>"></script>
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 
 		

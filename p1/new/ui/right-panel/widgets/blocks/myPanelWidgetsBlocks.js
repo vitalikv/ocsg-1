@@ -8,6 +8,7 @@ class MyPanelWidgetsBlocks
 	content1;
 	content2;
 	
+	checkBox1;
 	checkBox2;
 	
 	inputSizeX;
@@ -232,33 +233,34 @@ class MyPanelWidgetsBlocks
 			if(this.getStateCheckBox2()) myCalcBlocks.setParamsUserSize(this.getInputSize());
 
 			myCalcBlocks.init();
-			myCalcBlocks.showHideWalls(false);
+			myBlocksMode.hideObjs();
 		}	
 
 		const btnClearCalc = div.querySelector('[nameId="btnClearCalc"]');		
 		btnClearCalc.onmousedown = () => 
 		{ 
-			myCalcBlocks.showHideWalls(true);
+			myBlocksMode.showObjs();
 			myCalcBlocks.clearResult(); 
 		}
 
-		const checkBox1 = div.querySelector('[nameId="item_1"]');
-		checkBox1.onmousedown = () => 
+		this.checkBox1 = div.querySelector('[nameId="item_1"]');
+		this.checkBox1.onmousedown = () => 
 		{  
-			const check = checkBox1.children[0].style.background;
-			const value = (check === 'none') ? true : false;
-			checkBox1.children[0].style.background = (value) ? 'rgb(213, 213, 213)' : 'none';
+			this.changeStateCheckBox1({});
+			const value = this.getStateCheckBox1();
 			
-			myCalcBlocks.setCalcAllLevel({value});		
+			myBlocksMode.setCalcAllLevel({value});
+			
+			myPanelR.myLevelVisible.switchShowAllLevel({value});
 		}
 		
 		this.checkBox2 = div.querySelector('[nameId="userSize"]');				
 		this.checkBox2.onmousedown = () => 
 		{  
-			const value = !this.getStateCheckBox2();
-			this.checkBox2.children[0].style.background = (value) ? 'rgb(213, 213, 213)' : 'none';
+			this.changeStateCheckBox2({});
+			const value = this.getStateCheckBox2();
 			
-			myCalcBlocks.setUserSize({value});		
+			myBlocksMode.setUserSize({value});		
 		}
 
 		this.inputSizeX = div.querySelector('[nameId="inputSizeObjX"]');
@@ -266,8 +268,18 @@ class MyPanelWidgetsBlocks
 		this.inputSizeZ = div.querySelector('[nameId="inputSizeObjZ"]');
 		this.inputOffset = div.querySelector('[nameId="inputOffset"]');
 	}
+
+
+	// получаем состояние вкл/выкл (расчет блоков для всех этажей)
+	getStateCheckBox1()
+	{
+		const check = this.checkBox1.children[0].style.background;
+		const value = (check === 'none') ? false : true;
+
+		return value;
+	}
 	
-	
+	// получаем состояние вкл/выкл (свой размер блока)
 	getStateCheckBox2()
 	{
 		const check = this.checkBox2.children[0].style.background;
@@ -276,14 +288,30 @@ class MyPanelWidgetsBlocks
 		return value;
 	}
 	
+	// получаем размеры блока
 	getInputSize()
 	{
 		return {length: this.inputSizeX.value, height: this.inputSizeY.value, width: this.inputSizeZ.value};
 	}
 
+	// получаем толщину раствора
 	getInputOffset()
 	{
 		return this.inputOffset;
+	}
+
+	// меняем состояние для CheckBox вкл/выкл (расчет для всех этажей) только для css, без дальнейшей логики
+	changeStateCheckBox1({value = undefined})
+	{
+		if(value === undefined) value = !this.getStateCheckBox1();
+		this.checkBox1.children[0].style.background = (value) ? 'rgb(213, 213, 213)' : 'none';		
+	}
+	
+	// меняем состояние для CheckBox вкл/выкл (свой размер блока) только для css, без дальнейшей логики
+	changeStateCheckBox2({value = undefined})
+	{
+		if(value === undefined) value = !this.getStateCheckBox2();
+		this.checkBox2.children[0].style.background = (value) ? 'rgb(213, 213, 213)' : 'none';		
 	}
 	
 	// показываем в правой панели вкладку

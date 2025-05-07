@@ -7,8 +7,7 @@ class MyCalcBlocks
 	arrTypeG = [];
 	blockParams = {dlina: 0.6, h: 0.3, z: 0.4, offset: 0.01};
 	arrW2 = { outside: [], inside: [], single: [] };
-	isAllLevel = true;
-	isUserSize = true;
+
 	
 	constructor()
 	{
@@ -27,12 +26,8 @@ class MyCalcBlocks
 	init()
 	{
 		this.clearResult();
-		
-		const result = myPanelR.myLevelVisible.getModeCheckBox();
-		
-		
-		const allLevel = this.getCalcAllLevel();
-		console.log(1111, allLevel);
+				
+		const allLevel = myBlocksMode.getCalcAllLevel();
 		
 		if(allLevel)
 		{
@@ -45,25 +40,6 @@ class MyCalcBlocks
 		}
 	}
 	
-	setCalcAllLevel({value})
-	{
-		this.isAllLevel = value;
-	}
-
-	getCalcAllLevel()
-	{
-		return this.isAllLevel;
-	}
-	
-	setUserSize({value})
-	{
-		this.isUserSize = value;
-	}
-
-	getUserSize()
-	{
-		return this.isUserSize;
-	}
 
 	setParamsUserSize(params)
 	{
@@ -403,7 +379,7 @@ class MyCalcBlocks
 
 		this.arrW2 = arrW2;
 		
-		let userZ = (this.getUserSize()) ? this.blockParams.z : null;
+		let userZ = (myBlocksMode.getUserSize()) ? this.blockParams.z : null;
 		this.setUserWidthForWall(userZ);
 		
 		const arrUniqueWidth = this.getUniqueBlocksWidth();

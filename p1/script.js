@@ -1098,6 +1098,7 @@ let myToolPG_UI;
 let myHouse;
 let myWarmFloor;
 let myCalcBlocks;
+let myBlocksMode;
 let myStartProject;
 
 
@@ -1158,6 +1159,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myWarmFloor = new MyWarmFloor();
 	
 	myCalcBlocks = new MyCalcBlocks();
+	myBlocksMode = new MyBlocksMode();
 	
 	myStartProject = new MyStartProject();
 	startInitProject();
@@ -1179,7 +1181,17 @@ async function startInitProject()
 	if(1===2) if(myStartProject.detectShowStartWind()) windUI.showWin();	// меню пользователя
 	
 	if(1===2) myPanelTop2.addPaidPanel({panel: 'otop'});	// панель для платных пользователей (отопление)	
-	if(1===1) myPanelTop2.addPaidPanel({panel: 'calcBlock'});	// панель для платных пользователей (расчет блоков)	
+	
+	// панель для расчета блоков
+	if(1===1) 
+	{
+		myPanelTop2.addPaidPanel({panel: 'calcBlock'});	// создаем верхнию панель
+
+		myPanelWidgetsBlocks.addPaidContent();	// создаем правую панель			
+		myPanelWidgetsBlocks.showTab();			// переключаем на нужную вкладку	
+		
+		myPanelTop2.showPanelRWBlocks();	// отображаем правую панель 
+	}		
 		
 	if(1===2) myPanelR.myTabsR.activeTab({id: 0});	// вклад при старте
 	

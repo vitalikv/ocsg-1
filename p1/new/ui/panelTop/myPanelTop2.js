@@ -4,6 +4,7 @@ class MyPanelTop2
 {
 	container;
 	divP;
+	stateCheckBox;
 	
 	// панель для платных пользователей
 	addPaidPanel({panel = null})
@@ -17,7 +18,7 @@ class MyPanelTop2
 		this.divP = this.crDivP({list});
 		this.container.append(this.divP);
 		
-		
+		this.eventStop({div: this.divP});
 		this.initEvent();
 		
 		if(panel && panel === 'otop') 
@@ -27,14 +28,7 @@ class MyPanelTop2
 			this.showPanelROtop();
 			myPanelWF.showTabOtop();
 		}
-		
-		if(panel && panel === 'calcBlock') 
-		{
-			myPanelWidgetsBlocks.addPaidContent();
-			
-			this.showPanelRWBlocks();
-			myPanelWidgetsBlocks.showTab();
-		}		
+				
 	}
 
 	// верхняя панель с режимами (теплый пол, отопление и т.д.)
@@ -43,7 +37,18 @@ class MyPanelTop2
 		const div = document.createElement('div');
 		div.innerHTML = this.html({list});
 		return div.children[0];	
-	}		
+	}
+
+	// блокируем действия на 3д сцене, когда курсор находится на div
+	eventStop({div})
+	{
+		const arrEvent = ['onmousedown', 'onwheel', 'onmousewheel', 'onmousemove', 'ontouchstart', 'ontouchend', 'ontouchmove'];
+
+		arrEvent.forEach((events) => 
+		{
+			div[events] = (e) => { e.stopPropagation(); }					
+		});			
+	}	
 	
 	initEvent()
 	{
@@ -51,12 +56,7 @@ class MyPanelTop2
 		const btnOt = this.divP.querySelector('[nameId="otop"]');
 		const btnCalcBlock = this.divP.querySelector('[nameId="calcBlock"]');
 		
-		btnPl.onmousedown = () => 
-		{ 
-			myPanelWF.showHidePanel({show: false});
-			myPanelWidgetsBlocks.showHidePanel({show: false});
-			myPanelR.divPanel_1.style.display = ''; 
-		}
+		btnPl.onmousedown = () => { this.showPanelRPlan(); }
 		if(btnOt) btnOt.onmousedown = () => { this.showPanelROtop(); }
 		if(btnCalcBlock) btnCalcBlock.onmousedown = () => { this.showPanelRWBlocks(); }
 	}
@@ -105,18 +105,54 @@ class MyPanelTop2
 		return html;
 	}
 
-
+	
+	// показываем правую панель с планировкой
+	showPanelRPlan()
+	{
+		const state = this.getStateCheckBox();
+		if(state) this.changeStateCheckBox(state);
+		
+		myPanelWF.showHidePanel({show: false});
+		myPanelWidgetsBlocks.showHidePanel({show: false});
+		myPanelR.divPanel_1.style.display = ''; 		
+	}
+	
 	showPanelROtop()
 	{
 		myPanelR.divPanel_1.style.display = 'none'; 
 		myPanelWF.showHidePanel({show: true});
 	}
 	
+	// показываем правую панель с расчетом блоков
 	showPanelRWBlocks()
 	{
+		this.setStateCheckBox();
+		const state = this.getStateCheckBox();
+		this.changeStateCheckBox({showAllLevel: state.showAllLevel, wallTransparent: false, showAllRoofs: state.showAllRoofs});
+		
+		myBlocksMode.init({showAllLevel: state.showAllLevel});
+		
 		myPanelR.divPanel_1.style.display = 'none'; 
 		myPanelWidgetsBlocks.showHidePanel({show: true});
-	}	
+	}
+
+
+	setStateCheckBox()
+	{
+		this.stateCheckBox = myPanelR.myLevelVisible.getStateCheckBox();		
+	}
+	
+	getStateCheckBox()
+	{
+		return this.stateCheckBox;		
+	}
+
+	changeStateCheckBox({showAllLevel, wallTransparent, showAllRoofs})
+	{
+		//myPanelR.myLevelVisible.switchShowAllLevel({value: showAllLevel});
+		myPanelR.myLevelVisible.switchWallTransparent({value: wallTransparent});
+		//myPanelR.myLevelVisible.switchShowAllRoofs({value: showAllRoofs});
+	}
 }
 
 
