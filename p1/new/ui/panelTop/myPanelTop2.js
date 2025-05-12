@@ -109,6 +109,9 @@ class MyPanelTop2
 	// показываем правую панель с планировкой
 	showPanelRPlan()
 	{
+		myCalcBlocks.myBlocksCamera.deActivate();
+		myCalcBlocks.clearResultBlocks();
+		
 		const state = this.getStateCheckBox();
 		if(state) this.changeStateCheckBox(state);
 		
@@ -134,6 +137,9 @@ class MyPanelTop2
 		
 		myPanelR.divPanel_1.style.display = 'none'; 
 		myPanelWidgetsBlocks.showHidePanel({show: true});
+		
+		myPanelWidgetsBlocks.setStartBtnLevel();
+		myPanelWidgetsBlocks.setStartInputValue();		
 	}
 
 

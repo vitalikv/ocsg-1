@@ -2,15 +2,20 @@
 // автоматическая расчет кол-во блоков/кирпичей
 class MyCalcBlocks
 {
+	isActive = false;	// расчет произошел или нет
 	listPathImgs = {};
 	material;
 	arrTypeG = [];
 	blockParams = {dlina: 0.6, h: 0.3, z: 0.4, offset: 0.01};
 	arrW2 = { outside: [], inside: [], single: [] };
-
+	levelsData = [];
+	
+	myBlocksCamera;
 	
 	constructor()
 	{
+		this.myBlocksCamera = new MyBlocksCamera();
+		
 		this.listPathImgs.kirpich = infProject.path+'img/widgets/blocks/one_kirpich.jpg';
 		this.listPathImgs.block = infProject.path+'img/widgets/blocks/block_1.jpg';
 		
@@ -19,25 +24,61 @@ class MyCalcBlocks
 		//this.geometry = new THREE.BufferGeometry().fromGeometry(this.geometry);
 
 		
-		this.material = new THREE.MeshStandardMaterial({ color: 0xffffff, lightMap : lightMap_1, wireframe: false });
+		this.material = new THREE.MeshStandardMaterial({ color: 0xcccccc, lightMap : lightMap_1, wireframe: false });
 		this.setImage({material: this.material, img: this.listPathImgs.kirpich});
 	}
 	
+	// вкл/выкл когда произошел расчет блоков
+	setActive({value})
+	{
+		this.isActive = value;
+	}
+	
+	getActive()
+	{
+		return this.isActive;
+	}
+
+	setLevelsData({data})
+	{
+		this.levelsData = data;
+	}
+	
+	getLevelsData()
+	{
+		return this.levelsData;
+	}	
+	
 	init()
 	{
-		this.clearResult();
-				
+		this.clearResultBlocks();
+		this.setActive({value: true});
+		
+		const idActive = myLevels.getIdActLevel();
 		const allLevel = myBlocksMode.getCalcAllLevel();
+		
+		const data = [];
 		
 		if(allLevel)
 		{
-			this.test({level: myLevels.levels[0]});
-			this.test({level: myLevels.levels[1]});			
+			for ( let i = 0; i < myLevels.levels.length; i++ )
+			{
+				//this.test({idLevel: i, level: myLevels.levels[i]});
+			}	
+
+			data[0] = this.test({idLevel: 0, level: myLevels.levels[0]});
+			data[1] = this.test({idLevel: 1, level: myLevels.levels[1]});			
 		}
 		else
 		{
-			this.test({level: myLevels.levels[0]});
+			
+			data[0] = this.test({idLevel: idActive, level: myLevels.levels[idActive]});
 		}
+		
+		this.setLevelsData({data});
+		
+		this.myBlocksCamera.hideBlocks();
+		this.myBlocksCamera.showBlocks({idLevel: idActive});
 	}
 	
 
@@ -188,7 +229,7 @@ class MyCalcBlocks
 	}
 	
 	
-	test({level})
+	test({idLevel, level})
 	{
 		//const posY = myLevels.getLevelPos0({lastId: 0, newId: 0});
 		
@@ -405,9 +446,10 @@ class MyCalcBlocks
 			const lines2 = this.calcWalls({data: arrW2.single[i].data, type: 'single'});		
 			arrW2.single[i].lines2 = lines2;			
 		}		
-
-
+		
 		this.showResult({levelHeight});
+		
+		return {idLevel, arrW2};
 	}
 	
 	
@@ -2036,33 +2078,19 @@ findObjectsUntilRepetition(arrayObjects) {
 	}
 
 	
-	// скрываем/показываем стены, которые учавствуют в расчетах
-	showHideWalls(visible)
-	{
-		const setVisible = (obj) =>
-		{
-			for ( let i = 0; i < obj.length; i++ )
-			{	
-				obj[i].visible = visible;					
-			}					
-		}
-		
-		for ( let i = 0; i < myLevels.levels.length; i++ )
-		{		
-			setVisible(myLevels.levels[i].wall);
-			setVisible(myLevels.levels[i].floor);
-			setVisible(myLevels.levels[i].door);
-			setVisible(myLevels.levels[i].window);
-			setVisible(myLevels.levels[i].roof);
-			setVisible(myLevels.levels[i].obj);
-			console.log(myLevels.levels[i])
-		}
 
-		renderCamera();
+	// меняем высоту блоков при переключении этажа
+	changePosYLevel({posY})
+	{
+		const arr = this.getAllBlocks({});
+
+		for ( let i = 0; i < arr.length; i++ )
+		{		
+			arr[i].position.y -= posY;
+		}		
 	}
 	
-	
-	clearResult()
+	getAllBlocks({id = undefined})
 	{
 		const arr = [];
 		
@@ -2074,25 +2102,39 @@ findObjectsUntilRepetition(arrayObjects) {
 			}					
 		}
 		
-		const arrW2 = this.arrW2;
+		const levelsData = this.getLevelsData();
 		
-		for ( let i = 0; i < arrW2.outside.length; i++ )
-		{		
-			getBlocks(arrW2.outside[i].lines2);	
-		}			
+		for ( let i = 0; i < levelsData.length; i++ )
+		{	
+			const idLevel = levelsData[i].idLevel;
+			
+			if(id !== undefined && id !== idLevel) continue;
+	
+			const arrW2 = levelsData[i].arrW2;
 
+			for ( let i2 = 0; i2 < arrW2.outside.length; i2++ )
+			{		
+				getBlocks(arrW2.outside[i2].lines2);	
+			}			
 
-		for ( let i = 0; i < arrW2.inside.length; i++ )
-		{		
-			getBlocks(arrW2.inside[i].lines2);
+			for ( let i2 = 0; i2 < arrW2.inside.length; i2++ )
+			{		
+				getBlocks(arrW2.inside[i2].lines2);
+			}
+
+			for ( let i2 = 0; i2 < arrW2.single.length; i2++ )
+			{		
+				getBlocks(arrW2.single[i2].lines2);			
+			}			
 		}
 
-
-		for ( let i = 0; i < arrW2.single.length; i++ )
-		{		
-			getBlocks(arrW2.single[i].lines2);			
-		}
-		
+		return arr;
+	}
+	
+	// удаляем все блоки и сбрасываем массивы
+	clearResultBlocks()
+	{
+		const arr = this.getAllBlocks({});
 		
 		for ( let i = 0; i < arr.length; i++ )
 		{		
@@ -2101,6 +2143,10 @@ findObjectsUntilRepetition(arrayObjects) {
 		}
 		
 		this.arrW2 = { outside: [], inside: [], single: [] };
+		
+		this.setLevelsData({data: []});
+		
+		this.setActive({value: false});
 		
 		renderCamera();		
 	}

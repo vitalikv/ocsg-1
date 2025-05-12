@@ -16,8 +16,16 @@ class EventMyCamera
 		myMouse.clearClick();
 		myComposerRenderer.outlineRemoveObj();	
 		if(myComposerRenderer) myComposerRenderer.changeCamera({camera});
-
-		changeCamera();
+		
+		
+		if(myCalcBlocks.getActive())
+		{
+			myCalcBlocks.myBlocksCamera.changeCamera();
+		}
+		else
+		{
+			changeCamera();
+		}		
 	}
 		
 	moveCam2D()

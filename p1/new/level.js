@@ -107,7 +107,7 @@ class MyLevels
 		
 		this.updateArrLevel();
 		
-		resetArrScene()
+		resetArrScene();
 	}
 
 
@@ -249,7 +249,7 @@ class MyLevels
 				walls[i].userData.wall.arrO[i2].position.y = walls[i].userData.wall.arrO[i2].position.y - posY;
 			}
 		}
-		if(id === 0) infProject.scene.grid.position.y = infProject.scene.grid.position.y - posY;
+		if(id === 0) infProject.scene.grid.position.y = infProject.scene.grid.position.y - posY; 
 		for ( let i = 0; i < points.length; i++ ) points[i].position.y = points[i].position.y - posY;	
 		for ( let i = 0; i < floors.length; i++ ) floors[i].position.y = floors[i].position.y - posY;
 		for ( let i = 0; i < ceilings.length; i++ ) ceilings[i].position.y = ceilings[i].position.y - posY;
