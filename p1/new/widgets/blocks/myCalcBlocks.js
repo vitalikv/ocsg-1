@@ -1203,8 +1203,8 @@ findObjectsUntilRepetition(arrayObjects) {
 			let posL2 = result.posL2;	// 2-ая линия
 			//this.helpLine({v: posL1, color: 0x00ff00});
 			
-			let posCut1 = null;
-			let posCut2 = null;
+			let posCut1 = posL1[0].clone();
+			let posCut2 = posL1[1].clone();
 			let normalCut1 = null;
 			let normalCut2 = null;
 			let dirCut1 = null;
@@ -1359,7 +1359,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			const offset2 = (type === 'single') ? 0 : offset;
 			
-			const posStart2 = pos2.clone().sub(dir.clone().multiplyScalar(dist - offset2 - dlina/2));
+			const posStart2 = pos2.clone().sub(dir.clone().multiplyScalar(dist - offset2 + dlina/2));
 			lines2[i].row[1].pos[0] = posStart2;
 		}
 
@@ -1367,33 +1367,28 @@ findObjectsUntilRepetition(arrayObjects) {
 		//lines2.length = 0;
 		for ( let i = 0; i < lines2.length; i++ )
 		{
-			const pos1 = lines2[i].row[0].pos[0];
-			const pos2 = lines2[i].row[0].pos[1];
+			const pos1 = lines2[i].row[1].pos[0];
+			const pos2 = lines2[i].row[1].pos[1];
 
 			const pIds = lines2[i].pIds;
-			if(pIds[0] === 98 || pIds[0] === 97 && pIds[1] === 98 || pIds[1] === 97)
+			if(pIds[0] === 66 && pIds[1] === 86)
 			{
-	
+				this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0x00ff00});
+				this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1 + (0.1 * (i + 1)), 0)), size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
 			}
-
-			//this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.03, 0.03, 0.03), color: 0x00ff00});
-			//this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1 + (0.1 * (i + 1)), 0)), size: new THREE.Vector3(0.08, 0.1, 0.08), color: 0xff0000});
 		}
 
-		if(showLines)
+		if(showLines && 1===1)
 		{
 			for (let i = 0; i < lines2.length; i++)
 			{
-				if(1===1)
-				{
-					const result = lines2[i].row[0];
-
-			const posZ = result.normal.clone().multiplyScalar(z);
-
-			
-					this.helpLine({v: [result.pos[0], result.pos[1]], color: 0x00ff00});
-					this.helpLine({v: [result.pos[0].clone().add(posZ), result.pos[1].clone().add(posZ)], color: 0xff0000});					
-				}				
+				const result = lines2[i].row[1];
+				const width = lines2[i].width;
+				
+				const posZ = result.normal.clone().multiplyScalar(width);
+		
+				this.helpLine({v: [result.pos[0], result.pos[1]], color: 0x00ff00});
+				this.helpLine({v: [result.pos[0].clone().add(posZ), result.pos[1].clone().add(posZ)], color: 0xff0000});				
 			}			
 		}
 
@@ -1590,38 +1585,41 @@ findObjectsUntilRepetition(arrayObjects) {
 		let pos1 = getPos2({v1: lines[0][0], v2: lines[0][1]});
 		const pos2 = getPos2({v1: lines[1][0], v2: lines[1][1]});
 		
-		if(pos1) this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x00ff00});
-		if(pos2) this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
+		//if(pos1) this.helpBox({pos: pos1.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x00ff00});
+		//if(pos2) this.helpBox({pos: pos2.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
 		
-		const posCut = pos1.clone();
+		const posCut = (pos1) ? pos1.clone() : null;
 	
-		const pos3 = myMath.mathProjectPointOnLine2D({A: lines[0][0], B: lines[0][1], C: pos2});
-		pos3.y = lines[0][0].y;
-	
-		if(ind === 0)
+		if(pos2)
 		{
-			const dist1 = pos1.distanceTo(lines[0][1]);
-			const dist2 = pos3.distanceTo(lines[0][1]);
-			
-			if(dist1 < dist2) 
+			const pos3 = myMath.mathProjectPointOnLine2D({A: lines[0][0], B: lines[0][1], C: pos2});
+			pos3.y = lines[0][0].y;
+		
+			if(ind === 0)
 			{
-				this.helpBox({pos: pos3.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
+				const dist1 = pos1.distanceTo(lines[0][1]);
+				const dist2 = pos3.distanceTo(lines[0][1]);
 				
-				pos1 = pos3;
-			}				
+				if(dist1 < dist2) 
+				{
+					this.helpBox({pos: pos3.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
+					
+					pos1 = pos3;
+				}				
+			}
+			if(ind === 1)
+			{
+				const dist1 = pos1.distanceTo(lines[0][0]);
+				const dist2 = pos3.distanceTo(lines[0][0]);
+				
+				if(dist1 < dist2) 
+				{
+					this.helpBox({pos: pos3.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
+					
+					pos1 = pos3;
+				}				
+			}			
 		}
-		if(ind === 1)
-		{
-			const dist1 = pos1.distanceTo(lines[0][0]);
-			const dist2 = pos3.distanceTo(lines[0][0]);
-			
-			if(dist1 < dist2) 
-			{
-				this.helpBox({pos: pos3.clone().add(new THREE.Vector3(0, 0.1, 0)), size: new THREE.Vector3(0.1, 0.1, 0.1), color: 0x0000ff});
-				
-				pos1 = pos3;
-			}				
-		}			
 		
 		return {pos1, pos2, posCut};
 	}
@@ -2060,7 +2058,7 @@ findObjectsUntilRepetition(arrayObjects) {
 	checkIs150degree({angle})
 	{
 		//return false;
-		return (Math.abs(angle) > 120) ? true : false;
+		return (Math.abs(angle) > 170) ? true : false;
 	}
 	
 	
@@ -2090,6 +2088,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		}		
 	}
 	
+	// получить все блоки (всех этажей) или только одного этажа по id
 	getAllBlocks({id = undefined})
 	{
 		const arr = [];
