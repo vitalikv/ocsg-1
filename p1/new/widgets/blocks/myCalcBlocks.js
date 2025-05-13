@@ -67,7 +67,8 @@ class MyCalcBlocks
 			}	
 
 			data[0] = this.test({idLevel: 0, level: myLevels.levels[0]});
-			data[1] = this.test({idLevel: 1, level: myLevels.levels[1]});			
+			data[1] = this.test({idLevel: 1, level: myLevels.levels[1]});
+			//data[2] = this.test({idLevel: 2, level: myLevels.levels[2]});
 		}
 		else
 		{
@@ -772,10 +773,32 @@ findObjectsUntilRepetition(arrayObjects) {
 			for (let i2 = 0; i2 < arrO.length; i2++)
 			{
 				arrBloks = this.cutBlockes({obj: arrO[i2], w: arrBloks});
+				arrO[i2].geometry.dispose();
 			}
 			
 			lines2[i].arrBloks = arrBloks;
 		}
+		
+		
+		const roofs = this.setCutRoof();
+		
+		for (let i = 0; i < lines2.length; i++)
+		{
+			let arrBloks = lines2[i].arrBloks;
+			
+			for (let i2 = 0; i2 < roofs.length; i2++)
+			{
+				const roof = roofs[i2];
+				
+				for (let i3 = 0; i3 < roof.length; i3++)
+				{
+					arrBloks = this.cutBlockes({obj: roof[i3], w: arrBloks});
+					roof[i3].geometry.dispose();					
+				}
+			}
+			
+			lines2[i].arrBloks = arrBloks;
+		}		
 	}
 	
 	
@@ -2075,7 +2098,24 @@ findObjectsUntilRepetition(arrayObjects) {
 		return arr;
 	}
 
-	
+
+	setCutRoof()
+	{
+		const level = myLevels.levels;
+		
+		const roofsClone = [];
+		
+		for(let i = 0; i < level.length; i++)
+		{
+			for(let i2 = 0; i2 < level[i].roof.length; i2++)
+			{
+				const group = myHouse.myRoofCSG.cgs_2(level[i].roof[i2]);
+				roofsClone.push(group);
+			}
+		}
+		
+		return roofsClone;		
+	}	
 
 	// меняем высоту блоков при переключении этажа
 	changePosYLevel({posY})

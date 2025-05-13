@@ -80,21 +80,21 @@ class MyRoofCSG
 	// старт обрезание стен крышами
 	cgs()
 	{
-		let level = myLevels.levels;
-		let arr = [];
+		const level = myLevels.levels;
 		
 		for(let i = 0; i < level.length; i++)
 		{
 			for(let i2 = 0; i2 < level[i].roof.length; i2++)
 			{
-				this.cgs_2(level[i].roof[i2]);
+				const group = this.cgs_2(level[i].roof[i2]);
+				this.cgs_3({group});
 			}
 		}
 	}
 	
 	cgs_2(roof)
 	{		
-		console.log('обрезаем стены крышами');
+		console.log('создание клонов крыш для обрезки');
 		
 		let group = [];
 		for(let i = 0; i < roof.children.length; i++)
@@ -116,6 +116,14 @@ class MyRoofCSG
 			group.push(roofClone);
 		}
 		
+		return group;		
+	}
+	
+	
+	cgs_3({group})
+	{	
+		console.log('обрезаем стены крышами');
+		
 		for(let i = 0; i < group.length; i++)
 		{
 			//group[i].position.y += 1;
@@ -123,7 +131,7 @@ class MyRoofCSG
 			this.cutMeshBSP(group[i]);
 			group[i].geometry.dispose();
 		}		
-	}
+	}	
 
 	
 	// получаем модифицированную клон-крышу, с высокими откасами, чтобы резать стены
