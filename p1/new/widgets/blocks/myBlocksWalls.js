@@ -3,6 +3,7 @@
 class MyBlocksWalls
 {
 	material;
+	dataWallsClone = [];
 	
 	constructor()
 	{
@@ -12,12 +13,13 @@ class MyBlocksWalls
 
 	initWalls()
 	{
-		const data = this.getWalls();
+		const data = this.getWalls_1();
 		this.crCloneWalls({data});
 	}
 	
 	
-	getWalls()
+	// получаем все стены независимо от блоков (для проверки построения)
+	getWalls_1()
 	{
 		const level = myLevels.levels;
 		const data = [];
@@ -35,12 +37,31 @@ class MyBlocksWalls
 		return data;
 	}
 	
+	// создание стен с уменьшиной тощиной и высотой
 	crCloneWalls({data})
 	{
+		const kof = 0.001;
+		
 		const roofs = myCalcBlocks.setCutRoof();
 		
+		for (let i = 0; i < roofs.length; i++)
+		{
+			const roof = roofs[i];
+			
+			for (let i2 = 0; i2 < roof.length; i2++)
+			{
+				roof[i2].position.y -= kof;
+			}
+		}
+		
+		
+		const arr = [];
+		
 		for(let i = 0; i < data.length; i++)
-		{			
+		{	
+			const idLevel = data[i].idLevel;
+			const wallsClone = [];
+			
 			for(let i2 = 0; i2 < data[i].walls.length; i2++)
 			{
 				const wall = data[i].walls[i2];
@@ -60,11 +81,19 @@ class MyBlocksWalls
 				for ( let i3 = 0; i3 < v.length; i3++ ) { v[i3] = wall.userData.wall.v[i3].clone(); }
 				
 				// уменьшаем ширину стены
-				let width = wall.userData.wall.width - 0.001;
+				let width = wall.userData.wall.width - kof;
 				width /= 2;
 				v[0].z = v[1].z = v[6].z = v[7].z = width;
 				v[4].z = v[5].z = v[10].z = v[11].z = -width;
-			
+
+				// уменьшаем высоту стены
+				v[1].y -= kof;
+				v[3].y -= kof;
+				v[5].y -= kof;
+				v[7].y -= kof;
+				v[9].y -= kof;
+				v[11].y -= kof;
+				
 				geometry.verticesNeedUpdate = true;
 				geometry.elementsNeedUpdate = true;	
 				geometry.computeBoundingSphere();
@@ -79,6 +108,7 @@ class MyBlocksWalls
 				
 				for ( let i3 = 0; i3 < arrO.length; i3++ )
 				{
+					arrO[i3].scale.set(1.001, 1.001, 1);
 					myCalcBlocks.cutBlockes({obj: arrO[i3], w: [wallClone]});
 					
 					arrO[i3].geometry.dispose();
@@ -98,8 +128,98 @@ class MyBlocksWalls
 				}				
 
 				scene.add(wallClone);
-			}			
+				
+				wallsClone.push(wallClone);
+			}
+
+			arr.push({idLevel, walls: wallsClone});
+		}
+
+		this.setDataWallsClone({data: arr});
+	}
+	
+	
+	setDataWallsClone({data})
+	{
+		this.dataWallsClone = data;
+	}
+	
+	getDataWallsClone()
+	{
+		return this.dataWallsClone;
+	}
+		
+	
+	// получаем стены (всех этажей) или только одного этажа по id
+	getWallsClone({id = undefined})
+	{
+		const arr = [];
+		
+		const data = this.getDataWallsClone();
+		
+		for (let i = 0; i < data.length; i++)
+		{
+			const idLevel = data[i].idLevel;
+			
+			if(id !== undefined && id !== idLevel) continue;
+			
+			arr.push(...data[i].walls);
+		}
+		
+		return arr;
+	}
+
+
+	// меняем высоту стен при переключении этажа
+	changePosYLevel({posY})
+	{
+		const walls = this.getWallsClone({});
+
+		for ( let i = 0; i < walls.length; i++ )
+		{		
+			walls[i].position.y -= posY;
 		}		
+	}
+	
+	
+	// показываем стены (всех этажей) или только одного этажа по id
+	showWalls({idLevel = undefined})
+	{
+		const walls = this.getWallsClone({id: idLevel});
+		
+		for (let i = 0; i < walls.length; i++)
+		{
+			walls[i].visible = true;
+		}		
+	}
+	
+
+	// скрываем все стены всех этажей
+	hideWalls()
+	{
+		const walls = this.getWallsClone({});
+		
+		for (let i = 0; i < walls.length; i++)
+		{
+			walls[i].visible = false;
+		}		
+	}
+
+	
+	// удаляем все стены
+	deleteWalls()
+	{
+		const walls = this.getWallsClone({});
+		
+		for (let i = 0; i < walls.length; i++)
+		{
+			const wall = walls[i];
+			
+			wall.geometry.dispose();
+			scene.remove(wall);
+		}
+
+		this.setDataWallsClone({data: []});
 	}
 }
 

@@ -18,6 +18,8 @@ class MyBlocksCamera
 	// деактивировался расчет блоков
 	deActivate()
 	{
+		myCalcBlocks.myBlocksWalls.deleteWalls();
+		
 		this.showObjs();
 		
 		changeCamera();
@@ -36,13 +38,33 @@ class MyBlocksCamera
 			upPosLabels_1({resize: true});	
 
 			const idActive = myLevels.getIdActLevel();
+			
 			this.hideBlocks();
-			this.showBlocks({idLevel: idActive});			
+			this.showBlocks({idLevel: idActive});
+
+			myCalcBlocks.myBlocksWalls.hideWalls();
+			myCalcBlocks.myBlocksWalls.showWalls({idLevel: idActive});			
 		}
 		
 		if(myCameraOrbit.activeCam.userData.isCam3D)
 		{
-			this.showBlocks({});
+			const allLevel = myBlocksMode.getCalcAllLevel();
+			
+			if(allLevel)
+			{
+				this.showBlocks({});				
+				myCalcBlocks.myBlocksWalls.showWalls({});				
+			}
+			else
+			{
+				const idActive = myLevels.getIdActLevel();
+				
+				this.hideBlocks();
+				this.showBlocks({idLevel: idActive});
+
+				myCalcBlocks.myBlocksWalls.hideWalls();
+				myCalcBlocks.myBlocksWalls.showWalls({idLevel: idActive});				
+			}
 		}
 	}
 	
@@ -54,20 +76,10 @@ class MyBlocksCamera
 		
 		myHouse.myGhostLevel.deleteLevel();
 		
-		console.log(999, posY);
 		myCalcBlocks.changePosYLevel({posY});
+		myCalcBlocks.myBlocksWalls.changePosYLevel({posY});
 		
-		if(myCameraOrbit.activeCam.userData.isCam2D)
-		{
-			this.hideBlocks();
-			const idActive = myLevels.getIdActLevel();
-			this.showBlocks({idLevel: idActive});			
-		}
-		
-		if(myCameraOrbit.activeCam.userData.isCam3D)
-		{
-			this.showBlocks({});			
-		}		
+		this.changeCamera();		
 		
 		renderCamera();
 	}

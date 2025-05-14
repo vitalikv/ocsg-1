@@ -57,33 +57,25 @@ class MyCalcBlocks
 		this.setActive({value: true});
 		
 		const idActive = myLevels.getIdActLevel();
-		const allLevel = myBlocksMode.getCalcAllLevel();
+		
 		
 		const data = [];
 		
-		if(allLevel)
+		for ( let i = 0; i < myLevels.levels.length; i++ )
 		{
-			for ( let i = 0; i < myLevels.levels.length; i++ )
-			{
-				//this.test({idLevel: i, level: myLevels.levels[i]});
-			}	
+			//this.test({idLevel: i, level: myLevels.levels[i]});
+		}	
 
-			data[0] = this.test({idLevel: 0, level: myLevels.levels[0]});
-			data[1] = this.test({idLevel: 1, level: myLevels.levels[1]});
-			//data[2] = this.test({idLevel: 2, level: myLevels.levels[2]});
-		}
-		else
-		{
-			
-			data[0] = this.test({idLevel: idActive, level: myLevels.levels[idActive]});
-		}
+		data[0] = this.test({idLevel: 0, level: myLevels.levels[0]});
+		data[1] = this.test({idLevel: 1, level: myLevels.levels[1]});
+		//data[2] = this.test({idLevel: 2, level: myLevels.levels[2]});
+
 		
 		this.setLevelsData({data});
 		
-		this.myBlocksCamera.hideBlocks();
-		this.myBlocksCamera.showBlocks({idLevel: idActive});
-		
 		this.myBlocksWalls.initWalls();
+		
+		this.myBlocksCamera.changeCamera();
 	}
 	
 

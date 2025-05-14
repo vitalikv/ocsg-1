@@ -281,7 +281,9 @@ class MyPanelWidgetsBlocks
 			
 			myBlocksMode.setCalcAllLevel({value});
 			
-			myPanelR.myLevelVisible.switchShowAllLevel({value});
+			//myPanelR.myLevelVisible.switchShowAllLevel({value});
+			
+			myCalcBlocks.myBlocksCamera.changeCamera();
 		}
 		
 		this.checkBox2 = div.querySelector('[nameId="userSize"]');				
