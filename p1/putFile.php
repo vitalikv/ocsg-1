@@ -146,6 +146,7 @@ new/warmFloor/generator/myGeneratorWf.js
 new/widgets/blocks/myCalcBlocks.js
 new/widgets/blocks/myBlocksMode.js
 new/widgets/blocks/myBlocksCamera.js
+new/widgets/blocks/myBlocksWalls.js
 ';
 
 $arrF = array();

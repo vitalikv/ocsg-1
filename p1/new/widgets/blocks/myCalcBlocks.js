@@ -6,20 +6,22 @@ class MyCalcBlocks
 	listPathImgs = {};
 	material;
 	arrTypeG = [];
-	blockParams = {dlina: 0.6, h: 0.3, z: 0.4, offset: 0.01};
+	blockParams = {dlina: 0.6, h: 0.3, z: 0.4, offset: 0.003};
 	arrW2 = { outside: [], inside: [], single: [] };
 	levelsData = [];
 	
 	myBlocksCamera;
+	myBlocksWalls;
 	
 	constructor()
 	{
 		this.myBlocksCamera = new MyBlocksCamera();
+		this.myBlocksWalls = new MyBlocksWalls();
 		
 		this.listPathImgs.kirpich = infProject.path+'img/widgets/blocks/one_kirpich.jpg';
 		this.listPathImgs.block = infProject.path+'img/widgets/blocks/block_1.jpg';
 		
-		//this.listPathImgs.kirpich = this.listPathImgs.block;
+		this.listPathImgs.kirpich = this.listPathImgs.block;
 		
 		//this.geometry = new THREE.BufferGeometry().fromGeometry(this.geometry);
 
@@ -80,6 +82,8 @@ class MyCalcBlocks
 		
 		this.myBlocksCamera.hideBlocks();
 		this.myBlocksCamera.showBlocks({idLevel: idActive});
+		
+		this.myBlocksWalls.initWalls();
 	}
 	
 
