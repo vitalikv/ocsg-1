@@ -53,6 +53,7 @@ class MyCalcBlocks
 	
 	init()
 	{
+		this.myBlocksWalls.deleteWalls();
 		this.clearResultBlocks();
 		this.setActive({value: true});
 		
@@ -72,8 +73,17 @@ class MyCalcBlocks
 
 		
 		this.setLevelsData({data});
+
+
+		// создание блоков
+		for ( let i = 0; i < data.length; i++ )
+		{
+			//this.showResult({arrW2: data[i].arrW2, levelHeight: data[i].levelHeight});
+		}
 		
-		this.myBlocksWalls.initWalls();
+		console.log(888888, data);
+		
+		this.myBlocksWalls.initWalls({data});
 		
 		this.myBlocksCamera.changeCamera();
 	}
@@ -444,16 +454,12 @@ class MyCalcBlocks
 			arrW2.single[i].lines2 = lines2;			
 		}		
 		
-		this.showResult({levelHeight});
-		
-		return {idLevel, arrW2};
+		return {idLevel, arrW2, levelHeight};
 	}
 	
 	
-	showResult({levelHeight})
-	{
-		const arrW2 = this.arrW2;
-		
+	showResult({arrW2, levelHeight})
+	{		
 		for ( let i = 0; i < arrW2.outside.length; i++ )
 		{
 			this.crDomByTypes({lines2: arrW2.outside[i].lines2, levelHeight});
@@ -1289,7 +1295,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			const points = wall.userData.wall.p;
 			const pIds = [points[0].userData.id, points[1].userData.id];
-			lines2.push({row: [data1, data2], width, arrO, angle: 0, arrBloks: [], pIds});			
+			lines2.push({row: [data1, data2], walls: [wall], width, arrO, angle: 0, arrBloks: [], pIds});			
 			
 			lines[i].pos = posL1;
 			lines[i].pos2 = posL2;
@@ -2012,7 +2018,6 @@ findObjectsUntilRepetition(arrayObjects) {
 			if(lines2[i - 1].width !== lines2[n1].width) continue;			
 
 			if(Math.abs(Math.abs(angle) - 180) > 0.0001) continue;
-			console.log(angle, Math.abs(angle));
 			
 			lines2[i - 1].row[0].pos[1] = lines2[n1].row[0].pos[1];
 			lines2[i - 1].row[0].cut2 = lines2[n1].row[0].cut2;
@@ -2020,7 +2025,9 @@ findObjectsUntilRepetition(arrayObjects) {
 			lines2[i - 1].row[1].pos[1] = lines2[n1].row[1].pos[1];
 			lines2[i - 1].row[1].cut2 = lines2[n1].row[1].cut2;
 			
-			lines2[i - 1].arrO.push(...lines2[n1].arrO);
+			lines2[i - 1].walls.push(...lines2[n1].walls);
+			lines2[i - 1].arrO.push(...lines2[n1].arrO);			
+			lines2[i - 1].pIds.push(...lines2[n1].pIds);
 			
 			lines2.splice(i, 1);
 			i--;
