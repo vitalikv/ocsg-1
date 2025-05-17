@@ -258,6 +258,7 @@
 	
 	<script src="<?=$path?>new/widgets/blocks/myCalcBlocks.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/widgets/blocks/myBlocksMode.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/widgets/blocks/myBlocksMouse.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/widgets/blocks/myBlocksCamera.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/widgets/blocks/myBlocksWalls.js?<?=$vrs?>"></script>
 	

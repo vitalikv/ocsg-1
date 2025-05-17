@@ -109,8 +109,7 @@ class MyPanelTop2
 	// показываем правую панель с планировкой
 	showPanelRPlan()
 	{
-		myCalcBlocks.myBlocksCamera.deActivate();
-		myCalcBlocks.clearResultBlocks();
+		myCalcBlocks.myBlocksMode.disableMode();
 		
 		const state = this.getStateCheckBox();
 		if(state) this.changeStateCheckBox(state);
@@ -126,14 +125,14 @@ class MyPanelTop2
 		myPanelWF.showHidePanel({show: true});
 	}
 	
-	// показываем правую панель с расчетом блоков
+	// показываем правую панель с расчетом блоков (активируем режим)
 	showPanelRWBlocks()
 	{
 		this.setStateCheckBox();
 		const state = this.getStateCheckBox();
 		this.changeStateCheckBox({showAllLevel: state.showAllLevel, wallTransparent: false, showAllRoofs: state.showAllRoofs});
 		
-		myBlocksMode.init({showAllLevel: state.showAllLevel});
+		myCalcBlocks.myBlocksMode.enableMode({showAllLevel: state.showAllLevel});
 		
 		myPanelR.divPanel_1.style.display = 'none'; 
 		myPanelWidgetsBlocks.showHidePanel({show: true});

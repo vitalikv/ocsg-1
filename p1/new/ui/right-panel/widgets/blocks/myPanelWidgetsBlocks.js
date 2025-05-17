@@ -7,6 +7,7 @@ class MyPanelWidgetsBlocks
 	
 	content1;
 	content2;
+	content3;
 	
 	itemsLevel = [];
 	
@@ -108,7 +109,12 @@ class MyPanelWidgetsBlocks
 						<div class="right_panel_1_item_block_text">
 							этажи
 						</div>	
-					</div>			
+					</div>
+					<div class="right_panel_1_item_block" nameId="tabSetting">
+						<div class="right_panel_1_item_block_text">
+							настройки
+						</div>	
+					</div>					
 					<div class="right_panel_1_item_block" nameId="tabCalc3D">
 						<div class="right_panel_1_item_block_text">
 							расчет
@@ -120,22 +126,26 @@ class MyPanelWidgetsBlocks
 			<div class="flex_column_1" nameId="wrapLevels" style="display: none; overflow: auto;">
 				<div class="right_panel_1_1_h">Этажи</div>
 				${htmlLevels}
-			</div>
-			
-			<div class="flex_column_1" nameId="wrapCalc3D" style="display: none; overflow: auto;">
-				<div class="right_panel_1_1_h">Расчет блоков</div>
-				
-				<div nameId="btnCalc3D" style="${cssBtn}">рассчитать</div>
-				<div nameId="btnClearCalc" style="${cssBtn}">очистить</div>
 				
 				<div style="display: flex; flex-direction: column; margin: 20px 0 0 0; padding: 10px; font-size: 16px; color: #666; border: 1px solid #ccc;">
 					<div style="${css1}">
 						<div nameId="item_1" style="${css2}">
 							<div style="${css3}"></div>
 						</div>
-						<div>Все этажи</div>
+						<div>Показать все этажи</div>
 					</div>			
 				</div>				
+			</div>
+			
+			<div class="flex_column_1" nameId="wrapSetting" style="display: none; overflow: auto;">
+				<div class="right_panel_1_1_h">Настройки</div>	
+
+				<div style="display: flex; flex-direction: column; margin: 20px 0 0 0; padding: 10px; font-size: 16px; color: #666; border: 1px solid #ccc;">
+					<div style="${css1}">
+						<div>Толщина слоя<br>раствора (мм)</div>
+						${htmlOffset}
+					</div>					
+				</div>
 
 				<div style="display: flex; flex-direction: column; margin: 20px 0 0 0; padding: 10px; font-size: 16px; color: #666; border: 1px solid #ccc;">
 					<div style="${css1}">
@@ -145,16 +155,14 @@ class MyPanelWidgetsBlocks
 						<div>Свой размер блока (мм)</div>						
 					</div>	
 					<div>${htmlInputSize}</div>
-				</div>
-				
-				<div style="display: flex; flex-direction: column; margin: 20px 0 0 0; padding: 10px; font-size: 16px; color: #666; border: 1px solid #ccc;">
-					<div style="${css1}">
-						<div>Толщина слоя<br>раствора (мм)</div>
-						${htmlOffset}
-					</div>	
-					
 				</div>				
+			</div>			
+			
+			<div class="flex_column_1" nameId="wrapCalc3D" style="display: none; overflow: auto;">
+				<div class="right_panel_1_1_h">Расчет блоков</div>
 				
+				<div nameId="btnCalc3D" style="${cssBtn}">рассчитать</div>
+				<div nameId="btnClearCalc" style="${cssBtn}">очистить</div>
 			</div>
 		</div>`;
 		
@@ -249,13 +257,16 @@ class MyPanelWidgetsBlocks
 		this.divPanel.append(div);
 		
 		const tab1 = div.querySelector('[nameId="tab_level"]');
-		const tab2 = div.querySelector('[nameId="tabCalc3D"]');
+		const tab2 = div.querySelector('[nameId="tabSetting"]');
+		const tab3 = div.querySelector('[nameId="tabCalc3D"]');
 		
 		this.content1 = div.querySelector('[nameId="wrapLevels"]');
-		this.content2 = div.querySelector('[nameId="wrapCalc3D"]');
+		this.content2 = div.querySelector('[nameId="wrapSetting"]');
+		this.content3 = div.querySelector('[nameId="wrapCalc3D"]');
 		
-		tab1.onmousedown = () => { this.content2.style.display = 'none'; this.content1.style.display = ''; }
-		tab2.onmousedown = () => { this.showTab(); }
+		tab1.onmousedown = () => { this.showWrapContent({tabName: 'level'}); }
+		tab2.onmousedown = () => { this.showWrapContent({tabName: 'setting'}); }
+		tab3.onmousedown = () => { this.showWrapContent({tabName: 'calc3D'}); }
 		
 		const btnCalc3D = div.querySelector('[nameId="btnCalc3D"]');		
 		btnCalc3D.onmousedown = () => 
@@ -279,7 +290,7 @@ class MyPanelWidgetsBlocks
 			this.changeStateCheckBox1({});
 			const value = this.getStateCheckBox1();
 			
-			myBlocksMode.setCalcAllLevel({value});
+			myCalcBlocks.myBlocksMode.setCalcAllLevel({value});
 			
 			//myPanelR.myLevelVisible.switchShowAllLevel({value});
 			
@@ -292,7 +303,7 @@ class MyPanelWidgetsBlocks
 			this.changeStateCheckBox2({});
 			const value = this.getStateCheckBox2();
 			
-			myBlocksMode.setUserSize({value});		
+			myCalcBlocks.myBlocksMode.setUserSize({value});		
 		}
 
 		this.inputSizeX = div.querySelector('[nameId="inputSizeObjX"]');
@@ -429,11 +440,23 @@ class MyPanelWidgetsBlocks
 		this.checkBox2.children[0].style.background = (value) ? 'rgb(213, 213, 213)' : 'none';		
 	}
 	
-	// показываем в правой панели вкладку
-	showTab()
+	
+	// показываем контент выбранной вкладки
+	showWrapContent({tabName = 'level'})
 	{
-		this.content1.style.display = 'none'; 
-		this.content2.style.display = '';
+		this.hideWrapContent();
+		
+		if(tabName === 'level') this.content1.style.display = '';
+		if(tabName === 'setting') this.content2.style.display = '';
+		if(tabName === 'calc3D') this.content3.style.display = '';
+	}	
+	
+	// скрываем все вкладки с контентом
+	hideWrapContent()
+	{
+		this.content1.style.display = 'none';
+		this.content2.style.display = 'none';		
+		this.content3.style.display = 'none';		
 	}
 }
 

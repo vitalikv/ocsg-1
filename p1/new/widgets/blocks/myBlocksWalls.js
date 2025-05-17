@@ -13,54 +13,36 @@ class MyBlocksWalls
 
 	initWalls({data})
 	{
-		const result = this.getWalls_1({data});
+		const result = this.getLines2({data});
 		this.crCloneWalls({data: result});
 	}
 	
 	
-	// получаем все стены 
-	getWalls_1({data})
+	// отсортировываем массив с lines2 (чтобы потом проще работать)
+	getLines2({data})
 	{
 		const arr = [];
-		
-		const getBlocks = (lines2) =>
-		{
-			const color = Math.floor(Math.random() * 0xffffff);
-			
-			const arr = {objs: [], color};
-			
-			for ( let i = 0; i < lines2.length; i++ )
-			{			
-				arr.objs.push(...lines2[i].walls);
-			}
-
-			return arr;
-		}
-		
 		
 		for ( let i = 0; i < data.length; i++ )
 		{	
 			const idLevel = data[i].idLevel;
 			const arrW2 = data[i].arrW2;			
 			
-			arr[i] = {idLevel, walls: []};
+			arr[i] = {idLevel, groups: []};
 			
 			for ( let i2 = 0; i2 < arrW2.outside.length; i2++ )
 			{		
-				const result = getBlocks(arrW2.outside[i2].lines2);
-				arr[i].walls.push(result);
+				arr[i].groups.push(arrW2.outside[i2]);
 			}			
 
 			for ( let i2 = 0; i2 < arrW2.inside.length; i2++ )
 			{		
-				const result = getBlocks(arrW2.inside[i2].lines2);
-				arr[i].walls.push(result);
+				arr[i].groups.push(arrW2.inside[i2]);
 			}
 
 			for ( let i2 = 0; i2 < arrW2.single.length; i2++ )
 			{		
-				const result = getBlocks(arrW2.single[i2].lines2);
-				arr[i].walls.push(result);
+				arr[i].groups.push(arrW2.single[i2]);
 			}			
 		}		
 
@@ -92,89 +74,40 @@ class MyBlocksWalls
 		for(let i = 0; i < data.length; i++)
 		{	
 			const idLevel = data[i].idLevel;
+			const groups = data[i].groups;
+			
 			const wallsClone = [];
 			
-			for(let i2 = 0; i2 < data[i].walls.length; i2++)
+			for(let i2 = 0; i2 < groups.length; i2++)
 			{
-				
-				const objs = data[i].walls[i2].objs;
-				//const color = data[i].walls[i2].color;
+				const lines2 = groups[i2].lines2;				
 				const color = new THREE.Color(Math.random(), Math.random(), Math.random());
+				const arrWClone = [];
 				
-				
-				for(let x1 = 0; x1 < objs.length; x1++)
+				for(let i3 = 0; i3 < lines2.length; i3++)
 				{
-					const wall = objs[x1];
+					const line = lines2[i3];
+					const walls = line.walls;
 					
-					const posW = wall.getWorldPosition(new THREE.Vector3());
-					const quaW = wall.getWorldQuaternion(new THREE.Quaternion());							
-					const scaW = wall.getWorldScale(new THREE.Vector3());
-
-					// геометрия простой стены
-					const p1 = wall.userData.wall.p[0].position;
-					const p2 = wall.userData.wall.p[1].position;	
-					const d = p1.distanceTo( p2 );		
-					const geometry = createGeometryWall(d, wall.userData.wall.height_1, wall.userData.wall.width, wall.userData.wall.offsetZ);			
-					 
-					// добавляем откосы
-					const v = geometry.vertices;
-					for ( let i3 = 0; i3 < v.length; i3++ ) { v[i3] = wall.userData.wall.v[i3].clone(); }
-					
-					// уменьшаем ширину стены
-					let width = wall.userData.wall.width - kof;
-					width /= 2;
-					v[0].z = v[1].z = v[6].z = v[7].z = width;
-					v[4].z = v[5].z = v[10].z = v[11].z = -width;
-
-					// уменьшаем высоту стены
-					v[1].y -= kof;
-					v[3].y -= kof;
-					v[5].y -= kof;
-					v[7].y -= kof;
-					v[9].y -= kof;
-					v[11].y -= kof;
-					
-					geometry.verticesNeedUpdate = true;
-					geometry.elementsNeedUpdate = true;	
-					geometry.computeBoundingSphere();
-			
-					const mat = new THREE.MeshStandardMaterial({ color, lightMap: lightMap_1 });
-					const material = [ mat.clone(), mat.clone(), mat.clone(), mat.clone() ];
-					
-					let wallClone = new THREE.Mesh(geometry, material);
-					
-					wallClone.position.copy( posW );
-					wallClone.quaternion.copy( quaW );
-					wallClone.scale.copy( scaW );
-					
-					const arrO = myCalcBlocks.setCutWD({arrO: wall.userData.wall.arrO});
-					
-					for ( let i3 = 0; i3 < arrO.length; i3++ )
+					for(let x1 = 0; x1 < walls.length; x1++)
 					{
-						arrO[i3].scale.set(1.001, 1.001, 1);
-						myCalcBlocks.cutBlockes({obj: arrO[i3], w: [wallClone]});
+						const wall = walls[x1];
 						
-						arrO[i3].geometry.dispose();
-					}
-
-
-					for (let i3 = 0; i3 < roofs.length; i3++)
-					{
-						const roof = roofs[i3];
+						const wallClone = this.crWall({wall, roofs, color, kof});						
 						
-						for (let i4 = 0; i4 < roof.length; i4++)
-						{
-							myCalcBlocks.cutBlockes({obj: roof[i4], w: [wallClone]});
-							
-							roof[i4].geometry.dispose();					
-						}
-					}				
-
-					scene.add(wallClone);
-					
-					wallsClone.push(wallClone);
-					
+						line.wallsClone.push(wallClone);
+						arrWClone.push(wallClone);
+						wallsClone.push(wallClone);
+					}					
 				}
+				
+				// добавляем walls, arrWClone чтобы при выборе одной стены, мы знали все стены группы
+				for(let x1 = 0; x1 < arrWClone.length; x1++)
+				{
+					arrWClone[x1].userData = { arrWClone, group: groups[i2] };
+				}
+
+				myCalcBlocks.addItemParentLines2({group: groups[i2], wallsClone: arrWClone});
 				
 			}
 
@@ -182,6 +115,78 @@ class MyBlocksWalls
 		}
 
 		this.setDataWallsClone({data: arr});
+	}
+	
+	
+	crWall({wall, roofs, color, kof})
+	{
+		const posW = wall.getWorldPosition(new THREE.Vector3());
+		const quaW = wall.getWorldQuaternion(new THREE.Quaternion());							
+		const scaW = wall.getWorldScale(new THREE.Vector3());
+
+		// геометрия простой стены
+		const p1 = wall.userData.wall.p[0].position;
+		const p2 = wall.userData.wall.p[1].position;	
+		const d = p1.distanceTo( p2 );		
+		const geometry = createGeometryWall(d, wall.userData.wall.height_1, wall.userData.wall.width, wall.userData.wall.offsetZ);			
+		 
+		// добавляем откосы
+		const v = geometry.vertices;
+		for ( let i3 = 0; i3 < v.length; i3++ ) { v[i3] = wall.userData.wall.v[i3].clone(); }
+		
+		// уменьшаем ширину стены
+		let width = wall.userData.wall.width - kof;
+		width /= 2;
+		v[0].z = v[1].z = v[6].z = v[7].z = width;
+		v[4].z = v[5].z = v[10].z = v[11].z = -width;
+
+		// уменьшаем высоту стены
+		v[1].y -= kof;
+		v[3].y -= kof;
+		v[5].y -= kof;
+		v[7].y -= kof;
+		v[9].y -= kof;
+		v[11].y -= kof;
+		
+		geometry.verticesNeedUpdate = true;
+		geometry.elementsNeedUpdate = true;	
+		geometry.computeBoundingSphere();
+
+		const mat = new THREE.MeshStandardMaterial({ color, lightMap: lightMap_1 });
+		const material = [ mat.clone(), mat.clone(), mat.clone(), mat.clone() ];
+		
+		let wallClone = new THREE.Mesh(geometry, material);
+		
+		wallClone.position.copy( posW );
+		wallClone.quaternion.copy( quaW );
+		wallClone.scale.copy( scaW );
+		
+		const arrO = myCalcBlocks.setCutWD({arrO: wall.userData.wall.arrO});
+		
+		for ( let i3 = 0; i3 < arrO.length; i3++ )
+		{
+			arrO[i3].scale.set(1.001, 1.001, 1);	// немного увеличиваем размер, чтобы вырез был глубже чем у блоков
+			myCalcBlocks.cutBlockes({obj: arrO[i3], w: [wallClone]});
+			
+			arrO[i3].geometry.dispose();
+		}
+
+
+		for (let i3 = 0; i3 < roofs.length; i3++)
+		{
+			const roof = roofs[i3];
+			
+			for (let i4 = 0; i4 < roof.length; i4++)
+			{
+				myCalcBlocks.cutBlockes({obj: roof[i4], w: [wallClone]});
+				
+				roof[i4].geometry.dispose();					
+			}
+		}				
+		
+		scene.add(wallClone);
+		
+		return wallClone;				
 	}
 	
 	

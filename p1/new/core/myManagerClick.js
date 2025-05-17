@@ -11,7 +11,16 @@ class MyManagerClick
 					
 		const isCam2D = myCameraOrbit.activeCam.userData.isCam2D;
 		const isCam3D = myCameraOrbit.activeCam.userData.isCam3D;
-				
+		
+		if(myCalcBlocks.myBlocksMode.getActiveMode())
+		{
+			const ray = myCalcBlocks.myBlocksMouse.clickRayhit({event});
+			
+			rayhit = null;
+			
+			return rayhit;
+		}
+		
 		if(myToolPG.pivot.visible)
 		{
 			var ray = rayIntersect( event, myToolPG.pivot.children, 'arr' );

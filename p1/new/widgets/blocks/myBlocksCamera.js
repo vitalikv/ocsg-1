@@ -48,7 +48,7 @@ class MyBlocksCamera
 		
 		if(myCameraOrbit.activeCam.userData.isCam3D)
 		{
-			const allLevel = myBlocksMode.getCalcAllLevel();
+			const allLevel = myCalcBlocks.myBlocksMode.getCalcAllLevel();
 			
 			if(allLevel)
 			{

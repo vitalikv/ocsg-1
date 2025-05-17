@@ -1098,9 +1098,7 @@ let myToolPG_UI;
 let myHouse;
 let myWarmFloor;
 let myCalcBlocks;
-let myBlocksMode;
 let myStartProject;
-
 
 
 
@@ -1159,7 +1157,6 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myWarmFloor = new MyWarmFloor();
 	
 	myCalcBlocks = new MyCalcBlocks();
-	myBlocksMode = new MyBlocksMode();
 	
 	myStartProject = new MyStartProject();
 	startInitProject();
@@ -1188,9 +1185,12 @@ async function startInitProject()
 		myPanelTop2.addPaidPanel({panel: 'calcBlock'});	// создаем верхнию панель
 
 		myPanelWidgetsBlocks.addPaidContent();	// создаем правую панель			
-		myPanelWidgetsBlocks.showTab();			// переключаем на нужную вкладку	
+		myPanelWidgetsBlocks.showWrapContent({tabName: 'calc3D'});	// переключаем на нужную вкладку	
 		
 		myPanelTop2.showPanelRWBlocks();	// отображаем правую панель 
+		
+		//myCalcBlocks.init();
+		//myCalcBlocks.myBlocksCamera.activate();
 	}		
 		
 	if(1===2) myPanelR.myTabsR.activeTab({id: 0});	// вклад при старте

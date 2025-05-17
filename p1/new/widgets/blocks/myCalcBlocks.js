@@ -10,11 +10,15 @@ class MyCalcBlocks
 	arrW2 = { outside: [], inside: [], single: [] };
 	levelsData = [];
 	
+	myBlocksMode;
+	myBlocksMouse;
 	myBlocksCamera;
 	myBlocksWalls;
 	
 	constructor()
 	{
+		this.myBlocksMode = new MyBlocksMode();
+		this.myBlocksMouse = new MyBlocksMouse();
 		this.myBlocksCamera = new MyBlocksCamera();
 		this.myBlocksWalls = new MyBlocksWalls();
 		
@@ -50,6 +54,13 @@ class MyCalcBlocks
 	{
 		return this.levelsData;
 	}	
+	
+	// добавляем в группу (рядом с lines2) клон стен
+	addItemParentLines2({group, wallsClone})
+	{
+		group.wallsClone = wallsClone;
+	}
+	
 	
 	init()
 	{
@@ -427,31 +438,33 @@ class MyCalcBlocks
 
 		this.arrW2 = arrW2;
 		
-		let userZ = (myBlocksMode.getUserSize()) ? this.blockParams.z : null;
+		let userZ = (this.myBlocksMode.getUserSize()) ? this.blockParams.z : null;
 		this.setUserWidthForWall(userZ);
 		
 		const arrUniqueWidth = this.getUniqueBlocksWidth();
 		this.arrTypeG = this.createGeometryByWidth({arrUniqueWidth});		
 		console.log(777, this.arrTypeG);		
 		
+		const paramsBlock = { length: 0.6, height: 0.3, width: 0 };
+	
 		for ( let i = 0; i < arrW2.outside.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.outside[i].data, type: 'outside', showLines: false});		
-			arrW2.outside[i].lines2 = lines2;	
+			arrW2.outside[i] = { lines2, paramsBlock };	
 		}			
 
 
 		for ( let i = 0; i < arrW2.inside.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.inside[i].data, type: 'inside', showLines: true});		
-			arrW2.inside[i].lines2 = lines2;
+			arrW2.inside[i] = { lines2, paramsBlock };
 		}
 
 
 		for ( let i = 0; i < arrW2.single.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.single[i].data, type: 'single'});		
-			arrW2.single[i].lines2 = lines2;			
+			arrW2.single[i] = { lines2, paramsBlock };			
 		}		
 		
 		return {idLevel, arrW2, levelHeight};
@@ -1295,7 +1308,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			const points = wall.userData.wall.p;
 			const pIds = [points[0].userData.id, points[1].userData.id];
-			lines2.push({row: [data1, data2], walls: [wall], width, arrO, angle: 0, arrBloks: [], pIds});			
+			lines2.push({row: [data1, data2], walls: [wall], wallsClone: [], width, arrO, angle: 0, arrBloks: [], pIds});			
 			
 			lines[i].pos = posL1;
 			lines[i].pos2 = posL2;
