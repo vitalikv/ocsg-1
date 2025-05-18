@@ -88,12 +88,41 @@ class MyCalcBlocks
 	// после всех рассчетов создаем блоки
 	createHouseBlocks()
 	{
-		//this.blockParams.z
 		const data = this.getLevelsData();
 		
 		const arrParams = this.getUniqueBlocksParams({data});
 		this.arrTypeG = this.createGeometryByParams({arrParams});		
 		console.log(777, this.arrTypeG);		
+		
+		
+		
+		const groups = [];
+		
+		for ( let i = 0; i < data.length; i++ )
+		{			
+			const arrW2 = data[i].arrW2;
+			
+			for ( let i2 = 0; i2 < arrW2.outside.length; i2++ )
+			{
+				groups.push({group: arrW2.outside[i2], type: 'outside'});
+			}			
+
+			for ( let i2 = 0; i2 < arrW2.inside.length; i2++ )
+			{
+				groups.push({group: arrW2.inside[i2], type: 'inside'});
+			}
+
+			for ( let i2 = 0; i2 < arrW2.single.length; i2++ )
+			{
+				groups.push({group: arrW2.single[i2], type: 'single'});
+			}
+		}
+
+		for ( let i = 0; i < groups.length; i++ )
+		{
+			this.caclCladka({group: groups[i].group, type: groups[i].type});
+		}
+		
 		
 		for ( let i = 0; i < data.length; i++ )
 		{			
@@ -179,13 +208,14 @@ class MyCalcBlocks
 		return arr;
 	}
 	
-	getGeometryByParams({width})
+	getGeometryByParams({length, height, width})
 	{
 		let geometry = null;
 		
 		for ( let i = 0; i < this.arrTypeG.length; i++ )
 		{
-			if(this.arrTypeG[i].params.width === width)
+			const blockP = this.arrTypeG[i].params;
+			if(blockP.length === length && blockP.height === height && blockP.width === width)
 			{
 				geometry = this.arrTypeG[i].geometry;				
 				break;
@@ -519,19 +549,19 @@ class MyCalcBlocks
 	{		
 		for ( let i = 0; i < arrW2.outside.length; i++ )
 		{
-			this.crDomByTypes({lines2: arrW2.outside[i].lines2, levelHeight});
+			this.crDomByTypes({group: arrW2.outside[i], levelHeight});
 		}			
 
 
 		for ( let i = 0; i < arrW2.inside.length; i++ )
 		{
-			this.crDomByTypes({lines2: arrW2.inside[i].lines2, levelHeight});
+			this.crDomByTypes({group: arrW2.inside[i], levelHeight});
 		}
 
 
 		for ( let i = 0; i < arrW2.single.length; i++ )
 		{
-			this.crDomByTypes({lines2: arrW2.single[i].lines2, levelHeight, type: 'single'});
+			this.crDomByTypes({group: arrW2.single[i], levelHeight, type: 'single'});
 		}
 
 		
@@ -774,9 +804,11 @@ findObjectsUntilRepetition(arrayObjects) {
 	
 
 	// создаем стены по типу (наружные, внутренние, отдельные)
-	crDomByTypes({lines2, levelHeight})
+	crDomByTypes({group, levelHeight})
 	{
-		const { h, offset } = this.blockParams;					
+		const { offset } = this.blockParams;					
+		const h = group.paramsBlock.height;
+		const lines2 = group.lines2;
 		
 		let countY = 0;			
 		
@@ -786,7 +818,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			if(countY < 2222) 
 			{
-				this.crBloksRow({lines2, currentY: i, levelHeight, delLastBlock});
+				this.crBloksRow({group, currentY: i, levelHeight, delLastBlock});
 			}
 			
 			countY++;
@@ -833,9 +865,14 @@ findObjectsUntilRepetition(arrayObjects) {
 	
 
 	// обрезаем блоки в начале/конце и под высоту этажа
-	crBloksRow({lines2, currentY, levelHeight, delLastBlock})
+	crBloksRow({group, currentY, levelHeight, delLastBlock})
 	{
 		const ind = delLastBlock ? 1 : 0;
+		
+		const lines2 = group.lines2;
+		
+		const dlina = group.paramsBlock.length;
+		const h = group.paramsBlock.height;
 		
 		//lines2.length = 0;
 		for (let i = 0; i < lines2.length; i++)
@@ -844,11 +881,10 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			const wallDlina = result.pos[0].distanceTo(result.pos[1]);
 			
-			const answer = this.rowBlockes2({x: wallDlina, posStart: result.pos[0], dir: result.dir, currentY, normal: result.normal, z: lines2[i].width});
+			const answer = this.rowBlockes2({x: wallDlina, posStart: result.pos[0], dir: result.dir, currentY, normal: result.normal, z: lines2[i].width, dlina, h});
 			let arrBloks = answer.arrBloks;
 			
 			const z = lines2[i].width;
-			const {dlina, h} = this.blockParams;
 			
 			// обрезаем начало стены
 			if(1===1)
@@ -1232,8 +1268,6 @@ findObjectsUntilRepetition(arrayObjects) {
 	{
 		console.log('Расчет');
 		
-		const { dlina, offset } = this.blockParams;
-		
 		const lines2 = [];
 		
 		for ( let i = 0; i < lines.length; i++ )
@@ -1315,7 +1349,8 @@ findObjectsUntilRepetition(arrayObjects) {
 			data1.cut2 = {pos: (posCut2) ? posCut2 : posL1[1].clone(), normal: (normalCut2) ? normalCut2 : normal, dir: (dirCut2) ? dirCut2 : dir.clone().negate()};
 			
 			// для 2-ого ряда 
-			const posStart2 = posL1[0].clone().sub(dir.clone().multiplyScalar(dlina/2));	// смещаем на пол блока назад
+			//const posStart2 = posL1[0].clone().sub(dir.clone().multiplyScalar(dlina/2));	// смещаем на пол блока назад
+			const posStart2 = posL1[0].clone();
 			const data2 = {pos: [posStart2.clone(), posL1[1].clone()], dir, normal};
 			data2.cut1 = {pos: (posCut1) ? posCut1 : posL1[0].clone(), normal: (normalCut1) ? normalCut1 : normal, dir: (dirCut1) ? dirCut1 : dir};
 			data2.cut2 = {pos: (posCut2) ? posCut2 : posL1[1].clone(), normal: (normalCut2) ? normalCut2 : normal, dir: (dirCut2) ? dirCut2 : dir.clone().negate()};
@@ -1360,6 +1395,17 @@ findObjectsUntilRepetition(arrayObjects) {
 		
 		this.upCutLinesForAngle({lines2, type});
 		
+		return lines2;
+	}
+	
+	
+	// расчет для кладки блоков (1 и 2 ряд)
+	caclCladka({group, type, showLines = false})
+	{
+		const { offset } = this.blockParams;
+		const dlina = group.paramsBlock.length;
+		
+		const lines2 = group.lines2;
 		
 		// зазор/кладка для первых и последних блоков		
 		for ( let i = 0; i < lines2.length; i++ )
@@ -1442,17 +1488,13 @@ findObjectsUntilRepetition(arrayObjects) {
 				this.helpLine({v: [result.pos[0], result.pos[1]], color: 0x00ff00});
 				this.helpLine({v: [result.pos[0].clone().add(posZ), result.pos[1].clone().add(posZ)], color: 0xff0000});				
 			}			
-		}
-
-		
-		return lines2;
+		}		
 	}
 	
 	
-	
-	rowBlockes2({x, posStart, dir, currentY, normal, z})
+	rowBlockes2({x, posStart, dir, currentY, normal, z, dlina, h})
 	{		
-		const { dlina, h, offset } = this.blockParams;
+		const { offset } = this.blockParams;
 		let z2 = z;
 		
 		const arrBloks = [];
@@ -1472,7 +1514,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			pos.add(dir.clone().multiplyScalar(dlina/2));
 			pos.add(normal.clone().multiplyScalar(z2/2));
 			
-			const geometry = this.getGeometryByParams({width: z});
+			const geometry = this.getGeometryByParams({length: dlina, height: h, width: z});
 			const block = this.createBlock({pos, geometry});
 			const volume = this.calculateMeshVolume(block.geometry);
 			
@@ -1760,8 +1802,6 @@ findObjectsUntilRepetition(arrayObjects) {
 			const n1 = (type === 'outside' && i === lines.length - 1) ? 0 : i;
 			lines2[n1].angle = angle;			
 		}
-		
-		console.log(lines2);
 
 		if(type === 'outside')
 		{
