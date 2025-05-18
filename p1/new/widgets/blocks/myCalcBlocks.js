@@ -55,11 +55,6 @@ class MyCalcBlocks
 		return this.levelsData;
 	}	
 	
-	// добавляем в группу (рядом с lines2) клон стен
-	addItemParentLines2({group, wallsClone})
-	{
-		group.wallsClone = wallsClone;
-	}
 	
 	
 	init()
@@ -67,9 +62,6 @@ class MyCalcBlocks
 		this.myBlocksWalls.deleteWalls();
 		this.clearResultBlocks();
 		this.setActive({value: true});
-		
-		const idActive = myLevels.getIdActLevel();
-		
 		
 		const data = [];
 		
@@ -84,68 +76,125 @@ class MyCalcBlocks
 
 		
 		this.setLevelsData({data});
-
-
-		// создание блоков
-		for ( let i = 0; i < data.length; i++ )
-		{
-			//this.showResult({arrW2: data[i].arrW2, levelHeight: data[i].levelHeight});
-		}
-		
-		console.log(888888, data);
 		
 		this.myBlocksWalls.initWalls({data});
 		
 		this.myBlocksCamera.changeCamera();
+		
+		console.log(888888, data);
+	}
+	
+	
+	// после всех рассчетов создаем блоки
+	createHouseBlocks()
+	{
+		//this.blockParams.z
+		const data = this.getLevelsData();
+		
+		const arrParams = this.getUniqueBlocksParams({data});
+		this.arrTypeG = this.createGeometryByParams({arrParams});		
+		console.log(777, this.arrTypeG);		
+		
+		for ( let i = 0; i < data.length; i++ )
+		{			
+			this.showResult({arrW2: data[i].arrW2, levelHeight: data[i].levelHeight});
+		}	
+
+		this.myBlocksCamera.changeCamera();
 	}
 	
 
-	setParamsUserSize(params)
+	
+	// назначаем размер блока для группы линий
+	setParamsBlock({group, paramsBlock, type = 'm'})
 	{
-		this.blockParams.dlina = params.length/1000;
-		this.blockParams.h = params.height/1000;
-		this.blockParams.z = params.width/1000;
+		// при открытии вкладки расчет, назначаем размер блоков для группы линий
+		if(paramsBlock.start) 
+		{
+			paramsBlock = { length: 0.6, height: 0.3 };
+			group.paramsBlock = paramsBlock;
+		}			
 		
-		console.log(this.blockParams);
+		if(type === 'mm')
+		{
+			for (const key in paramsBlock) 
+			{
+				paramsBlock[key] /= 1000; 
+			}			
+		}
+
+		// назначаем только те key, которые пришли 
+		for (const key in paramsBlock) 
+		{
+			group.paramsBlock[key] = paramsBlock[key];
+		}
 	}
 	
-	// получаем уникальную ширину от всех стен (чтобы сделать блоки)
-	getUniqueBlocksWidth()
+	
+	// получаем массив только с уникальными параметрами блока
+	getUniqueBlocksParams({data})
 	{
-		const arrWidth = [];
+		const arrParamsBlock = [];
+		const arr = this.myBlocksWalls.getGroups({data});
 		
-		for ( let i = 0; i < myLevels.levels.length; i++ )
+		// собираем массив параметров блоков со всех стен
+		for ( let i = 0; i < arr.length; i++ )
 		{
-			const walls = myLevels.levels[i].wall;
-			
-			const arr = walls.filter(wall => wall.userData.wall.width2 !== undefined).map(wall => wall.userData.wall.width2);
-			
-			arrWidth.push(...arr);			
+			for ( let i2 = 0; i2 < arr[i].groups.length; i2++ )
+			{				
+				const paramsBlock = arr[i].groups[i2].paramsBlock;				
+				
+				for ( let i3 = 0; i3 < arr[i].groups[i2].lines2.length; i3++ )
+				{
+					const width = arr[i].groups[i2].lines2[i3].width;
+					
+					arrParamsBlock.push({length: paramsBlock.length, height: paramsBlock.height, width});
+				}
+			}			
 		}
 		
-		const uniqueValues = [...new Set(arrWidth)];
+		console.log(222, arrParamsBlock);
 		
-		return uniqueValues;
+		const uniqueObjects = Array.from(new Set(arrParamsBlock.map(obj => JSON.stringify(obj)))).map(str => JSON.parse(str));
+
+		console.log(555, uniqueObjects);		
+		
+		return uniqueObjects;
 	}
 	
 	
 	// создаем геометрии блоков по ширине
-	createGeometryByWidth({arrUniqueWidth})
+	createGeometryByParams({arrParams})
 	{
-		const {dlina, h} = this.blockParams;
 		const arr = [];
 		
-		for ( let i = 0; i < arrUniqueWidth.length; i++ )
+		for ( let i = 0; i < arrParams.length; i++ )
 		{
-			const width = arrUniqueWidth[i];
-			const geometry = createGeometryCube(dlina, h, width);
+			const {length, height, width} = arrParams[i];
+			const geometry = createGeometryCube(length, height, width);
 			
-			arr.push({width, geometry});
+			arr.push({params: arrParams[i], geometry});
 		}
 
 		return arr;
 	}
 	
+	getGeometryByParams({width})
+	{
+		let geometry = null;
+		
+		for ( let i = 0; i < this.arrTypeG.length; i++ )
+		{
+			if(this.arrTypeG[i].params.width === width)
+			{
+				geometry = this.arrTypeG[i].geometry;				
+				break;
+			}
+		}
+
+		return geometry;
+	}
+
 	
 	createBlock({pos, geometry})
 	{ 
@@ -307,7 +356,7 @@ class MyCalcBlocks
 						const wall = newArr[i].wall;
 						//const side = newArr[i].side;
 						
-						arrW2.single[ind].data.push({wall, side, pStart});
+						arrW2.single[ind].data.push({wall, side, pStart, width: wall.userData.wall.width});
 						
 						const array2 = newArr[i+1].array;
 						
@@ -360,7 +409,7 @@ class MyCalcBlocks
 				const wall = newArr[i].wall;
 				const side = newArr[i].side;
 				
-				arrW2.outside[ind].data.push({wall, side, pStart});
+				arrW2.outside[ind].data.push({wall, side, pStart, width: wall.userData.wall.width});
 				
 				const array2 = newArr[i+1].array;
 				
@@ -421,7 +470,7 @@ class MyCalcBlocks
 				const wall = newArr[i].wall;
 				//const side = newArr[i].side;
 				
-				arrW2.inside[ind].data.push({wall, side, pStart});
+				arrW2.inside[ind].data.push({wall, side, pStart, width: wall.userData.wall.width});
 				
 				const array2 = newArr[i+1].array;
 				
@@ -438,33 +487,28 @@ class MyCalcBlocks
 
 		this.arrW2 = arrW2;
 		
-		let userZ = (this.myBlocksMode.getUserSize()) ? this.blockParams.z : null;
-		this.setUserWidthForWall(userZ);
-		
-		const arrUniqueWidth = this.getUniqueBlocksWidth();
-		this.arrTypeG = this.createGeometryByWidth({arrUniqueWidth});		
-		console.log(777, this.arrTypeG);		
-		
-		const paramsBlock = { length: 0.6, height: 0.3, width: 0 };
 	
 		for ( let i = 0; i < arrW2.outside.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.outside[i].data, type: 'outside', showLines: false});		
-			arrW2.outside[i] = { lines2, paramsBlock };	
+			arrW2.outside[i] = { lines2, paramsBlock: null };
+			this.setParamsBlock({group: arrW2.outside[i], paramsBlock: {start: true}});
 		}			
 
 
 		for ( let i = 0; i < arrW2.inside.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.inside[i].data, type: 'inside', showLines: true});		
-			arrW2.inside[i] = { lines2, paramsBlock };
+			arrW2.inside[i] = { lines2, paramsBlock: null };
+			this.setParamsBlock({group: arrW2.inside[i], paramsBlock: {start: true}});
 		}
 
 
 		for ( let i = 0; i < arrW2.single.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.single[i].data, type: 'single'});		
-			arrW2.single[i] = { lines2, paramsBlock };			
+			arrW2.single[i] = { lines2, paramsBlock: null };
+			this.setParamsBlock({group: arrW2.single[i], paramsBlock: {start: true}});
 		}		
 		
 		return {idLevel, arrW2, levelHeight};
@@ -696,37 +740,7 @@ findObjectsUntilRepetition(arrayObjects) {
 }
 
 
-	setUserWidthForWall(width = null)
-	{
-		const setWidth = (data) =>
-		{
-			for ( let i = 0; i < data.length; i++ )
-			{	
-				const wall = data[i].wall;		
-				wall.userData.wall.width2 = (width) ? width : wall.userData.wall.width;
-			}					
-		}
-		
-		const arrW2 = this.arrW2;
-		
-		for ( let i = 0; i < arrW2.outside.length; i++ )
-		{		
-			setWidth(arrW2.outside[i].data);	
-		}			
 
-
-		for ( let i = 0; i < arrW2.inside.length; i++ )
-		{		
-			setWidth(arrW2.inside[i].data);
-		}
-
-
-		for ( let i = 0; i < arrW2.single.length; i++ )
-		{		
-			setWidth(arrW2.single[i].data);			
-		}		
-	}
-	
 	
 	calcWalls({data, type, showLines = false})
 	{
@@ -737,7 +751,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			const wall = data[i].wall;
 			const side = data[i].side;
 			const pStart = data[i].pStart;			
-			const width = wall.userData.wall.width2;
+			const width = data[i].width;
 			
 			const arrO = [];
 			if(wall.userData.wall.arrO) arrO.push(...wall.userData.wall.arrO);
@@ -1218,7 +1232,7 @@ findObjectsUntilRepetition(arrayObjects) {
 	{
 		console.log('Расчет');
 		
-		const { dlina, z, offset } = this.blockParams;
+		const { dlina, offset } = this.blockParams;
 		
 		const lines2 = [];
 		
@@ -1435,22 +1449,6 @@ findObjectsUntilRepetition(arrayObjects) {
 	}
 	
 	
-	getGeometryByWidth({width})
-	{
-		let geometry = null;
-		
-		for ( let i = 0; i < this.arrTypeG.length; i++ )
-		{
-			if(this.arrTypeG[i].width === width)
-			{
-				geometry = this.arrTypeG[i].geometry;				
-				break;
-			}
-		}
-
-		return geometry;
-	}
-	
 	
 	rowBlockes2({x, posStart, dir, currentY, normal, z})
 	{		
@@ -1474,7 +1472,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			pos.add(dir.clone().multiplyScalar(dlina/2));
 			pos.add(normal.clone().multiplyScalar(z2/2));
 			
-			const geometry = this.getGeometryByWidth({width: z});
+			const geometry = this.getGeometryByParams({width: z});
 			const block = this.createBlock({pos, geometry});
 			const volume = this.calculateMeshVolume(block.geometry);
 			
@@ -1551,7 +1549,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			//console.log('ind', ind, wall.userData.wall.p, pStart, pStart2, side, points[ind].userData.id, [points2[0].userData.id, points2[1].userData.id]);
 			
-			const width = w2[i].userData.wall.width2;
+			const width = w2[i].userData.wall.width;
 			
 			const {posL1, posL2} = this.calcLineWall({posP, pStart: pStart2, side, width, z: width, type, show: false});
 			

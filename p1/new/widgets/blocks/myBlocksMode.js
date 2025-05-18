@@ -4,7 +4,6 @@ class MyBlocksMode
 {
 	isActiveMode = false;
 	isAllLevel = true;
-	isUserSize = true;
 	
 	
 	// вкл режим когда можно делать расчеты блоков
@@ -17,10 +16,10 @@ class MyBlocksMode
 		
 		this.setCalcAllLevel({value: showAllLevel});
 		const value1 = this.getCalcAllLevel();
-		myPanelWidgetsBlocks.changeStateCheckBox1({value: value1});
+		myPanelWidgetsBlocks.changeStateCheckBox1({value: value1});	
 		
-		this.setUserSize({value: false});
-		myPanelWidgetsBlocks.changeStateCheckBox2({value: false});		
+		myCalcBlocks.init();
+		myCalcBlocks.myBlocksCamera.activate();		
 	}
 	
 	// выкл
@@ -53,16 +52,6 @@ class MyBlocksMode
 	getCalcAllLevel()
 	{
 		return this.isAllLevel;
-	}
-	
-	setUserSize({value})
-	{
-		this.isUserSize = value;
-	}
-
-	getUserSize()
-	{
-		return this.isUserSize;
 	}
 
 }

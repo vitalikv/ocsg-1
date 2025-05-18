@@ -13,13 +13,13 @@ class MyBlocksWalls
 
 	initWalls({data})
 	{
-		const result = this.getLines2({data});
+		const result = this.getGroups({data});
 		this.crCloneWalls({data: result});
 	}
 	
 	
 	// отсортировываем массив с lines2 (чтобы потом проще работать)
-	getLines2({data})
+	getGroups({data})
 	{
 		const arr = [];
 		
@@ -93,9 +93,13 @@ class MyBlocksWalls
 					{
 						const wall = walls[x1];
 						
-						const wallClone = this.crWall({wall, roofs, color, kof});						
+						const wallClone = this.crWall({wall, roofs, color, kof});
+
+						wallClone.userData.group = groups[i2];
+						wallClone.userData.line = line;
 						
 						line.wallsClone.push(wallClone);
+						
 						arrWClone.push(wallClone);
 						wallsClone.push(wallClone);
 					}					
@@ -104,10 +108,8 @@ class MyBlocksWalls
 				// добавляем walls, arrWClone чтобы при выборе одной стены, мы знали все стены группы
 				for(let x1 = 0; x1 < arrWClone.length; x1++)
 				{
-					arrWClone[x1].userData = { arrWClone, group: groups[i2] };
+					arrWClone[x1].userData.arrWClone = arrWClone;
 				}
-
-				myCalcBlocks.addItemParentLines2({group: groups[i2], wallsClone: arrWClone});
 				
 			}
 

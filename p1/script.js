@@ -1185,12 +1185,9 @@ async function startInitProject()
 		myPanelTop2.addPaidPanel({panel: 'calcBlock'});	// создаем верхнию панель
 
 		myPanelWidgetsBlocks.addPaidContent();	// создаем правую панель			
-		myPanelWidgetsBlocks.showWrapContent({tabName: 'calc3D'});	// переключаем на нужную вкладку	
+		myPanelWidgetsBlocks.showWrapContent({tabName: 'setting'});	// переключаем на нужную вкладку	
 		
-		myPanelTop2.showPanelRWBlocks();	// отображаем правую панель 
-		
-		//myCalcBlocks.init();
-		//myCalcBlocks.myBlocksCamera.activate();
+		myPanelTop2.showPanelRWBlocks();	// вкл режим для расчета блоков 
 	}		
 		
 	if(1===2) myPanelR.myTabsR.activeTab({id: 0});	// вклад при старте

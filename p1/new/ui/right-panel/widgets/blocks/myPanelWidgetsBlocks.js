@@ -12,7 +12,6 @@ class MyPanelWidgetsBlocks
 	itemsLevel = [];
 	
 	checkBox1;
-	checkBox2;
 	
 	inputSizeX;
 	inputSizeY;
@@ -29,8 +28,6 @@ class MyPanelWidgetsBlocks
 		this.container = document.querySelector('[nameId="panelR"]');
 		this.divPanel = this.crPanel();
 		this.container.append(this.divPanel);
-		
-		this.initEvent();
 	}
 
 
@@ -40,12 +37,7 @@ class MyPanelWidgetsBlocks
 		div.innerHTML = this.html_1();
 		return div.children[0];	
 	}	
-	
-	initEvent()
-	{
-		//this.btnShow.onmousedown = () => { this.showHidePanelR({show: true}); }
-				
-	}
+
 	
 	html_1()
 	{  
@@ -149,10 +141,7 @@ class MyPanelWidgetsBlocks
 
 				<div style="display: flex; flex-direction: column; margin: 20px 0 0 0; padding: 10px; font-size: 16px; color: #666; border: 1px solid #ccc;">
 					<div style="${css1}">
-						<div nameId="userSize" style="${css2}">
-							<div style="${css3}"></div>
-						</div>
-						<div>Свой размер блока (мм)</div>						
+						<div>Размер блока (мм)</div>						
 					</div>	
 					<div>${htmlInputSize}</div>
 				</div>				
@@ -199,6 +188,8 @@ class MyPanelWidgetsBlocks
 	
 	htmlInputSize()
 	{
+		const css1 = `pointer-events: none; user-select: none; cursor: default; background-color: #f0f0f0;`;
+		
 		let html = 
 		`<div style="display: -webkit-box; display: flex; margin-top: 20px; font-size: 12px;">
 			<div style="display: -webkit-box; display: flex;">
@@ -206,7 +197,7 @@ class MyPanelWidgetsBlocks
 					<div style="margin: 0 0 2px 2px; color: #4A4A4A; text-align: center;">Длина</div>
 					<div class="wr_input_1" nameId="wrInputSizeObjX">
 						<div class="flex_1">
-							<input type="text" class="input_1" nameId="inputSizeObjX" value="600">
+							<input type="text" class="input_1" nameId="inputSizeObjX" value="">
 						</div>
 					</div>
 				</div>
@@ -214,7 +205,7 @@ class MyPanelWidgetsBlocks
 					<div style="margin: 0 0 2px 2px; color: #4A4A4A; text-align: center;">Высота</div>
 					<div class="wr_input_1" nameId="wrInputSizeObjY">
 						<div class="flex_1">
-							<input type="text" class="input_1" nameId="inputSizeObjY" value="300">
+							<input type="text" class="input_1" nameId="inputSizeObjY" value="">
 						</div>
 					</div>
 				</div>
@@ -222,7 +213,7 @@ class MyPanelWidgetsBlocks
 					<div style="margin: 0 0 2px 2px; color: #4A4A4A; text-align: center;">Ширина</div>
 					<div class="wr_input_1" nameId="wrInputSizeObjZ">
 						<div class="flex_1">
-							<input type="text" class="input_1" nameId="inputSizeObjZ" value="400">
+							<input type="text" style="${css1}" class="input_1" nameId="inputSizeObjZ" disabled value="">
 						</div>
 					</div>
 				</div>					
@@ -271,10 +262,7 @@ class MyPanelWidgetsBlocks
 		const btnCalc3D = div.querySelector('[nameId="btnCalc3D"]');		
 		btnCalc3D.onmousedown = () => 
 		{ 
-			if(this.getStateCheckBox2()) myCalcBlocks.setParamsUserSize(this.getInputSize());
-
-			myCalcBlocks.init();
-			myCalcBlocks.myBlocksCamera.activate();
+			myCalcBlocks.createHouseBlocks();
 		}	
 
 		const btnClearCalc = div.querySelector('[nameId="btnClearCalc"]');		
@@ -297,14 +285,6 @@ class MyPanelWidgetsBlocks
 			myCalcBlocks.myBlocksCamera.changeCamera();
 		}
 		
-		this.checkBox2 = div.querySelector('[nameId="userSize"]');				
-		this.checkBox2.onmousedown = () => 
-		{  
-			this.changeStateCheckBox2({});
-			const value = this.getStateCheckBox2();
-			
-			myCalcBlocks.myBlocksMode.setUserSize({value});		
-		}
 
 		this.inputSizeX = div.querySelector('[nameId="inputSizeObjX"]');
 		this.inputSizeY = div.querySelector('[nameId="inputSizeObjY"]');
@@ -312,6 +292,8 @@ class MyPanelWidgetsBlocks
 		this.inputOffset = div.querySelector('[nameId="inputOffset"]');
 		
 		this.appointDivLevels({container: this.content1});
+		
+		this.initEvents();
 	}
 	
 	
@@ -342,29 +324,16 @@ class MyPanelWidgetsBlocks
 		this.itemsLevel[1] = { div: div2, btn: btn2, input: input2 };
 		this.itemsLevel[2] = { div: div3, btn: btn3, input: input3 };
 		this.itemsLevel[3] = { div: div4, btn: btn4, input: input4 };
-				
-		this.initElemsEvent();
 	}
 
-	// при включении режима расчета блоков показать в меню, какой этаж активирован
-	setStartBtnLevel()
+	initEvents()
 	{
-		const id = myLevels.getIdActLevel();
-		this.levelBackground_UI({id});		
+		this.initEventLevel();
 	}
-
-	// при включении режима расчета блоков установить в input значения по дефолту/из файла
-	setStartInputValue()
-	{
-		const level = myLevels.levels;		
-
-		for ( let i = 0; i < this.itemsLevel.length; i++ )
-		{
-			this.itemsLevel[i].input.value = level[i].height;
-		}
-	}
-
-	initElemsEvent()
+	
+	
+	// события при нажатии кнопок этажей
+	initEventLevel()
 	{
 		for ( let i = 0; i < this.itemsLevel.length; i++ )
 		{
@@ -386,6 +355,29 @@ class MyPanelWidgetsBlocks
 		}		
 	}
 
+
+	
+	
+	// при включении режима расчета блоков показать в меню, какой этаж активирован
+	setStartBtnLevel()
+	{
+		const id = myLevels.getIdActLevel();
+		this.levelBackground_UI({id});		
+	}
+
+	// при включении режима расчета блоков установить в input значения по дефолту/из файла
+	setStartInputValue()
+	{
+		const level = myLevels.levels;		
+
+		for ( let i = 0; i < this.itemsLevel.length; i++ )
+		{
+			this.itemsLevel[i].input.value = level[i].height;
+		}
+	}
+
+
+
 	// меняем фон item/блока этажа
 	levelBackground_UI({id}) 
 	{
@@ -405,20 +397,89 @@ class MyPanelWidgetsBlocks
 		return value;
 	}
 	
-	// получаем состояние вкл/выкл (свой размер блока)
-	getStateCheckBox2()
+	
+	
+	// устанавливаем в input размер блоков
+	setInputSize({size, type = 'm', callBack})
 	{
-		const check = this.checkBox2.children[0].style.background;
-		const value = (check === 'none') ? false : true;
-
-		return value;
+		const kof = (type === 'm') ? 1000 : 1;
+		
+		if(size.length) this.inputSizeX.value = size.length * kof;
+		if(size.height) this.inputSizeY.value = size.height * kof;
+		if(size.width) this.inputSizeZ.value = size.width * kof;
+		
+		this.initEventSizeBlock({callBack});
 	}
 	
-	// получаем размеры блока
-	getInputSize()
-	{
-		return {length: this.inputSizeX.value, height: this.inputSizeY.value, width: this.inputSizeZ.value};
+	
+	// события при вводе в input размера блока (при изменении, вызывается callBack и обновляется данные)
+	initEventSizeBlock({callBack})
+	{		
+		// проверка на валидность после ввода в input
+		const processInput = ({input, limit}) =>
+		{
+			let value = input.value.trim();
+
+			// Заменяем запятую на точку (для корректного парсинга)
+			value = value.replace(',', '.');
+
+			// Пытаемся преобразовать в число
+			const numberValue = parseFloat(value);
+
+			// Проверяем валидность
+			if (isNaN(numberValue)) return {success: false, message: 'Введите число!'};
+
+			// Округляем до целого
+			const roundedValue = Math.round(numberValue);
+
+			// Проверяем диапазон (Число должно быть от limit[0] до limit[1])
+			if (roundedValue < limit[0] || roundedValue > limit[1]) return {success: false, message: `Число должно быть от ${limit[0]} до ${limit[1]}`};
+
+			// Если всё ок — выводим результат
+			console.log("Валидное число:", roundedValue);
+			input.value = roundedValue; // Заменяем ввод на округлённое значение
+			
+			return {success: true, value: input.value};
+		}
+
+		// если значение не валидное то сбрасываем значение до оригинального
+		const resetInput = ({result, input, originalValue}) =>
+		{
+			input.value = originalValue; 	// сбрасываем значение в input до оригинального
+			console.log(result);
+		}		
+		
+		const addEvent = ({input, key, limit}) =>
+		{
+			let originalValue = '';
+			
+			input.onfocus = (e) => 
+			{
+				originalValue = input.value;
+			}
+			
+			input.onkeydown = (e) => 
+			{								
+				if (e.code === 'Enter') 
+				{
+					const result = processInput({input, limit});
+					if(!result.success) resetInput({result, input, originalValue});
+					if(result.success) callBack({result, key});
+				}
+			}
+
+			input.onblur = (e) => 
+			{
+				const result = processInput({input, limit});
+				if(!result.success) resetInput({result, input, originalValue});
+				if(result.success) callBack({result, key});
+			}			
+		}
+
+		addEvent({input: this.inputSizeX, key: 'length', limit: [300, 1000]});
+		addEvent({input: this.inputSizeY, key: 'height', limit: [100, 1000]});				
 	}
+	
 
 	// получаем толщину раствора
 	getInputOffset()
@@ -431,13 +492,6 @@ class MyPanelWidgetsBlocks
 	{
 		if(value === undefined) value = !this.getStateCheckBox1();
 		this.checkBox1.children[0].style.background = (value) ? 'rgb(213, 213, 213)' : 'none';		
-	}
-	
-	// меняем состояние для CheckBox вкл/выкл (свой размер блока) только для css, без дальнейшей логики
-	changeStateCheckBox2({value = undefined})
-	{
-		if(value === undefined) value = !this.getStateCheckBox2();
-		this.checkBox2.children[0].style.background = (value) ? 'rgb(213, 213, 213)' : 'none';		
 	}
 	
 	
