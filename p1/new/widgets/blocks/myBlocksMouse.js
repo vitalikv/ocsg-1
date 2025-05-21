@@ -41,7 +41,7 @@ class MyBlocksMouse
 				myCalcBlocks.setParamsBlock({group, paramsBlock, type: 'mm'})
 			}
 			
-			myPanelWidgetsBlocks.setInputSize({size, type: 'm', callBack});
+			myCalcBlocks.myPanelWidgetsBlocks.setInputSize({size, type: 'm', callBack});
 			
 			myComposerRenderer.outlineAddObj({arr: arrWClone});
 		}

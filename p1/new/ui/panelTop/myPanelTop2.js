@@ -115,7 +115,7 @@ class MyPanelTop2
 		if(state) this.changeStateCheckBox(state);
 		
 		myPanelWF.showHidePanel({show: false});
-		myPanelWidgetsBlocks.showHidePanel({show: false});
+		myCalcBlocks.myPanelWidgetsBlocks.showHidePanel({show: false});
 		myPanelR.divPanel_1.style.display = ''; 		
 	}
 	
@@ -135,10 +135,10 @@ class MyPanelTop2
 		myCalcBlocks.myBlocksMode.enableMode({showAllLevel: state.showAllLevel});
 		
 		myPanelR.divPanel_1.style.display = 'none'; 
-		myPanelWidgetsBlocks.showHidePanel({show: true});
+		myCalcBlocks.myPanelWidgetsBlocks.showHidePanel({show: true});
 		
-		myPanelWidgetsBlocks.setStartBtnLevel();
-		myPanelWidgetsBlocks.setStartInputValue();		
+		myCalcBlocks.myPanelWidgetsBlocks.setStartBtnLevel();
+		myCalcBlocks.myPanelWidgetsBlocks.setStartInputValue();		
 	}
 
 

@@ -6,32 +6,42 @@ class MyCalcBlocks
 	listPathImgs = {};
 	material;
 	arrTypeG = [];
-	blockParams = {offset: 0.003};
-	levelGroups = [];
+		
 	levelsData = [];
+	levelGroups = [];	// массив групп для одного этажа
+	blockOffset = 0;
 	
 	myBlocksMode;
 	myBlocksMouse;
 	myBlocksCamera;
 	myBlocksWalls;
+	myPanelWidgetsBlocks;
 	
-	constructor()
+	
+	init()
 	{
 		this.myBlocksMode = new MyBlocksMode();
 		this.myBlocksMouse = new MyBlocksMouse();
 		this.myBlocksCamera = new MyBlocksCamera();
 		this.myBlocksWalls = new MyBlocksWalls();
+		this.myPanelWidgetsBlocks = new MyPanelWidgetsBlocks();
+		
+		
 		
 		this.listPathImgs.kirpich = infProject.path+'img/widgets/blocks/one_kirpich.jpg';
 		this.listPathImgs.block = infProject.path+'img/widgets/blocks/block_1.jpg';
 		
 		this.listPathImgs.kirpich = this.listPathImgs.block;
 		
-		//this.geometry = new THREE.BufferGeometry().fromGeometry(this.geometry);
-
-		
 		this.material = new THREE.MeshStandardMaterial({ color: 0xcccccc, lightMap : lightMap_1, wireframe: false });
 		this.setImage({material: this.material, img: this.listPathImgs.kirpich});
+		
+		
+		myPanelTop2.addPaidPanel({panel: 'calcBlock'});	// создаем верхнию панель
+		this.myPanelWidgetsBlocks.addPaidContent();	// создаем правую панель
+		this.myPanelWidgetsBlocks.setInputOffsetBlock({value: 0.003, type: 'm'});
+		this.myPanelWidgetsBlocks.showWrapContent({tabName: 'calc3D'});	// переключаем на нужную вкладку			
+		myPanelTop2.showPanelRWBlocks();	// вкл режим для расчета блоков 		
 	}
 	
 	// вкл/выкл когда произошел расчет блоков
@@ -55,9 +65,23 @@ class MyCalcBlocks
 		return this.levelsData;
 	}	
 	
+	setOffsetBlock({value, type})
+	{
+		if(type === 'mm')
+		{
+			value /= 1000; 			
+		}
+		
+		this.blockOffset = value;
+	}
+	
+	getOffsetBlock()
+	{
+		return this.blockOffset;
+	}	
 	
 	
-	init()
+	enable()
 	{
 		this.myBlocksWalls.deleteWalls();
 		this.clearResultBlocks();
@@ -131,7 +155,7 @@ class MyCalcBlocks
 	// создаем стены по типу (наружные, внутренние, отдельные)
 	crDomByTypes({group, levelHeight})
 	{
-		const { offset } = this.blockParams;					
+		const offset = this.getOffsetBlock();					
 		const h = group.paramsBlock.height;
 		
 		
@@ -554,7 +578,7 @@ class MyCalcBlocks
 			}			
 		}
 
-		this.levelGroup = [];
+		this.levelGroups = [];
 		
 		const paramsBlock = { length: 0.6, height: 0.3 };
 		const groups = [];
@@ -562,7 +586,7 @@ class MyCalcBlocks
 		for ( let i = 0; i < arrW2.outside.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.outside[i].data, type: 'outside'});		
-			groups.push({type: 'outside', lines2: lines2, paramsBlock });
+			groups.push({type: 'outside', lines2: lines2, paramsBlock: {...paramsBlock} });
 			
 			this.levelGroups = groups;
 		}			
@@ -571,7 +595,7 @@ class MyCalcBlocks
 		for ( let i = 0; i < arrW2.inside.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.inside[i].data, type: 'inside'});		
-			groups.push({type: 'inside', lines2: lines2, paramsBlock });
+			groups.push({type: 'inside', lines2: lines2, paramsBlock: {...paramsBlock} });
 			
 			this.levelGroups = groups;
 		}
@@ -580,7 +604,7 @@ class MyCalcBlocks
 		for ( let i = 0; i < arrW2.single.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.single[i].data, type: 'single'});		
-			groups.push({type: 'single', lines2: lines2, paramsBlock });
+			groups.push({type: 'single', lines2: lines2, paramsBlock: {...paramsBlock} });
 			
 			this.levelGroups = groups;
 		}		
@@ -1364,7 +1388,7 @@ findObjectsUntilRepetition(arrayObjects) {
 	// расчет для кладки блоков (1 и 2 ряд)
 	caclCladka({group, showLines = false})
 	{
-		const { offset } = this.blockParams;
+		const offset = this.getOffsetBlock();
 		
 		const type = group.type;
 		const lines2 = group.lines2;
@@ -1457,7 +1481,7 @@ findObjectsUntilRepetition(arrayObjects) {
 	
 	rowBlockes2({x, posStart, dir, currentY, normal, z, dlina, h})
 	{		
-		const { offset } = this.blockParams;
+		const offset = this.getOffsetBlock();
 		let z2 = z;
 		
 		const arrBloks = [];
@@ -1571,11 +1595,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			linesW.push(posL1, posL2);
 		}
 
-	const data = this.getLevelsData();
-	// получить все блоки (всех этажей) или только одного этажа по id
-	const arrL = this.getGroupByLevelType({id: data.length - 1, type: 'inside'});
 
-console.log(1777, data, arrL);
 		const levelGroups = this.levelGroups;
 		
 		for ( let i = 0; i < levelGroups.length; i++ )
@@ -1589,7 +1609,7 @@ console.log(1777, data, arrL);
 			{
 				if(points[ind].userData.id === lines2[i2].pIds[0] || points[ind].userData.id === lines2[i2].pIds[1])
 				{
-					console.log(2777, points[ind].userData.id, lines2[i2].pIds);
+					//console.log(2777, points[ind].userData.id, lines2[i2].pIds);
 					isMin = true;
 				}
 				
@@ -1684,7 +1704,7 @@ console.log(1777, data, arrL);
 	}
 	
 
-	// получить все блоки (всех этажей) или только одного этажа по id
+	// получить группы (всех этажей) или только одного этажа по id
 	getGroupByLevelType({id = undefined, type = ''})
 	{
 		const arr = [];
@@ -1703,9 +1723,7 @@ console.log(1777, data, arrL);
 				{	
 					if(groups[i2].type !== 'inside') continue;
 					
-					const lines2 = groups[i2].lines2;
-
-					arr.push(lines2);				
+					arr.push(...groups[i2]);				
 				}
 			}
 	

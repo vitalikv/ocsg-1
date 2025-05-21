@@ -1146,7 +1146,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myCatalogList = new MyCatalogList();
 	switchCamera = new SwitchCamera();	
 	myPanelWF = new MyPanelWF();	
-	myPanelWidgetsBlocks = new MyPanelWidgetsBlocks();
+	
 	
 	myTexture = new MyTexture();
 	
@@ -1182,12 +1182,7 @@ async function startInitProject()
 	// панель для расчета блоков
 	if(1===1) 
 	{
-		myPanelTop2.addPaidPanel({panel: 'calcBlock'});	// создаем верхнию панель
-
-		myPanelWidgetsBlocks.addPaidContent();	// создаем правую панель			
-		myPanelWidgetsBlocks.showWrapContent({tabName: 'setting'});	// переключаем на нужную вкладку	
-		
-		myPanelTop2.showPanelRWBlocks();	// вкл режим для расчета блоков 
+		myCalcBlocks.init();
 	}		
 		
 	if(1===2) myPanelR.myTabsR.activeTab({id: 0});	// вклад при старте

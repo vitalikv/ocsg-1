@@ -291,6 +291,7 @@ class MyPanelWidgetsBlocks
 		this.inputSizeZ = div.querySelector('[nameId="inputSizeObjZ"]');
 		this.inputOffset = div.querySelector('[nameId="inputOffset"]');
 		
+		
 		this.appointDivLevels({container: this.content1});
 		
 		this.initEvents();
@@ -329,6 +330,7 @@ class MyPanelWidgetsBlocks
 	initEvents()
 	{
 		this.initEventLevel();
+		this.initEventOffsetBlock();
 	}
 	
 	
@@ -479,13 +481,86 @@ class MyPanelWidgetsBlocks
 		addEvent({input: this.inputSizeX, key: 'length', limit: [300, 1000]});
 		addEvent({input: this.inputSizeY, key: 'height', limit: [100, 1000]});				
 	}
-	
 
-	// получаем толщину раствора
-	getInputOffset()
+
+	// меняем в input толщину клея (+ передаем толщину клея в основной класс для расчета блоков)
+	setInputOffsetBlock({value, type = 'm'})
 	{
-		return this.inputOffset;
+		const kof = (type === 'm') ? 1000 : 1;
+		
+		this.inputOffset.value = value * kof;
+		
+		myCalcBlocks.setOffsetBlock({value, type});
 	}
+
+
+	// события при вводе в input толщины клея
+	initEventOffsetBlock()
+	{		
+		// проверка на валидность после ввода в input
+		const processInput = ({input, limit}) =>
+		{
+			let value = input.value.trim();
+
+			// Заменяем запятую на точку (для корректного парсинга)
+			value = value.replace(',', '.');
+
+			// Пытаемся преобразовать в число
+			const numberValue = parseFloat(value);
+
+			// Проверяем валидность
+			if (isNaN(numberValue)) return {success: false, message: 'Введите число!'};
+
+			// Округляем до целого
+			const roundedValue = Math.round(numberValue);
+
+			// Проверяем диапазон (Число должно быть от limit[0] до limit[1])
+			if (roundedValue < limit[0] || roundedValue > limit[1]) return {success: false, message: `Число должно быть от ${limit[0]} до ${limit[1]}`};
+
+			// Если всё ок — выводим результат
+			console.log("Валидное число:", roundedValue);
+			input.value = roundedValue; // Заменяем ввод на округлённое значение
+			
+			return {success: true, value: input.value};
+		}
+
+		// если значение не валидное то сбрасываем значение до оригинального
+		const resetInput = ({result, input, originalValue}) =>
+		{
+			input.value = originalValue; 	// сбрасываем значение в input до оригинального
+			console.log(result);
+		}		
+		
+		const addEvent = ({input, limit}) =>
+		{
+			let originalValue = '';
+			
+			input.onfocus = (e) => 
+			{
+				originalValue = input.value;
+			}
+			
+			input.onkeydown = (e) => 
+			{								
+				if (e.code === 'Enter') 
+				{
+					const result = processInput({input, limit});
+					if(!result.success) resetInput({result, input, originalValue});
+					if(result.success) this.setInputOffsetBlock({value: result.value, type: 'mm'});
+				}
+			}
+
+			input.onblur = (e) => 
+			{
+				const result = processInput({input, limit});
+				if(!result.success) resetInput({result, input, originalValue});
+				if(result.success) this.setInputOffsetBlock({value: result.value, type: 'mm'});
+			}			
+		}
+
+		addEvent({input: this.inputOffset, limit: [1, 50]});			
+	}
+
 
 	// меняем состояние для CheckBox вкл/выкл (расчет для всех этажей) только для css, без дальнейшей логики
 	changeStateCheckBox1({value = undefined})

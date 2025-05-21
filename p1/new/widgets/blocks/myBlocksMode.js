@@ -16,9 +16,9 @@ class MyBlocksMode
 		
 		this.setCalcAllLevel({value: showAllLevel});
 		const value1 = this.getCalcAllLevel();
-		myPanelWidgetsBlocks.changeStateCheckBox1({value: value1});	
+		myCalcBlocks.myPanelWidgetsBlocks.changeStateCheckBox1({value: value1});	
 		
-		myCalcBlocks.init();
+		myCalcBlocks.enable();
 		myCalcBlocks.myBlocksCamera.activate();		
 	}
 	
