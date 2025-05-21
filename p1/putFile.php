@@ -148,6 +148,7 @@ new/widgets/blocks/myBlocksMode.js
 new/widgets/blocks/myBlocksMouse.js
 new/widgets/blocks/myBlocksCamera.js
 new/widgets/blocks/myBlocksWalls.js
+new/widgets/blocks/myBlocksObjs.js
 ';
 
 $arrF = array();

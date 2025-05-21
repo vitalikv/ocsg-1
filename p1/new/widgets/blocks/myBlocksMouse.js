@@ -38,7 +38,7 @@ class MyBlocksMouse
 				const paramsBlock = {};
 				paramsBlock[data.key] = data.result.value;
 				
-				myCalcBlocks.setParamsBlock({group, paramsBlock, type: 'mm'})
+				myCalcBlocks.myBlocksObjs.setParamsBlock({group, paramsBlock, type: 'mm'})
 			}
 			
 			myCalcBlocks.myPanelWidgetsBlocks.setInputSize({size, type: 'm', callBack});

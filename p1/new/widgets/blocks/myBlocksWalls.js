@@ -22,7 +22,7 @@ class MyBlocksWalls
 	{
 		const kof = 0.001;
 		
-		const roofs = myCalcBlocks.setCutRoof();
+		const roofs = myCalcBlocks.myBlocksObjs.setCutRoof();
 		
 		for (let i = 0; i < roofs.length; i++)
 		{
@@ -129,12 +129,12 @@ class MyBlocksWalls
 		wallClone.quaternion.copy( quaW );
 		wallClone.scale.copy( scaW );
 		
-		const arrO = myCalcBlocks.setCutWD({arrO: wall.userData.wall.arrO});
+		const arrO = myCalcBlocks.myBlocksObjs.setCutWD({arrO: wall.userData.wall.arrO});
 		
 		for ( let i3 = 0; i3 < arrO.length; i3++ )
 		{
 			arrO[i3].scale.set(1.001, 1.001, 1);	// немного увеличиваем размер, чтобы вырез был глубже чем у блоков
-			myCalcBlocks.cutBlockes({obj: arrO[i3], w: [wallClone]});
+			myCalcBlocks.myBlocksObjs.cutBlockes({obj: arrO[i3], w: [wallClone]});
 			
 			arrO[i3].geometry.dispose();
 		}
@@ -146,7 +146,7 @@ class MyBlocksWalls
 			
 			for (let i4 = 0; i4 < roof.length; i4++)
 			{
-				myCalcBlocks.cutBlockes({obj: roof[i4], w: [wallClone]});
+				myCalcBlocks.myBlocksObjs.cutBlockes({obj: roof[i4], w: [wallClone]});
 				
 				roof[i4].geometry.dispose();					
 			}

@@ -262,7 +262,7 @@ class MyPanelWidgetsBlocks
 		const btnCalc3D = div.querySelector('[nameId="btnCalc3D"]');		
 		btnCalc3D.onmousedown = () => 
 		{ 
-			myCalcBlocks.createHouseBlocks();
+			myCalcBlocks.myBlocksObjs.createHouseBlocks();
 		}	
 
 		const btnClearCalc = div.querySelector('[nameId="btnClearCalc"]');		
@@ -490,7 +490,7 @@ class MyPanelWidgetsBlocks
 		
 		this.inputOffset.value = value * kof;
 		
-		myCalcBlocks.setOffsetBlock({value, type});
+		myCalcBlocks.myBlocksObjs.setOffsetBlock({value, type});
 	}
 
 
