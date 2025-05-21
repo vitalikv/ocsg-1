@@ -6,8 +6,8 @@ class MyCalcBlocks
 	listPathImgs = {};
 	material;
 	arrTypeG = [];
-	blockParams = {dlina: 0.6, h: 0.3, z: 0.4, offset: 0.003};
-	arrW2 = { outside: [], inside: [], single: [] };
+	blockParams = {offset: 0.003};
+	levelGroups = [];
 	levelsData = [];
 	
 	myBlocksMode;
@@ -100,50 +100,101 @@ class MyCalcBlocks
 		
 		for ( let i = 0; i < data.length; i++ )
 		{			
-			const arrW2 = data[i].arrW2;
-			
-			for ( let i2 = 0; i2 < arrW2.outside.length; i2++ )
-			{
-				groups.push({group: arrW2.outside[i2], type: 'outside'});
-			}			
+			const groups = data[i].groups;
 
-			for ( let i2 = 0; i2 < arrW2.inside.length; i2++ )
+			for ( let i2 = 0; i2 < groups.length; i2++ )
 			{
-				groups.push({group: arrW2.inside[i2], type: 'inside'});
+				this.caclCladka({group: groups[i2]});
 			}
-
-			for ( let i2 = 0; i2 < arrW2.single.length; i2++ )
-			{
-				groups.push({group: arrW2.single[i2], type: 'single'});
-			}
-		}
-
-		for ( let i = 0; i < groups.length; i++ )
-		{
-			this.caclCladka({group: groups[i].group, type: groups[i].type});
 		}
 		
 		
 		for ( let i = 0; i < data.length; i++ )
-		{			
-			this.showResult({arrW2: data[i].arrW2, levelHeight: data[i].levelHeight});
-		}	
+		{	
+			const groups = data[i].groups;
+			const levelHeight = data[i].levelHeight;
+			
+			//this.showResult({arrW2: data[i].arrW2, levelHeight: data[i].levelHeight});			
+			
+			for ( let i2 = 0; i2 < groups.length; i2++ )
+			{
+				this.crDomByTypes({group: groups[i2], levelHeight});
+			}			
+		}
+		
+		//renderCamera();
 
 		this.myBlocksCamera.changeCamera();
 	}
+
+
+	// создаем стены по типу (наружные, внутренние, отдельные)
+	crDomByTypes({group, levelHeight})
+	{
+		const { offset } = this.blockParams;					
+		const h = group.paramsBlock.height;
+		
+		
+		let countY = 0;			
+		
+		for (let i = 0; i < levelHeight; i += h + offset) 
+		{
+			let delLastBlock = countY % 2 === 0 ? false : true;
+			
+			if(countY < 2222) 
+			{
+				this.crBloksRow({group, currentY: i, levelHeight, delLastBlock});
+			}
+			
+			countY++;
+		}
+		
+		const lines2 = group.lines2;
+		
+		// обрезаем блоки под окна/двери
+		for (let i = 0; i < lines2.length; i++)
+		{
+			const arrO = this.setCutWD({arrO: lines2[i].arrO});
+			
+			let arrBloks = lines2[i].arrBloks;
+			
+			for (let i2 = 0; i2 < arrO.length; i2++)
+			{
+				arrBloks = this.cutBlockes({obj: arrO[i2], w: arrBloks});
+				arrO[i2].geometry.dispose();
+			}
+			
+			lines2[i].arrBloks = arrBloks;
+		}
+		
+		
+		const roofs = this.setCutRoof();
+		
+		for (let i = 0; i < lines2.length; i++)
+		{
+			let arrBloks = lines2[i].arrBloks;
+			
+			for (let i2 = 0; i2 < roofs.length; i2++)
+			{
+				const roof = roofs[i2];
+				
+				for (let i3 = 0; i3 < roof.length; i3++)
+				{
+					arrBloks = this.cutBlockes({obj: roof[i3], w: arrBloks});
+					roof[i3].geometry.dispose();					
+				}
+			}
+			
+			lines2[i].arrBloks = arrBloks;
+		}		
+	}
 	
+			
 
 	
 	// назначаем размер блока для группы линий
 	setParamsBlock({group, paramsBlock, type = 'm'})
 	{
-		// при открытии вкладки расчет, назначаем размер блоков для группы линий
-		if(paramsBlock.start) 
-		{
-			paramsBlock = { length: 0.6, height: 0.3 };
-			group.paramsBlock = paramsBlock;
-		}			
-		
 		if(type === 'mm')
 		{
 			for (const key in paramsBlock) 
@@ -164,18 +215,17 @@ class MyCalcBlocks
 	getUniqueBlocksParams({data})
 	{
 		const arrParamsBlock = [];
-		const arr = this.myBlocksWalls.getGroups({data});
 		
 		// собираем массив параметров блоков со всех стен
-		for ( let i = 0; i < arr.length; i++ )
+		for ( let i = 0; i < data.length; i++ )
 		{
-			for ( let i2 = 0; i2 < arr[i].groups.length; i2++ )
+			for ( let i2 = 0; i2 < data[i].groups.length; i2++ )
 			{				
-				const paramsBlock = arr[i].groups[i2].paramsBlock;				
+				const paramsBlock = data[i].groups[i2].paramsBlock;				
 				
-				for ( let i3 = 0; i3 < arr[i].groups[i2].lines2.length; i3++ )
+				for ( let i3 = 0; i3 < data[i].groups[i2].lines2.length; i3++ )
 				{
-					const width = arr[i].groups[i2].lines2[i3].width;
+					const width = data[i].groups[i2].lines2[i3].width;
 					
 					arrParamsBlock.push({length: paramsBlock.length, height: paramsBlock.height, width});
 				}
@@ -225,17 +275,6 @@ class MyCalcBlocks
 		return geometry;
 	}
 
-	
-	createBlock({pos, geometry})
-	{ 
-		const obj = new THREE.Mesh( geometry, this.material ); 
-		obj.position.copy(pos);
-		scene.add(obj);
-
-		return obj;
-	}
-	
-	
 	
 	// добавляем img к obj
 	async setImage({material, img})
@@ -515,60 +554,42 @@ class MyCalcBlocks
 			}			
 		}
 
-		this.arrW2 = arrW2;
+		this.levelGroup = [];
 		
-	
+		const paramsBlock = { length: 0.6, height: 0.3 };
+		const groups = [];
+		
 		for ( let i = 0; i < arrW2.outside.length; i++ )
 		{
-			const lines2 = this.calcWalls({data: arrW2.outside[i].data, type: 'outside', showLines: false});		
-			arrW2.outside[i] = { lines2, paramsBlock: null };
-			this.setParamsBlock({group: arrW2.outside[i], paramsBlock: {start: true}});
+			const lines2 = this.calcWalls({data: arrW2.outside[i].data, type: 'outside'});		
+			groups.push({type: 'outside', lines2: lines2, paramsBlock });
+			
+			this.levelGroups = groups;
 		}			
 
 
 		for ( let i = 0; i < arrW2.inside.length; i++ )
 		{
-			const lines2 = this.calcWalls({data: arrW2.inside[i].data, type: 'inside', showLines: true});		
-			arrW2.inside[i] = { lines2, paramsBlock: null };
-			this.setParamsBlock({group: arrW2.inside[i], paramsBlock: {start: true}});
+			const lines2 = this.calcWalls({data: arrW2.inside[i].data, type: 'inside'});		
+			groups.push({type: 'inside', lines2: lines2, paramsBlock });
+			
+			this.levelGroups = groups;
 		}
 
 
 		for ( let i = 0; i < arrW2.single.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.single[i].data, type: 'single'});		
-			arrW2.single[i] = { lines2, paramsBlock: null };
-			this.setParamsBlock({group: arrW2.single[i], paramsBlock: {start: true}});
+			groups.push({type: 'single', lines2: lines2, paramsBlock });
+			
+			this.levelGroups = groups;
 		}		
 		
-		return {idLevel, arrW2, levelHeight};
+		return {idLevel, groups, levelHeight};
 	}
 	
 	
-	showResult({arrW2, levelHeight})
-	{		
-		for ( let i = 0; i < arrW2.outside.length; i++ )
-		{
-			this.crDomByTypes({group: arrW2.outside[i], levelHeight});
-		}			
 
-
-		for ( let i = 0; i < arrW2.inside.length; i++ )
-		{
-			this.crDomByTypes({group: arrW2.inside[i], levelHeight});
-		}
-
-
-		for ( let i = 0; i < arrW2.single.length; i++ )
-		{
-			this.crDomByTypes({group: arrW2.single[i], levelHeight, type: 'single'});
-		}
-
-		
-		renderCamera();
-	}
-
-	
 	/* сортируем массив, чтобы array шел последовательно 
 	входные данные
 	const arrayObjects = [
@@ -772,7 +793,7 @@ findObjectsUntilRepetition(arrayObjects) {
 
 
 	
-	calcWalls({data, type, showLines = false})
+	calcWalls({data, type})
 	{
 		const lines = [];		
 		
@@ -796,73 +817,14 @@ findObjectsUntilRepetition(arrayObjects) {
 			//wall.visible = false;
 		}
 		
-		const lines2 = this.showLines({lines, type, showLines});
+		const lines2 = this.showLines({lines, type});
 		
 
 		return lines2;
 	}
 	
 
-	// создаем стены по типу (наружные, внутренние, отдельные)
-	crDomByTypes({group, levelHeight})
-	{
-		const { offset } = this.blockParams;					
-		const h = group.paramsBlock.height;
-		const lines2 = group.lines2;
-		
-		let countY = 0;			
-		
-		for (let i = 0; i < levelHeight; i += h + offset) 
-		{
-			let delLastBlock = countY % 2 === 0 ? false : true;
-			
-			if(countY < 2222) 
-			{
-				this.crBloksRow({group, currentY: i, levelHeight, delLastBlock});
-			}
-			
-			countY++;
-		}
-		
-		// обрезаем блоки под окна/двери
-		for (let i = 0; i < lines2.length; i++)
-		{
-			const arrO = this.setCutWD({arrO: lines2[i].arrO});
-			
-			let arrBloks = lines2[i].arrBloks;
-			
-			for (let i2 = 0; i2 < arrO.length; i2++)
-			{
-				arrBloks = this.cutBlockes({obj: arrO[i2], w: arrBloks});
-				arrO[i2].geometry.dispose();
-			}
-			
-			lines2[i].arrBloks = arrBloks;
-		}
-		
-		
-		const roofs = this.setCutRoof();
-		
-		for (let i = 0; i < lines2.length; i++)
-		{
-			let arrBloks = lines2[i].arrBloks;
-			
-			for (let i2 = 0; i2 < roofs.length; i2++)
-			{
-				const roof = roofs[i2];
-				
-				for (let i3 = 0; i3 < roof.length; i3++)
-				{
-					arrBloks = this.cutBlockes({obj: roof[i3], w: arrBloks});
-					roof[i3].geometry.dispose();					
-				}
-			}
-			
-			lines2[i].arrBloks = arrBloks;
-		}		
-	}
-	
-	
+
 
 	// обрезаем блоки в начале/конце и под высоту этажа
 	crBloksRow({group, currentY, levelHeight, delLastBlock})
@@ -1264,7 +1226,7 @@ findObjectsUntilRepetition(arrayObjects) {
 		scene.add( arrowHelper );
 	}
 
-	showLines({lines, type, showLines = false})
+	showLines({lines, type})
 	{
 		console.log('Расчет');
 		
@@ -1400,12 +1362,13 @@ findObjectsUntilRepetition(arrayObjects) {
 	
 	
 	// расчет для кладки блоков (1 и 2 ряд)
-	caclCladka({group, type, showLines = false})
+	caclCladka({group, showLines = false})
 	{
 		const { offset } = this.blockParams;
-		const dlina = group.paramsBlock.length;
 		
+		const type = group.type;
 		const lines2 = group.lines2;
+		const dlina = group.paramsBlock.length;
 		
 		// зазор/кладка для первых и последних блоков		
 		for ( let i = 0; i < lines2.length; i++ )
@@ -1533,6 +1496,16 @@ findObjectsUntilRepetition(arrayObjects) {
 	}
 	
 	
+	createBlock({pos, geometry})
+	{ 
+		const obj = new THREE.Mesh( geometry, this.material ); 
+		obj.position.copy(pos);
+		scene.add(obj);
+
+		return obj;
+	}	
+	
+	
 	// вычисляем стартовые/конечные точки у стены, у которой есть соседние стены (внутренние стены) 
 	calcW2({wall, ind, lines, z, pStart})
 	{		
@@ -1598,17 +1571,25 @@ findObjectsUntilRepetition(arrayObjects) {
 			linesW.push(posL1, posL2);
 		}
 
+	const data = this.getLevelsData();
+	// получить все блоки (всех этажей) или только одного этажа по id
+	const arrL = this.getGroupByLevelType({id: data.length - 1, type: 'inside'});
 
-		for ( let i = 0; i < this.arrW2.inside.length; i++ )
+console.log(1777, data, arrL);
+		const levelGroups = this.levelGroups;
+		
+		for ( let i = 0; i < levelGroups.length; i++ )
 		{
-			const inside = this.arrW2.inside[i].lines2;
-			if(!inside) continue;
+			const levelGroup = levelGroups[i];
+			if(levelGroup.type !== 'inside') continue;
 			
-			for ( let i2 = 0; i2 < inside.length; i2++ )
+			const lines2 = levelGroup.lines2;
+			
+			for ( let i2 = 0; i2 < lines2.length; i2++ )
 			{
-				if(points[ind].userData.id === inside[i2].pIds[0] || points[ind].userData.id === inside[i2].pIds[1])
+				if(points[ind].userData.id === lines2[i2].pIds[0] || points[ind].userData.id === lines2[i2].pIds[1])
 				{
-					//console.log(2222, points[ind].userData.id, inside[i2].pIds);
+					console.log(2777, points[ind].userData.id, lines2[i2].pIds);
 					isMin = true;
 				}
 				
@@ -1702,25 +1683,37 @@ findObjectsUntilRepetition(arrayObjects) {
 		return {pos1, pos2, posCut};
 	}
 	
-	
-	getLines2FromArrW2({wall})
+
+	// получить все блоки (всех этажей) или только одного этажа по id
+	getGroupByLevelType({id = undefined, type = ''})
 	{
-		let wall_1 = null;
+		const arr = [];
 		
-		for ( let i = 0; i < this.arrW2.outside.length; i++ )
-		{
-			const outside = this.arrW2.outside[i].data;
+		const data = this.getLevelsData();
+		
+		for ( let i = 0; i < data.length; i++ )
+		{	
+			const idLevel = data[i].idLevel;
 			
-			for ( let i2 = 0; i2 < outside.length; i2++ )
+			if(id === idLevel && type === 'inside')
 			{
-				if(wall === outside[i2].wall) 
-				{
-					console.log(2222, outside[i3]);
-					break;
+				const groups = data[i].groups;
+
+				for ( let i2 = 0; i2 < groups.length; i2++ )
+				{	
+					if(groups[i2].type !== 'inside') continue;
+					
+					const lines2 = groups[i2].lines2;
+
+					arr.push(lines2);				
 				}
-			}			
-		}		
+			}
+	
+		}
+
+		return arr;
 	}
+	
 	
 	// получаем позиции 2-х линий
 	calcLineWall({posP, pStart, side, width, z, type, show = false})
@@ -2187,37 +2180,24 @@ findObjectsUntilRepetition(arrayObjects) {
 	{
 		const arr = [];
 		
-		const getBlocks = (lines2) =>
-		{
-			for ( let i = 0; i < lines2.length; i++ )
-			{			
-				arr.push(...lines2[i].arrBloks);
-			}					
-		}
+		const data = this.getLevelsData();
 		
-		const levelsData = this.getLevelsData();
-		
-		for ( let i = 0; i < levelsData.length; i++ )
+		for ( let i = 0; i < data.length; i++ )
 		{	
-			const idLevel = levelsData[i].idLevel;
+			const idLevel = data[i].idLevel;
 			
 			if(id !== undefined && id !== idLevel) continue;
 	
-			const arrW2 = levelsData[i].arrW2;
+			const groups = data[i].groups;
 
-			for ( let i2 = 0; i2 < arrW2.outside.length; i2++ )
+			for ( let i2 = 0; i2 < groups.length; i2++ )
 			{		
-				getBlocks(arrW2.outside[i2].lines2);	
-			}			
+				const lines2 = groups[i2].lines2;
 
-			for ( let i2 = 0; i2 < arrW2.inside.length; i2++ )
-			{		
-				getBlocks(arrW2.inside[i2].lines2);
-			}
-
-			for ( let i2 = 0; i2 < arrW2.single.length; i2++ )
-			{		
-				getBlocks(arrW2.single[i2].lines2);			
+				for ( let i3 = 0; i3 < lines2.length; i3++ )
+				{			
+					arr.push(...lines2[i3].arrBloks);
+				}				
 			}			
 		}
 
@@ -2235,7 +2215,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			scene.remove( arr[i] );
 		}
 		
-		this.arrW2 = { outside: [], inside: [], single: [] };
+		this.levelGroups = [];
 		
 		this.setLevelsData({data: []});
 		

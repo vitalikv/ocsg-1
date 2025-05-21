@@ -13,41 +13,7 @@ class MyBlocksWalls
 
 	initWalls({data})
 	{
-		const result = this.getGroups({data});
-		this.crCloneWalls({data: result});
-	}
-	
-	
-	// отсортировываем массив с lines2 (чтобы потом проще работать)
-	getGroups({data})
-	{
-		const arr = [];
-		
-		for ( let i = 0; i < data.length; i++ )
-		{	
-			const idLevel = data[i].idLevel;
-			const arrW2 = data[i].arrW2;			
-			
-			arr[i] = {idLevel, groups: []};
-			
-			for ( let i2 = 0; i2 < arrW2.outside.length; i2++ )
-			{		
-				arr[i].groups.push(arrW2.outside[i2]);
-			}			
-
-			for ( let i2 = 0; i2 < arrW2.inside.length; i2++ )
-			{		
-				arr[i].groups.push(arrW2.inside[i2]);
-			}
-
-			for ( let i2 = 0; i2 < arrW2.single.length; i2++ )
-			{		
-				arr[i].groups.push(arrW2.single[i2]);
-			}			
-		}		
-
-
-		return arr;
+		this.crCloneWalls({data});
 	}
 	
 	
