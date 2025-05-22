@@ -4,10 +4,10 @@ class MyBlocksCamera
 	arrHideObjs = [];
 	
 	
-	// активировался расчет блоков
+	// активировалась панель
 	activate()
 	{	
-		this.hideObjs();
+		this.hidePlanObjs();
 		
 		myHouse.myGhostLevel.deleteLevel();	// прячем призрачный этаж
 		
@@ -15,12 +15,12 @@ class MyBlocksCamera
 		infProject.tools.axis[1].visible = false;
 	}
 	
-	// деактивировался расчет блоков
+	// деактивировался панель
 	deActivate()
 	{
 		myCalcBlocks.myBlocksWalls.deleteWalls();
 		
-		this.showObjs();
+		this.showPlanObjs();
 		
 		changeCamera();
 	}
@@ -72,7 +72,7 @@ class MyBlocksCamera
 	// переключение этажа в режиме расчет блоков
 	switchLevel({id, posY})
 	{
-		this.hideObjs();
+		this.hidePlanObjs();
 		
 		myHouse.myGhostLevel.deleteLevel();
 		
@@ -106,9 +106,9 @@ class MyBlocksCamera
 	}
 	
 	// прячем планировку
-	hideObjs()
+	hidePlanObjs()
 	{
-		this.showObjs();	// сначала надо восстановить все видемые объекты или они не попадут в this.arrHideObjs
+		this.showPlanObjs();	// сначала надо восстановить все видемые объекты или они не попадут в this.arrHideObjs
 		//this.arrHideObjs.length = 0;
 		
 		const setVisible = (obj) =>
@@ -137,7 +137,7 @@ class MyBlocksCamera
 	}
 	
 	// показываем планировку
-	showObjs()
+	showPlanObjs()
 	{		
 		for ( let i = 0; i < this.arrHideObjs.length; i++ )
 		{		

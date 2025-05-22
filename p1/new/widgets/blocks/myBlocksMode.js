@@ -3,7 +3,9 @@
 class MyBlocksMode
 {
 	isActiveMode = false;
+	isActiveBlocks = false;	// расчет произошел или нет
 	isAllLevel = true;
+	typeTab = '';
 	
 	
 	// вкл режим когда (произошел подсчет линий и построение фековых стен)
@@ -25,8 +27,47 @@ class MyBlocksMode
 	disableMode()
 	{
 		myCalcBlocks.disableWalls();
-
 		this.setActiveMode({value: false});
+	}
+	
+	
+	// вкл расчет блоков
+	enableBlocks()
+	{
+		myCalcBlocks.enableBlocks();
+		this.setActiveBlocks({value: true});
+	}	
+	
+	disableBlocks()
+	{
+		myCalcBlocks.disableBlocks();
+		this.setActiveBlocks({value: false});
+	}
+	
+	
+	changeTab({type})
+	{
+		this.setTab({type});
+		
+		let mode = 'def';
+		if(type === 'setting') mode = 'select';
+		
+		myCalcBlocks.myBlocksWalls.changeColorWalls({mode});
+
+		
+		if(this.getActiveBlocks())
+		{
+			if(type === 'setting')
+			{
+				myCalcBlocks.myBlocksCamera.hideBlocks();
+			}
+			else
+			{
+				myCalcBlocks.myBlocksCamera.changeCamera();
+			}			
+		}
+		
+		renderCamera();
 	}
 	
 	
@@ -41,6 +82,16 @@ class MyBlocksMode
 		return this.isActiveMode;
 	}
 
+	// вкл/выкл когда произошел расчет блоков
+	setActiveBlocks({value})
+	{
+		this.isActiveBlocks = value;
+	}
+	
+	getActiveBlocks()
+	{
+		return this.isActiveBlocks;
+	}
 	
 	setCalcAllLevel({value})
 	{
@@ -52,6 +103,17 @@ class MyBlocksMode
 		return this.isAllLevel;
 	}
 
+
+	setTab({type})
+	{
+		this.typeTab = type;
+		console.log(type);
+	}
+	
+	getTab()
+	{
+		return this.typeTab;
+	}	
 }
 
 

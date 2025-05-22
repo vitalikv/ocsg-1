@@ -2,12 +2,10 @@
 // автоматическая расчет кол-во блоков/кирпичей
 class MyCalcBlocks
 {
-	isInit = false;
-	isActiveBlocks = false;	// расчет произошел или нет
+	isInit = false;	
 		
 	levelsData = [];
-	levelGroups = [];	// массив групп для одного этажа
-	
+	levelGroups = [];	// массив групп для одного этажа	
 	
 	myBlocksMode;
 	myBlocksMouse;
@@ -32,20 +30,11 @@ class MyCalcBlocks
 		myPanelTop2.addPaidPanel({panel: 'calcBlock'});	// создаем верхнию панель
 		this.myPanelWidgetsBlocks.addPaidContent();	// создаем правую панель
 		this.myPanelWidgetsBlocks.setInputOffsetBlock({value: 0.003, type: 'm'});
-		this.myPanelWidgetsBlocks.showWrapContent({tabName: 'calc3D'});	// переключаем на нужную вкладку			
+		this.myPanelWidgetsBlocks.showWrapContent({tabName: 'setting'});	// переключаем на нужную вкладку			
 		myPanelTop2.showPanelRWBlocks();	// вкл режим для расчета блоков 		
 	}
 	
-	// вкл/выкл когда произошел расчет блоков
-	setActiveBlocks({value})
-	{
-		this.isActiveBlocks = value;
-	}
-	
-	getActiveBlocks()
-	{
-		return this.isActiveBlocks;
-	}
+
 
 	setLevelsData({data})
 	{
@@ -91,7 +80,7 @@ class MyCalcBlocks
 	{
 		this.myBlocksCamera.deActivate();
 		this.myBlocksWalls.deleteWalls();
-		this.myBlocksObjs.clearResultBlocks();
+		this.disableBlocks();
 		
 		this.levelGroups = [];
 		
@@ -102,19 +91,15 @@ class MyCalcBlocks
 	enableBlocks()
 	{
 		this.myBlocksObjs.clearResultBlocks();
-		
-		this.setActiveBlocks({value: true});
-		
+
 		this.myBlocksObjs.createHouseBlocks();
-	}
-	
+	}	
 	
 	disableBlocks()
 	{
 		this.myBlocksObjs.clearResultBlocks();
-		
-		this.setActiveBlocks({value: false});
 	}	
+	
 	
 	// получаем массив стен по типу
 	getArrTypeWalls({wall})

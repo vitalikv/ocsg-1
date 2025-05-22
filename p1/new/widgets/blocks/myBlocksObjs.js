@@ -92,7 +92,7 @@ class MyBlocksObjs
 		
 		const arrParams = this.getUniqueBlocksParams({data});
 		this.arrTypeG = this.createGeometryByParams({arrParams});		
-		console.log(777, this.arrTypeG);		
+		console.log(777, data, this.arrTypeG);		
 		
 		
 		

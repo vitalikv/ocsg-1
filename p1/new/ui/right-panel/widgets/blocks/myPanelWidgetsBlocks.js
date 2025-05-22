@@ -262,13 +262,13 @@ class MyPanelWidgetsBlocks
 		const btnCalc3D = div.querySelector('[nameId="btnCalc3D"]');		
 		btnCalc3D.onmousedown = () => 
 		{ 
-			myCalcBlocks.enableBlocks();
+			myCalcBlocks.myBlocksMode.enableBlocks();
 		}	
 
 		const btnClearCalc = div.querySelector('[nameId="btnClearCalc"]');		
 		btnClearCalc.onmousedown = () => 
 		{ 
-			myCalcBlocks.disableBlocks();
+			myCalcBlocks.myBlocksMode.disableBlocks();
 		}
 
 		this.checkBox1 = div.querySelector('[nameId="item_1"]');
@@ -577,6 +577,8 @@ class MyPanelWidgetsBlocks
 		if(tabName === 'level') this.content1.style.display = '';
 		if(tabName === 'setting') this.content2.style.display = '';
 		if(tabName === 'calc3D') this.content3.style.display = '';
+		
+		myCalcBlocks.myBlocksMode.changeTab({type: tabName});
 	}	
 	
 	// скрываем все вкладки с контентом

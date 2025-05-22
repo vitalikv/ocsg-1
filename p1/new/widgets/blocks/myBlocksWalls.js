@@ -2,18 +2,15 @@
 // клон стен (фейковая кладка для блоков)
 class MyBlocksWalls
 {
-	material;
 	dataWallsClone = [];
 	
-	constructor()
-	{
-		const mat = new THREE.MeshStandardMaterial({ color: 0x696969, lightMap: lightMap_1 });
-		this.material = [ mat.clone(), mat.clone(), mat.clone(), mat.clone() ];
-	}
 
 	initWalls({data})
 	{
 		this.crCloneWalls({data});
+		
+		const type = myCalcBlocks.myBlocksMode.getTab();
+		myCalcBlocks.myBlocksMode.changeTab({type});
 	}
 	
 	
@@ -63,6 +60,7 @@ class MyBlocksWalls
 
 						wallClone.userData.group = groups[i2];
 						wallClone.userData.line = line;
+						wallClone.userData.colors = { def: 0x696969, select: color };
 						
 						line.wallsClone.push(wallClone);
 						
@@ -200,6 +198,21 @@ class MyBlocksWalls
 		}		
 	}
 	
+	
+	// меняем цвет стен, в зависимости от режима
+	changeColorWalls({mode = 'def'})
+	{
+		const walls = this.getWallsClone({});
+
+		for ( let i = 0; i < walls.length; i++ )
+		{	
+			const wall = walls[i];
+			
+			const color = (mode === 'def') ? wall.userData.colors.def : wall.userData.colors.select;
+			wall.material[0].color = new THREE.Color(color);	
+		}		
+	}
+
 	
 	// показываем стены (всех этажей) или только одного этажа по id
 	showWalls({idLevel = undefined})
