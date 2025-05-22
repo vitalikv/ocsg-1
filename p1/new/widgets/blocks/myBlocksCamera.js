@@ -76,7 +76,7 @@ class MyBlocksCamera
 		
 		myHouse.myGhostLevel.deleteLevel();
 		
-		myCalcBlocks.changePosYLevel({posY});
+		myCalcBlocks.myBlocksObjs.changePosYLevel({posY});
 		myCalcBlocks.myBlocksWalls.changePosYLevel({posY});
 		
 		this.changeCamera();		
@@ -87,7 +87,7 @@ class MyBlocksCamera
 	
 	hideBlocks()
 	{
-		const arr = myCalcBlocks.getAllBlocks({});
+		const arr = myCalcBlocks.myBlocksObjs.getAllBlocks({});
 
 		for ( let i = 0; i < arr.length; i++ )
 		{		
@@ -97,7 +97,7 @@ class MyBlocksCamera
 	
 	showBlocks({idLevel = undefined})
 	{
-		const arr = myCalcBlocks.getAllBlocks({id: idLevel});
+		const arr = myCalcBlocks.myBlocksObjs.getAllBlocks({id: idLevel});
 		
 		for ( let i = 0; i < arr.length; i++ )
 		{		

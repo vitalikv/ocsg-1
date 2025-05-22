@@ -22,7 +22,7 @@ class MyBlocksWalls
 	{
 		const kof = 0.001;
 		
-		const roofs = myCalcBlocks.myBlocksObjs.setCutRoof();
+		const roofs = myCalcBlocks.myBlocksObjs.getCutRoofs();
 		
 		for (let i = 0; i < roofs.length; i++)
 		{
@@ -234,7 +234,8 @@ class MyBlocksWalls
 		{
 			const wall = walls[i];
 			
-			wall.geometry.dispose();
+			//wall.geometry.dispose();
+			disposeNode(wall);
 			scene.remove(wall);
 		}
 

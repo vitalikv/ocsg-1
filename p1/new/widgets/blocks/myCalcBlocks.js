@@ -2,7 +2,8 @@
 // автоматическая расчет кол-во блоков/кирпичей
 class MyCalcBlocks
 {
-	isActive = false;	// расчет произошел или нет
+	isInit = false;
+	isActiveBlocks = false;	// расчет произошел или нет
 		
 	levelsData = [];
 	levelGroups = [];	// массив групп для одного этажа
@@ -18,6 +19,8 @@ class MyCalcBlocks
 	
 	init()
 	{
+		this.isInit = true;
+		
 		this.myBlocksMode = new MyBlocksMode();
 		this.myBlocksMouse = new MyBlocksMouse();
 		this.myBlocksCamera = new MyBlocksCamera();
@@ -34,14 +37,14 @@ class MyCalcBlocks
 	}
 	
 	// вкл/выкл когда произошел расчет блоков
-	setActive({value})
+	setActiveBlocks({value})
 	{
-		this.isActive = value;
+		this.isActiveBlocks = value;
 	}
 	
-	getActive()
+	getActiveBlocks()
 	{
-		return this.isActive;
+		return this.isActiveBlocks;
 	}
 
 	setLevelsData({data})
@@ -53,13 +56,14 @@ class MyCalcBlocks
 	{
 		return this.levelsData;
 	}	
-	
-	
-	enable()
+		
+
+	// вкл предварительный расчет + построение фейковых стен
+	enableWalls()
 	{
 		this.myBlocksWalls.deleteWalls();
-		this.clearResultBlocks();
-		this.setActive({value: true});
+		this.myBlocksObjs.clearResultBlocks();
+		
 		
 		const data = [];
 		
@@ -70,7 +74,6 @@ class MyCalcBlocks
 
 		data[0] = this.test({idLevel: 0, level: myLevels.levels[0]});
 		data[1] = this.test({idLevel: 1, level: myLevels.levels[1]});
-		//data[2] = this.test({idLevel: 2, level: myLevels.levels[2]});
 
 		
 		this.setLevelsData({data});
@@ -78,11 +81,40 @@ class MyCalcBlocks
 		this.myBlocksWalls.initWalls({data});
 		
 		this.myBlocksCamera.changeCamera();
+		this.myBlocksCamera.activate();
 		
-		console.log(888888, data);
+		console.log(888888, data);		
 	}
 	
-
+	// выкл
+	disableWalls()
+	{
+		this.myBlocksCamera.deActivate();
+		this.myBlocksWalls.deleteWalls();
+		this.myBlocksObjs.clearResultBlocks();
+		
+		this.levelGroups = [];
+		
+		this.setLevelsData({data: []});			
+	}
+	
+	// вкл расчет блоков
+	enableBlocks()
+	{
+		this.myBlocksObjs.clearResultBlocks();
+		
+		this.setActiveBlocks({value: true});
+		
+		this.myBlocksObjs.createHouseBlocks();
+	}
+	
+	
+	disableBlocks()
+	{
+		this.myBlocksObjs.clearResultBlocks();
+		
+		this.setActiveBlocks({value: false});
+	}	
 	
 	// получаем массив стен по типу
 	getArrTypeWalls({wall})
@@ -1592,65 +1624,7 @@ findObjectsUntilRepetition(arrayObjects) {
 	}
 	
 
-	// меняем высоту блоков при переключении этажа
-	changePosYLevel({posY})
-	{
-		const arr = this.getAllBlocks({});
 
-		for ( let i = 0; i < arr.length; i++ )
-		{		
-			arr[i].position.y -= posY;
-		}		
-	}
-	
-	// получить все блоки (всех этажей) или только одного этажа по id
-	getAllBlocks({id = undefined})
-	{
-		const arr = [];
-		
-		const data = this.getLevelsData();
-		
-		for ( let i = 0; i < data.length; i++ )
-		{	
-			const idLevel = data[i].idLevel;
-			
-			if(id !== undefined && id !== idLevel) continue;
-	
-			const groups = data[i].groups;
-
-			for ( let i2 = 0; i2 < groups.length; i2++ )
-			{		
-				const lines2 = groups[i2].lines2;
-
-				for ( let i3 = 0; i3 < lines2.length; i3++ )
-				{			
-					arr.push(...lines2[i3].arrBloks);
-				}				
-			}			
-		}
-
-		return arr;
-	}
-	
-	// удаляем все блоки и сбрасываем массивы
-	clearResultBlocks()
-	{
-		const arr = this.getAllBlocks({});
-		
-		for ( let i = 0; i < arr.length; i++ )
-		{		
-			disposeNode( arr[i] );
-			scene.remove( arr[i] );
-		}
-		
-		this.levelGroups = [];
-		
-		this.setLevelsData({data: []});
-		
-		this.setActive({value: false});
-		
-		renderCamera();		
-	}
 }
 
 

@@ -6,7 +6,7 @@ class MyBlocksMode
 	isAllLevel = true;
 	
 	
-	// вкл режим когда можно делать расчеты блоков
+	// вкл режим когда (произошел подсчет линий и построение фековых стен)
 	enableMode({showAllLevel})
 	{
 		myMouse.clearClick();
@@ -18,15 +18,13 @@ class MyBlocksMode
 		const value1 = this.getCalcAllLevel();
 		myCalcBlocks.myPanelWidgetsBlocks.changeStateCheckBox1({value: value1});	
 		
-		myCalcBlocks.enable();
-		myCalcBlocks.myBlocksCamera.activate();		
+		myCalcBlocks.enableWalls();				
 	}
 	
 	// выкл
 	disableMode()
 	{
-		myCalcBlocks.myBlocksCamera.deActivate();
-		myCalcBlocks.clearResultBlocks();
+		myCalcBlocks.disableWalls();
 
 		this.setActiveMode({value: false});
 	}

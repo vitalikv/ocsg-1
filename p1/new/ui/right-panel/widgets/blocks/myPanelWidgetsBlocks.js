@@ -262,14 +262,13 @@ class MyPanelWidgetsBlocks
 		const btnCalc3D = div.querySelector('[nameId="btnCalc3D"]');		
 		btnCalc3D.onmousedown = () => 
 		{ 
-			myCalcBlocks.myBlocksObjs.createHouseBlocks();
+			myCalcBlocks.enableBlocks();
 		}	
 
 		const btnClearCalc = div.querySelector('[nameId="btnClearCalc"]');		
 		btnClearCalc.onmousedown = () => 
 		{ 
-			myCalcBlocks.myBlocksCamera.deActivate();
-			myCalcBlocks.clearResultBlocks(); 
+			myCalcBlocks.disableBlocks();
 		}
 
 		this.checkBox1 = div.querySelector('[nameId="item_1"]');
@@ -347,7 +346,7 @@ class MyPanelWidgetsBlocks
 				myMouse.clearClick();
 				myLevels.switchLevel(i);
 				
-				if(myCalcBlocks.getActive())
+				if(myCalcBlocks.myBlocksMode.getActiveMode())
 				{
 					myCalcBlocks.myBlocksCamera.switchLevel({id: idActive, posY});
 				}							 

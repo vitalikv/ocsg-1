@@ -18,7 +18,7 @@ class EventMyCamera
 		if(myComposerRenderer) myComposerRenderer.changeCamera({camera});
 		
 		
-		if(myCalcBlocks.getActive())
+		if(myCalcBlocks.isInit && myCalcBlocks.myBlocksMode.getActiveMode())
 		{
 			myCalcBlocks.myBlocksCamera.changeCamera();
 		}

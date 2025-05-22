@@ -5,6 +5,7 @@ class MyBlocksObjs
 	listPathImgs = {};
 	material;
 	arrTypeG = [];
+	roofs = [];
 	blockOffset = 0;
 	
 	
@@ -107,6 +108,7 @@ class MyBlocksObjs
 			}
 		}
 		
+		this.roofs = this.getCutRoofs();
 		
 		for ( let i = 0; i < data.length; i++ )
 		{	
@@ -248,15 +250,15 @@ class MyBlocksObjs
 		}
 		
 		
-		const roofs = this.setCutRoof();
+		
 		
 		for (let i = 0; i < lines2.length; i++)
 		{
 			let arrBloks = lines2[i].arrBloks;
 			
-			for (let i2 = 0; i2 < roofs.length; i2++)
+			for (let i2 = 0; i2 < this.roofs.length; i2++)
 			{
-				const roof = roofs[i2];
+				const roof = this.roofs[i2];
 				
 				for (let i3 = 0; i3 < roof.length; i3++)
 				{
@@ -285,9 +287,9 @@ class MyBlocksObjs
 		{
 			const result = lines2[i].row[ind];
 			
-			const wallDlina = result.pos[0].distanceTo(result.pos[1]);
+			const dist = result.pos[0].distanceTo(result.pos[1]);
 			
-			const answer = this.rowBlockes2({x: wallDlina, posStart: result.pos[0], dir: result.dir, currentY, normal: result.normal, z: lines2[i].width, dlina, h});
+			const answer = this.rowBlockes2({x: dist, posStart: result.pos[0], dir: result.dir, currentY, normal: result.normal, z: lines2[i].width, dlina, h});
 			let arrBloks = answer.arrBloks;
 			
 			const z = lines2[i].width;
@@ -342,7 +344,7 @@ class MyBlocksObjs
 				const dir = result.dir;
 				const normal = result.normal;
 				
-				const geometry = createGeometryCube(wallDlina * 2, h * 2, z * 2);
+				const geometry = createGeometryCube(dist * 2, h * 2, z * 2);
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
 				const obj = new THREE.Mesh( geometry, material ); 
 				
@@ -389,9 +391,8 @@ class MyBlocksObjs
 			pos.add(dir.clone().multiplyScalar(dlina/2));
 			pos.add(normal.clone().multiplyScalar(z2/2));
 			
-			const geometry = this.getGeometryByParams({length: dlina, height: h, width: z});
-			const block = this.createBlock({pos, geometry});
-			const volume = this.calculateMeshVolume(block.geometry);
+			const { geometry, volume } = this.getGeometryByParams({length: dlina, height: h, width: z});
+			const block = this.createBlock({pos, geometry});			
 			
 			block.userData.originalVolume = volume;
 			block.userData.upVolume = volume;
@@ -463,17 +464,17 @@ class MyBlocksObjs
 	}
 
 
-	setCutRoof()
+	getCutRoofs()
 	{
-		const level = myLevels.levels;
+		const levels = myLevels.levels;
 		
 		const roofsClone = [];
 		
-		for(let i = 0; i < level.length; i++)
+		for(let i = 0; i < levels.length; i++)
 		{
-			for(let i2 = 0; i2 < level[i].roof.length; i2++)
+			for(let i2 = 0; i2 < levels[i].roof.length; i2++)
 			{
-				const group = myHouse.myRoofCSG.cgs_2(level[i].roof[i2]);
+				const group = myHouse.myRoofCSG.cgs_2(levels[i].roof[i2]);
 				roofsClone.push(group);
 			}
 		}
@@ -542,7 +543,9 @@ class MyBlocksObjs
 			const {length, height, width} = arrParams[i];
 			const geometry = createGeometryCube(length, height, width);
 			
-			arr.push({params: arrParams[i], geometry});
+			const volume = this.calculateMeshVolume(geometry);
+			
+			arr.push({params: arrParams[i], geometry, volume});
 		}
 
 		return arr;
@@ -552,22 +555,24 @@ class MyBlocksObjs
 	// находим геометрию блока по ширине и высоте
 	getGeometryByParams({length, height, width})
 	{
-		let geometry = null;
+		const result = {geometry: null, volume: 0};
 		
 		for ( let i = 0; i < this.arrTypeG.length; i++ )
 		{
 			const blockP = this.arrTypeG[i].params;
 			if(blockP.length === length && blockP.height === height && blockP.width === width)
 			{
-				geometry = this.arrTypeG[i].geometry;				
+				result.geometry = this.arrTypeG[i].geometry;
+				result.volume = this.arrTypeG[i].volume;				
 				break;
 			}
 		}
 
-		return geometry;
+		return result;
 	}	
 
-
+	
+	// расчитываем объем блока
 	calculateMeshVolume(geometry) 
 	{
 		const vertices = geometry.vertices; // Массив вершин
@@ -593,6 +598,78 @@ class MyBlocksObjs
 		return Math.abs(volume); // Возвращаем абсолютное значение объёма
 	}
 
+
+	// меняем высоту блоков при переключении этажа
+	changePosYLevel({posY})
+	{
+		const arr = this.getAllBlocks({});
+
+		for ( let i = 0; i < arr.length; i++ )
+		{		
+			arr[i].position.y -= posY;
+		}		
+	}
+	
+	// получить все блоки (всех этажей) или только одного этажа по id
+	getAllBlocks({id = undefined})
+	{
+		const arr = [];
+		
+		const data = myCalcBlocks.getLevelsData();
+		
+		for ( let i = 0; i < data.length; i++ )
+		{	
+			const idLevel = data[i].idLevel;
+			
+			if(id !== undefined && id !== idLevel) continue;
+	
+			const groups = data[i].groups;
+
+			for ( let i2 = 0; i2 < groups.length; i2++ )
+			{		
+				const lines2 = groups[i2].lines2;
+
+				for ( let i3 = 0; i3 < lines2.length; i3++ )
+				{			
+					arr.push(...lines2[i3].arrBloks);
+				}				
+			}			
+		}
+
+		return arr;
+	}
+	
+	// удаляем все блоки и сбрасываем массивы
+	clearResultBlocks()
+	{
+		const arr = this.getAllBlocks({});
+		
+		for ( let i = 0; i < arr.length; i++ )
+		{		
+			disposeNode( arr[i] );
+			scene.remove( arr[i] );
+		}
+		
+		renderCamera();	
+
+
+		const data = myCalcBlocks.getLevelsData();
+		
+		for ( let i = 0; i < data.length; i++ )
+		{		
+			const groups = data[i].groups;
+
+			for ( let i2 = 0; i2 < groups.length; i2++ )
+			{		
+				const lines2 = groups[i2].lines2;
+
+				for ( let i3 = 0; i3 < lines2.length; i3++ )
+				{			
+					lines2[i3].arrBloks.length = 0;
+				}				
+			}			
+		}		
+	}
 }
 
 
