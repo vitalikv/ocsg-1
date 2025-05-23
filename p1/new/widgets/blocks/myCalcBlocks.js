@@ -12,6 +12,7 @@ class MyCalcBlocks
 	myBlocksCamera;
 	myBlocksWalls;
 	myBlocksObjs;
+	myBlocksInfoPoints;
 	myPanelWidgetsBlocks;
 	
 	
@@ -24,6 +25,7 @@ class MyCalcBlocks
 		this.myBlocksCamera = new MyBlocksCamera();
 		this.myBlocksWalls = new MyBlocksWalls();
 		this.myBlocksObjs = new MyBlocksObjs();
+		this.myBlocksInfoPoints = new MyBlocksInfoPoints();
 		this.myPanelWidgetsBlocks = new MyPanelWidgetsBlocks();
 
 		
@@ -72,7 +74,7 @@ class MyCalcBlocks
 		this.myBlocksCamera.changeCamera();
 		this.myBlocksCamera.activate();
 		
-		console.log(888888, data);		
+		console.log(888888, data);
 	}
 	
 	// выкл
@@ -133,7 +135,6 @@ class MyCalcBlocks
 			if(room.length === 2)
 			{
 				arrW.inside.push({wall: wall[i], side: 0, array: [wall[i].userData.wall.p[0].userData.id, wall[i].userData.wall.p[1].userData.id]});
-				console.log([wall[i].userData.wall.p[0].userData.id, wall[i].userData.wall.p[1].userData.id]);
 			}
 		}
 
@@ -184,42 +185,43 @@ class MyCalcBlocks
 			let pStart = reverseWall;
 			let side = reverseWall;
 			
-			if(newArr.length > 0)
+			const ind = arrW2.single.length;
+			arrW2.single[ind] = {data: [], lines2: null};
+		
+			// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
+			// решено, теперь знаем если стартовая точка не имеет связей (она одна), то pStart = 0
+			// решение только для не замкнутой стены, для замкнутой, нужно доробатывать
+			newArr.push(newArr[0]);
+			
+			const arrOrderIds = [];
+			if(pStart === 0) arrOrderIds.push(newArr[0].array[0]);
+			else arrOrderIds.push(newArr[0].array[1]);
+			
+			for ( let i = 0; i < newArr.length - 1; i++ )
 			{
-				const ind = arrW2.single.length;
-				arrW2.single[ind] = {data: [], lines2: null};
+				const array = newArr[i].array;
+				const wall = newArr[i].wall;
+				//const side = newArr[i].side;
 				
-				// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
-				// решено, теперь знаем если стартовая точка не имеет связей (она одна), то pStart = 0
-				// решение только для не замкнутой стены, для замкнутой, нужно доробатывать
-				if(newArr.length > 0)
+				arrW2.single[ind].data.push({wall, side, pStart, width: wall.userData.wall.width});
+				
+				const array2 = newArr[i+1].array;
+				
+				console.log(array, pStart, array2[0], array[1]);
+
+				if(pStart === 1) arrOrderIds.push(newArr[i].array[0]);
+				else arrOrderIds.push(newArr[i].array[1]);				
+				
+				if(!(array2[0] === array[1] || array2[1] === array[0]))
 				{
-					newArr.push(newArr[0]);
-					for ( let i = 0; i < newArr.length - 1; i++ )
-					{
-						const array = newArr[i].array;
-						const wall = newArr[i].wall;
-						//const side = newArr[i].side;
-						
-						arrW2.single[ind].data.push({wall, side, pStart, width: wall.userData.wall.width});
-						
-						const array2 = newArr[i+1].array;
-						
-						console.log(array, pStart, array2[0], array[1]);
-						
-						
-						if(!(array2[0] === array[1] || array2[1] === array[0]))
-						{
-							pStart = (pStart === 0) ? 1 : 0;
-							side = pStart;
-						}
-					}					
+					pStart = (pStart === 0) ? 1 : 0;
+					side = pStart;
 				}
-				else
-				{
-					arrW2.single[ind].data.push({wall, side, pStart});
-				}
-			}
+			}					
+
+			arrW2.single[ind].arrOrderIds = arrOrderIds;
+			
+			console.log(arrOrderIds);
 		}		
 		
 		
@@ -244,10 +246,15 @@ class MyCalcBlocks
 			let pStart = reverseWall;
 
 			const ind = arrW2.outside.length;
-			arrW2.outside[ind] = {data: [], lines2: null};
-				
+			arrW2.outside[ind] = {data: [], lines2: null, arrOrderIds: []};
+			
 			// !!! - при старте стены, по идее нужно узнавать из array, это 1 точка у стены или 2-ая и от этого назначать pStart = 0 или 1
 			newArr.push(newArr[0]);
+			
+			const arrOrderIds = [];
+			if(pStart === 0) arrOrderIds.push(newArr[0].array[0]);
+			else arrOrderIds.push(newArr[0].array[1]);
+			
 			for ( let i = 0; i < newArr.length - 1; i++ )
 			{
 				const array = newArr[i].array;
@@ -260,12 +267,18 @@ class MyCalcBlocks
 				
 				console.log(array, pStart, array2[0], array[1]);
 				
-				
+				if(pStart === 1) arrOrderIds.push(newArr[i].array[0]);
+				else arrOrderIds.push(newArr[i].array[1]);
+			
 				if(!(array2[0] === array[1] || array2[1] === array[0]))
 				{
 					pStart = (pStart === 0) ? 1 : 0;
 				}
-			}			
+			}
+			
+			arrW2.outside[ind].arrOrderIds = arrOrderIds;
+			
+			console.log(arrOrderIds);
 		}
 
 
@@ -306,9 +319,13 @@ class MyCalcBlocks
 			
 			const ind = arrW2.inside.length;
 			arrW2.inside[ind] = {data: [], lines2: null};
-				
 			
 			newArr.push(newArr[0]);
+			
+			const arrOrderIds = [];
+			if(pStart === 0) arrOrderIds.push(newArr[0].array[0]);
+			else arrOrderIds.push(newArr[0].array[1]);
+			
 			for ( let i = 0; i < newArr.length - 1; i++ )
 			{
 				const array = newArr[i].array;
@@ -321,13 +338,19 @@ class MyCalcBlocks
 				
 				console.log(array, pStart, array2[0], array[1]);
 				
+				if(pStart === 1) arrOrderIds.push(newArr[i].array[0]);
+				else arrOrderIds.push(newArr[i].array[1]);
 				
 				if(!(array2[0] === array[1] || array2[1] === array[0]))
 				{
 					pStart = (pStart === 0) ? 1 : 0;
 					side = pStart;					
 				}
-			}			
+			}
+
+			arrW2.inside[ind].arrOrderIds = arrOrderIds;
+			
+			console.log(arrOrderIds);
 		}
 
 		this.levelGroups = [];
@@ -338,7 +361,7 @@ class MyCalcBlocks
 		for ( let i = 0; i < arrW2.outside.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.outside[i].data, type: 'outside'});		
-			groups.push({type: 'outside', lines2: lines2, paramsBlock: {...paramsBlock} });
+			groups.push({type: 'outside', lines2: lines2, arrOrderIds: arrW2.outside[i].arrOrderIds, paramsBlock: {...paramsBlock} });
 			
 			this.levelGroups = groups;
 		}			
@@ -347,7 +370,7 @@ class MyCalcBlocks
 		for ( let i = 0; i < arrW2.inside.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.inside[i].data, type: 'inside'});		
-			groups.push({type: 'inside', lines2: lines2, paramsBlock: {...paramsBlock} });
+			groups.push({type: 'inside', lines2: lines2, arrOrderIds: arrW2.inside[i].arrOrderIds, paramsBlock: {...paramsBlock} });
 			
 			this.levelGroups = groups;
 		}
@@ -356,7 +379,7 @@ class MyCalcBlocks
 		for ( let i = 0; i < arrW2.single.length; i++ )
 		{
 			const lines2 = this.calcWalls({data: arrW2.single[i].data, type: 'single'});		
-			groups.push({type: 'single', lines2: lines2, paramsBlock: {...paramsBlock} });
+			groups.push({type: 'single', lines2: lines2, arrOrderIds: arrW2.single[i].arrOrderIds, paramsBlock: {...paramsBlock} });
 			
 			this.levelGroups = groups;
 		}		
@@ -946,7 +969,8 @@ findObjectsUntilRepetition(arrayObjects) {
 			
 			const points = wall.userData.wall.p;
 			const pIds = [points[0].userData.id, points[1].userData.id];
-			lines2.push({row: [data1, data2], walls: [wall], wallsClone: [], width, arrO, angle: 0, arrBloks: [], pIds});			
+			const pObjs = [points[0], points[1]];
+			lines2.push({row: [data1, data2], walls: [wall], wallsClone: [], width, arrO, angle: 0, arrBloks: [], pIds, pObjs});			
 			
 			lines[i].pos = posL1;
 			lines[i].pos2 = posL2;
@@ -1174,15 +1198,15 @@ findObjectsUntilRepetition(arrayObjects) {
 		{	
 			const idLevel = data[i].idLevel;
 			
-			if(id === idLevel && type === 'inside')
+			if(id === idLevel)
 			{
 				const groups = data[i].groups;
 
 				for ( let i2 = 0; i2 < groups.length; i2++ )
 				{	
-					if(groups[i2].type !== 'inside') continue;
+					if(groups[i2].type !== type) continue;
 					
-					arr.push(...groups[i2]);				
+					arr.push({...groups[i2]});				
 				}
 			}
 	
@@ -1549,6 +1573,7 @@ findObjectsUntilRepetition(arrayObjects) {
 			lines2[i - 1].walls.push(...lines2[n1].walls);
 			lines2[i - 1].arrO.push(...lines2[n1].arrO);			
 			lines2[i - 1].pIds.push(...lines2[n1].pIds);
+			lines2[i - 1].pObjs.push(...lines2[n1].pObjs);
 			
 			lines2.splice(i, 1);
 			i--;

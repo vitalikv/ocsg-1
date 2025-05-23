@@ -2,7 +2,9 @@
 // действия с мышей и все что касается с кликами
 class MyBlocksMouse
 {
-
+	isDown = false;
+	isMove = false;
+	offset = new THREE.Vector3();
 	
 	
 	clickRayhit({event})
@@ -18,6 +20,8 @@ class MyBlocksMouse
 		const ray = rayIntersect( event, walls, 'arr' );
 		if(ray.length > 0) { rayhit = ray[0]; }			
 
+
+		myCalcBlocks.myBlocksInfoPoints.deletePointsInfo();
 		
 		
 		if(rayhit)
@@ -42,6 +46,10 @@ class MyBlocksMouse
 			}
 			
 			myCalcBlocks.myPanelWidgetsBlocks.setInputSize({size, type: 'm', callBack});
+			
+			
+			const points = myCalcBlocks.myBlocksInfoPoints.getPointsFromGroup({group});
+			myCalcBlocks.myBlocksInfoPoints.crPoints({arr: points});
 			
 			myComposerRenderer.outlineAddObj({arr: arrWClone});
 		}
