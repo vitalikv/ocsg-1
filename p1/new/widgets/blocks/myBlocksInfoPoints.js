@@ -31,6 +31,7 @@ class MyBlocksInfoPoints
 		const material = new THREE.MeshStandardMaterial({ color: 0xffffff, side: THREE.DoubleSide, lightMap: lightMap_1 });
 
 		const obj = new THREE.Mesh( geometry, material );
+		obj.userData.tag = 'blockPointInfo';
 		obj.rotation.x = -Math.PI/2;
 		scene.add( obj );
 		
@@ -129,6 +130,7 @@ class MyBlocksInfoPoints
 	}
 	
 	
+	// удаляем инфо точки
 	deletePointsInfo()
 	{
 		const points = this.getPointsInfo();
@@ -139,7 +141,9 @@ class MyBlocksInfoPoints
 			
 			disposeNode(point);
 			scene.remove(point);
-		}		
+		}
+
+		this.setPointsInfo({points: []});
 	}
 }
 

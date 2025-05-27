@@ -21,7 +21,7 @@ class MyCalcBlocks
 		this.isInit = true;
 		
 		this.myBlocksMode = new MyBlocksMode();
-		this.myBlocksMouse = new MyBlocksMouse();
+		this.myBlocksMouse = new MyBlocksMouse({container: containerF});
 		this.myBlocksCamera = new MyBlocksCamera();
 		this.myBlocksWalls = new MyBlocksWalls();
 		this.myBlocksObjs = new MyBlocksObjs();

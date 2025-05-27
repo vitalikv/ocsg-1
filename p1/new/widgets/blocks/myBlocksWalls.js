@@ -121,7 +121,8 @@ class MyBlocksWalls
 		const mat = new THREE.MeshStandardMaterial({ color, lightMap: lightMap_1 });
 		const material = [ mat.clone(), mat.clone(), mat.clone(), mat.clone() ];
 		
-		let wallClone = new THREE.Mesh(geometry, material);
+		const wallClone = new THREE.Mesh(geometry, material);
+		wallClone.userData.tag = 'blockWallClone';
 		
 		wallClone.position.copy( posW );
 		wallClone.quaternion.copy( quaW );

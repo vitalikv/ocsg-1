@@ -14,10 +14,6 @@ class MyManagerClick
 		
 		if(myCalcBlocks.myBlocksMode.getActiveMode())
 		{
-			const ray = myCalcBlocks.myBlocksMouse.clickRayhit({event});
-			
-			rayhit = null;
-			
 			return rayhit;
 		}
 		
