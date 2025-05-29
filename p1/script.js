@@ -2,7 +2,7 @@
 var containerF = document.getElementById( 'canvasFrame' );
 var canvas = document.createElement( 'canvas' );
 var context = canvas.getContext( 'webgl2' );
-var renderer = new THREE.WebGLRenderer( { canvas: canvas, context: context, logarithmicDepthBuffer: true, preserveDrawingBuffer: true, } );
+var renderer = new THREE.WebGLRenderer( { canvas: canvas, context: context, logarithmicDepthBuffer: true, preserveDrawingBuffer: true, alpha: true } );
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.localClippingEnabled = true;
 renderer.shadowMap.enabled = false;
@@ -269,46 +269,80 @@ function upPosLabels_2(cdm)
   
 
 
+
 function backgroundPlane()
 {
-	var geometry = new THREE.PlaneGeometry( 1000, 1000 );
-	var material = new THREE.MeshLambertMaterial( {color: 0xffffff, polygonOffset: true, polygonOffsetFactor: 10.0, polygonOffsetUnits: 4.0 } );
-	//var material = new THREE.MeshPhongMaterial( {color: 0xffffff, transparent: true, opacity: 0.5  } );
-	var planeMath = new THREE.Mesh( geometry, material );
+	const geometry = new THREE.PlaneGeometry( 1000, 1000 );
+	const material = new THREE.MeshStandardMaterial( {color: 0xffffff, transparent: true, side: THREE.DoubleSide  } );
+	//const material = new THREE.MeshLambertMaterial( {color: 0xffffff, polygonOffset: true, polygonOffsetFactor: 10.0, polygonOffsetUnits: 4.0 } );
+	
+	const planeMath = new THREE.Mesh( geometry, material );
 	planeMath.position.y = -0.02;
 	planeMath.rotation.set(-Math.PI/2, 0, 0);
 	scene.add( planeMath );	
 	
 	
-	var cdm = {};
-	var img = infProject.path+'img/f1.png';
-	
-	new THREE.TextureLoader().load(img, function ( image )  
+	const applyTexture = ( image ) => 
 	{
-		material.color = new THREE.Color( 0xffffff );
-		var texture = image;			
+		const texture = image;			
 		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 		texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
 		
-		if(cdm.repeat)
-		{
-			texture.repeat.x = cdm.repeat.x;
-			texture.repeat.y = cdm.repeat.y;			
-		}
-		else
-		{
-			texture.repeat.x = 1000;
-			texture.repeat.y = 1000;			
-		}
+		texture.repeat.x = 1000;
+		texture.repeat.y = 1000;			
 		
 		texture.needsUpdate = true;
 		
 		material.map = texture; 
-		material.lightMap = lightMap_1;
+		//material.lightMap = lightMap_1;
 		material.needsUpdate = true; 					
 		
 		renderCamera();
-	});		
+	};
+
+	
+	const loadImg = ({src}) =>
+	{
+		const img = new Image();
+		img.crossOrigin = "anonymous";
+		img.src = src;
+
+		img.onload = () => 
+		{
+			const canvas = document.createElement('canvas');
+			canvas.width = img.width;
+			canvas.height = img.height;
+			const ctx = canvas.getContext('2d');
+			ctx.drawImage(img, 0, 0);
+
+			const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+			const data = imageData.data;
+
+			// Заменяем белый (RGB ≈ 255,255,255) на прозрачный
+			for (let i = 0; i < data.length; i += 4) 
+			{
+				const r = data[i];
+				const g = data[i + 1];
+				const b = data[i + 2];
+				
+				// Если цвет близок к белому (можно настроить порог)
+				if (r > 240 && g > 240 && b > 240) 
+				{
+					data[i + 3] = 0; // Устанавливаем альфа = 0
+				}
+			}
+
+			ctx.putImageData(imageData, 0, 0);
+			
+			// Создаём текстуру из Canvas
+			const processedTexture = new THREE.CanvasTexture(canvas);
+			
+			applyTexture(processedTexture);
+		};			
+	}
+	
+	// загружаем img и делаем белый цвет прозрачным (альфа-канал)
+	loadImg({src: infProject.path+'img/f1.png'});
 	
 	return planeMath;
 }
@@ -1080,7 +1114,6 @@ let windDivSubs;
 let myPanelR;
 let myCatalogList;
 let myPanelWF;
-let myPanelWidgetsBlocks;
 
 let myCookie;
 let myTexture;
