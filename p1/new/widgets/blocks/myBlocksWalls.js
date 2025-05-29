@@ -60,7 +60,7 @@ class MyBlocksWalls
 
 						wallClone.userData.group = groups[i2];
 						wallClone.userData.line = line;
-						wallClone.userData.colors = { def: 0x696969, select: color };
+						wallClone.userData.colors = { def: 0x8c8c8c, select: color };
 						
 						line.wallsClone.push(wallClone);
 						
@@ -149,7 +149,20 @@ class MyBlocksWalls
 				
 				roof[i4].geometry.dispose();					
 			}
-		}				
+		}	
+
+
+		wallClone.geometry.computeFaceNormals();	
+		boxUnwrapUVs(wallClone.geometry);
+		for ( let i2 = 0; i2 < wallClone.geometry.faces.length; i2++ )
+		{
+			wallClone.geometry.faces[i2].normal.normalize();
+			if(wallClone.geometry.faces[i2].normal.z == 1) { wallClone.geometry.faces[i2].materialIndex = 1; }
+			else if(wallClone.geometry.faces[i2].normal.z == -1) { wallClone.geometry.faces[i2].materialIndex = 2; }
+			else if(wallClone.geometry.faces[i2].normal.x == 1) { wallClone.geometry.faces[i2].materialIndex = 0; }
+			else if(wallClone.geometry.faces[i2].normal.x == -1) { wallClone.geometry.faces[i2].materialIndex = 0; }
+			else { wallClone.geometry.faces[i2].materialIndex = 3; }
+		}		
 		
 		scene.add(wallClone);
 		
@@ -210,7 +223,16 @@ class MyBlocksWalls
 			const wall = walls[i];
 			
 			const color = (mode === 'def') ? wall.userData.colors.def : wall.userData.colors.select;
-			wall.material[0].color = new THREE.Color(color);	
+			
+			for ( let i2 = 0; i2 < wall.material.length; i2++ )
+			{
+				wall.material[i2].color = new THREE.Color(color);
+			}
+			if(mode === 'def') 
+			{
+				wall.material[0].color = new THREE.Color(0x696969);
+				wall.material[3].color = new THREE.Color(0x696969);
+			}
 		}		
 	}
 

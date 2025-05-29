@@ -132,47 +132,58 @@ class MyBlocksObjs
 	// расчет для кладки блоков (1 и 2 ряд)
 	caclCladka({group, showLines = false})
 	{
-		const offset = this.getOffsetBlock();
+		const offsetBlock = this.getOffsetBlock();
 		
 		const type = group.type;
 		const lines2 = group.lines2;
 		const dlina = group.paramsBlock.length;
 		
+		
+		
 		// зазор/кладка для первых и последних блоков		
 		for ( let i = 0; i < lines2.length; i++ )
 		{	
+			lines2[i].row[0].posNew = [lines2[i].row[0].pos[0].clone(), lines2[i].row[0].pos[1].clone()];
+			lines2[i].row[1].posNew = [lines2[i].row[1].pos[0].clone(), lines2[i].row[1].pos[1].clone()];
+			
+			lines2[i].row[0].cut1.posNew = lines2[i].row[0].cut1.pos.clone();
+			lines2[i].row[0].cut2.posNew = lines2[i].row[0].cut2.pos.clone();	
+			lines2[i].row[1].cut1.posNew = lines2[i].row[1].cut1.pos.clone();
+			lines2[i].row[1].cut2.posNew = lines2[i].row[1].cut2.pos.clone();
+			
 			const dir = lines2[i].row[0].dir;
+			const offset = dir.clone().multiplyScalar(offsetBlock);
 			
 			if(type === 'single')
 			{
 				if(i === 0)
 				{
-					lines2[i].row[0].cut2.pos.sub(dir.clone().multiplyScalar(offset));
+					lines2[i].row[0].cut2.posNew.sub(offset);
 				}
 				else if(i === lines2.length - 1)
 				{
-					lines2[i].row[1].cut1.pos.add(dir.clone().multiplyScalar(offset));
+					lines2[i].row[1].cut1.posNew.add(offset);
 				}
 				else
 				{
-					lines2[i].row[0].cut2.pos.sub(dir.clone().multiplyScalar(offset));
-					lines2[i].row[1].cut1.pos.add(dir.clone().multiplyScalar(offset));						
+					lines2[i].row[0].cut2.posNew.sub(offset);
+					lines2[i].row[1].cut1.posNew.add(offset);						
 				}
 				
 				continue;
 			}
 			
 			
-			lines2[i].row[0].cut2.pos.sub(dir.clone().multiplyScalar(offset));
-			lines2[i].row[1].cut1.pos.add(dir.clone().multiplyScalar(offset));	
+			lines2[i].row[0].cut2.posNew.sub(offset);
+			lines2[i].row[1].cut1.posNew.add(offset);	
 
 			if(type === 'inside')
 			{
-				lines2[i].row[0].pos[0].add(dir.clone().multiplyScalar(offset));
-				lines2[i].row[1].pos[0].add(dir.clone().multiplyScalar(offset));
+				lines2[i].row[0].posNew[0].add(offset);
+				lines2[i].row[1].posNew[0].add(offset);
 				
-				lines2[i].row[0].cut1.pos.add(dir.clone().multiplyScalar(offset));
-				lines2[i].row[1].cut2.pos.sub(dir.clone().multiplyScalar(offset));					
+				lines2[i].row[0].cut1.posNew.add(offset);
+				lines2[i].row[1].cut2.posNew.sub(offset);					
 			}			
 		}			
 
@@ -180,16 +191,16 @@ class MyBlocksObjs
 		// смещаем 2-ой ряд, так чтобы блоки относительно 1-ого были смещены на половину длины блока (+кладка)
 		for ( let i = 0; i < lines2.length; i++ )
 		{
-			const pos1 = lines2[i].row[0].pos[0];
-			const pos2 = lines2[i].row[1].pos[0];
+			const pos1 = lines2[i].row[0].posNew[0];
+			const pos2 = lines2[i].row[1].posNew[0];
 			const dir = lines2[i].row[1].dir;
 			
 			const dist = pos1.distanceTo(pos2);
 			
-			const offset2 = (type === 'single') ? 0 : offset;
+			const offset2 = (type === 'single') ? 0 : offsetBlock;
 			
 			const posStart2 = pos2.clone().sub(dir.clone().multiplyScalar(dist - offset2 + dlina/2));
-			lines2[i].row[1].pos[0] = posStart2;
+			lines2[i].row[1].posNew[0] = posStart2;
 		}
 
 		
@@ -216,22 +227,56 @@ class MyBlocksObjs
 		const offset = this.getOffsetBlock();					
 		const h = group.paramsBlock.height;
 		
+		const lines2 = group.lines2;
 		
 		let countY = 0;			
+		const rowBlocks = [];
 		
 		for (let i = 0; i < levelHeight; i += h + offset) 
 		{
 			let delLastBlock = countY % 2 === 0 ? false : true;
 			
-			if(countY < 2222) 
+			
+			if(countY < 2222) // создаем только 2 ряда блоков (потому что только они уникальные, все остальные будут такие же, за исключением высоты)
 			{
-				this.crBloksRow({group, currentY: i, levelHeight, delLastBlock});
+
+				
+				const arrBloks = this.crBloksRow({group, currentY: i, levelHeight, delLastBlock});
+				
+				for (let i2 = 0; i2 < lines2.length; i2++)
+				{
+					//lines2[i2].arrBloks.push(...arrBloks);
+				}
+
+				//rowBlocks.push([...arrBloks]);
+			}
+			else //if(countY < 4)  копируем 2 ряда блоков и строим всю стену
+			{
+				const arrBloks = [];
+				
+				const ind = delLastBlock ? 1 : 0;
+				const bloks = rowBlocks[ind];			
+				
+				for (let i3 = 0; i3 < bloks.length; i3++)
+				{
+					const y = (ind === 0) ? i : i - (h + offset);
+					const blok = bloks[i3].clone();
+					blok.position.y += y;
+					scene.add(blok);
+					
+					arrBloks.push(blok);
+				}					
+
+				for (let i2 = 0; i2 < lines2.length; i2++)
+				{
+					lines2[i2].arrBloks.push(...arrBloks);
+				}
 			}
 			
 			countY++;
 		}
 		
-		const lines2 = group.lines2;
+		
 		
 		// обрезаем блоки под окна/двери
 		for (let i = 0; i < lines2.length; i++)
@@ -251,7 +296,7 @@ class MyBlocksObjs
 		
 		
 		
-		
+		// обрезаем блоки крышами
 		for (let i = 0; i < lines2.length; i++)
 		{
 			let arrBloks = lines2[i].arrBloks;
@@ -282,15 +327,17 @@ class MyBlocksObjs
 		const dlina = group.paramsBlock.length;
 		const h = group.paramsBlock.height;
 		
+		const arrBloks = [];
+		
 		//lines2.length = 0;
 		for (let i = 0; i < lines2.length; i++)
 		{
 			const result = lines2[i].row[ind];
 			
-			const dist = result.pos[0].distanceTo(result.pos[1]);
+			const dist = result.posNew[0].distanceTo(result.posNew[1]);
 			
-			const answer = this.rowBlockes2({x: dist, posStart: result.pos[0], dir: result.dir, currentY, normal: result.normal, z: lines2[i].width, dlina, h});
-			let arrBloks = answer.arrBloks;
+			const answer = this.rowBlockes2({x: dist, posStart: result.posNew[0], dir: result.dir, currentY, normal: result.normal, z: lines2[i].width, dlina, h});
+			const bloks = answer.arrBloks;
 			
 			const z = lines2[i].width;
 			
@@ -299,7 +346,7 @@ class MyBlocksObjs
 			{
 				const normal = result.cut1.normal;
 				const dir2 = result.cut1.dir;
-				const pos = result.cut1.pos;
+				const pos = result.cut1.posNew;
 				const offsetZ = 0;
 		
 				const geometry = createGeometryCube(dlina * 2, levelHeight + 1, z * 10);
@@ -313,7 +360,7 @@ class MyBlocksObjs
 				//scene.add(obj);	
 				//obj.visible = false;
 
-				arrBloks = this.cutBlockes({obj, w: arrBloks});
+				this.cutBlockes({obj, w: bloks});
 			}
 
 			// обрезаем конец стены
@@ -321,7 +368,7 @@ class MyBlocksObjs
 			{
 				const normal = result.cut2.normal;
 				const dir2 = result.cut2.dir;
-				const pos = result.cut2.pos;
+				const pos = result.cut2.posNew;
 				const offsetZ = 0;
 		
 				const geometry = createGeometryCube(dlina * 2, levelHeight + 1, z * 10);
@@ -335,7 +382,7 @@ class MyBlocksObjs
 				//scene.add(obj);	
 				//obj.visible = false;
 				
-				arrBloks = this.cutBlockes({obj, w: arrBloks});				
+				this.cutBlockes({obj, w: bloks});				
 			}
 
 			// обрезаем вверх стены
@@ -348,7 +395,7 @@ class MyBlocksObjs
 				const material = new THREE.MeshStandardMaterial({ color: 0x0000ff, lightMap : lightMap_1 });
 				const obj = new THREE.Mesh( geometry, material ); 
 				
-				const posC1 = result.pos[1].clone().sub(result.pos[0]).divideScalar(2).add(result.pos[0]);
+				const posC1 = result.posNew[1].clone().sub(result.posNew[0]).divideScalar(2).add(result.posNew[0]);
 				posC1.add(new THREE.Vector3(0, levelHeight, 0));
 				posC1.add(normal.clone().multiplyScalar((z/2) * 2));
 				
@@ -360,11 +407,13 @@ class MyBlocksObjs
 				//scene.add(obj);	
 				//obj.visible = false;
 				
-				arrBloks = this.cutBlockes({obj, w: arrBloks});
+				this.cutBlockes({obj, w: bloks});
 			}			
 		
-			lines2[i].arrBloks.push(...arrBloks);
-		}		
+			lines2[i].arrBloks.push(...bloks);
+		}
+
+		return arrBloks;
 	}
 	
 
@@ -543,7 +592,7 @@ class MyBlocksObjs
 			const {length, height, width} = arrParams[i];
 			const geometry = createGeometryCube(length, height, width);
 			
-			const volume = this.calculateMeshVolume(geometry);
+			const volume = myCalcBlocks.myBlocksVolume.calculateMeshVolume(geometry);
 			
 			arr.push({params: arrParams[i], geometry, volume});
 		}
@@ -572,31 +621,7 @@ class MyBlocksObjs
 	}	
 
 	
-	// расчитываем объем блока
-	calculateMeshVolume(geometry) 
-	{
-		const vertices = geometry.vertices; // Массив вершин
-		const faces = geometry.faces; // Массив граней (треугольников)
-		let volume = 0;
 
-		// Проходим по всем граням (треугольникам)
-		for (let i = 0; i < faces.length; i++) 
-		{
-			const face = faces[i];
-
-			// Получаем вершины треугольника
-			const a = vertices[face.a];
-			const b = vertices[face.b];
-			const c = vertices[face.c];
-
-			// Вычисляем объём для текущего треугольника
-			const cross = new THREE.Vector3();
-			cross.crossVectors(new THREE.Vector3().subVectors(b, a), new THREE.Vector3().subVectors(c, a));
-			volume += a.dot(cross) / 6;
-		}
-
-		return Math.abs(volume); // Возвращаем абсолютное значение объёма
-	}
 
 
 	// меняем высоту блоков при переключении этажа
@@ -609,6 +634,39 @@ class MyBlocksObjs
 			arr[i].position.y -= posY;
 		}		
 	}
+
+
+	// получить все блоки (всех этажей) или только одного этажа по id
+	getLinesAllBlocks({id = undefined})
+	{
+		const arr = [];
+		
+		const data = myCalcBlocks.getLevelsData();
+		
+		for ( let i = 0; i < data.length; i++ )
+		{	
+			const idLevel = data[i].idLevel;
+			
+			if(id !== undefined && id !== idLevel) continue;
+	
+			const groups = data[i].groups;
+
+			for ( let i2 = 0; i2 < groups.length; i2++ )
+			{		
+				const lines2 = groups[i2].lines2;
+				const paramsBlock = groups[i2].paramsBlock;
+				
+				for ( let i3 = 0; i3 < lines2.length; i3++ )
+				{	
+					const width = lines2[i3].width;
+					arr.push({paramsBlock: {length: paramsBlock.length, height: paramsBlock.height, width}, arrBloks: lines2[i3].arrBloks});
+				}				
+			}			
+		}
+
+		return arr;
+	}
+
 	
 	// получить все блоки (всех этажей) или только одного этажа по id
 	getAllBlocks({id = undefined})
