@@ -636,7 +636,7 @@ class MyBlocksObjs
 	}
 
 
-	// получить все блоки (всех этажей) или только одного этажа по id
+	// получить все блоки со параметрами (для отображения в ui список)
 	getLinesAllBlocks({id = undefined})
 	{
 		const arr = [];
@@ -658,8 +658,9 @@ class MyBlocksObjs
 				
 				for ( let i3 = 0; i3 < lines2.length; i3++ )
 				{	
+					const wallsClone = lines2[i3].wallsClone;
 					const width = lines2[i3].width;
-					arr.push({paramsBlock: {length: paramsBlock.length, height: paramsBlock.height, width}, arrBloks: lines2[i3].arrBloks});
+					arr.push({wallsClone, paramsBlock: {length: paramsBlock.length, height: paramsBlock.height, width}, arrBloks: lines2[i3].arrBloks});
 				}				
 			}			
 		}

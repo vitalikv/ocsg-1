@@ -136,28 +136,43 @@ class MyBlocksMouse
 			const group = object.userData.group;
 			const line = object.userData.line;
 			
+			const typeTab = myCalcBlocks.myBlocksMode.getTab();
+			
 			console.log(3333, group, line);
 			
-			const sizeBlock = group.paramsBlock;
-			
-			const size = { length: sizeBlock.length, height: sizeBlock.height, width: line.width };
-			
-			// после изменения в input (length или height), получаем key (length или height) и значение
-			const callBack = (data) => 
-			{ 
-				const paramsBlock = {};
-				paramsBlock[data.key] = data.result.value;
+			if(typeTab === 'setting')
+			{
+				const sizeBlock = group.paramsBlock;
 				
-				myCalcBlocks.myBlocksObjs.setParamsBlock({group, paramsBlock, type: 'mm'})
+				const size = { length: sizeBlock.length, height: sizeBlock.height, width: line.width };
+				
+				// после изменения в input (length или height), получаем key (length или height) и значение
+				const callBack = (data) => 
+				{ 
+					const paramsBlock = {};
+					paramsBlock[data.key] = data.result.value;
+					
+					myCalcBlocks.myBlocksObjs.setParamsBlock({group, paramsBlock, type: 'mm'})
+				}
+				
+				myCalcBlocks.myPanelWidgetsBlocks.setInputSize({size, type: 'm', callBack});
+				
+				
+				const points = myCalcBlocks.myBlocksInfoPoints.getPointsFromGroup({group});
+				myCalcBlocks.myBlocksInfoPoints.crPoints({arr: points});
+				
+				myComposerRenderer.outlineAddObj({arr: arrWClone});							
 			}
 			
-			myCalcBlocks.myPanelWidgetsBlocks.setInputSize({size, type: 'm', callBack});
-			
-			
-			const points = myCalcBlocks.myBlocksInfoPoints.getPointsFromGroup({group});
-			myCalcBlocks.myBlocksInfoPoints.crPoints({arr: points});
-			
-			myComposerRenderer.outlineAddObj({arr: arrWClone});			
+			// кликаем на стену
+			if(typeTab === 'calc3D')
+			{
+				const wallsClone = line.wallsClone;
+				
+				myComposerRenderer.outlineAddObj({arr: wallsClone});
+				
+				myCalcBlocks.myPanelWidgetsBlocks.myUiBlocksCount.scrollToItem({wallClone: object});
+			}
 		}
 		
 		renderCamera();

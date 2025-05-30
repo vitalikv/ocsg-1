@@ -64,6 +64,7 @@ new/ui/right-panel/colorPicker/myColorPicker.js
 new/ui/right-panel/catalog/myCatalogList.js
 new/ui/right-panel/warmFloor/myPanelWF.js
 new/ui/right-panel/widgets/blocks/myPanelWidgetsBlocks.js
+new/ui/right-panel/widgets/blocks/myUiBlocksCount.js
 new/tools/myToolPG.js
 new/tools/myToolPG_UI.js
 new/tools/myPivot.js

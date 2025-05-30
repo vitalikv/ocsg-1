@@ -18,7 +18,7 @@ class MyPanelWidgetsBlocks
 	inputSizeZ;
 	inputOffset;
 	
-	divInfoCount;
+	myUiBlocksCount;
 	
 	
 	constructor()
@@ -31,6 +31,8 @@ class MyPanelWidgetsBlocks
 		this.container = document.querySelector('[nameId="panelR"]');
 		this.divPanel = this.crPanel();
 		this.container.append(this.divPanel);
+		
+		this.myUiBlocksCount = new MyUiBlocksCount();
 	}
 
 
@@ -299,14 +301,14 @@ class MyPanelWidgetsBlocks
 		btnCalc3D.onmousedown = () => 
 		{ 
 			myCalcBlocks.myBlocksMode.enableBlocks();
-			this.upInfoCountBlocks({});
+			this.myUiBlocksCount.upInfoCountBlocks({});
 		}	
 
 		const btnClearCalc = div.querySelector('[nameId="btnClearCalc"]');		
 		btnClearCalc.onmousedown = () => 
 		{ 
 			myCalcBlocks.myBlocksMode.disableBlocks();
-			this.clearInfoCountBlocks();
+			this.myUiBlocksCount.clearInfoCountBlocks();
 		}
 
 		this.checkBox1 = div.querySelector('[nameId="item_1"]');
@@ -331,8 +333,8 @@ class MyPanelWidgetsBlocks
 		
 		this.appointDivLevels({container: this.content1});
 		
-		this.divInfoCount = div.querySelector('[nameId="infoCount"]');
-		
+				
+		this.myUiBlocksCount.init({divInfoCount: div.querySelector('[nameId="infoCount"]')})
 		
 		this.initEvents();
 	}
@@ -368,121 +370,7 @@ class MyPanelWidgetsBlocks
 	}
 
 	
-	upInfoCountBlocks({data})
-	{
-		this.clearInfoCountBlocks();
-		
 
-		const css1 = `display: flex; align-items: center; padding: 10px; margin: 3px 0; border: 1px solid #ccc; cursor: pointer;`;
-		const cssItem = `padding: 5px 10px; margin: 1px 0; border: 1px solid #ccc;`;
-
-		const svg1 = 
-		`<div nameid="shCp_1" style="margin-right: 15px; width: 10px; height: 20px;">				
-			<svg height="100%" width="100%" viewBox="0 0 100 100">					
-				<polygon points="0,0 100,0 50,100" style="stroke:#222222; stroke-width:4; fill: #fff;"></polygon>				
-			</svg>
-		</div>`;	
-
-		// группирует объекты по параметрам и суммирует их количество
-		const sumCountsByBlockParams = ({data}) =>
-		{
-			const result = data.reduce((acc, item) => 
-			{
-				// Преобразуем paramsBlock в строку для сравнения
-				const paramsKey = JSON.stringify(item.paramsBlock);
-
-				// Если такой paramsBlock уже есть, прибавляем count
-				if (acc[paramsKey]) 
-				{
-					acc[paramsKey].totalCount += item.count;
-				}			
-				else 	// Иначе создаем новую запись
-				{
-					acc[paramsKey] = { paramsBlock: item.paramsBlock, totalCount: item.count};
-				}
-
-				return acc;
-			}, {});
-
-			// Преобразуем объект в массив (если нужно)
-			const groupedData = Object.values(result);		
-
-			return groupedData;
-		}
-		
-		
-		for ( let i = 0; i < 4; i++ )
-		{
-			const arr = myCalcBlocks.myBlocksObjs.getLinesAllBlocks({id: i});
-			
-			const arrCount = [];
-			
-			for ( let i2 = 0; i2 < arr.length; i2++ )
-			{
-				const count = arr[i2].arrBloks.length;
-				const paramsBlock = arr[i2].paramsBlock;
-				
-				arrCount.push({count, paramsBlock});				
-			}
-			
-			const totalGroup = sumCountsByBlockParams({data: arrCount});
-			
-			// общее кол-во блоков на этаже (по группам)
-			let htmlTotal = ``;			
-			for ( let i2 = 0; i2 < totalGroup.length; i2++ )
-			{
-				const paramsBlock = totalGroup[i2].paramsBlock;
-				const txtSizeBlock = `(${paramsBlock.length * 1000} х ${paramsBlock.height * 1000} х ${paramsBlock.width * 1000})`;
-				
-				htmlTotal += `<div>${totalGroup[i2].totalCount} шт ${txtSizeBlock}</div>`;
-			}
-			
-			// кол-во блоков на одной стене (для текущего этажа)
-			let htmlItems = ``;	
-			for ( let i2 = 0; i2 < arrCount.length; i2++ )
-			{
-				const count = arrCount[i2].count;
-				const paramsBlock = arrCount[i2].paramsBlock;
-				const txtSizeBlock = `(${paramsBlock.length * 1000} х ${paramsBlock.height * 1000} х ${paramsBlock.width * 1000})`;
-				htmlItems += `<div style="${cssItem}">${i2+1}. стена: ${count} шт ${txtSizeBlock}</div>`;
-			}
-
-			// собираем все вместе для текущего этажа
-			const html = 
-			`<div>
-				<div nameId="level" style="${css1}">
-					${svg1}
-					<div>
-						<div style="font-weight: bold;">${i+1} этаж общее кол-во:</div>
-						${htmlTotal}
-					</div>
-				</div>
-				<div nameId="items" style="display: none;">${htmlItems}</div>
-			</div>`;
-
-			let div = document.createElement('div');
-			div.innerHTML = html;
-			div = div.children[0];
-
-			this.divInfoCount.append(div);
-			
-			const btn = div.querySelector('[nameId="level"]');
-			const divItems = div.querySelector('[nameId="items"]');
-			
-			btn.onmousedown = () => 
-			{
-				const value = (divItems.style.display === 'none') ? '' : 'none';
-				divItems.style.display = value;
-			}
-		}
-
-	}
-	
-	
-	clearInfoCountBlocks()
-	{
-		this.divInfoCount.innerHTML = '';
-	}
 	
 	
 	initEvents()
