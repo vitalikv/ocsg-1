@@ -16,7 +16,8 @@ class MyUiBlocksSize
 		
 		this.wrapDiv = this.crDiv();
 		this.container.append(this.wrapDiv);
-
+		this.hide();
+		
 		this.inputSizeX = this.wrapDiv.querySelector('[nameId="inputSizeObjX"]');
 		this.inputSizeY = this.wrapDiv.querySelector('[nameId="inputSizeObjY"]');
 		this.inputSizeZ = this.wrapDiv.querySelector('[nameId="inputSizeObjZ"]');
@@ -26,16 +27,33 @@ class MyUiBlocksSize
 	crDiv()
 	{
 		const div = document.createElement('div');
-		div.innerHTML = this.htmlInputSize();
+		div.innerHTML = this.htmlWrapBlockSize();
 		return div.children[0];	
 	}	
 	
+	
+	htmlWrapBlockSize()
+	{
+		const htmlInputSize = this.htmlInputSize();
+		
+		const css1 = `display: flex; align-items: center;`;
+		
+		const html =
+		`<div style="display: flex; flex-direction: column; margin: 20px 0 0 0; padding: 10px; font-size: 16px; color: #666; border: 1px solid #ccc;">
+			<div style="${css1}">
+				<div>Размер блока (мм)</div>						
+			</div>
+			<div nameId="wrapInputSize">${htmlInputSize}</div>
+		</div>`;
 
+		return html;
+	}
+	
 	htmlInputSize()
 	{
 		const css1 = `pointer-events: none; user-select: none; cursor: default; background-color: #f0f0f0;`;
 		
-		let html = 
+		const html = 
 		`<div style="display: -webkit-box; display: flex; margin-top: 20px; font-size: 12px;">
 			<div style="display: -webkit-box; display: flex;">
 				<div>
@@ -151,6 +169,16 @@ class MyUiBlocksSize
 		addEvent({input: this.inputSizeY, key: 'height', limit: [100, 1000]});				
 	}
 	
+	
+	show()
+	{
+		this.wrapDiv.style.display = '';
+	}
+	
+	hide()
+	{
+		this.wrapDiv.style.display = 'none';
+	}
 }
 
 

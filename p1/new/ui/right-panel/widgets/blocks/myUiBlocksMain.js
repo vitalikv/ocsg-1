@@ -141,13 +141,8 @@ class MyUiBlocksMain
 						${htmlOffset}
 					</div>					
 				</div>
-
-				<div style="display: flex; flex-direction: column; margin: 20px 0 0 0; padding: 10px; font-size: 16px; color: #666; border: 1px solid #ccc;">
-					<div style="${css1}">
-						<div>Размер блока (мм)</div>						
-					</div>
-					<div nameId="wrapInputSize"></div>
-				</div>				
+				
+				<div nameId="wrapBlockSize"></div>
 			</div>			
 			
 			<div class="flex_column_1" nameId="wrapCalc3D" style="display: none; overflow: auto;">
@@ -234,6 +229,7 @@ class MyUiBlocksMain
 		btnCalc3D.onmousedown = () => 
 		{ 
 			myCalcBlocks.myBlocksMode.enableBlocks();
+			this.myUiBlocksCount.show();
 			this.myUiBlocksCount.upInfoCountBlocks({});
 		}	
 
@@ -242,6 +238,7 @@ class MyUiBlocksMain
 		{ 
 			myCalcBlocks.myBlocksMode.disableBlocks();
 			this.myUiBlocksCount.clearInfoCountBlocks();
+			this.myUiBlocksCount.hide();
 		}
 
 		this.checkBox1 = div.querySelector('[nameId="item_1"]');
@@ -265,7 +262,7 @@ class MyUiBlocksMain
 		this.appointDivLevels({container: this.content1});
 		
 				
-		this.myUiBlocksSize.init({container: this.divPanel.querySelector('[nameId="wrapInputSize"]')});
+		this.myUiBlocksSize.init({container: this.divPanel.querySelector('[nameId="wrapBlockSize"]')});
 		this.myUiBlocksCount.init({container: this.divPanel.querySelector('[nameId="wrapDivSum"]')});
 		
 		this.initEvents();

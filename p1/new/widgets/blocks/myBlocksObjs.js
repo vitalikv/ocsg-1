@@ -727,7 +727,11 @@ class MyBlocksObjs
 					lines2[i3].arrBloks.length = 0;
 				}				
 			}			
-		}		
+		}
+
+
+		myCalcBlocks.myUiBlocksMain.myUiBlocksCount.clearInfoCountBlocks();
+		myCalcBlocks.myUiBlocksMain.myUiBlocksCount.hide();		
 	}
 }
 

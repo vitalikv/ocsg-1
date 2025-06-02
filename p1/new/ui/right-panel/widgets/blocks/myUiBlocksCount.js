@@ -13,7 +13,8 @@ class MyUiBlocksCount
 		
 		this.wrapDiv = this.crDiv();
 		this.container.append(this.wrapDiv);
-
+		this.hide();
+		
 		this.divList = this.wrapDiv.querySelector('[nameId="infoCount"]');
 	}
 
@@ -221,11 +222,6 @@ class MyUiBlocksCount
 		item.style.background = '#d5d5d5';
 	}
 	
-	// очищаем список
-	clearInfoCountBlocks()
-	{
-		this.divList.innerHTML = '';
-	}
 	
 	// когда в 3d кликнули на стену, показываем в ui списке эту стену
 	scrollToItem({wallClone}) 
@@ -248,6 +244,23 @@ class MyUiBlocksCount
 				break;
 			}
 		}
+	}
+
+	show()
+	{
+		this.wrapDiv.style.display = '';
+	}
+	
+	hide()
+	{
+		this.wrapDiv.style.display = 'none';
+	}
+
+
+	// очищаем список
+	clearInfoCountBlocks()
+	{
+		this.divList.innerHTML = '';
 	}	
 }
 

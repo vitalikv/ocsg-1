@@ -6,6 +6,7 @@ class MyBlocksMouse
 	isMove = false;
 	offset = new THREE.Vector3();
 	rayhit = null;
+	actData = null;
 	
 	
 	constructor({container})
@@ -38,15 +39,15 @@ class MyBlocksMouse
 		const btnType = getBtnType(event);
 		if(btnType === 'right') return;
 		
-		myMouse.clearClick();
-		myComposerRenderer.outlineRemoveObj();		
+		
+		this.deActSelected();		
 
 		this.isDown = true;
 		
 		if(myCameraOrbit.activeCam.userData.isCam2D)
 		{
 			const rayhit = this.clickRayhit({event});
-			this.actionRayhit({rayhit});
+			this.actSelected({rayhit});
 		}		
 	}
 
@@ -63,7 +64,7 @@ class MyBlocksMouse
 		if(!this.isMove && myCameraOrbit.activeCam.userData.isCam3D)
 		{
 			const rayhit = this.clickRayhit({event});
-			this.actionRayhit({rayhit});
+			this.actSelected({rayhit});
 		}
 		
 		myMouse.setMouseStop(false);
@@ -108,7 +109,7 @@ class MyBlocksMouse
 	
 	
 	// действие в зависимости от того какой rayhit
-	actionRayhit({rayhit})
+	actSelected({rayhit})
 	{
 		if(!rayhit) 
 		{
@@ -126,6 +127,8 @@ class MyBlocksMouse
 			myComposerRenderer.outlineAddObj({arr: [object]});
 			
 			myMouse.setMouseStop(true);
+			
+			this.setActData({type: 'clickPointInfo', objs: [object]});
 		}
 		
 		if(object.userData.tag === 'blockWallClone')
@@ -155,13 +158,17 @@ class MyBlocksMouse
 					myCalcBlocks.myBlocksObjs.setParamsBlock({group, paramsBlock, type: 'mm'})
 				}
 				
+				// вставляем в input размеры блоков на стенах
+				myCalcBlocks.myUiBlocksMain.myUiBlocksSize.show();
 				myCalcBlocks.myUiBlocksMain.myUiBlocksSize.setInputSize({size, type: 'm', callBack});
 				
 				
 				const points = myCalcBlocks.myBlocksInfoPoints.getPointsFromGroup({group});
 				myCalcBlocks.myBlocksInfoPoints.crPoints({arr: points});
 				
-				myComposerRenderer.outlineAddObj({arr: arrWClone});							
+				myComposerRenderer.outlineAddObj({arr: arrWClone});
+
+				this.setActData({type: 'clickContourWalls', objs: arrWClone});
 			}
 			
 			// кликаем на стену
@@ -172,12 +179,46 @@ class MyBlocksMouse
 				myComposerRenderer.outlineAddObj({arr: wallsClone});
 				
 				myCalcBlocks.myUiBlocksMain.myUiBlocksCount.scrollToItem({wallClone: object});
+				
+				this.setActData({type: 'clickLinesWalls', objs: wallsClone});
 			}
 		}
 		
 		renderCamera();
 	}
 	
+	
+	setActData(data)
+	{
+		this.actData = data;
+	}
+
+	getActData()
+	{
+		return this.actData;
+	}
+
+	
+	deActSelected()
+	{
+		myMouse.clearClick();
+		myComposerRenderer.outlineRemoveObj();	
+		
+		const actData = this.getActData();
+		if(!actData) return;
+		
+		if(actData.type === 'clickContourWalls')
+		{
+			myCalcBlocks.myUiBlocksMain.myUiBlocksSize.hide();
+		}
+		
+		if(actData.type === 'clickLinesWalls')
+		{
+			myCalcBlocks.myUiBlocksMain.myUiBlocksCount.setColorDefAllItems();
+		}
+
+		this.setActData(null);
+	}	
 }
 
 

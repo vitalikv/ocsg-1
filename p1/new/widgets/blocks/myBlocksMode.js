@@ -41,13 +41,15 @@ class MyBlocksMode
 	disableBlocks()
 	{
 		myCalcBlocks.disableBlocks();
-		this.setActiveBlocks({value: false});
+		this.setActiveBlocks({value: false});		
 	}
 	
 	
 	changeTab({type})
 	{
 		this.setTab({type});
+		
+		myCalcBlocks.myBlocksMouse.deActSelected();
 		
 		let mode = 'def';
 		if(type === 'setting') mode = 'select';
