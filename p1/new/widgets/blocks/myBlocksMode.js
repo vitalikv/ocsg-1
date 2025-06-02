@@ -18,7 +18,7 @@ class MyBlocksMode
 		
 		this.setCalcAllLevel({value: showAllLevel});
 		const value1 = this.getCalcAllLevel();
-		myCalcBlocks.myPanelWidgetsBlocks.changeStateCheckBox1({value: value1});	
+		myCalcBlocks.myUiBlocksMain.changeStateCheckBox1({value: value1});	
 		
 		myCalcBlocks.enableWalls();				
 	}

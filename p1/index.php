@@ -174,8 +174,9 @@
 	<script src="<?=$path?>new/ui/right-panel/colorPicker/myColorPicker.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/catalog/myCatalogList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/warmFloor/myPanelWF.js?<?=$vrs?>"></script>
-	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myPanelWidgetsBlocks.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myUiBlocksMain.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myUiBlocksCount.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myUiBlocksSize.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/myCookie.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/btnDropList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/level.js?<?=$vrs?>"></script>		

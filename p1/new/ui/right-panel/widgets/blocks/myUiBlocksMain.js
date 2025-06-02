@@ -1,6 +1,6 @@
 
 
-class MyPanelWidgetsBlocks
+class MyUiBlocksMain
 {
 	container;
 	divPanel;
@@ -13,13 +13,11 @@ class MyPanelWidgetsBlocks
 	
 	checkBox1;
 	
-	inputSizeX;
-	inputSizeY;
-	inputSizeZ;
 	inputOffset;
 	
+	myUiBlocksSize;
 	myUiBlocksCount;
-	
+
 	
 	constructor()
 	{
@@ -32,7 +30,8 @@ class MyPanelWidgetsBlocks
 		this.divPanel = this.crPanel();
 		this.container.append(this.divPanel);
 		
-		this.myUiBlocksCount = new MyUiBlocksCount();
+		this.myUiBlocksSize = new MyUiBlocksSize();
+		this.myUiBlocksCount = new MyUiBlocksCount();		
 	}
 
 
@@ -94,10 +93,8 @@ class MyPanelWidgetsBlocks
 		const css2 = `width: 20px; height: 20px; margin-right: 15px; border: 1px solid #ccc; border-radius: 4px; background: #fff; cursor: pointer;`;
 		const css3 = `width: 16px; height: 16px; margin: 2px; border-radius: 4px; background: rgb(213, 213, 213);`;
 		
-		const htmlLevels = this.htmlLevels();
-		const htmlInputSize = this.htmlInputSize();
+		const htmlLevels = this.htmlLevels();		
 		const htmlOffset = this.htmlOffset();
-		const htmlInfoSum = this.htmlInfoSum();
 		
 		const html = 
 		`<div>
@@ -148,8 +145,8 @@ class MyPanelWidgetsBlocks
 				<div style="display: flex; flex-direction: column; margin: 20px 0 0 0; padding: 10px; font-size: 16px; color: #666; border: 1px solid #ccc;">
 					<div style="${css1}">
 						<div>Размер блока (мм)</div>						
-					</div>	
-					<div>${htmlInputSize}</div>
+					</div>
+					<div nameId="wrapInputSize"></div>
 				</div>				
 			</div>			
 			
@@ -159,7 +156,7 @@ class MyPanelWidgetsBlocks
 				<div nameId="btnCalc3D" style="${cssBtn}">рассчитать</div>
 				<div nameId="btnClearCalc" style="${cssBtn}">очистить</div>
 				
-				<div>${htmlInfoSum}</div>
+				<div nameId="wrapDivSum"></div>
 			</div>
 		</div>`;
 		
@@ -194,43 +191,7 @@ class MyPanelWidgetsBlocks
 		return html;
 	}
 	
-	htmlInputSize()
-	{
-		const css1 = `pointer-events: none; user-select: none; cursor: default; background-color: #f0f0f0;`;
-		
-		let html = 
-		`<div style="display: -webkit-box; display: flex; margin-top: 20px; font-size: 12px;">
-			<div style="display: -webkit-box; display: flex;">
-				<div>
-					<div style="margin: 0 0 2px 2px; color: #4A4A4A; text-align: center;">Длина</div>
-					<div class="wr_input_1" nameId="wrInputSizeObjX">
-						<div class="flex_1">
-							<input type="text" class="input_1" nameId="inputSizeObjX" value="">
-						</div>
-					</div>
-				</div>
-				<div style="margin-left: 10px;">
-					<div style="margin: 0 0 2px 2px; color: #4A4A4A; text-align: center;">Высота</div>
-					<div class="wr_input_1" nameId="wrInputSizeObjY">
-						<div class="flex_1">
-							<input type="text" class="input_1" nameId="inputSizeObjY" value="">
-						</div>
-					</div>
-				</div>
-				<div style="margin-left: 10px;">							
-					<div style="margin: 0 0 2px 2px; color: #4A4A4A; text-align: center;">Ширина</div>
-					<div class="wr_input_1" nameId="wrInputSizeObjZ">
-						<div class="flex_1">
-							<input type="text" style="${css1}" class="input_1" nameId="inputSizeObjZ" disabled value="">
-						</div>
-					</div>
-				</div>					
-			</div>						
-		</div>`;					
 
-		return html;
-	}	
-	
 	
 	htmlOffset()
 	{
@@ -249,36 +210,8 @@ class MyPanelWidgetsBlocks
 	}
 	
 	
-	htmlInfoSum()
-	{
-		const css1 =	
-		`display: block;
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 40px;
-		bottom: 60px;
-		margin: auto 10px;
-		border: 1px solid #ccc;
-		border-radius: 3px;
-		background-color: #fff;
-		box-shadow: 0px 0px 2px #bababa, inset 0px 0px 2px rgba(154, 147, 140, 0.5);
-		overflow: auto;`;
-		
-		const css2 = `font-size: 15px; color: #666;`;
-		
-		const html = 
-		`<div style="position: relative; height: 300px;">
-			<div style="${css1} ${css2}">
-				<div nameId="infoCount" style="margin: 0px;">
-				</div>
-			</div>				
-		</div>`;					
 
-		return html;
-	}
-	
-	
+	// заполняем при старте панель (до этого она пустая)
 	addPaidContent()
 	{
 		const div = this.crDiv();
@@ -325,16 +258,15 @@ class MyPanelWidgetsBlocks
 		}
 		
 
-		this.inputSizeX = div.querySelector('[nameId="inputSizeObjX"]');
-		this.inputSizeY = div.querySelector('[nameId="inputSizeObjY"]');
-		this.inputSizeZ = div.querySelector('[nameId="inputSizeObjZ"]');
+
 		this.inputOffset = div.querySelector('[nameId="inputOffset"]');
 		
 		
 		this.appointDivLevels({container: this.content1});
 		
 				
-		this.myUiBlocksCount.init({divInfoCount: div.querySelector('[nameId="infoCount"]')})
+		this.myUiBlocksSize.init({container: this.divPanel.querySelector('[nameId="wrapInputSize"]')});
+		this.myUiBlocksCount.init({container: this.divPanel.querySelector('[nameId="wrapDivSum"]')});
 		
 		this.initEvents();
 	}
@@ -446,88 +378,6 @@ class MyPanelWidgetsBlocks
 	}
 	
 	
-	
-	// устанавливаем в input размер блоков
-	setInputSize({size, type = 'm', callBack})
-	{
-		const kof = (type === 'm') ? 1000 : 1;
-		
-		if(size.length) this.inputSizeX.value = size.length * kof;
-		if(size.height) this.inputSizeY.value = size.height * kof;
-		if(size.width) this.inputSizeZ.value = size.width * kof;
-		
-		this.initEventSizeBlock({callBack});
-	}
-	
-	
-	// события при вводе в input размера блока (при изменении, вызывается callBack и обновляется данные)
-	initEventSizeBlock({callBack})
-	{		
-		// проверка на валидность после ввода в input
-		const processInput = ({input, limit}) =>
-		{
-			let value = input.value.trim();
-
-			// Заменяем запятую на точку (для корректного парсинга)
-			value = value.replace(',', '.');
-
-			// Пытаемся преобразовать в число
-			const numberValue = parseFloat(value);
-
-			// Проверяем валидность
-			if (isNaN(numberValue)) return {success: false, message: 'Введите число!'};
-
-			// Округляем до целого
-			const roundedValue = Math.round(numberValue);
-
-			// Проверяем диапазон (Число должно быть от limit[0] до limit[1])
-			if (roundedValue < limit[0] || roundedValue > limit[1]) return {success: false, message: `Число должно быть от ${limit[0]} до ${limit[1]}`};
-
-			// Если всё ок — выводим результат
-			console.log("Валидное число:", roundedValue);
-			input.value = roundedValue; // Заменяем ввод на округлённое значение
-			
-			return {success: true, value: input.value};
-		}
-
-		// если значение не валидное то сбрасываем значение до оригинального
-		const resetInput = ({result, input, originalValue}) =>
-		{
-			input.value = originalValue; 	// сбрасываем значение в input до оригинального
-			console.log(result);
-		}		
-		
-		const addEvent = ({input, key, limit}) =>
-		{
-			let originalValue = '';
-			
-			input.onfocus = (e) => 
-			{
-				originalValue = input.value;
-			}
-			
-			input.onkeydown = (e) => 
-			{								
-				if (e.code === 'Enter') 
-				{
-					const result = processInput({input, limit});
-					if(!result.success) resetInput({result, input, originalValue});
-					if(result.success) callBack({result, key});
-				}
-			}
-
-			input.onblur = (e) => 
-			{
-				const result = processInput({input, limit});
-				if(!result.success) resetInput({result, input, originalValue});
-				if(result.success) callBack({result, key});
-			}			
-		}
-
-		addEvent({input: this.inputSizeX, key: 'length', limit: [300, 1000]});
-		addEvent({input: this.inputSizeY, key: 'height', limit: [100, 1000]});				
-	}
-
 
 	// меняем в input толщину клея (+ передаем толщину клея в основной класс для расчета блоков)
 	setInputOffsetBlock({value, type = 'm'})

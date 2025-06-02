@@ -155,7 +155,7 @@ class MyBlocksMouse
 					myCalcBlocks.myBlocksObjs.setParamsBlock({group, paramsBlock, type: 'mm'})
 				}
 				
-				myCalcBlocks.myPanelWidgetsBlocks.setInputSize({size, type: 'm', callBack});
+				myCalcBlocks.myUiBlocksMain.myUiBlocksSize.setInputSize({size, type: 'm', callBack});
 				
 				
 				const points = myCalcBlocks.myBlocksInfoPoints.getPointsFromGroup({group});
@@ -171,7 +171,7 @@ class MyBlocksMouse
 				
 				myComposerRenderer.outlineAddObj({arr: wallsClone});
 				
-				myCalcBlocks.myPanelWidgetsBlocks.myUiBlocksCount.scrollToItem({wallClone: object});
+				myCalcBlocks.myUiBlocksMain.myUiBlocksCount.scrollToItem({wallClone: object});
 			}
 		}
 		

@@ -2,14 +2,60 @@
 
 class MyUiBlocksCount
 {
-	divInfoCount;
+	container;
+	wrapDiv;
+	divList;
 	
 	
-	init({divInfoCount})
+	init({container})
 	{
-		this.divInfoCount = divInfoCount;
+		this.container = container;
+		
+		this.wrapDiv = this.crDiv();
+		this.container.append(this.wrapDiv);
+
+		this.divList = this.wrapDiv.querySelector('[nameId="infoCount"]');
 	}
 
+
+	crDiv()
+	{
+		const div = document.createElement('div');
+		div.innerHTML = this.htmlInfoSum();
+		return div.children[0];	
+	}	
+	
+	
+	htmlInfoSum()
+	{
+		const css1 =	
+		`display: block;
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 40px;
+		bottom: 60px;
+		margin: auto 10px;
+		border: 1px solid #ccc;
+		border-radius: 3px;
+		background-color: #fff;
+		box-shadow: 0px 0px 2px #bababa, inset 0px 0px 2px rgba(154, 147, 140, 0.5);
+		overflow: auto;`;
+		
+		const css2 = `font-size: 15px; color: #666;`;
+		
+		const html = 
+		`<div style="position: relative; height: 300px;">
+			<div style="${css1} ${css2}">
+				<div nameId="infoCount" style="margin: 0px;">
+				</div>
+			</div>				
+		</div>`;					
+
+		return html;
+	}
+	
+	
 	// группирует объекты по параметрам и суммирует их количество
 	sumCountsByBlockParams({data})
 	{
@@ -99,7 +145,7 @@ class MyUiBlocksCount
 			div.innerHTML = html;
 			div = div.children[0];
 
-			this.divInfoCount.append(div);
+			this.divList.append(div);
 			
 			const btn = div.querySelector('[nameId="level"]');
 			const divItems = div.querySelector('[nameId="items"]');
@@ -161,7 +207,7 @@ class MyUiBlocksCount
 	// убираем выделение со всех items (после клика)
 	setColorDefAllItems()
 	{
-		const items = this.divInfoCount.querySelectorAll('div[nameid="items"] div');
+		const items = this.divList.querySelectorAll('div[nameid="items"] div');
 		
 		for (const item of items) 
 		{
@@ -178,13 +224,13 @@ class MyUiBlocksCount
 	// очищаем список
 	clearInfoCountBlocks()
 	{
-		this.divInfoCount.innerHTML = '';
+		this.divList.innerHTML = '';
 	}
 	
 	// когда в 3d кликнули на стену, показываем в ui списке эту стену
 	scrollToItem({wallClone}) 
 	{
-		const items = this.divInfoCount.querySelectorAll('div[nameid="items"] div');
+		const items = this.divList.querySelectorAll('div[nameid="items"] div');
 
 		for (const item of items) 
 		{

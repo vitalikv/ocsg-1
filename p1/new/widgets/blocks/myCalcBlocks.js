@@ -14,7 +14,7 @@ class MyCalcBlocks
 	myBlocksObjs;
 	myBlocksVolume;
 	myBlocksInfoPoints;
-	myPanelWidgetsBlocks;
+	myUiBlocksMain;
 	
 	
 	init()
@@ -28,13 +28,13 @@ class MyCalcBlocks
 		this.myBlocksObjs = new MyBlocksObjs();
 		this.myBlocksVolume = new MyBlocksVolume();
 		this.myBlocksInfoPoints = new MyBlocksInfoPoints();
-		this.myPanelWidgetsBlocks = new MyPanelWidgetsBlocks();
+		this.myUiBlocksMain = new MyUiBlocksMain();
 
 		
 		myPanelTop2.addPaidPanel({panel: 'calcBlock'});	// создаем верхнию панель
-		this.myPanelWidgetsBlocks.addPaidContent();	// создаем правую панель
-		this.myPanelWidgetsBlocks.setInputOffsetBlock({value: 0.003, type: 'm'});
-		this.myPanelWidgetsBlocks.showWrapContent({tabName: 'calc3D'});	// переключаем на нужную вкладку			
+		this.myUiBlocksMain.addPaidContent();	// создаем правую панель
+		this.myUiBlocksMain.setInputOffsetBlock({value: 0.003, type: 'm'});
+		this.myUiBlocksMain.showWrapContent({tabName: 'calc3D'});	// переключаем на нужную вкладку			
 		myPanelTop2.showPanelRWBlocks();	// вкл режим для расчета блоков 		
 	}
 	

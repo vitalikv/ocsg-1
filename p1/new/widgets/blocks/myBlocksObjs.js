@@ -12,11 +12,11 @@ class MyBlocksObjs
 	constructor()
 	{
 		this.listPathImgs.kirpich = infProject.path+'img/widgets/blocks/one_kirpich.jpg';
-		this.listPathImgs.block = infProject.path+'img/widgets/blocks/block_1.jpg';
+		this.listPathImgs.block = infProject.path+'img/widgets/blocks/block_3.png';
 		
 		this.listPathImgs.kirpich = this.listPathImgs.block;
 		
-		this.material = new THREE.MeshStandardMaterial({ color: 0xcccccc, lightMap : lightMap_1, wireframe: false });
+		this.material = new THREE.MeshStandardMaterial({ color: 0xffffff, lightMap : lightMap_1, wireframe: false });
 		this.setImage({material: this.material, img: this.listPathImgs.kirpich});		
 	}
 
