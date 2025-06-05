@@ -39,8 +39,20 @@ class MyBlocksCamera
 
 			const idActive = myLevels.getIdActLevel();
 			
-			this.hideBlocks();
-			this.showBlocks({idLevel: idActive});
+			if(myCalcBlocks.myBlocksMode.getActiveBlocks())
+			{
+				const type = myCalcBlocks.myBlocksMode.getTab();
+				
+				if(type === 'setting')
+				{
+					this.hideBlocks();
+				}
+				else
+				{
+					this.hideBlocks();
+					this.showBlocks({idLevel: idActive});
+				}					
+			}
 
 			myCalcBlocks.myBlocksWalls.hideWalls();
 			myCalcBlocks.myBlocksWalls.showWalls({idLevel: idActive});			
@@ -49,19 +61,36 @@ class MyBlocksCamera
 		if(myCameraOrbit.activeCam.userData.isCam3D)
 		{
 			const allLevel = myCalcBlocks.myBlocksMode.getCalcAllLevel();
+			const idActive = myLevels.getIdActLevel();
+
+			if(myCalcBlocks.myBlocksMode.getActiveBlocks())
+			{
+				const type = myCalcBlocks.myBlocksMode.getTab();
+				
+				if(type === 'setting')
+				{
+					this.hideBlocks();
+				}
+				else
+				{
+					if(allLevel)
+					{
+						this.showBlocks({});
+					}
+					else
+					{
+						this.hideBlocks();
+						this.showBlocks({idLevel: idActive});						
+					}
+				}					
+			}
 			
 			if(allLevel)
-			{
-				this.showBlocks({});				
+			{								
 				myCalcBlocks.myBlocksWalls.showWalls({});				
 			}
 			else
 			{
-				const idActive = myLevels.getIdActLevel();
-				
-				this.hideBlocks();
-				this.showBlocks({idLevel: idActive});
-
 				myCalcBlocks.myBlocksWalls.hideWalls();
 				myCalcBlocks.myBlocksWalls.showWalls({idLevel: idActive});				
 			}

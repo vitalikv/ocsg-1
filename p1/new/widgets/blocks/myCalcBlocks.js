@@ -62,7 +62,7 @@ class MyCalcBlocks
 		
 		for ( let i = 0; i < myLevels.levels.length; i++ )
 		{
-			//this.test({idLevel: i, level: myLevels.levels[i]});
+			//data[i] = this.test({idLevel: i, level: myLevels.levels[i]});
 		}	
 
 		data[0] = this.test({idLevel: 0, level: myLevels.levels[0]});

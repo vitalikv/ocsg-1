@@ -94,7 +94,9 @@ class MyBlocksObjs
 		this.arrTypeG = this.createGeometryByParams({arrParams});		
 		console.log(777, data, this.arrTypeG);		
 		
-		
+		// текущая высота 1-ого этажа (например, когда переключили на 2-ой)
+		const idActive = myLevels.getIdActLevel();
+		const posY = myLevels.getLevelPos0({lastId: idActive, newId: 0});			
 		
 		const groups = [];
 		
@@ -119,7 +121,7 @@ class MyBlocksObjs
 			
 			for ( let i2 = 0; i2 < groups.length; i2++ )
 			{
-				this.crDomByTypes({group: groups[i2], levelHeight});
+				this.crDomByTypes({group: groups[i2], levelHeight, levelY0: posY});
 			}			
 		}
 		
@@ -222,7 +224,7 @@ class MyBlocksObjs
 	
 
 	// создаем стены по типу (наружные, внутренние, отдельные)
-	crDomByTypes({group, levelHeight})
+	crDomByTypes({group, levelHeight, levelY0})
 	{
 		const offset = this.getOffsetBlock();					
 		const h = group.paramsBlock.height;
@@ -231,8 +233,9 @@ class MyBlocksObjs
 		
 		let countY = 0;			
 		const rowBlocks = [];
-		
-		for (let i = 0; i < levelHeight; i += h + offset) 
+
+				
+		for (let i = offset; i < levelHeight; i += h + offset) 
 		{
 			let delLastBlock = countY % 2 === 0 ? false : true;
 			
@@ -240,8 +243,7 @@ class MyBlocksObjs
 			if(countY < 2222) // создаем только 2 ряда блоков (потому что только они уникальные, все остальные будут такие же, за исключением высоты)
 			{
 
-				
-				const arrBloks = this.crBloksRow({group, currentY: i, levelHeight, delLastBlock});
+				const arrBloks = this.crBloksRow({group, currentY: i, levelHeight, levelY0, delLastBlock});
 				
 				for (let i2 = 0; i2 < lines2.length; i2++)
 				{
@@ -318,7 +320,7 @@ class MyBlocksObjs
 	
 
 	// обрезаем блоки в начале/конце и под высоту этажа
-	crBloksRow({group, currentY, levelHeight, delLastBlock})
+	crBloksRow({group, currentY, levelHeight, levelY0, delLastBlock})
 	{
 		const ind = delLastBlock ? 1 : 0;
 		
@@ -336,8 +338,8 @@ class MyBlocksObjs
 			
 			const dist = result.posNew[0].distanceTo(result.posNew[1]);
 			
-			const answer = this.rowBlockes2({x: dist, posStart: result.posNew[0], dir: result.dir, currentY, normal: result.normal, z: lines2[i].width, dlina, h});
-			const bloks = answer.arrBloks;
+			const answer = this.rowBlockes2({x: dist, posStart: result.posNew[0], dir: result.dir, currentY: currentY + levelY0, normal: result.normal, z: lines2[i].width, dlina, h});
+			let bloks = answer.arrBloks;
 			
 			const z = lines2[i].width;
 			
@@ -356,11 +358,12 @@ class MyBlocksObjs
 				obj.lookAt(normal);
 				obj.position.copy(pos.clone().sub(dir2.clone().multiplyScalar(dlina - offsetZ)));
 				obj.position.add(normal.clone().multiplyScalar(z/10));
+				obj.position.y += levelY0;
 				
 				//scene.add(obj);	
 				//obj.visible = false;
 
-				this.cutBlockes({obj, w: bloks});
+				bloks = this.cutBlockes({obj, w: bloks});
 			}
 
 			// обрезаем конец стены
@@ -378,11 +381,12 @@ class MyBlocksObjs
 				obj.lookAt(normal);
 				obj.position.copy(pos.clone().sub(dir2.clone().multiplyScalar(dlina - offsetZ)));
 				obj.position.add(normal.clone().multiplyScalar(z/10));
+				obj.position.y += levelY0;
 
 				//scene.add(obj);	
 				//obj.visible = false;
 				
-				this.cutBlockes({obj, w: bloks});				
+				bloks = this.cutBlockes({obj, w: bloks});				
 			}
 
 			// обрезаем вверх стены
@@ -403,11 +407,12 @@ class MyBlocksObjs
 				
 				const rad = Math.atan2(dir.z, -dir.x);
 				obj.rotateY(rad);
-
+				obj.position.y += levelY0;
+				
 				//scene.add(obj);	
 				//obj.visible = false;
 				
-				this.cutBlockes({obj, w: bloks});
+				bloks = this.cutBlockes({obj, w: bloks});
 			}			
 		
 			lines2[i].arrBloks.push(...bloks);
