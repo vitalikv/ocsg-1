@@ -780,28 +780,6 @@ findObjectsUntilRepetition(arrayObjects) {
 	
 	
 
-
-	upVolume(block)
-	{
-		const volume = this.calculateMeshVolume(block.geometry);
-		
-
-		const originalNumber = block.userData.originalVolume; // Исходное число (100%)
-		const obtainedValue = volume; // Полученное значение
-
-		// Вычисляем процент
-		const percentage = (obtainedValue / originalNumber) * 100;
-
-		// Округляем до 2 знаков после запятой
-		const roundedPercentage = percentage.toFixed(2);
-
-		block.userData.upVolume = volume;
-		block.userData.percentage = roundedPercentage;
-		
-		//console.log(111, block.userData);		
-	}
-
-
 	getArrPosWorldObj({obj})
 	{
 		// Вычисляем boundingBox в локальных координатах

@@ -127,6 +127,13 @@ class MyBlocksObjs
 		
 		//renderCamera();
 
+		// обновляем данные по объему блоков после обрезки
+		const arr = this.getAllBlocks({});		
+		for ( let i = 0; i < arr.length; i++ )
+		{	
+			myCalcBlocks.myBlocksVolume.upVolume(arr[i]);			
+		}		
+		
 		myCalcBlocks.myBlocksCamera.changeCamera();
 	}
 
@@ -587,7 +594,7 @@ class MyBlocksObjs
 	}
 
 
-	// создаем геометрии блоков по ширине
+	// создаем геометрии блоков 
 	createGeometryByParams({arrParams})
 	{
 		const arr = [];

@@ -57,33 +57,6 @@ class MyUiBlocksCount
 	}
 	
 	
-	// группирует объекты по параметрам и суммирует их количество
-	sumCountsByBlockParams({data})
-	{
-		const result = data.reduce((acc, item) => 
-		{
-			// Преобразуем paramsBlock в строку для сравнения
-			const paramsKey = JSON.stringify(item.paramsBlock);
-
-			// Если такой paramsBlock уже есть, прибавляем count
-			if (acc[paramsKey]) 
-			{
-				acc[paramsKey].totalCount += item.count;
-			}			
-			else 	// Иначе создаем новую запись
-			{
-				acc[paramsKey] = { paramsBlock: item.paramsBlock, totalCount: item.count};
-			}
-
-			return acc;
-		}, {});
-
-		// Преобразуем объект в массив (если нужно)
-		const groupedData = Object.values(result);		
-
-		return groupedData;
-	}
-
 	
 	upInfoCountBlocks({data})
 	{
@@ -101,31 +74,20 @@ class MyUiBlocksCount
 		</div>`;	
 
 		
-		for ( let i = 0; i < 4; i++ )
+		for ( let i = 0; i < data.length; i++ )
 		{
-			const arr = myCalcBlocks.myBlocksObjs.getLinesAllBlocks({id: i});
-			
-			const data = [];
-			
-			for ( let i2 = 0; i2 < arr.length; i2++ )
-			{
-				const count = arr[i2].arrBloks.length;
-				const paramsBlock = arr[i2].paramsBlock;
-				const wallsClone = arr[i2].wallsClone;
-				
-				data.push({count, paramsBlock, wallsClone});				
-			}
-			
-			const totalGroup = this.sumCountsByBlockParams({data});
+			const idLevel = data[i].idLevel;
+			const group = data[i].group;
+			const lines = data[i].lines;
 			
 			// общее кол-во блоков на этаже (по группам)
 			let htmlTotal = ``;			
-			for ( let i2 = 0; i2 < totalGroup.length; i2++ )
+			for ( let i2 = 0; i2 < group.length; i2++ )
 			{
-				const paramsBlock = totalGroup[i2].paramsBlock;
+				const paramsBlock = group[i2].paramsBlock;
 				const txtSizeBlock = `(${paramsBlock.length * 1000} х ${paramsBlock.height * 1000} х ${paramsBlock.width * 1000})`;
 				
-				htmlTotal += `<div>${totalGroup[i2].totalCount} шт ${txtSizeBlock}</div>`;
+				htmlTotal += `<div>${group[i2].totalCount} шт ${txtSizeBlock}</div>`;
 			}
 			
 
@@ -135,7 +97,7 @@ class MyUiBlocksCount
 				<div nameId="level" style="${css1}">
 					${svg1}
 					<div>
-						<div style="font-weight: bold;">${i+1} этаж общее кол-во:</div>
+						<div style="font-weight: bold;">${idLevel+1} этаж общее кол-во:</div>
 						${htmlTotal}
 					</div>
 				</div>
@@ -157,7 +119,7 @@ class MyUiBlocksCount
 				divItems.style.display = value;
 			}
 			
-			this.crDivItems({container: divItems, data});
+			this.crDivItems({container: divItems, data: lines});
 		}
 	}	
 	

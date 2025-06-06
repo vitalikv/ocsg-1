@@ -36,6 +36,7 @@ class MyBlocksMode
 	{
 		myCalcBlocks.enableBlocks();
 		this.setActiveBlocks({value: true});
+		myCalcBlocks.myBlocksCamera.changeCamera();
 	}	
 	
 	disableBlocks()

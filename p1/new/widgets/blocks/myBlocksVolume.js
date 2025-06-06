@@ -26,7 +26,102 @@ class MyBlocksVolume
 		}
 
 		return Math.abs(volume); // Возвращаем абсолютное значение объёма
-	}		
+	}
+
+
+	upVolume(block)
+	{
+		const volume = this.calculateMeshVolume(block.geometry);		
+
+		const originalNumber = block.userData.originalVolume; // Исходное число (100%)
+		const obtainedValue = volume; // Полученное значение
+
+		// Вычисляем процент
+		const percentage = (obtainedValue / originalNumber) * 100;
+
+		// Округляем до 2 знаков после запятой
+		const roundedPercentage = Number(percentage.toFixed(2));
+
+		block.userData.upVolume = volume;
+		block.userData.percentage = roundedPercentage;
+
+		if(percentage < 95)
+		{	
+			block.material = block.material.clone();
+			block.material.color = new THREE.Color().setHSL(percentage / 200, 1, 0.5);
+		}
+		
+		if(percentage < 80 && percentage > 50 && 1 ===2)
+		{
+			block.material = block.material.clone();
+			block.material.color = new THREE.Color( 0x00ff00 );
+		}
+		
+		if(percentage <= 50 && 1 ===2)
+		{
+			block.material = block.material.clone();
+			block.material.color = new THREE.Color( 0x0000ff );
+		}		
+	}
+
+
+	calcCountBlocks()
+	{
+		const data = [];
+		
+		for ( let i = 0; i < 4; i++ )
+		{
+			const arr = myCalcBlocks.myBlocksObjs.getLinesAllBlocks({id: i});
+			
+			const lines = [];
+			
+			for ( let i2 = 0; i2 < arr.length; i2++ )
+			{
+				const count = arr[i2].arrBloks.length;
+				const paramsBlock = arr[i2].paramsBlock;
+				const wallsClone = arr[i2].wallsClone;
+				
+				lines.push({count, paramsBlock, wallsClone});				
+			}
+			
+			const group = this.sumCountsByBlockParams({lines});
+			
+			if(group.length === 0) continue;
+			
+			data.push({ idLevel: i, group, lines });
+		}
+		
+		return data;
+	}
+	
+	
+	// группирует объекты по параметрам и суммирует их количество
+	sumCountsByBlockParams({lines})
+	{
+		const result = lines.reduce((acc, item) => 
+		{
+			// Преобразуем paramsBlock в строку для сравнения
+			const paramsKey = JSON.stringify(item.paramsBlock);
+
+			// Если такой paramsBlock уже есть, прибавляем count
+			if (acc[paramsKey]) 
+			{
+				acc[paramsKey].totalCount += item.count;
+			}			
+			else 	// Иначе создаем новую запись
+			{
+				acc[paramsKey] = { paramsBlock: item.paramsBlock, totalCount: item.count };
+			}
+
+			return acc;
+		}, {});
+
+		// Преобразуем объект в массив (если нужно)
+		const groupedData = Object.values(result);		
+
+		return groupedData;
+	}
+	
 }
 
 

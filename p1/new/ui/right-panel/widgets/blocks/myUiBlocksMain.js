@@ -229,8 +229,9 @@ class MyUiBlocksMain
 		btnCalc3D.onmousedown = () => 
 		{ 
 			myCalcBlocks.myBlocksMode.enableBlocks();
+			const data = myCalcBlocks.myBlocksVolume.calcCountBlocks();
 			this.myUiBlocksCount.show();
-			this.myUiBlocksCount.upInfoCountBlocks({});
+			this.myUiBlocksCount.upInfoCountBlocks({data});			
 		}	
 
 		const btnClearCalc = div.querySelector('[nameId="btnClearCalc"]');		
