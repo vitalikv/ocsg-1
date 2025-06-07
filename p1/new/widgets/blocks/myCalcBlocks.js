@@ -13,6 +13,7 @@ class MyCalcBlocks
 	myBlocksWalls;
 	myBlocksObjs;
 	myBlocksVolume;
+	myBlocksMerge;
 	myBlocksInfoPoints;
 	myUiBlocksMain;
 	
@@ -27,6 +28,7 @@ class MyCalcBlocks
 		this.myBlocksWalls = new MyBlocksWalls();
 		this.myBlocksObjs = new MyBlocksObjs();
 		this.myBlocksVolume = new MyBlocksVolume();
+		this.myBlocksMerge = new MyBlocksMerge();
 		this.myBlocksInfoPoints = new MyBlocksInfoPoints();
 		this.myUiBlocksMain = new MyUiBlocksMain();
 

@@ -64,7 +64,8 @@ class MyBlocksVolume
 		}		
 	}
 
-
+	
+	// собираем данные по кол-во блоков на этаже и группируем
 	calcCountBlocks()
 	{
 		const data = [];

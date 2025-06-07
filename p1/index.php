@@ -265,6 +265,7 @@
 	<script src="<?=$path?>new/widgets/blocks/myBlocksWalls.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/widgets/blocks/myBlocksObjs.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/widgets/blocks/myBlocksVolume.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/widgets/blocks/myBlocksMerge.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/widgets/blocks/myBlocksInfoPoints.js?<?=$vrs?>"></script>
 	
     <script src="<?=$path?>script.js?<?=$vrs?>"></script>    		 

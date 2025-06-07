@@ -488,7 +488,12 @@ class MyBlocksObjs
 		
 		for ( let i = 0; i < w.length; i++ )
 		{
-			if(w[i].geometry.vertices.length === 0) continue;
+			if(w[i].geometry.vertices.length === 0) 
+			{
+				disposeNode( w[i] );
+				scene.remove( w[i] );
+				continue;				
+			}				
 			
 			w[i].updateMatrixWorld();
 			let wBSP = new ThreeBSP( w[i] );
@@ -502,7 +507,12 @@ class MyBlocksObjs
 			w[i].geometry.computeFaceNormals();	
 			//boxUnwrapUVs(w[i].geometry);
 			
-			if(w[i].geometry.vertices.length === 0) continue;
+			if(w[i].geometry.vertices.length === 0) 
+			{
+				disposeNode( w[i] );
+				scene.remove( w[i] );
+				continue;				
+			}
 			
 			w2.push(w[i]);
 		}

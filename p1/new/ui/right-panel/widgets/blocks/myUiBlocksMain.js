@@ -231,7 +231,10 @@ class MyUiBlocksMain
 			myCalcBlocks.myBlocksMode.enableBlocks();
 			const data = myCalcBlocks.myBlocksVolume.calcCountBlocks();
 			this.myUiBlocksCount.show();
-			this.myUiBlocksCount.upInfoCountBlocks({data});			
+			this.myUiBlocksCount.upInfoCountBlocks({data});
+
+myCalcBlocks.myBlocksMerge.crMergeBlocks();
+myCalcBlocks.myBlocksObjs.clearResultBlocks(); 			
 		}	
 
 		const btnClearCalc = div.querySelector('[nameId="btnClearCalc"]');		

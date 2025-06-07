@@ -152,6 +152,7 @@ new/widgets/blocks/myBlocksCamera.js
 new/widgets/blocks/myBlocksWalls.js
 new/widgets/blocks/myBlocksObjs.js
 new/widgets/blocks/myBlocksVolume.js
+new/widgets/blocks/myBlocksMerge.js
 new/widgets/blocks/myBlocksInfoPoints.js
 ';
 

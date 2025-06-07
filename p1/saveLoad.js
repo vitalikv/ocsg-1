@@ -110,7 +110,23 @@ function getConsoleRendererInfo()
 	console.log(renderer.info.memory);	
 }
 
-
+// подсчет уникальных материалов в сцене
+function countUniqueMaterials() 
+{
+    const materials = new Set();
+    
+    scene.traverse(function(object) {
+        if (object.isMesh && object.material) {
+            if (Array.isArray(object.material)) {
+                object.material.forEach(mat => materials.add(mat.uuid));
+            } else {
+                materials.add(object.material.uuid);
+            }
+        }
+    });
+    
+    return materials.size;
+}
 
 
 
