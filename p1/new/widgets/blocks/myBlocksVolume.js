@@ -82,14 +82,59 @@ class MyBlocksVolume
 				const paramsBlock = arr[i2].paramsBlock;
 				const wallsClone = arr[i2].wallsClone;
 				
-				lines.push({count, paramsBlock, wallsClone});				
+				let countFloat = 0;
+				for ( let i3 = 0; i3 < arr[i2].arrBloks.length; i3++ )
+				{
+					countFloat += arr[i2].arrBloks[i3].userData.percentage / 100;
+				}
+				countFloat = countFloat.toFixed(2);
+				
+				lines.push({count, countFloat, paramsBlock, wallsClone});				
 			}
 			
 			const group = this.sumCountsByBlockParams({lines});
 			
 			if(group.length === 0) continue;
 			
-			data.push({ idLevel: i, group, lines });
+			
+			const blockTypes = [];
+			for ( let i2 = 0; i2 < group.length; i2++ )
+			{
+				blockTypes.push(group[i2].paramsBlock);
+			}
+			
+			
+			const blocksData = [];		
+			for ( let i2 = 0; i2 < arr.length; i2++ )
+			{	
+				for ( let i3 = 0; i3 < arr[i2].arrBloks.length; i3++ )
+				{
+					blocksData.push(arr[i2].arrBloks[i3].userData);				
+				}
+			}
+			
+			const optimizer = new MyBlocksOptimizer(blocksData, blockTypes);
+			const result = optimizer.optimize();
+			const statsByType = optimizer.getStatsByType();
+
+console.log('====================');
+console.log('🧱 ИТОГО ПО ТИПАМ БЛОКОВ:');
+statsByType.forEach(stat => {
+  console.log(`\n📦 Тип блока: ${stat.type.length}x${stat.type.height}x${stat.type.width}`);
+  console.log(`  Всего взято: ${stat.usedCount} шт., ${stat.totalVolume.toFixed(4)} м³`);
+  console.log(`  Полностью использованные: ${stat.fullBlocks} шт., ${stat.fullVolume.toFixed(4)} м³`);
+  console.log(`  Использовано из обрезков: ${stat.usedFromLeftovers} шт., ${stat.usedFromLeftoversVolume.toFixed(4)} м³`);
+  console.log(`  Остатки: ${stat.leftoverCount} шт., ${stat.leftoverVolume.toFixed(4)} м³`);
+});
+console.log('====================');
+
+
+console.log('====================');
+console.log('Блоки по типам:', result.blocksUsedByType);
+console.log('Обрезки по типам:', result.leftoversByType);
+console.log('====================');	
+		
+			data.push({ idLevel: i, group, lines, statsByType });
 		}
 		
 		return data;

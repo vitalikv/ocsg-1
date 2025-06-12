@@ -132,7 +132,7 @@ class MyBlocksObjs
 		for ( let i = 0; i < arr.length; i++ )
 		{	
 			myCalcBlocks.myBlocksVolume.upVolume(arr[i]);			
-		}		
+		}				
 		
 		myCalcBlocks.myBlocksCamera.changeCamera();
 	}
@@ -452,9 +452,10 @@ class MyBlocksObjs
 			pos.add(dir.clone().multiplyScalar(dlina/2));
 			pos.add(normal.clone().multiplyScalar(z2/2));
 			
-			const { geometry, volume } = this.getGeometryByParams({length: dlina, height: h, width: z});
+			const { geometry, volume, size } = this.getGeometryByParams({length: dlina, height: h, width: z});
 			const block = this.createBlock({pos, geometry});			
 			
+			block.userData.size = size;
 			block.userData.originalVolume = volume;
 			block.userData.upVolume = volume;
 			block.userData.percentage = 100;
@@ -630,9 +631,10 @@ class MyBlocksObjs
 		
 		for ( let i = 0; i < this.arrTypeG.length; i++ )
 		{
-			const blockP = this.arrTypeG[i].params;
-			if(blockP.length === length && blockP.height === height && blockP.width === width)
+			const size = this.arrTypeG[i].params;
+			if(size.length === length && size.height === height && size.width === width)
 			{
+				result.size = size;
 				result.geometry = this.arrTypeG[i].geometry;
 				result.volume = this.arrTypeG[i].volume;				
 				break;
@@ -756,10 +758,6 @@ class MyBlocksObjs
 		myCalcBlocks.myUiBlocksMain.myUiBlocksCount.hide();		
 	}
 }
-
-
-
-
 
 
 
