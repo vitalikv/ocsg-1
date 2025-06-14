@@ -755,7 +755,8 @@ class MyBlocksObjs
 
 
 		myCalcBlocks.myUiBlocksMain.myUiBlocksCount.clearInfoCountBlocks();
-		myCalcBlocks.myUiBlocksMain.myUiBlocksCount.hide();		
+		myCalcBlocks.myUiBlocksMain.myUiBlocksCount.hide();
+		myCalcBlocks.myUiBlocksMain.myUiBlocksStats.hide();
 	}
 }
 

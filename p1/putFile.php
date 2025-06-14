@@ -66,6 +66,7 @@ new/ui/right-panel/warmFloor/myPanelWF.js
 new/ui/right-panel/widgets/blocks/myUiBlocksMain.js
 new/ui/right-panel/widgets/blocks/myUiBlocksCount.js
 new/ui/right-panel/widgets/blocks/myUiBlocksSize.js
+new/ui/right-panel/widgets/blocks/myUiBlocksStats.js
 new/tools/myToolPG.js
 new/tools/myToolPG_UI.js
 new/tools/myPivot.js

@@ -34,8 +34,8 @@ class MyUiBlocksCount
 		position: absolute;
 		left: 0;
 		right: 0;
-		top: 40px;
-		bottom: 60px;
+		top: 15px;
+		bottom: 15px;
 		margin: auto 10px;
 		border: 1px solid #ccc;
 		border-radius: 3px;
@@ -145,6 +145,8 @@ class MyUiBlocksCount
 			const idLevel = data[i].idLevel;
 			const statsByType = data[i].statsByType;
 			const lines = data[i].lines;
+			
+			myCalcBlocks.myUiBlocksMain.myUiBlocksStats.renderBlockStats({idLevel, statsByType});
 			
 			// общее кол-во блоков на этаже (по группам)
 			let htmlTotal = ``;	

@@ -17,7 +17,8 @@ class MyUiBlocksMain
 	
 	myUiBlocksSize;
 	myUiBlocksCount;
-
+	myUiBlocksStats;
+	
 	
 	constructor()
 	{
@@ -31,7 +32,8 @@ class MyUiBlocksMain
 		this.container.append(this.divPanel);
 		
 		this.myUiBlocksSize = new MyUiBlocksSize();
-		this.myUiBlocksCount = new MyUiBlocksCount();		
+		this.myUiBlocksCount = new MyUiBlocksCount();
+		this.myUiBlocksStats = new MyUiBlocksStats();
 	}
 
 
@@ -152,6 +154,7 @@ class MyUiBlocksMain
 				<div nameId="btnClearCalc" style="${cssBtn}">очистить</div>
 				
 				<div nameId="wrapDivSum"></div>
+				<div nameId="wrapDivStats"></div>
 			</div>
 		</div>`;
 		
@@ -232,9 +235,10 @@ class MyUiBlocksMain
 			const data = myCalcBlocks.myBlocksVolume.calcCountBlocks();
 			this.myUiBlocksCount.show();
 			this.myUiBlocksCount.upInfoCountBlocks({data});
+			this.myUiBlocksStats.show();
 
-myCalcBlocks.myBlocksMerge.crMergeBlocks();
-myCalcBlocks.myBlocksObjs.clearResultBlocks(); 			
+//myCalcBlocks.myBlocksMerge.crMergeBlocks();
+//myCalcBlocks.myBlocksObjs.clearResultBlocks(); 			
 		}	
 
 		const btnClearCalc = div.querySelector('[nameId="btnClearCalc"]');		
@@ -243,6 +247,7 @@ myCalcBlocks.myBlocksObjs.clearResultBlocks();
 			myCalcBlocks.myBlocksMode.disableBlocks();
 			this.myUiBlocksCount.clearInfoCountBlocks();
 			this.myUiBlocksCount.hide();
+			this.myUiBlocksStats.hide();
 		}
 
 		this.checkBox1 = div.querySelector('[nameId="item_1"]');
@@ -268,6 +273,7 @@ myCalcBlocks.myBlocksObjs.clearResultBlocks();
 				
 		this.myUiBlocksSize.init({container: this.divPanel.querySelector('[nameId="wrapBlockSize"]')});
 		this.myUiBlocksCount.init({container: this.divPanel.querySelector('[nameId="wrapDivSum"]')});
+		this.myUiBlocksStats.init({container: this.divPanel.querySelector('[nameId="wrapDivStats"]')});
 		
 		this.initEvents();
 	}
