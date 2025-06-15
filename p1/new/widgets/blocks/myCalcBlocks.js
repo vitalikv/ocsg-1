@@ -36,7 +36,7 @@ class MyCalcBlocks
 		myPanelTop2.addPaidPanel({panel: 'calcBlock'});	// создаем верхнию панель
 		this.myUiBlocksMain.addPaidContent();	// создаем правую панель
 		this.myUiBlocksMain.setInputOffsetBlock({value: 0.003, type: 'm'});
-		this.myUiBlocksMain.showWrapContent({tabName: 'calc3D'});	// переключаем на нужную вкладку			
+		this.myUiBlocksMain.showWrapContent({tabName: 'setting'});	// переключаем на нужную вкладку			
 		myPanelTop2.showPanelRWBlocks();	// вкл режим для расчета блоков 		
 	}
 	
@@ -69,7 +69,7 @@ class MyCalcBlocks
 
 		data[0] = this.test({idLevel: 0, level: myLevels.levels[0]});
 		data[1] = this.test({idLevel: 1, level: myLevels.levels[1]});
-
+		
 		
 		this.setLevelsData({data});
 		
@@ -285,7 +285,7 @@ class MyCalcBlocks
 			console.log(arrOrderIds);
 		}
 
-
+		const checkUsed = [];
 		while(arrW.inside.length > 0)
 		{
 			console.log('inside - внутренние');
@@ -294,11 +294,12 @@ class MyCalcBlocks
 			
 			const firstElem = result[0].item;
 			
-			arrW.inside = this.moveElementToFirstPosition({data: arrW.inside, elementToMove: firstElem});
+			const newArr2 = this.moveElementToFirstPosition({data: arrW.inside, elementToMove: firstElem});
+						
+			const newArr1 = this.sortChains(newArr2);	
 			
-			const newArr1 = this.findObjectsUntilRepetition(arrW.inside);
+			const newArr = this.findObjectsUntilRepetition(newArr1, checkUsed);
 			
-			const newArr = this.sortChains(newArr1);
 			
 			let reverseWall = 0;
 			if(newArr.length > 1)
@@ -314,6 +315,7 @@ class MyCalcBlocks
 				const index = arrW.inside.indexOf(newArr[i]);
 				if (index !== -1) 
 				{
+					checkUsed.push(...newArr[i].array);
 					arrW.inside.splice(index, 1);
 				}
 			}
@@ -340,7 +342,7 @@ class MyCalcBlocks
 				
 				const array2 = newArr[i+1].array;
 				
-				console.log(array, pStart, array2[0], array[1]);
+				//console.log(array, pStart, array2[0], array[1]);
 				
 				if(pStart === 1) arrOrderIds.push(newArr[i].array[0]);
 				else arrOrderIds.push(newArr[i].array[1]);
@@ -441,6 +443,7 @@ class MyCalcBlocks
 		return result;
 	}
 	
+	// находим стартовые точки
 	// найти элементы массива, у которых числа в свойстве array либо не встречаются в других элементах, либо встречаются только один раз во всех других элементах
 	// возвращает объекты с информацией о найденных элементах и числах, которые делают их уникальными
 	/*
@@ -555,13 +558,13 @@ class MyCalcBlocks
 	}
 
 
-findObjectsUntilRepetition(arrayObjects) {
+findObjectsUntilRepetition(arrayObjects, checkUsed) {
     // Объект для подсчета количества вхождений каждого числа
     const countMap = {};
 
     // Результирующий массив
     const result = [];
-
+	let step = 0;
     // Проходим по каждому объекту в массиве
     for (const obj of arrayObjects) {
         const currentArray = obj.array;
@@ -569,6 +572,13 @@ findObjectsUntilRepetition(arrayObjects) {
         // Проверяем каждое число в текущем массиве
         let shouldStop = false; // Флаг для определения, нужно ли остановить проверку
 
+		if(checkUsed.length > 0 && step > 0)
+		{
+			const index1 = checkUsed.indexOf(currentArray[0]);
+			const index2 = checkUsed.indexOf(currentArray[1]);
+			if(index1 > -1 || index2 > -1) continue;
+		}
+		
         for (const num of currentArray) {
             // Увеличиваем счетчик для числа
             countMap[num] = (countMap[num] || 0) + 1;
@@ -587,6 +597,8 @@ findObjectsUntilRepetition(arrayObjects) {
 
         // Добавляем текущий объект в результирующий массив
         result.push(obj);
+		
+		step++;
     }
 
     // Возвращаем результирующий массив

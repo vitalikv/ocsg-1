@@ -12,7 +12,8 @@ class MyBlocksInfoPoints
 		for ( let i = 0; i < arr.length; i++ )
 		{			
 			const obj = this.crPoint();
-			obj.material.map = this.crTexture({text: i + 1});
+			//obj.material.map = this.crTexture({text: i + 1});
+			obj.material.map = this.crTexture({text: arr[i].userData.id});
 			
 			obj.position.copy(arr[i].position.clone());
 			obj.position.y = 3;
