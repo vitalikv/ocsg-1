@@ -1203,17 +1203,21 @@ document.addEventListener("DOMContentLoaded", ()=>
 // запуск проекта при открытии страницы
 async function startInitProject()
 {
-			infProject.settings.load.file = 'demo/3.json';
-			infProject.settings.save.file = 't/fileJson9.json';
+			//infProject.settings.load.file = 'demo/3.json';
+			//infProject.settings.save.file = 't/fileJson9.json';
+
+	const slug = window.location.pathname.split('/').filter(Boolean).pop();
+	console.log('--------->', slug); // "calc-blocks"
+
 			
-	await myStartProject.init({name: ''});	// new - пустой проект 
+	await myStartProject.init({name: 'new'});	// new - пустой проект 
 
 	if(1===2) if(myStartProject.detectShowStartWind()) windUI.showWin();	// меню пользователя
 	
 	if(1===2) myPanelTop2.addPaidPanel({panel: 'otop'});	// панель для платных пользователей (отопление)	
 	
 	// панель для расчета блоков
-	if(1===1) 
+	if(1===1 && slug === 'calc-blocks') 
 	{
 		myCalcBlocks.init();
 	}		

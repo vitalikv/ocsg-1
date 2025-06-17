@@ -36,8 +36,8 @@ class MyCalcBlocks
 		myPanelTop2.addPaidPanel({panel: 'calcBlock'});	// создаем верхнию панель
 		this.myUiBlocksMain.addPaidContent();	// создаем правую панель
 		this.myUiBlocksMain.setInputOffsetBlock({value: 0.003, type: 'm'});
-		this.myUiBlocksMain.showWrapContent({tabName: 'setting'});	// переключаем на нужную вкладку			
-		myPanelTop2.showPanelRWBlocks();	// вкл режим для расчета блоков 		
+		this.myUiBlocksMain.showWrapContent({tabName: 'calc3D'});	// переключаем на нужную вкладку			
+		//myPanelTop2.showPanelRWBlocks();	// вкл режим для расчета блоков 		
 	}
 	
 

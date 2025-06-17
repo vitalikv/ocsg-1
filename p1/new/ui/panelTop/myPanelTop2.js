@@ -128,6 +128,8 @@ class MyPanelTop2
 	// показываем правую панель с расчетом блоков (активируем режим)
 	showPanelRWBlocks()
 	{
+		myLevels.switchLevel(0);
+		
 		this.setStateCheckBox();
 		const state = this.getStateCheckBox();
 		this.changeStateCheckBox({showAllLevel: state.showAllLevel, wallTransparent: false, showAllRoofs: state.showAllRoofs});

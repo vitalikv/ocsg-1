@@ -45,6 +45,11 @@ if($url == '/construction?demo=5')
 	$title = 'Проект квартиры 3D';
 	$h1 = 'Демо проект';	
 }
+if($url == '/calc-blocks')	
+{ 
+	$title = 'Калькулятор и раскладка блоков 3D';
+	$h1 = '3D расчет блоков';	
+}
 
 
 $infProject = array('url' => $url, 'title' => $title, 'h1' => $h1, 'nameId' => $nameId, 'path' => $path, 'load' => [ img => [] ]);

@@ -38,6 +38,10 @@
 
 		<div style="margin-top: 30px;">
 			- <a href="/loaderObj/src/index.php">загрузчик</a> 
+		</div>
+
+		<div style="margin-top: 30px;">
+			7. <a href="/calc-blocks">калькулятор и раскладка блоков 3Д</a> 
 		</div>		
 	</div>
 

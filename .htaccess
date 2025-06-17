@@ -26,6 +26,7 @@ RewriteRule ^active_2\/.*$ p1/components/activeUser.php
 RewriteRule ^reset_pass_2\/.*$ p1/components/resetPass_2.php
 
 RewriteRule ^construction$ p1/index.php
+RewriteRule ^calc-blocks$ p1/index.php
 
 
 
