@@ -63,6 +63,15 @@ new/ui/right-panel/insetObj/myTabObjWfObj.js
 new/ui/right-panel/colorPicker/myColorPicker.js
 new/ui/right-panel/catalog/myCatalogList.js
 new/ui/right-panel/warmFloor/myPanelWF.js
+new/ui/widgets/blocks/menu/windUI.js
+new/ui/widgets/blocks/menu/tabs.js
+new/ui/widgets/blocks/menu/divAbout.js
+new/ui/widgets/blocks/menu/myUiInstruction.js
+new/ui/widgets/blocks/menu/divAccount.js
+new/ui/widgets/blocks/menu/divProjectSave.js
+new/ui/widgets/blocks/menu/divProjectLoad.js
+new/ui/widgets/blocks/menu/divProjectDemo.js
+new/ui/widgets/blocks/menu/divSubs.js
 new/ui/right-panel/widgets/blocks/myUiBlocksMain.js
 new/ui/right-panel/widgets/blocks/myUiBlocksCount.js
 new/ui/right-panel/widgets/blocks/myUiBlocksSize.js

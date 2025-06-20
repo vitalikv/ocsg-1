@@ -174,10 +174,21 @@
 	<script src="<?=$path?>new/ui/right-panel/colorPicker/myColorPicker.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/catalog/myCatalogList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/warmFloor/myPanelWF.js?<?=$vrs?>"></script>
+	
+	<script src="<?=$path?>new/ui/widgets/blocks/menu/windUI.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/widgets/blocks/menu/tabs.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/widgets/blocks/menu/divAbout.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/widgets/blocks/menu/myUiInstruction.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/widgets/blocks/menu/divAccount.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/widgets/blocks/menu/divProjectSave.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/widgets/blocks/menu/divProjectLoad.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/widgets/blocks/menu/divProjectDemo.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/widgets/blocks/menu/divSubs.js?<?=$vrs?>"></script>		
 	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myUiBlocksMain.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myUiBlocksCount.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myUiBlocksSize.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myUiBlocksStats.js?<?=$vrs?>"></script>
+	
 	<script src="<?=$path?>new/myCookie.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/btnDropList.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/level.js?<?=$vrs?>"></script>		

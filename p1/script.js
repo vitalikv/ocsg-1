@@ -1115,6 +1115,8 @@ let myPanelR;
 let myCatalogList;
 let myPanelWF;
 
+let myUIBlocksWindMain;
+
 let myCookie;
 let myTexture;
 let switchCamera;
@@ -1142,22 +1144,6 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myPanelTop1 = new MyPanelTop1();
 	myPanelTop1.init();
 	myPanelTop2 = new MyPanelTop2();
-	
-	windUI = new WindUI();
-	windTabs = new WindTabs();
-	windDivAbout = new WindDivAbout();
-	windDivAccount = new WindDivAccount();
-	windDivProjectLoad = new WindDivProjectLoad();
-	windDivProjectSave = new WindDivProjectSave();
-	windDivProjectDemo = new WindDivProjectDemo();
-	windDivSubs = new WindDivSubs();
-	windTabs.init();
-	windDivAbout.init();
-	windDivAccount.init();
-	windDivProjectLoad.init();
-	windDivProjectSave.init();
-	windDivProjectDemo.init();
-	windUI.init();
 	
 	
 	myCookie = new MyCookie();
@@ -1189,6 +1175,7 @@ document.addEventListener("DOMContentLoaded", ()=>
 	myHouse = new MyHouse();
 	myWarmFloor = new MyWarmFloor();
 	
+	myUIBlocksWindMain = new MyUIBlocksWindMain();
 	myCalcBlocks = new MyCalcBlocks();
 	
 	myStartProject = new MyStartProject();
@@ -1230,6 +1217,29 @@ async function startInitProject()
 	
 	if(1===2) myWarmFloor.myGridWf.initTest(); 	// сетка для теплого пола
 	if(1===2) myWarmFloor.myGridContourWf.initTestContour();	// тепл.пол улитка
+	
+	if(slug === 'calc-blocks')
+	{
+		myUIBlocksWindMain.init();
+	}
+	else
+	{
+		windUI = new WindUI();
+		windTabs = new WindTabs();
+		windDivAbout = new WindDivAbout();
+		windDivAccount = new WindDivAccount();
+		windDivProjectLoad = new WindDivProjectLoad();
+		windDivProjectSave = new WindDivProjectSave();
+		windDivProjectDemo = new WindDivProjectDemo();
+		windDivSubs = new WindDivSubs();
+		windTabs.init();
+		windDivAbout.init();
+		windDivAccount.init();
+		windDivProjectLoad.init();
+		windDivProjectSave.init();
+		windDivProjectDemo.init();
+		windUI.init();
+	}
 	
 }
 
