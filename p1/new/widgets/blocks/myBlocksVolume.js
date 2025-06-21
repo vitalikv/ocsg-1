@@ -118,18 +118,6 @@ class MyBlocksVolume
 			const statsByType = optimizer.getStatsByType();
 
 console.log('====================');
-console.log('🧱 ИТОГО ПО ТИПАМ БЛОКОВ:');
-statsByType.forEach(stat => {
-  console.log(`\n📦 Тип блока: ${stat.type.length}x${stat.type.height}x${stat.type.width}`);
-  console.log(`  Всего взято: ${stat.usedCount} шт., ${stat.totalVolume.toFixed(4)} м³`);
-  console.log(`  Полностью использованные: ${stat.fullBlocks} шт., ${stat.fullVolume.toFixed(4)} м³`);
-  console.log(`  Использовано из обрезков: ${stat.usedFromLeftovers} шт., ${stat.usedFromLeftoversVolume.toFixed(4)} м³`);
-  console.log(`  Остатки: ${stat.leftoverCount} шт., ${stat.leftoverVolume.toFixed(4)} м³`);
-});
-console.log('====================');
-
-
-console.log('====================');
 console.log('Блоки по типам:', result.blocksUsedByType);
 console.log('Обрезки по типам:', result.leftoversByType);
 console.log('====================');	

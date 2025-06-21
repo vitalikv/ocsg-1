@@ -7,6 +7,7 @@ class MyBlocksObjs
 	arrTypeG = [];
 	roofs = [];
 	blockOffset = 0;
+	sizeAllBlocks = { length: 0, height: 0 };
 	
 	
 	constructor()
@@ -84,6 +85,51 @@ class MyBlocksObjs
 		return this.blockOffset;
 	}	
 
+
+	// назначаем размер блока (ширина, высота) для всех групп линий
+	setAllWallsParamsBlocks({paramsBlock, key, type = 'm'})
+	{
+		if(type === 'mm')
+		{
+			for (const key in paramsBlock) 
+			{
+				paramsBlock[key] /= 1000; 
+			}			
+		}
+
+		const arr = [];
+		
+		const data = myCalcBlocks.getLevelsData();
+		
+		for ( let i = 0; i < data.length; i++ )
+		{		
+			const groups = data[i].groups;
+
+			for ( let i2 = 0; i2 < groups.length; i2++ )
+			{
+				arr.push(groups[i2]);				
+			}			
+		}
+		
+		for ( let i = 0; i < arr.length; i++ )
+		{
+			const group = arr[i];
+			// назначаем только те key, которые пришли 
+			for (const key in paramsBlock) 
+			{
+				group.paramsBlock[key] = paramsBlock[key];
+			}			
+		}
+		
+		this.sizeAllBlocks[key] = paramsBlock[key];
+	}
+
+
+	getAllWallsParamsBlocks()
+	{
+		return this.sizeAllBlocks;
+	}	
+	
 	
 	// после всех рассчетов создаем блоки
 	createHouseBlocks()

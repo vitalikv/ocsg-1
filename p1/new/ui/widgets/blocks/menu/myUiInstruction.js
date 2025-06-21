@@ -281,7 +281,7 @@ const html =
 			btnClose.onmousedown = () => { closeWin(wind); }			
 			
 			const wrapImg = wind.querySelector('[nameId="content"]');
-			wrapImg.innerHTML = `<img nameId="" src="${img.src}" style="max-width: 100%; height: auto; cursor: pointer;">`;
+			wrapImg.innerHTML = `<img nameId="" src="${img.src}" style="max-width: 100%; height: auto;">`;
 		}		
 	}
 }

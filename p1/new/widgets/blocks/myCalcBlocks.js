@@ -17,6 +17,8 @@ class MyCalcBlocks
 	myBlocksInfoPoints;
 	myUiBlocksMain;
 	
+	defSizeBlock = { length: 0.6, height: 0.3 };
+	defOffsetBlock = 0.003;
 	
 	init()
 	{
@@ -35,9 +37,11 @@ class MyCalcBlocks
 		
 		myPanelTop2.addPaidPanel({panel: 'calcBlock'});	// создаем верхнию панель
 		this.myUiBlocksMain.addPaidContent();	// создаем правую панель
-		this.myUiBlocksMain.setInputOffsetBlock({value: 0.003, type: 'm'});
-		this.myUiBlocksMain.showWrapContent({tabName: 'calc3D'});	// переключаем на нужную вкладку			
-		//myPanelTop2.showPanelRWBlocks();	// вкл режим для расчета блоков 		
+		this.myUiBlocksMain.myUiBlocksOffset.setInputOffsetBlock({value: this.defOffsetBlock, type: 'm'});
+		this.myUiBlocksMain.myUiBlocksOffset.setInputSize({value: this.defSizeBlock.length, key: 'length', type: 'm'});
+		this.myUiBlocksMain.myUiBlocksOffset.setInputSize({value: this.defSizeBlock.height, key: 'height', type: 'm'});
+		this.myUiBlocksMain.showWrapContent({tabName: 'setting'});	// переключаем на нужную вкладку			
+		myPanelTop2.showPanelRWBlocks();	// вкл режим для расчета блоков 		
 	}
 	
 
@@ -361,7 +365,7 @@ class MyCalcBlocks
 
 		this.levelGroups = [];
 		
-		const paramsBlock = { length: 0.6, height: 0.3 };
+		const paramsBlock = this.myBlocksObjs.getAllWallsParamsBlocks();
 		const groups = [];
 		
 		for ( let i = 0; i < arrW2.outside.length; i++ )

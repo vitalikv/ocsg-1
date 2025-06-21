@@ -187,6 +187,7 @@
 	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myUiBlocksMain.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myUiBlocksCount.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myUiBlocksSize.js?<?=$vrs?>"></script>
+	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myUiBlocksOffset.js?<?=$vrs?>"></script>
 	<script src="<?=$path?>new/ui/right-panel/widgets/blocks/myUiBlocksStats.js?<?=$vrs?>"></script>
 	
 	<script src="<?=$path?>new/myCookie.js?<?=$vrs?>"></script>

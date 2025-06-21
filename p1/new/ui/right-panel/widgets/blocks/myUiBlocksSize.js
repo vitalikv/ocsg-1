@@ -41,7 +41,7 @@ class MyUiBlocksSize
 		const html =
 		`<div style="display: flex; flex-direction: column; margin: 20px 0 0 0; padding: 10px; font-size: 16px; color: #666; border: 1px solid #ccc;">
 			<div style="${css1}">
-				<div>Размер блока (мм)</div>						
+				<div>Размер блока для выделенной стены (мм)</div>						
 			</div>
 			<div nameId="wrapInputSize">${htmlInputSize}</div>
 		</div>`;

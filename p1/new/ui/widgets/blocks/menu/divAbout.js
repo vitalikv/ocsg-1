@@ -8,7 +8,7 @@ class MyUIBlocksWindDivAbout
 	init()
 	{
 		this.container = this.createDiv();
-		this.content = this.container.querySelector('[nameId="content"]');
+		//this.content = this.container.querySelector('[nameId="content"]');
 	}
 	
 	createDiv()
@@ -34,7 +34,7 @@ class MyUIBlocksWindDivAbout
 		
 		const html = 
 		`<div style="display: none;"> 
-			<div style="${cssHeader}"><strong>Калькулятор блоков с учетом обрезков</strong></div>
+			<div style="${cssHeader}"><strong>3D калькулятор блоков с учетом обрезков</strong></div>
 
 <section style="
   max-width: 900px;

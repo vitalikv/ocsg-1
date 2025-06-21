@@ -15,7 +15,8 @@ class MyUiBlocksMain
 	
 	inputOffset;
 	
-	myUiBlocksSize;
+	myUiBlocksOffset;
+	myUiBlocksSize;	
 	myUiBlocksCount;
 	myUiBlocksStats;
 	
@@ -31,7 +32,8 @@ class MyUiBlocksMain
 		this.divPanel = this.crPanel();
 		this.container.append(this.divPanel);
 		
-		this.myUiBlocksSize = new MyUiBlocksSize();
+		this.myUiBlocksOffset = new MyUiBlocksOffset();
+		this.myUiBlocksSize = new MyUiBlocksSize();		
 		this.myUiBlocksCount = new MyUiBlocksCount();
 		this.myUiBlocksStats = new MyUiBlocksStats();
 	}
@@ -96,7 +98,6 @@ class MyUiBlocksMain
 		const css3 = `width: 16px; height: 16px; margin: 2px; border-radius: 4px; background: rgb(213, 213, 213);`;
 		
 		const htmlLevels = this.htmlLevels();		
-		const htmlOffset = this.htmlOffset();
 		
 		const html = 
 		`<div>
@@ -137,12 +138,7 @@ class MyUiBlocksMain
 			<div class="flex_column_1" nameId="wrapSetting" style="display: none; overflow: auto;">
 				<div class="right_panel_1_1_h">Настройки</div>	
 
-				<div style="display: flex; flex-direction: column; margin: 20px 0 0 0; padding: 10px; font-size: 16px; color: #666; border: 1px solid #ccc;">
-					<div style="${css1}">
-						<div>Толщина слоя<br>раствора (мм)</div>
-						${htmlOffset}
-					</div>					
-				</div>
+				<div nameId="wrapBlocksAllWalls"></div>
 				
 				<div nameId="wrapBlockSize"></div>
 			</div>			
@@ -190,24 +186,6 @@ class MyUiBlocksMain
 	}
 	
 
-	
-	htmlOffset()
-	{
-		let html = 
-		`<div style="display: -webkit-box; display: flex; margin: auto; font-size: 12px;">
-			<div style="display: -webkit-box; display: flex;">
-				<div class="wr_input_1">
-					<div class="flex_1">
-						<input type="text" class="input_1" style="margin: auto; width: 120px;" nameId="inputOffset" value="10">
-					</div>
-				</div>
-			</div>						
-		</div>`;					
-
-		return html;
-	}
-	
-	
 
 	// заполняем при старте панель (до этого она пустая)
 	addPaidContent()
@@ -262,15 +240,12 @@ class MyUiBlocksMain
 			
 			myCalcBlocks.myBlocksCamera.changeCamera();
 		}
-		
 
-
-		this.inputOffset = div.querySelector('[nameId="inputOffset"]');
-		
 		
 		this.appointDivLevels({container: this.content1});
 		
-				
+		
+		this.myUiBlocksOffset.init({container: this.divPanel.querySelector('[nameId="wrapBlocksAllWalls"]')});		
 		this.myUiBlocksSize.init({container: this.divPanel.querySelector('[nameId="wrapBlockSize"]')});
 		this.myUiBlocksCount.init({container: this.divPanel.querySelector('[nameId="wrapDivSum"]')});
 		this.myUiBlocksStats.init({container: this.divPanel.querySelector('[nameId="wrapDivStats"]')});
@@ -315,7 +290,6 @@ class MyUiBlocksMain
 	initEvents()
 	{
 		this.initEventLevel();
-		this.initEventOffsetBlock();
 	}
 	
 	
@@ -385,85 +359,6 @@ class MyUiBlocksMain
 	}
 	
 	
-
-	// меняем в input толщину клея (+ передаем толщину клея в основной класс для расчета блоков)
-	setInputOffsetBlock({value, type = 'm'})
-	{
-		const kof = (type === 'm') ? 1000 : 1;
-		
-		this.inputOffset.value = value * kof;
-		
-		myCalcBlocks.myBlocksObjs.setOffsetBlock({value, type});
-	}
-
-
-	// события при вводе в input толщины клея
-	initEventOffsetBlock()
-	{		
-		// проверка на валидность после ввода в input
-		const processInput = ({input, limit}) =>
-		{
-			let value = input.value.trim();
-
-			// Заменяем запятую на точку (для корректного парсинга)
-			value = value.replace(',', '.');
-
-			// Пытаемся преобразовать в число
-			const numberValue = parseFloat(value);
-
-			// Проверяем валидность
-			if (isNaN(numberValue)) return {success: false, message: 'Введите число!'};
-
-			// Округляем до целого
-			const roundedValue = Math.round(numberValue);
-
-			// Проверяем диапазон (Число должно быть от limit[0] до limit[1])
-			if (roundedValue < limit[0] || roundedValue > limit[1]) return {success: false, message: `Число должно быть от ${limit[0]} до ${limit[1]}`};
-
-			// Если всё ок — выводим результат
-			console.log("Валидное число:", roundedValue);
-			input.value = roundedValue; // Заменяем ввод на округлённое значение
-			
-			return {success: true, value: input.value};
-		}
-
-		// если значение не валидное то сбрасываем значение до оригинального
-		const resetInput = ({result, input, originalValue}) =>
-		{
-			input.value = originalValue; 	// сбрасываем значение в input до оригинального
-			console.log(result);
-		}		
-		
-		const addEvent = ({input, limit}) =>
-		{
-			let originalValue = '';
-			
-			input.onfocus = (e) => 
-			{
-				originalValue = input.value;
-			}
-			
-			input.onkeydown = (e) => 
-			{								
-				if (e.code === 'Enter') 
-				{
-					const result = processInput({input, limit});
-					if(!result.success) resetInput({result, input, originalValue});
-					if(result.success) this.setInputOffsetBlock({value: result.value, type: 'mm'});
-				}
-			}
-
-			input.onblur = (e) => 
-			{
-				const result = processInput({input, limit});
-				if(!result.success) resetInput({result, input, originalValue});
-				if(result.success) this.setInputOffsetBlock({value: result.value, type: 'mm'});
-			}			
-		}
-
-		addEvent({input: this.inputOffset, limit: [1, 50]});			
-	}
-
 
 	// меняем состояние для CheckBox вкл/выкл (расчет для всех этажей) только для css, без дальнейшей логики
 	changeStateCheckBox1({value = undefined})

@@ -155,7 +155,7 @@ class MyBlocksMouse
 					const paramsBlock = {};
 					paramsBlock[data.key] = data.result.value;
 					
-					myCalcBlocks.myBlocksObjs.setParamsBlock({group, paramsBlock, type: 'mm'})
+					myCalcBlocks.myBlocksObjs.setParamsBlock({group, paramsBlock, type: 'mm'});
 				}
 				
 				// вставляем в input размеры блоков на стенах
