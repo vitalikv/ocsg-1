@@ -40,8 +40,8 @@ class MyCalcBlocks
 		this.myUiBlocksMain.myUiBlocksOffset.setInputOffsetBlock({value: this.defOffsetBlock, type: 'm'});
 		this.myUiBlocksMain.myUiBlocksOffset.setInputSize({value: this.defSizeBlock.length, key: 'length', type: 'm'});
 		this.myUiBlocksMain.myUiBlocksOffset.setInputSize({value: this.defSizeBlock.height, key: 'height', type: 'm'});
-		this.myUiBlocksMain.showWrapContent({tabName: 'setting'});	// переключаем на нужную вкладку			
-		myPanelTop2.showPanelRWBlocks();	// вкл режим для расчета блоков 		
+		this.myUiBlocksMain.showWrapContent({tabName: 'calc3D'});	// переключаем на нужную вкладку			
+		//myPanelTop2.showPanelRWBlocks();	// вкл режим для расчета блоков 		
 	}
 	
 
@@ -68,11 +68,11 @@ class MyCalcBlocks
 		
 		for ( let i = 0; i < myLevels.levels.length; i++ )
 		{
-			//data[i] = this.test({idLevel: i, level: myLevels.levels[i]});
+			data[i] = this.test({idLevel: i, level: myLevels.levels[i]});
 		}	
 
-		data[0] = this.test({idLevel: 0, level: myLevels.levels[0]});
-		data[1] = this.test({idLevel: 1, level: myLevels.levels[1]});
+		//data[0] = this.test({idLevel: 0, level: myLevels.levels[0]});
+		//data[1] = this.test({idLevel: 1, level: myLevels.levels[1]});
 		
 		
 		this.setLevelsData({data});
@@ -837,6 +837,7 @@ findObjectsUntilRepetition(arrayObjects, checkUsed) {
 
 	helpBox({size = new THREE.Vector3(0.1, 0.1, 0.1), pos, color = 0x00ff00})
 	{
+		return;
 		const geometry = createGeometryCube(size.x, size.y, size.z);
 		const material = new THREE.MeshStandardMaterial({ color, lightMap: lightMap_1, transparent: true, opacity: 1, depthTest: false });
 		const obj = new THREE.Mesh( geometry, material ); 
@@ -848,6 +849,7 @@ findObjectsUntilRepetition(arrayObjects, checkUsed) {
 	
 	helpLine({v, color = 0x00ff00})
 	{
+		return;
 		const pipeSpline = new THREE.CatmullRomCurve3(v);
 		pipeSpline.curveType = 'catmullrom';
 		pipeSpline.tension = 0;
@@ -870,6 +872,7 @@ findObjectsUntilRepetition(arrayObjects, checkUsed) {
 
 	arrowHelper({dir, pos, length = 0.5, color = 0xff0000})
 	{
+		return;
 		const arrowHelper = new THREE.ArrowHelper( dir, pos, length, color );
 		scene.add( arrowHelper );
 	}

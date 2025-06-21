@@ -8,7 +8,7 @@ class MyBlocksInfoPoints
 	crPoints({arr})
 	{
 		const pointsInfo = [];
-		
+		return;	// пока выкл 
 		for ( let i = 0; i < arr.length; i++ )
 		{			
 			const obj = this.crPoint();

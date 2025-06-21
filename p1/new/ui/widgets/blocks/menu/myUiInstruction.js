@@ -38,7 +38,7 @@ const html =
 
     <section nameId="content" style="color: #444; padding: 0 25px 25px; max-width: 800px; margin: auto; line-height: 1.6;">
 
-        <div style="margin-top: 25px; border-bottom: 1px solid #e1e1e1; padding-bottom: 15px;">
+        <div style="margin-top: 15px; border-bottom: 1px solid #e1e1e1; padding-bottom: 15px;">
             <div style="font-weight: 600; color: #333; font-size: 17px; margin-bottom: 12px; display: flex; align-items: center;">
                 <span style="background: #505050; color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px;">1</span>
                 Создание проекта
@@ -47,10 +47,16 @@ const html =
                 <li style="margin-bottom: 6px;">Перейдите во вкладку <strong style="color: #404040;">«Планировка»</strong></li>
                 <li>Создайте схему помещения или здания</li>
             </ul>
+
+			<div style="margin-top: 10px; background: #f5f5f5; padding: 10px 10px 10px 20px; border-left: 4px solid #505050;">
+				<a href="/documentation" style="cursor: pointer; color: #075cff; text-decoration: none;" target="_blank">
+					Видеоинструкция по проектированию дома
+				</a>
+			</div>			
         </div>
 
         <div style="text-align: center; margin: 20px 0; background: #fafafa; padding: 15px; border: 1px solid #eaeaea;">
-            <img nameId="" src="${infProject.path}img/widgets/blocks/menu/1.png" style="max-width: 100%; height: auto; cursor: pointer;">
+            <img nameId="" src="${infProject.path}img/widgets/blocks/menu/1.jpg" style="max-width: 100%; height: auto; cursor: pointer;">
             <div style="font-size: 13px; color: #777; margin-top: 8px;">Рис. 1 - Интерфейс модуля планировки</div>
         </div>
 
@@ -79,7 +85,7 @@ const html =
         </div>
 
         <div style="text-align: center; margin: 20px 0; background: #fafafa; padding: 15px; border: 1px solid #eaeaea;">
-            <img nameId="" src="${infProject.path}img/widgets/blocks/menu/2.png" style="max-width: 100%; height: auto; cursor: pointer;">
+            <img nameId="" src="${infProject.path}img/widgets/blocks/menu/2.jpg" style="max-width: 100%; height: auto; cursor: pointer;">
             <div style="font-size: 13px; color: #777; margin-top: 8px;">Рис. 2 - Панель параметров расчета</div>
         </div>
 
@@ -96,8 +102,8 @@ const html =
         </div>
 
         <div style="text-align: center; margin: 20px 0; background: #fafafa; padding: 15px; border: 1px solid #eaeaea;">
-            <img nameId="" src="${infProject.path}img/widgets/blocks/menu/3.png" style="max-width: 100%; height: auto; cursor: pointer;">
-			<img nameId="" src="${infProject.path}img/widgets/blocks/menu/4.png" style="max-width: 100%; height: auto; cursor: pointer;">
+            <img nameId="" src="${infProject.path}img/widgets/blocks/menu/3.jpg" style="max-width: 100%; height: auto; cursor: pointer;">
+			<img nameId="" src="${infProject.path}img/widgets/blocks/menu/4.jpg" style="max-width: 100%; height: auto; cursor: pointer;">
             <div style="font-size: 13px; color: #777; margin-top: 8px;">Рис. 3 - Визуализация результатов расчета</div>
         </div>
 
@@ -116,7 +122,7 @@ const html =
         </div>
 
         <div style="text-align: center; margin: 20px 0; background: #fafafa; padding: 15px; border: 1px solid #eaeaea;">
-            <img nameId="" src="${infProject.path}img/widgets/blocks/menu/5.png" style="max-width: 100%; height: auto; cursor: pointer;">
+            <img nameId="" src="${infProject.path}img/widgets/blocks/menu/5.jpg" style="max-width: 100%; height: auto; cursor: pointer;">
             <div style="font-size: 13px; color: #777; margin-top: 8px;">Рис. 4 - Детальная статистика материалов</div>
         </div>
 
@@ -237,7 +243,7 @@ const html =
 		background: #e8e8e8;
 		border-top: 2px solid #f2f2f2;`;
 
-		// === Две колонки: таблица слева, диаграмма справа
+		
 		const html = `
 		<div style="${divWind}">
 			<div nameId="btnCloseContent" style="${btnClose}">+</div>

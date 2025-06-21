@@ -45,7 +45,7 @@ class MyBlocksVolume
 		block.userData.upVolume = volume;
 		block.userData.percentage = roundedPercentage;
 
-		if(percentage < 95)
+		if(percentage < 95 && 1 ===2)
 		{	
 			block.material = block.material.clone();
 			block.material.color = new THREE.Color().setHSL(percentage / 200, 1, 0.5);
