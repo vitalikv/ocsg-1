@@ -1220,6 +1220,9 @@ async function startInitProject()
 	
 	if(slug === 'calc-blocks')
 	{
+		const html = document.body.querySelector('[nameId="background_main_menu"]');
+		html.innerHTML = '';
+		html.remove();
 		myUIBlocksWindMain.init();
 	}
 	else
